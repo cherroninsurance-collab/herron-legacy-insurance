@@ -679,16 +679,18 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .lg-blob-purple{width:520px;height:520px;background:radial-gradient(circle,rgba(96,32,168,.34),transparent 62%);animation:lgDrift 26s ease-in-out infinite alternate}
 .lg-blob-indigo{width:620px;height:620px;background:radial-gradient(circle,rgba(70,96,220,.30),transparent 62%);animation:lgDrift 32s ease-in-out -8s infinite alternate-reverse}
 .lg-blob-cyan{width:480px;height:480px;background:radial-gradient(circle,rgba(28,190,214,.26),transparent 62%);animation:lgDrift 22s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.20),transparent 62%)}
-.bp-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.18),transparent 62%)}
-.bp-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.17),transparent 62%)}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.20),transparent 62%)}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.18),transparent 62%)}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.17),transparent 62%)}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
   50%{transform:translate3d(70px,-50px,0) scale(1.12)}
   100%{transform:translate3d(-60px,45px,0) scale(.94)}
 }
-.bp-band{position:relative;overflow:hidden}
-.bp-band .wrap{position:relative;z-index:1}
+.bp-band,.fitcheck,.quote-band{position:relative;overflow:hidden}
+.bp-band .wrap,.fitcheck .wrap,.quote-band .wrap{position:relative;z-index:1}
+/* fit check pane hugs its narrow quiz card */
+.fitcheck .lg-container{max-width:764px;margin:0 auto}
 @media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
 </style>
 </head>
@@ -1104,14 +1106,24 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 <!-- ============ FIT CHECK ============ -->
 <section class="fitcheck" id="fitcheck">
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-160px;right:-100px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-180px;left:-140px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:30%;left:44%" aria-hidden="true"></div>
   <div class="wrap">
     <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
       <span class="eyebrow">The 60-second fit check</span>
       <h2>Four questions. Your best path. No email required.</h2>
     </div>
-    <div class="fit-shell reveal">
-      <div class="fit-bar"><i id="fitBar"></i></div>
-      <div class="fit-body" id="fitBody" aria-live="polite"></div>
+    <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+         by liquid-glass.js; content stays on top (z-20, clickable). -->
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
+      <div class="lg-content">
+        <div class="fit-shell">
+          <div class="fit-bar"><i id="fitBar"></i></div>
+          <div class="fit-body" id="fitBody" aria-live="polite"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1159,17 +1171,27 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 <!-- ============ QUOTE TOOL ============ -->
 <section class="quote-band" id="quotes">
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-140px;left:-130px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-170px;right:-120px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:28%;right:30%" aria-hidden="true"></div>
   <div class="wrap">
     <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
       <span class="eyebrow">Instant estimate studio</span>
       <h2>Just want a number? Move the sliders.</h2>
       <p>The Blueprint builds the plan. This just prices one piece of it — ten seconds, zero forms.</p>
     </div>
-    <div class="q-shell reveal">
+    <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+         by liquid-glass.js; content stays on top (z-20, clickable). -->
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="dark">
+    <div class="lg-content">
+    <div class="q-shell">
       <div class="q-tabs" id="qTabs" role="tablist"></div>
       <div id="qStage"></div>
       <div id="estCapture"></div>
       <p class="q-note">Estimates are illustrative ranges based on typical non-guaranteed industry pricing for healthy applicants and are <b>not an offer of coverage or a quoted rate</b>. Actual premiums and annuity rates are determined solely by carrier underwriting and current product offerings, and vary by state, health class, and carrier. Annuity and IUL projections use illustrative, non-guaranteed rates you select — IUL figures reflect a typical policy-cost band and are not a carrier illustration. Hybrid LTC and disability figures are broad planning ranges; actual pricing depends on health, occupation class, carrier, and state. Get exact figures on a free call.</p>
+    </div>
+    </div>
     </div>
   </div>
 </section>
