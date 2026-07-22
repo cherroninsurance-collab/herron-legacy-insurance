@@ -21,6 +21,7 @@ live working copy; keep this template untouched so any future build can start cl
 | 7, 10 | Fixed left glide-out glass sidebar with multi-level accordion sub-drawer |
 | 11 | Shader extension — chromatic emissive shockwave burst on module expansion |
 | 12 | Real-time telemetry vector chart with neon gradient area fill |
+| 13 | Mobile responsive engine — sidebar refolds into a top banner, cards stack single-column, 3D tilt/glare neutralized on touch viewports |
 
 ## Customization entry points
 

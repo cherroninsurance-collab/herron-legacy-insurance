@@ -400,6 +400,59 @@
       stroke: rgba(255,255,255,0.03);
       stroke-width: 1;
     }
+    /* ==========================================================================
+       MODULE 13: MOBILE RESPONSIVE ENGINE (TOUCHSCREEN OPTIMIZATION)
+       ========================================================================== */
+    @media (max-width: 768px) {
+      body {
+        padding: 90px 16px 20px 16px !important; /* clear the top-banner nav */
+      }
+      body.sidebar-active {
+        padding-left: 16px !important; /* no left body shift when nav deploys */
+      }
+      .master-header h1 { font-size: 1.65rem; }
+      .master-header p { font-size: 0.9rem; }
+      .showcase-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .grid-tile { height: 350px; }
+      /* Fixed left sidebar refolds into a top banner control bar */
+      .liquid-sidebar {
+        top: 10px;
+        left: 10px;
+        right: 10px;
+        bottom: auto;
+        width: auto;
+        height: 54px;
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0 16px;
+        align-items: center;
+        border-radius: 14px;
+      }
+      .liquid-sidebar.open {
+        width: auto;
+        height: auto;
+        max-height: 320px;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px;
+      }
+      .sidebar-toggle-trigger { margin-bottom: 0; order: 1; }
+      .nav-links-stack {
+        display: none;
+        order: 2;
+        margin-top: 12px;
+        padding: 0;
+      }
+      .liquid-sidebar.open .nav-links-stack { display: flex; width: 100%; }
+      .accordion-group.active .sub-drawer-panel { max-height: 120px; }
+      /* Neutralize 3D tilt and specular glare on touch viewports.
+         .flip-card-inner keeps its rotateY so MODULE 2 still pivots on tap. */
+      .showcase-card { transform: none !important; }
+      .tile-glare { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -684,6 +737,8 @@
         const glare = tile.querySelector('.tile-glare');
         const flipInner = isFlip ? tile.querySelector('.flip-card-inner') : null;
         tile.addEventListener('mousemove', (e) => {
+          // MODULE 13 OVERRIDE: drop tilt calculations on mobile touchscreen scales
+          if (window.innerWidth <= 768) return;
           if ((card.classList.contains('expanded')) || (flipInner && flipInner.classList.contains('flipped'))) return;
           const rect = tile.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -697,6 +752,7 @@
           glare.style.setProperty('--y', `${gy}%`);
         });
         tile.addEventListener('mouseleave', () => {
+          if (window.innerWidth <= 768) return;
           if (card.classList.contains('expanded') || (flipInner && flipInner.classList.contains('flipped'))) return;
           card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
         });
@@ -730,22 +786,28 @@
           });
         }
       });
-      // Pivot attachments specific to Module 2 flip configurations
-      const btnFlipFront = document.getElementById('triggerFlipFront');
-      const btnFlipBack = document.getElementById('triggerFlipBack');
-      const flipInner = document.querySelector('.flip-card-inner');
-      if(btnFlipFront && btnFlipBack) {
-        btnFlipFront.addEventListener('click', () => {
+      // Delegated pivot triggers specific to Module 2 flip configurations
+      const gridContainer = document.getElementById('gridContainer');
+      gridContainer.addEventListener('click', (e) => {
+        const frontTrigger = e.target.closest('#triggerFlipFront');
+        const backTrigger = e.target.closest('#triggerFlipBack');
+        if (frontTrigger) {
           // MODULE 11 TRIGGER: flip pivot counts as a module expansion step
           triggerShaderSpark();
-          flipInner.classList.add('flipped');
-          btnFlipFront.style.transform = `perspective(1000px) rotateY(180deg)`;
-        });
-        btnFlipBack.addEventListener('click', () => {
-          flipInner.classList.remove('flipped');
-          btnFlipFront.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
-        });
-      }
+          const inner = frontTrigger.closest('.flip-card-inner');
+          inner.classList.add('flipped');
+          // MODULE 13: no 3D button transforms on touchscreen scales
+          if (window.innerWidth > 768) {
+            frontTrigger.style.transform = `perspective(1000px) rotateY(180deg)`;
+          }
+        }
+        if (backTrigger) {
+          const inner = backTrigger.closest('.flip-card-inner');
+          inner.classList.remove('flipped');
+          const front = inner.querySelector('.card-front');
+          front.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        }
+      });
     }
 
     // --- MODULE 7 & MODULE 10: SIDEBAR ACCORDION ROUTINES ---
@@ -776,13 +838,14 @@
 
     // --- MODULE 12: REALTIME MONITORING ARRAY GENERATION ALGORITHMS ---
     function startChartDataLoop() {
-      const chartNode = document.querySelector('.M-ChartNode');
-      if (!chartNode) return;
-      const pathLine = chartNode.querySelector('.chart-line');
-      const pathArea = chartNode.querySelector('.chart-area');
       const dataPoints = [62, 84, 55, 96, 70, 108, 66, 88, 74, 98, 60, 90];
       const widthStep = 300 / (dataPoints.length - 1);
       function updateChart() {
+        const chartNode = document.querySelector('.M-ChartNode');
+        if (!chartNode) { setTimeout(updateChart, 1000); return; }
+        const pathLine = chartNode.querySelector('.chart-line');
+        const pathArea = chartNode.querySelector('.chart-area');
+        if (!pathLine || !pathArea) return;
         // Shift values to left, push dynamic fluctuating float coordinate variables onto stack
         dataPoints.shift();
         dataPoints.push(30 + Math.random() * 80);
