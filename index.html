@@ -618,9 +618,13 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 /* context tints — glass needs a translucent fill to refract what's behind it */
 nav.liquid-glass{background:rgba(8,18,38,.55)}
 .cover-card.liquid-glass{background:rgba(255,255,255,.55)}
+/* the wide "classics" card is dark with white text — it needs dark glass,
+   not the white fill above, or its copy vanishes into the background */
+.cover-card.wide.liquid-glass{background:linear-gradient(140deg,rgba(14,31,62,.85) 0%,rgba(8,18,38,.88) 90%)}
 .iul-preview.liquid-glass{background:rgba(8,18,38,.42);border-color:rgba(255,255,255,.28)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .cover-card.liquid-glass{background:var(--cloud)}
+  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,var(--navy) 0%,var(--navy-deep) 90%)}
   .iul-preview.liquid-glass{background:rgba(8,18,38,.55)}
 }
 
