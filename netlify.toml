@@ -1,0 +1,11 @@
+# Netlify config — tells Netlify where things are.
+# Without this, a drag-and-drop zip deploy can silently skip the functions folder,
+# and Legacy AI falls back to the keyword bot with no error anywhere.
+
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
