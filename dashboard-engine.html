@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master UI Component Blueprint Suite - Supreme Edition</title>
+  <style>
+    /* ==========================================================================
+       MODULE 0: MASTER CORE ENGINE CANVAS & GLOBAL SETUP
+       ========================================================================== */
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      background: #040508;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 20px 60px 100px; /* Offset for left sidebar */
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+      color: #f8fafc;
+      transition: padding-left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    body.sidebar-active {
+      padding-left: 280px;
+    }
+
+    .master-header {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    .master-header h1 { font-size: 2.2rem; margin: 0 0 10px 0; letter-spacing: -0.5px; color: #fff;}
+    .master-header p { margin: 0; color: #475569; font-size: 1rem; }
+
+    .showcase-grid {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 40px;
+      width: 100%;
+      max-width: 1140px;
+    }
+
+    .grid-tile {
+      height: 400px;
+      perspective: 1000px;
+    }
+
+    /* ==========================================================================
+       MODULE 1: PRISMATIC EXPANDING GLASS CARD ARCHITECTURE
+       ========================================================================== */
+    .showcase-card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px;
+      box-sizing: border-box;
+      overflow: hidden;
+      cursor: pointer;
+      transform-style: preserve-3d;
+
+      transition:
+        transform 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+        top 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        left 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+        border-radius 0.6s ease,
+        background 0.6s ease;
+    }
+
+    .showcase-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(20px) saturate(140%);
+      -webkit-backdrop-filter: blur(20px) saturate(140%);
+      z-index: -1;
+    }
+
+    .showcase-card.expanded {
+      position: fixed;
+      z-index: 999;
+      cursor: default;
+      border-radius: 0px;
+      border: none;
+      background: rgba(6, 8, 12, 0.94);
+      justify-content: center;
+      align-items: center;
+      padding: 60px;
+    }
+    .showcase-card.expanded::before {
+      backdrop-filter: blur(45px) saturate(150%);
+      -webkit-backdrop-filter: blur(45px) saturate(150%);
+    }
+
+    .tile-glare {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.07) 0%, transparent 65%);
+      z-index: 1;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .grid-tile:hover .tile-glare { opacity: 1; }
+    .showcase-card.expanded .tile-glare { display: none !important; }
+
+    .grid-blob {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      filter: blur(45px);
+      z-index: -2;
+      opacity: 0.4;
+      transition: width 0.6s, height 0.6s, filter 0.6s;
+    }
+    .showcase-card.expanded .grid-blob { width: 650px; height: 650px; filter: blur(130px); opacity: 0.25; }
+
+    .theme-cyan { top: -20px; left: -20px; background: #06b6d4; }
+    .theme-fuchsia { bottom: -20px; right: -20px; background: #d946ef; }
+    .theme-amber { top: -20px; left: -20px; background: #f59e0b; }
+    .theme-rose { bottom: -20px; right: -20px; background: #f43f5e; }
+    .theme-emerald { top: -20px; left: -20px; background: #10b981; }
+    .theme-indigo { bottom: -20px; right: -20px; background: #6366f1; }
+
+    .tile-content { color: #f8fafc; transform: translateZ(30px); transition: max-width 0.6s, text-align 0.6s; max-width: 100%; width: 100%; }
+    .tile-content h3 { margin: 0 0 8px 0; font-size: 1.4rem; font-weight: 600; }
+    .tile-content p { margin: 0; font-size: 0.92rem; color: #94a3b8; line-height: 1.4; }
+
+    .extended-text {
+      max-height: 0; opacity: 0; overflow: hidden; color: #cbd5e1; font-size: 1rem; line-height: 1.6; margin-top: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease, margin-top 0.4s;
+    }
+
+    .showcase-card.expanded .tile-content { max-width: 600px; text-align: center; }
+    .showcase-card.expanded .tile-content h3 { font-size: 2.6rem; color: #fff; margin-bottom: 20px; }
+    .showcase-card.expanded .extended-text { max-height: 200px; opacity: 1; margin-top: 20px; }
+
+    .close-btn {
+      position: absolute; top: 40px; right: 40px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff; padding: 10px 20px; border-radius: 12px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+    }
+    .showcase-card.expanded .close-btn { opacity: 1; pointer-events: auto; }
+    .close-btn:hover { background: rgba(255, 255, 255, 0.15); }
+
+    .glass-btn {
+      position: relative; display: inline-block; margin-top: 16px; padding: 10px 20px; background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; color: #fff; font-size: 0.88rem; font-weight: 500;
+      text-decoration: none; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); transition: background 0.3s, border-color 0.3s;
+      cursor: pointer; transform: translateZ(20px);
+    }
+    .glass-btn:hover { background: rgba(255, 255, 255, 0.09); border-color: rgba(255, 255, 255, 0.25); }
+
+    /* ==========================================================================
+       MODULE 2: HYBRID GLASS CONTROL MODULE (360 FLIP ENGINE)
+       ========================================================================== */
+    .flip-card-inner {
+      position: relative; width: 100%; height: 100%; transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .flip-card-inner.flipped { transform: rotateY(180deg); }
+
+    .card-front, .card-back {
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      box-sizing: border-box; padding: 24px; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    }
+    .card-front { justify-content: flex-end; }
+    .card-back {
+      transform: rotateY(180deg); justify-content: space-between; align-items: center;
+      background: rgba(15, 15, 25, 0.25); border-radius: 24px; border: 1px solid rgba(255,255,255,0.06);
+    }
+    .card-back::before {
+      content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.01);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: -1; border-radius: 23px;
+    }
+
+    .back-header { text-align: center; color: #f8fafc; transform: translateZ(30px); }
+    .back-header h4 { margin: 0 0 4px 0; font-size: 1.2rem; color: #fff; }
+    .back-header p { margin: 0; font-size: 0.85rem; color: #64748b; }
+
+    /* ==========================================================================
+       MODULE 3: LIQUID GLASS TOGGLE SWITCH (GOOEY TRANSITION CURVES)
+       ========================================================================== */
+    .toggle-wrapper {
+      transform: translateZ(50px);
+      filter: url('#master-liquid-goo');
+    }
+
+    .toggle-label {
+      position: relative; display: block; width: 110px; height: 54px;
+      background: rgba(255, 255, 255, 0.05); border-radius: 40px; cursor: pointer;
+      box-shadow: inset 0 4px 12px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ball {
+      position: absolute; top: 4px; left: 4px; width: 44px; height: 44px;
+      background: rgba(255, 255, 255, 0.12); border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: center; align-items: center;
+      transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .liquid-core {
+      width: 20px; height: 20px; background: linear-gradient(135deg, #38bdf8, #0369a1); border-radius: 50%;
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+      transition: transform 0.8s cubic-bezier(0.68, -0.2, 0.27, 1.34), background 0.5s ease;
+    }
+
+    .toggle-input { display: none; }
+    .toggle-input:checked + .toggle-label .ball { transform: translateX(56px); }
+    .toggle-input:checked + .toggle-label .liquid-core {
+      background: linear-gradient(135deg, #f43f5e, #be123c);
+      box-shadow: 0 0 12px rgba(244, 63, 94, 0.7);
+      transform: scale(1.12);
+    }
+
+    /* ==========================================================================
+       MODULE 7 & MODULE 10: LIQUID GLASS SIDEBAR + MULTI-LEVEL ACCORDION DRAWER
+       ========================================================================== */
+    .liquid-sidebar {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      bottom: 20px;
+      width: 64px;
+      background: rgba(255, 255, 255, 0.01);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+      z-index: 100;
+      overflow-x: hidden;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+      box-sizing: border-box;
+      filter: url('#master-liquid-goo');
+      transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1), background 0.4s ease;
+    }
+    /* Scrollbar cleanup for sidebar track */
+    .liquid-sidebar::-webkit-scrollbar { width: 0px; background: transparent; }
+    .liquid-sidebar.open {
+      width: 240px;
+      background: rgba(10, 12, 22, 0.6);
+    }
+    .liquid-sidebar::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.01);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: -1;
+    }
+    .sidebar-toggle-trigger {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin-bottom: 30px;
+      flex-shrink: 0;
+    }
+    .sidebar-toggle-trigger:hover { background: rgba(255,255,255,0.12); }
+    .nav-links-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 0 10px;
+      box-sizing: border-box;
+    }
+    .accordion-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.04);
+      color: #94a3b8;
+      text-decoration: none;
+      padding: 0 12px;
+      box-sizing: border-box;
+      overflow: hidden;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, transform 0.3s;
+    }
+    .nav-item:hover {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+    .accordion-trigger .chevron {
+      margin-left: auto;
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+      opacity: 0;
+    }
+    .liquid-sidebar.open .accordion-trigger .chevron { opacity: 1; }
+    .accordion-group.active .chevron { transform: rotate(90deg); }
+    /* Nested Accordion Sub-Drawer Stack */
+    .sub-drawer-panel {
+      max-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-left: 24px;
+      box-sizing: border-box;
+      transition: max-height 0.3s cubic-bezier(0.25, 1, 0.5, 1), margin-top 0.3s;
+    }
+    .accordion-group.active .sub-drawer-panel {
+      max-height: 150px;
+      margin-top: 6px;
+    }
+    .sub-nav-item {
+      display: flex;
+      align-items: center;
+      height: 34px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: color 0.2s;
+    }
+    .sub-nav-item:hover { color: #38bdf8; }
+    .nav-icon { font-size: 1.1rem; margin-right: 16px; display: inline-block; width: 20px; text-align: center; flex-shrink: 0; }
+    .nav-label { opacity: 0; transition: opacity 0.2s ease; }
+    .liquid-sidebar.open .nav-label { opacity: 1; transition-delay: 0.1s; }
+    /* ==========================================================================
+       MODULE 12: REAL-TIME DYNAMIC MONITORING VECTOR INFOGRAPHIC CHART
+       ========================================================================== */
+    .chart-container {
+      width: 100%;
+      height: 140px;
+      margin-top: 16px;
+      position: relative;
+    }
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .chart-line {
+      fill: none;
+      stroke: url(#chart-gradient);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: d 0.3s ease;
+    }
+    .chart-area {
+      fill: url(#chart-area-gradient);
+      transition: d 0.3s ease;
+    }
+    .chart-grid-line {
+      stroke: rgba(255,255,255,0.03);
+      stroke-width: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- MODULE 0: Master core engine canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- ==========================================================================
+       MODULE 4: EMBEDDED SVG MORPHOLOGICAL COLOR MATRIX ARRAYS (LIQUID GOO FILTER)
+       ========================================================================== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <filter id="master-liquid-goo">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"></feGaussianBlur>
+        <feColorMatrix in="blur" mode="matrix"
+          values="1 0 0 0 0
+                  0 1 0 0 0
+                  0 0 1 0 0
+                  0 0 0 18 -7" result="goo"></feColorMatrix>
+        <feComposite in="SourceGraphic" in2="goo" operator="atop"></feComposite>
+      </filter>
+      <!-- MODULE 12 vector chart stroke + area fills -->
+      <linearGradient id="chart-gradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#10b981"></stop>
+        <stop offset="100%" stop-color="#6366f1"></stop>
+      </linearGradient>
+      <linearGradient id="chart-area-gradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(16, 185, 129, 0.25)"></stop>
+        <stop offset="100%" stop-color="rgba(16, 185, 129, 0)"></stop>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- ==========================================================================
+       MODULE 7 & MODULE 10: FIXED LEFT GLIDE-OUT LIQUID GLASS SIDEBAR
+       ========================================================================== -->
+  <aside class="liquid-sidebar" id="sidebarNode">
+    <button class="sidebar-toggle-trigger" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
+    <nav class="nav-links-stack">
+      <a href="#" class="nav-item">
+        <span class="nav-icon">⚄</span><span class="nav-label">Dashboard</span>
+      </a>
+      <div class="accordion-group">
+        <a href="#" class="nav-item accordion-trigger">
+          <span class="nav-icon">⚡</span><span class="nav-label">Core Engine</span>
+          <span class="chevron">▶</span>
+        </a>
+        <div class="sub-drawer-panel">
+          <a href="#" class="sub-nav-item">▫ WebGL Buffer</a>
+          <a href="#" class="sub-nav-item">▫ Gravity Vector</a>
+          <a href="#" class="sub-nav-item">▫ Array Pipeline</a>
+        </div>
+      </div>
+      <a href="#" class="nav-item">
+        <span class="nav-icon">⚙</span><span class="nav-label">System Adjust</span>
+      </a>
+    </nav>
+  </aside>
+
+  <header class="master-header">
+    <h1>Integrated System Core</h1>
+    <p>Hardware accelerated modules rendering simultaneously across discrete UI environments.</p>
+  </header>
+
+  <!-- MODULE 6/8 target: dynamically populated dashboard grid -->
+  <main class="showcase-grid" id="gridContainer"></main>
+
+  <script>
+    /* ==========================================================================
+       MODULE 5 & MODULE 9: WEBGL PARTICLE POINT BUFFERS + GRAVITATIONAL CURSOR
+       ========================================================================== */
+    const canvas = document.getElementById('webgl-canvas');
+    const gl = canvas.getContext('webgl');
+    let targetMouseX = 0, targetMouseY = 0;
+    let currentMouseX = 0, currentMouseY = 0;
+    let isSparking = false;
+    let sparkTime = 0.0;
+    window.addEventListener('mousemove', (e) => {
+      targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      targetMouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+    });
+    if (gl) {
+      const vsSource = `
+        attribute vec2 aPosition;
+        attribute float aMover;
+        uniform float uTime;
+        uniform vec2 uMouse;
+        uniform float uSparkTime;
+        varying float vAlpha;
+        varying vec3 vColor;
+        void main() {
+          float angle = aMover + (uTime * 0.02);
+          vec2 baseOffset = vec2(cos(angle), sin(angle)) * 0.25;
+          vec2 basePos = aPosition + baseOffset;
+          vec2 toMouse = uMouse - basePos;
+          float distance = length(toMouse);
+          vec2 attraction = vec2(0.0);
+          if (distance < 0.6) {
+            float force = (0.6 - distance) * 0.4;
+            attraction = normalize(toMouse) * force;
+          }
+          // --- MODULE 11: SHADER CHROMATIC SPARK BURST EXTENSION ---
+          vec2 finalPos = basePos + attraction;
+          if (uSparkTime > 0.01 && uSparkTime < 1.0) {
+            float wave = sin((distance * 8.0) - (uSparkTime * 4.0));
+            if (abs(wave) < 0.15) {
+              finalPos += normalize(toMouse) * (1.0 - uSparkTime) * 0.08;
+            }
+          }
+          gl_Position = vec4(finalPos, 0.0, 1.0);
+          gl_PointSize = 3.5 + (sin(angle) * 1.5);
+          vAlpha = 0.25 + (cos(angle) * 0.2);
+          // Chromatic variation interpolate
+          vColor = mix(vec3(0.45, 0.62, 1.0), vec3(0.2, 0.95, 0.6), sin(angle) * 0.5 + 0.5);
+        }
+      `;
+      const fsSource = `precision mediump float; varying float vAlpha; varying vec3 vColor; void main() { gl_FragColor = vec4(vColor, vAlpha); }`;
+      function createShader(gl, type, source) {
+        const shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        return shader;
+      }
+      const program = gl.createProgram();
+      gl.attachShader(program, createShader(gl, gl.VERTEX_SHADER, vsSource));
+      gl.attachShader(program, createShader(gl, gl.FRAGMENT_SHADER, fsSource));
+      gl.linkProgram(program);
+      gl.useProgram(program);
+      const particleCount = 400;
+      const vertexData = new Float32Array(particleCount * 3);
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        vertexData[i] = (Math.random() * 2 - 1) * 0.95;
+        vertexData[i+1] = (Math.random() * 2 - 1) * 0.95;
+        vertexData[i+2] = Math.random() * Math.PI * 2;
+      }
+      const buffer = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(gl.ARRAY_BUFFER, vertexData, gl.STATIC_DRAW);
+      const aPosition = gl.getAttribLocation(program, 'aPosition');
+      gl.enableVertexAttribArray(aPosition);
+      gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 12, 0);
+      const aMover = gl.getAttribLocation(program, 'aMover');
+      gl.enableVertexAttribArray(aMover);
+      gl.vertexAttribPointer(aMover, 1, gl.FLOAT, false, 12, 8);
+      const uTime = gl.getUniformLocation(program, 'uTime');
+      const uMouse = gl.getUniformLocation(program, 'uMouse');
+      const uSparkTime = gl.getUniformLocation(program, 'uSparkTime');
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+      function render(time) {
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        currentMouseX += (targetMouseX - currentMouseX) * 0.08;
+        currentMouseY += (targetMouseY - currentMouseY) * 0.08;
+        if (isSparking) {
+          sparkTime += 0.02;
+          if (sparkTime > 1.0) { isSparking = false; sparkTime = 0.0; }
+        }
+        gl.uniform1f(uTime, time * 0.05);
+        gl.uniform2f(uMouse, currentMouseX, currentMouseY);
+        gl.uniform1f(uSparkTime, sparkTime);
+        gl.drawArrays(gl.POINTS, 0, particleCount);
+        requestAnimationFrame(render);
+      }
+      requestAnimationFrame(render);
+    }
+    function triggerShaderSpark() {
+      isSparking = true;
+      sparkTime = 0.01;
+    }
+
+    // --- MODULE 8: EXPANDED RUNTIME SCHEMATIC MOCK API ARRAY ---
+    const mockApiResponse = [
+      {
+        id: "node-morph",
+        type: "morph",
+        title: "Prismatic Window",
+        themeClass: "theme-cyan",
+        altThemeClass: "theme-fuchsia",
+        shortDesc: "Cyan and fuchsia field vectors shifting under high-density refraction blur layers.",
+        extendedDesc: "This expanding core uses standard coordinate matching calculations. It bridges positions seamlessly to prevent DOM element painting drops when initializing large viewport views."
+      },
+      {
+        id: "node-chart",
+        type: "chart",
+        title: "Telemetry Vector",
+        themeClass: "theme-emerald",
+        altThemeClass: "theme-indigo",
+        shortDesc: "Real-time array monitoring chart feeding vector parameters into local infographic tracks.",
+        extendedDesc: "High-frequency telemetry stream tracking frame parsing speeds, memory allocations, and structural render buffer saturation profiles."
+      },
+      {
+        id: "node-flip",
+        type: "flip",
+        title: "Gold Matrix Hub",
+        themeClass: "theme-amber",
+        altThemeClass: "theme-rose",
+        shortDesc: "Tap this card interface profile to pivot the layout into hardware settings control configurations.",
+        extendedDesc: "Liquid Fluidic Surface Tension Configuration Core Module"
+      }
+    ];
+
+    function initializeDashboard(data) {
+      const container = document.getElementById('gridContainer');
+      container.innerHTML = '';
+      data.forEach(item => {
+        const tile = document.createElement('div');
+        tile.className = `grid-tile ${item.type === 'morph' ? 'M-MorphNode' : item.type === 'chart' ? 'M-ChartNode' : 'M-FlipNode'}`;
+        if (item.type === 'morph') {
+          tile.innerHTML = `<div class="showcase-card"> <button class="close-btn">Close Node</button> <div class="grid-blob ${item.themeClass}"></div> <div class="grid-blob ${item.altThemeClass}"></div> <div class="tile-glare"></div> <div class="tile-content"> <h3>${item.title}</h3> <p>${item.shortDesc}</p> <p class="extended-text">${item.extendedDesc}</p> <button class="glass-btn">Trigger Subroutine</button> </div> </div>`;
+        } else if (item.type === 'chart') {
+          tile.innerHTML = `<div class="showcase-card">
+            <button class="close-btn">Close Node</button>
+            <div class="grid-blob ${item.themeClass}"></div>
+            <div class="grid-blob ${item.altThemeClass}"></div>
+            <div class="tile-glare"></div>
+            <div class="tile-content">
+              <h3>${item.title}</h3>
+              <p>${item.shortDesc}</p>
+              <p class="extended-text">${item.extendedDesc}</p>
+              <div class="chart-container">
+                <svg class="chart-svg" viewBox="0 0 300 140" preserveAspectRatio="none">
+                  <line class="chart-grid-line" x1="0" y1="35" x2="300" y2="35"></line>
+                  <line class="chart-grid-line" x1="0" y1="70" x2="300" y2="70"></line>
+                  <line class="chart-grid-line" x1="0" y1="105" x2="300" y2="105"></line>
+                  <path class="chart-area" d=""></path>
+                  <path class="chart-line" d=""></path>
+                </svg>
+              </div>
+            </div>
+          </div>`;
+        } else if (item.type === 'flip') {
+          tile.innerHTML = `<div class="flip-card-inner">
+            <div class="showcase-card card-front">
+              <div class="grid-blob ${item.themeClass}"></div>
+              <div class="grid-blob ${item.altThemeClass}"></div>
+              <div class="tile-glare"></div>
+              <div class="tile-content">
+                <h3>${item.title}</h3>
+                <p>${item.shortDesc}</p>
+                <button class="glass-btn" id="triggerFlipFront">Enter Controls</button>
+              </div>
+            </div>
+            <div class="card-back">
+              <div class="back-header">
+                <h4>Core Overdrive</h4>
+                <p>${item.extendedDesc}</p>
+              </div>
+              <div class="toggle-wrapper">
+                <input type="checkbox" class="toggle-input" id="coreOverdriveToggle">
+                <label class="toggle-label" for="coreOverdriveToggle">
+                  <div class="ball"><div class="liquid-core"></div></div>
+                </label>
+              </div>
+              <button class="glass-btn" id="triggerFlipBack">Exit Controls</button>
+            </div>
+          </div>`;
+        }
+        container.appendChild(tile);
+      });
+      attachInteractionListeners();
+      // Initialize module 12 infographic updates
+      startChartDataLoop();
+    }
+
+    // --- MODULE 6: MASTER INTERACTION LISTENERS & COORDINATE INTERPOLATION ---
+    function attachInteractionListeners() {
+      const tiles = document.querySelectorAll('.grid-tile');
+      tiles.forEach(tile => {
+        const isFlip = tile.classList.contains('M-FlipNode');
+        const card = isFlip ? tile.querySelector('.card-front') : tile.querySelector('.showcase-card');
+        const glare = tile.querySelector('.tile-glare');
+        const flipInner = isFlip ? tile.querySelector('.flip-card-inner') : null;
+        tile.addEventListener('mousemove', (e) => {
+          if ((card.classList.contains('expanded')) || (flipInner && flipInner.classList.contains('flipped'))) return;
+          const rect = tile.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const gx = (x / rect.width * 100).toFixed(2);
+          const gy = (y / rect.height * 100).toFixed(2);
+          const tx = ((y / rect.height - 0.5) * -12).toFixed(2);
+          const ty = ((x / rect.width - 0.5) * 12).toFixed(2);
+          card.style.transform = `perspective(1000px) rotateX(${tx}deg) rotateY(${ty}deg)`;
+          glare.style.setProperty('--x', `${gx}%`);
+          glare.style.setProperty('--y', `${gy}%`);
+        });
+        tile.addEventListener('mouseleave', () => {
+          if (card.classList.contains('expanded') || (flipInner && flipInner.classList.contains('flipped'))) return;
+          card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+        // Setup expansion morph mappings across all standard card structures
+        if (!isFlip) {
+          const closeBtn = card.querySelector('.close-btn');
+          card.addEventListener('click', (e) => {
+            if (card.classList.contains('expanded') || e.target.classList.contains('glass-btn') || e.target.closest('.chart-container')) return;
+            // MODULE 11 TRIGGER: Pulse WebGL field on expansion action
+            triggerShaderSpark();
+            const rect = card.getBoundingClientRect();
+            card.style.top = `${rect.top}px`; card.style.left = `${rect.left}px`;
+            card.style.width = `${rect.width}px`; card.style.height = `${rect.height}px`;
+            card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+            setTimeout(() => {
+              card.classList.add('expanded');
+              card.style.top = '0px'; card.style.left = '0px';
+              card.style.width = '100vw'; card.style.height = '100vh';
+            }, 20);
+          });
+          closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            card.classList.remove('expanded');
+            const rect = tile.getBoundingClientRect();
+            card.style.top = `${rect.top}px`; card.style.left = `${rect.left}px`;
+            card.style.width = `${rect.width}px`; card.style.height = `${rect.height}px`;
+            setTimeout(() => {
+              card.style.top = ''; card.style.left = '';
+              card.style.width = ''; card.style.height = '';
+            }, 600);
+          });
+        }
+      });
+      // Pivot attachments specific to Module 2 flip configurations
+      const btnFlipFront = document.getElementById('triggerFlipFront');
+      const btnFlipBack = document.getElementById('triggerFlipBack');
+      const flipInner = document.querySelector('.flip-card-inner');
+      if(btnFlipFront && btnFlipBack) {
+        btnFlipFront.addEventListener('click', () => {
+          flipInner.classList.add('flipped');
+          btnFlipFront.style.transform = `perspective(1000px) rotateY(180deg)`;
+        });
+        btnFlipBack.addEventListener('click', () => {
+          flipInner.classList.remove('flipped');
+          btnFlipFront.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg)`;
+        });
+      }
+    }
+
+    // --- MODULE 7 & MODULE 10: SIDEBAR ACCORDION ROUTINES ---
+    const sidebar = document.getElementById('sidebarNode');
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const accordionTrigger = document.querySelector('.accordion-trigger');
+    const accordionGroup = document.querySelector('.accordion-group');
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      document.body.classList.toggle('sidebar-active');
+      // Collapse accordion submenus clean if macro track scales down
+      if (!sidebar.classList.contains('open')) {
+        accordionGroup.classList.remove('active');
+      }
+    });
+    accordionTrigger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      // Enforce full track extension baseline prior to sub-drawer disclosure loops
+      if (!sidebar.classList.contains('open')) {
+        sidebar.classList.add('open');
+        document.body.classList.add('sidebar-active');
+        setTimeout(() => { accordionGroup.classList.add('active'); }, 150);
+      } else {
+        accordionGroup.classList.toggle('active');
+      }
+    });
+
+    // --- MODULE 12: REALTIME MONITORING ARRAY GENERATION ALGORITHMS ---
+    function startChartDataLoop() {
+      const chartNode = document.querySelector('.M-ChartNode');
+      if (!chartNode) return;
+      const pathLine = chartNode.querySelector('.chart-line');
+      const pathArea = chartNode.querySelector('.chart-area');
+      const dataPoints = [62, 84, 55, 96, 70, 108, 66, 88, 74, 98, 60, 90];
+      const widthStep = 300 / (dataPoints.length - 1);
+      function updateChart() {
+        // Shift values to left, push dynamic fluctuating float coordinate variables onto stack
+        dataPoints.shift();
+        dataPoints.push(30 + Math.random() * 80);
+        let lineD = "";
+        let areaD = "M 0 140 ";
+        dataPoints.forEach((val, i) => {
+          const x = i * widthStep;
+          // Invert matrix bounds so high counts climb upward visually on canvas grids
+          const y = 140 - val;
+          if (i === 0) {
+            lineD += `M ${x} ${y} `;
+            areaD += `L ${x} ${y} `;
+          } else {
+            lineD += `L ${x} ${y} `;
+            areaD += `L ${x} ${y} `;
+          }
+        });
+        areaD += "L 300 140 Z";
+        pathLine.setAttribute('d', lineD);
+        pathArea.setAttribute('d', areaD);
+        setTimeout(updateChart, 1200);
+      }
+      updateChart();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initializeDashboard(mockApiResponse);
+    });
+  </script>
+</body>
+</html>
