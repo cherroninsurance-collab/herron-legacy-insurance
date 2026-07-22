@@ -623,6 +623,69 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   .cover-card.liquid-glass{background:var(--cloud)}
   .iul-preview.liquid-glass{background:rgba(8,18,38,.55)}
 }
+
+/* ============================================================
+   .lg-container — WebGL "Liquid Glass" panes (liquid-glass.js)
+   Layering contract (fail-safe, enforced in JS too):
+     z 10  .lg-canvas   pointer-events:none  (the WebGL glass)
+     z 20  .lg-content  pointer-events:auto  (all copy/buttons/forms)
+   The CSS backdrop-filter glass below is ACTIVE BY DEFAULT — it is
+   the fallback for low-end devices, blocked CDNs, reduced-motion and
+   no-JS. liquid-glass.js only *upgrades* it by adding .lg-webgl-on;
+   any WebGL failure/context-loss adds .webgl-failed-fallback which
+   restores this exact look. The layout can never break.
+   ============================================================ */
+.lg-container{
+  position:relative;isolation:isolate;border-radius:30px;
+  background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.22);
+  -webkit-backdrop-filter:blur(20px) saturate(1.35);
+  backdrop-filter:blur(20px) saturate(1.35);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 70px -28px rgba(8,18,38,.55);
+}
+.lg-container[data-lg-theme="light"]{
+  background:rgba(255,255,255,.5);border-color:rgba(14,31,62,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 30px 70px -28px rgba(8,18,38,.28);
+}
+/* explicit failure state (added by JS on context loss / init throw) */
+.lg-container.webgl-failed-fallback{
+  -webkit-backdrop-filter:blur(20px) saturate(1.35);
+  backdrop-filter:blur(20px) saturate(1.35);
+}
+/* WebGL active: the shader now draws the glass — hand off, avoid double blur */
+.lg-container.lg-webgl-on{
+  background:transparent;border-color:transparent;
+  -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;
+}
+.lg-canvas{position:absolute;z-index:10;pointer-events:none}   /* middle layer */
+.lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(14px,2vw,22px)}
+/* let the refracted scene glow through the chat shell when GL is on */
+.lg-webgl-on .lg-content .chat-shell{
+  background:rgba(8,18,38,.44);box-shadow:none;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+}
+/* no-backdrop-filter browsers: solid fills keep text legible */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .lg-container{background:rgba(8,18,38,.9)}
+  .lg-container[data-lg-theme="light"]{background:var(--cloud)}
+}
+
+/* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
+   glass so the WebGL refraction has high-contrast shapes to bend. */
+.lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(6px);will-change:transform}
+.lg-blob-purple{width:520px;height:520px;background:radial-gradient(circle,rgba(96,32,168,.34),transparent 62%);animation:lgDrift 26s ease-in-out infinite alternate}
+.lg-blob-indigo{width:620px;height:620px;background:radial-gradient(circle,rgba(70,96,220,.30),transparent 62%);animation:lgDrift 32s ease-in-out -8s infinite alternate-reverse}
+.lg-blob-cyan{width:480px;height:480px;background:radial-gradient(circle,rgba(28,190,214,.26),transparent 62%);animation:lgDrift 22s ease-in-out -14s infinite alternate}
+.bp-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.20),transparent 62%)}
+.bp-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.18),transparent 62%)}
+.bp-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.17),transparent 62%)}
+@keyframes lgDrift{
+  0%{transform:translate3d(0,0,0) scale(1)}
+  50%{transform:translate3d(70px,-50px,0) scale(1.12)}
+  100%{transform:translate3d(-60px,45px,0) scale(.94)}
+}
+.bp-band{position:relative;overflow:hidden}
+.bp-band .wrap{position:relative;z-index:1}
+@media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
 </style>
 </head>
 <body>
@@ -1004,6 +1067,10 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 <section class="ai-band" id="ai">
   <div class="glow glow-blue" style="top:-180px;left:-220px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-200px;right:-160px" aria-hidden="true"></div>
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-120px;right:6%" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-160px;left:24%" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:22%;right:-140px" aria-hidden="true"></div>
   <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ai-grid">
@@ -1019,7 +1086,13 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask your first question →</button>
       </div>
       <div class="reveal">
-        <div class="chat-shell" id="mainChat"></div>
+        <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+             by liquid-glass.js; content stays on top (z-20, clickable). -->
+        <div class="lg-container" data-liquid-glass data-lg-theme="dark">
+          <div class="lg-content">
+            <div class="chat-shell" id="mainChat"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1041,6 +1114,10 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 <!-- ============ LEGACY BLUEPRINT ============ -->
 <section class="bp-band" id="blueprint">
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-140px;left:-120px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-180px;right:-100px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:34%;left:38%" aria-hidden="true"></div>
   <div class="wrap">
     <div class="bp-head reveal">
       <div>
@@ -1054,7 +1131,11 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <div class="bp-step"><span class="n">03</span><div><b>We price it for real</b><span>Bring it to a call — Connor pulls live carrier offers.</span></div></div>
       </div>
     </div>
-    <div class="bp-card reveal">
+    <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+         by liquid-glass.js; content stays on top (z-20, clickable). -->
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
+    <div class="lg-content">
+    <div class="bp-card">
       <div class="bp-bar">
         <span class="dot" aria-hidden="true"></span>
         <b>Legacy Blueprint</b>
@@ -1066,6 +1147,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <span>Estimates are illustrative, not an offer of coverage or a quoted rate.</span>
         <span>Not loading? Call or text <a href="tel:6103608583">610-360-8583</a></span>
       </div>
+    </div>
+    </div>
     </div>
   </div>
 </section>
@@ -1952,5 +2035,9 @@ renderFit();
   matchMedia('(min-width:1081px)').addEventListener('change',function(m){if(m.matches)set(false)});
 })();
 </script>
+<!-- Liquid Glass WebGL engine (progressive enhancement — if this module or its
+     Three.js CDN import fails to load, the CSS backdrop-filter glass already
+     styled on .lg-container simply remains active). -->
+<script type="module" src="liquid-glass.js"></script>
 </body>
 </html>
