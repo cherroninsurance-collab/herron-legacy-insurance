@@ -490,6 +490,7 @@
         uniform float uSparkTime;
         varying float vAlpha;
         varying vec3 vColor;
+        varying float vSpark;
         void main() {
           float angle = aMover + (uTime * 0.02);
           vec2 baseOffset = vec2(cos(angle), sin(angle)) * 0.25;
@@ -503,20 +504,23 @@
           }
           // --- MODULE 11: SHADER CHROMATIC SPARK BURST EXTENSION ---
           vec2 finalPos = basePos + attraction;
+          float sparkGlow = 0.0;
           if (uSparkTime > 0.01 && uSparkTime < 1.0) {
             float wave = sin((distance * 8.0) - (uSparkTime * 4.0));
             if (abs(wave) < 0.15) {
-              finalPos += normalize(toMouse) * (1.0 - uSparkTime) * 0.08;
+              finalPos -= normalize(toMouse) * (1.0 - uSparkTime) * 0.08;
+              sparkGlow = 1.0 - uSparkTime;
             }
           }
+          vSpark = sparkGlow;
           gl_Position = vec4(finalPos, 0.0, 1.0);
-          gl_PointSize = 3.5 + (sin(angle) * 1.5);
+          gl_PointSize = 3.5 + (sin(angle) * 1.5) + (sparkGlow * 3.0);
           vAlpha = 0.25 + (cos(angle) * 0.2);
           // Chromatic variation interpolate
           vColor = mix(vec3(0.45, 0.62, 1.0), vec3(0.2, 0.95, 0.6), sin(angle) * 0.5 + 0.5);
         }
       `;
-      const fsSource = `precision mediump float; varying float vAlpha; varying vec3 vColor; void main() { gl_FragColor = vec4(vColor, vAlpha); }`;
+      const fsSource = `precision mediump float; varying float vAlpha; varying vec3 vColor; varying float vSpark; void main() { vec3 emissive = mix(vColor, vec3(1.0, 0.62, 0.88), vSpark); gl_FragColor = vec4(emissive, vAlpha + vSpark * 0.55); }`;
       function createShader(gl, type, source) {
         const shader = gl.createShader(type);
         gl.shaderSource(shader, source);
@@ -732,6 +736,8 @@
       const flipInner = document.querySelector('.flip-card-inner');
       if(btnFlipFront && btnFlipBack) {
         btnFlipFront.addEventListener('click', () => {
+          // MODULE 11 TRIGGER: flip pivot counts as a module expansion step
+          triggerShaderSpark();
           flipInner.classList.add('flipped');
           btnFlipFront.style.transform = `perspective(1000px) rotateY(180deg)`;
         });
