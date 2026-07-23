@@ -1,0 +1,1734 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herron Legacy — Viral Content Kit</title>
+<meta name="description" content="Social content playbook for Herron & Co. Legacy Agency — reels, posts, stories, 30-day calendar, hashtags, and link-in-bio setup, built in-brand.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081226'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23E2B45C' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='21' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<style>
+/* ============================================================
+   HERRON LEGACY — VIRAL CONTENT KIT
+   Brand-locked to herronlegacyinsurance.com
+   Single dark navy world (deliberate — it IS the brand).
+   ============================================================ */
+:root{
+  --navy-deep:#081226; --navy:#0E1F3E; --navy-mid:#16305C;
+  --blue:#3E68B8; --blue-bright:#5B8DEF;
+  --brass:#C9973B; --brass-bright:#E2B45C; --brass-glow:rgba(226,180,92,.16);
+  --white:#FFFFFF; --cloud:#F4F6FA; --mist:#E4EAF4;
+  --ink-100:#EAF0FB; --ink-70:rgba(234,240,251,.72); --ink-50:rgba(234,240,251,.52); --ink-35:rgba(234,240,251,.35);
+  --line:rgba(255,255,255,.10); --line-strong:rgba(226,180,92,.34);
+  --glass:rgba(14,31,62,.46); --glass-2:rgba(8,18,38,.6);
+  --radius:18px; --radius-sm:12px;
+  --shadow:0 30px 70px -30px rgba(0,0,0,.6);
+  --font-display:'Sora','Segoe UI',system-ui,-apple-system,sans-serif;
+  --font-body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  font-family:var(--font-body);color:var(--ink-100);line-height:1.62;font-size:16px;
+  background:var(--navy-deep);-webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(1200px 620px at 82% -8%,rgba(43,86,158,.30),transparent 60%),
+    radial-gradient(900px 500px at 8% 4%,rgba(226,180,92,.07),transparent 55%);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:600;line-height:1.1;letter-spacing:-.02em;text-wrap:balance}
+a{color:inherit;text-decoration:none}
+em{font-style:normal;color:var(--brass-bright)}
+::selection{background:var(--brass);color:var(--navy-deep)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px}
+.mono{font-family:var(--font-mono)}
+
+/* eyebrow */
+.eyebrow{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:500;display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--brass);opacity:.7}
+
+/* ---------- NAV ---------- */
+nav{position:sticky;top:0;z-index:100;background:rgba(8,18,38,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 22px;max-width:1260px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(150deg,var(--navy-mid),var(--navy-deep));border:1px solid rgba(226,180,92,.5);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-mark svg{width:24px;height:24px}
+.brand-txt b{font-family:var(--font-display);font-weight:700;font-size:15px;display:block;letter-spacing:-.01em;line-height:1.15}
+.brand-txt span{font-family:var(--font-mono);font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--brass)}
+.nav-links{display:flex;gap:6px;flex-wrap:wrap}
+.nav-links a{font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--ink-50);padding:7px 11px;border-radius:8px;transition:color .15s,background .15s}
+.nav-links a:hover{color:var(--ink-100);background:rgba(255,255,255,.05)}
+@media(max-width:900px){.nav-links{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:54px 54px;pointer-events:none;mask-image:linear-gradient(180deg,#000,transparent 90%)}
+.hero-inner{position:relative;z-index:1;padding:78px 22px 64px;max-width:1120px;margin:0 auto}
+.hero .pill{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line-strong);border-radius:999px;padding:7px 15px;font-family:var(--font-mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:26px}
+.hero .pill i{width:7px;height:7px;border-radius:50%;background:var(--brass-bright);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(34px,6vw,62px);font-weight:700;max-width:15ch}
+.hero h1 .grad{background:linear-gradient(94deg,var(--brass-bright),#F3D9A0 60%,var(--brass));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:clamp(16px,2.2vw,19px);color:var(--ink-70);margin:22px 0 0;max-width:60ch}
+.hero-stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:38px}
+.hstat{background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 20px;backdrop-filter:blur(8px);min-width:118px}
+.hstat b{font-family:var(--font-display);font-size:26px;font-weight:700;display:block;line-height:1;font-variant-numeric:tabular-nums}
+.hstat span{font-size:12px;color:var(--ink-50);font-family:var(--font-mono);letter-spacing:.04em;margin-top:6px;display:block}
+
+/* ---------- SECTION SHELL ---------- */
+section{padding:64px 0;border-bottom:1px solid var(--line)}
+.sec-head{max-width:70ch;margin-bottom:34px}
+.sec-head h2{font-size:clamp(26px,4vw,40px);font-weight:600;margin:14px 0 0}
+.sec-head p{color:var(--ink-70);font-size:16.5px;margin-top:14px}
+.sec-head .count{float:right;font-family:var(--font-mono);font-size:12px;color:var(--brass);border:1px solid var(--line-strong);border-radius:999px;padding:6px 13px;letter-spacing:.08em}
+
+/* ---------- GLASS CARD ---------- */
+.card{background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.card::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+@media(max-width:860px){.pillars{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.pillars{grid-template-columns:1fr}}
+.pillar{padding:22px 20px}
+.pillar .n{font-family:var(--font-mono);font-size:12px;color:var(--brass);letter-spacing:.1em}
+.pillar h4{font-size:17px;margin:12px 0 8px;font-weight:600}
+.pillar p{font-size:13.5px;color:var(--ink-70);line-height:1.55}
+
+/* ---------- REEL / POST CARDS ---------- */
+.stack{display:flex;flex-direction:column;gap:20px}
+.piece{padding:0;overflow:hidden}
+.piece-top{display:grid;grid-template-columns:minmax(0,1fr) 264px;gap:0}
+@media(max-width:820px){.piece-top{grid-template-columns:1fr}}
+.piece-body{padding:26px 26px 8px}
+.piece-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:7px;border:1px solid var(--line);color:var(--ink-70)}
+.tag.reel{border-color:rgba(91,141,239,.4);color:var(--blue-bright);background:rgba(91,141,239,.08)}
+.tag.post{border-color:var(--line-strong);color:var(--brass-bright);background:var(--brass-glow)}
+.tag.story{border-color:rgba(226,180,92,.34);color:var(--brass-bright)}
+.tag.save{border-color:rgba(78,201,141,.4);color:#7ee0a8;background:rgba(78,201,141,.08)}
+.piece h3{font-size:21px;font-weight:600;margin-bottom:6px}
+.piece .goal{font-size:13px;color:var(--ink-50);font-family:var(--font-mono);letter-spacing:.02em;margin-bottom:18px}
+.block{margin:18px 0}
+.block .lbl{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass);margin-bottom:10px;display:block}
+.beats{list-style:none;display:flex;flex-direction:column;gap:9px}
+.beats li{display:grid;grid-template-columns:58px 1fr;gap:12px;font-size:14.5px;color:var(--ink-100);align-items:baseline}
+.beats li .t{font-family:var(--font-mono);font-size:11.5px;color:var(--blue-bright);letter-spacing:.03em;padding-top:2px}
+.beats li b{color:var(--brass-bright);font-weight:600}
+.shot{list-style:none;display:flex;flex-direction:column;gap:7px}
+.shot li{font-size:13.5px;color:var(--ink-70);padding-left:18px;position:relative;line-height:1.5}
+.shot li::before{content:"▸";position:absolute;left:0;color:var(--brass);font-size:11px;top:1px}
+
+/* caption block (copy-paste) */
+.caption{background:var(--glass-2);border:1px solid var(--line);border-left:2px solid var(--brass);border-radius:10px;padding:16px 18px;margin-top:6px}
+.caption .capbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.caption .capbar span{font-family:var(--font-mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-50)}
+.caption p{font-size:14.5px;line-height:1.66;color:var(--ink-100);white-space:pre-wrap}
+.caption .tags-line{margin-top:12px;font-family:var(--font-mono);font-size:12.5px;color:var(--blue-bright);line-height:1.7;word-spacing:1px}
+.copyhint{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-35);border:1px solid var(--line);border-radius:6px;padding:3px 8px}
+
+/* ---------- PHONE MOCKS ---------- */
+.mockcol{background:linear-gradient(180deg,rgba(8,18,38,.5),rgba(8,18,38,.85));border-left:1px solid var(--line);display:flex;align-items:center;justify-content:center;padding:26px 20px}
+@media(max-width:820px){.mockcol{border-left:none;border-top:1px solid var(--line)}}
+
+/* social frames (real, screenshot-able) */
+.frame{position:relative;overflow:hidden;color:#fff;background:radial-gradient(720px 420px at 78% -12%,#1B3868,var(--navy) 46%,var(--navy-deep));border:1px solid rgba(226,180,92,.28);box-shadow:var(--shadow)}
+.frame .fg{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.06) 1px,transparent 1px);background-size:34px 34px}
+.frame .fglow{position:absolute;width:60%;height:40%;top:-10%;right:-8%;background:radial-gradient(circle,var(--brass-glow),transparent 68%)}
+.frame .fin{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;padding:26px}
+.frame .feye{font-family:var(--font-mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:auto;display:flex;align-items:center;gap:8px}
+.frame .feye i{width:6px;height:6px;border-radius:50%;background:var(--brass-bright);display:inline-block}
+.frame .fh{font-family:var(--font-display);font-weight:700;letter-spacing:-.02em;line-height:1.06}
+.frame .fsub{color:rgba(234,240,251,.8);line-height:1.4}
+.frame .ffoot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.14);padding-top:13px}
+.frame .fhandle{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.03em;color:rgba(234,240,251,.72)}
+.frame .fcta{font-family:var(--font-display);font-weight:600;font-size:11px;background:var(--brass);color:var(--navy-deep);padding:6px 11px;border-radius:7px}
+.frame .heronmark{width:28px;height:28px;flex-shrink:0}
+
+/* portrait 9:16 */
+.frame.v{width:250px;aspect-ratio:9/16;border-radius:20px}
+.frame.v .fh{font-size:27px}
+/* square 1:1 */
+.frame.sq{width:270px;aspect-ratio:1/1;border-radius:18px}
+.frame.sq .fh{font-size:30px}
+
+.mockcap{text-align:center;margin-top:12px;font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-35)}
+
+/* on-frame helpers */
+.chip{display:inline-block;background:rgba(8,18,38,.72);border:1px solid rgba(255,255,255,.16);border-radius:9px;padding:8px 12px;font-family:var(--font-mono);font-size:11px;color:#fff;backdrop-filter:blur(6px)}
+.poll{background:rgba(8,18,38,.55);border:1px solid rgba(255,255,255,.18);border-radius:13px;padding:12px;backdrop-filter:blur(6px)}
+.poll .q{font-family:var(--font-display);font-weight:600;font-size:14px;margin-bottom:10px;line-height:1.25}
+.poll .opt{display:flex;justify-content:space-between;font-size:12px;padding:8px 11px;border-radius:8px;background:rgba(255,255,255,.08);margin-bottom:7px;font-family:var(--font-mono)}
+.poll .opt.hot{background:var(--brass);color:var(--navy-deep);font-weight:600}
+
+/* ---------- LINK IN BIO / META ---------- */
+.linkgrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+@media(max-width:820px){.linkgrid{grid-template-columns:1fr}}
+.linkbox{padding:26px}
+.biobox{background:var(--glass-2)}
+.bio-preview{border:1px solid var(--line);border-radius:14px;padding:18px;background:rgba(8,18,38,.5);margin-top:6px}
+.bio-preview .row{display:flex;gap:13px;align-items:center;margin-bottom:14px}
+.bio-av{width:52px;height:52px;border-radius:50%;background:linear-gradient(150deg,var(--navy-mid),var(--navy-deep));border:1px solid var(--line-strong);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bio-av svg{width:30px;height:30px}
+.bio-handle b{font-family:var(--font-display);font-size:15px;display:block}
+.bio-handle span{font-size:12px;color:var(--ink-50);font-family:var(--font-mono)}
+.bio-lines{font-size:14px;line-height:1.7;white-space:pre-wrap;color:var(--ink-100)}
+.bio-link{color:var(--blue-bright);font-family:var(--font-mono);font-size:13px;word-break:break-all}
+.linklist{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.linklist li{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--glass);border:1px solid var(--line);border-radius:11px;padding:12px 15px}
+.linklist .l b{font-size:14px;font-family:var(--font-display);font-weight:600;display:block}
+.linklist .l span{font-size:11.5px;color:var(--ink-50);font-family:var(--font-mono)}
+.linklist .u{font-family:var(--font-mono);font-size:11.5px;color:var(--brass-bright);text-align:right;word-break:break-all;max-width:48%}
+.note{background:var(--brass-glow);border:1px solid var(--line-strong);border-radius:12px;padding:15px 17px;font-size:13.5px;color:var(--ink-70);margin-top:18px;line-height:1.6}
+.note b{color:var(--brass-bright)}
+
+/* ---------- CALENDAR ---------- */
+.calwrap{overflow-x:auto;border:1px solid var(--line);border-radius:16px}
+.cal{width:100%;border-collapse:collapse;min-width:720px;font-size:13px}
+.cal th{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-50);padding:13px 10px;text-align:left;border-bottom:1px solid var(--line);background:rgba(8,18,38,.5);position:sticky;left:0}
+.cal td{padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-70)}
+.cal td.day{font-family:var(--font-mono);color:var(--brass);white-space:nowrap;font-size:12px}
+.cal td b{color:var(--ink-100);font-family:var(--font-display);font-weight:600;font-size:13.5px}
+.cal tr:hover td{background:rgba(255,255,255,.03)}
+.fmt{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:6px;border:1px solid var(--line);white-space:nowrap}
+.fmt.reel{color:var(--blue-bright);border-color:rgba(91,141,239,.4)}
+.fmt.post{color:var(--brass-bright);border-color:var(--line-strong)}
+.fmt.story{color:#7ee0a8;border-color:rgba(78,201,141,.4)}
+
+/* ---------- HASHTAG BANKS + HOOKS ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:820px){.two{grid-template-columns:1fr}}
+.bank{padding:22px 24px}
+.bank h4{font-size:16px;margin-bottom:6px}
+.bank .desc{font-size:12.5px;color:var(--ink-50);margin-bottom:14px;font-family:var(--font-mono)}
+.bank .tags-line{font-family:var(--font-mono);font-size:12.5px;color:var(--blue-bright);line-height:1.9}
+.hooks{list-style:none;display:flex;flex-direction:column;gap:9px;counter-reset:h}
+.hooks li{counter-increment:h;font-size:14.5px;color:var(--ink-100);padding-left:34px;position:relative;line-height:1.5}
+.hooks li::before{content:counter(h,decimal-leading-zero);position:absolute;left:0;top:1px;font-family:var(--font-mono);font-size:11px;color:var(--brass);border:1px solid var(--line-strong);border-radius:6px;padding:2px 5px}
+.hooks li em{color:var(--brass-bright)}
+
+/* playbook */
+.play{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px}
+@media(max-width:820px){.play{grid-template-columns:1fr}}
+.play .card{padding:20px}
+.play h4{font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:9px}
+.play h4 .dot{width:8px;height:8px;border-radius:50%;background:var(--brass);flex-shrink:0}
+.play ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.play li{font-size:13.5px;color:var(--ink-70);padding-left:16px;position:relative;line-height:1.5}
+.play li::before{content:"→";position:absolute;left:0;color:var(--brass);font-size:12px}
+.play li b{color:var(--ink-100)}
+
+/* footer */
+footer{padding:48px 0 60px;text-align:center}
+footer .heron{width:44px;height:44px;margin:0 auto 16px;opacity:.9}
+footer p{font-size:12.5px;color:var(--ink-35);max-width:74ch;margin:10px auto 0;line-height:1.7}
+footer .big{font-family:var(--font-display);font-size:18px;color:var(--ink-100);font-weight:600}
+footer a{color:var(--brass-bright)}
+
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
+          <path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="4.4" stroke-linecap="round"/>
+          <circle cx="136" cy="66" r="3" fill="#fff"/>
+        </svg>
+      </div>
+      <div class="brand-txt">
+        <b>Herron&nbsp;&amp;&nbsp;Co. Legacy Agency</b>
+        <span>Viral Content Kit</span>
+      </div>
+    </div>
+    <div class="nav-links">
+      <a href="#strategy">Strategy</a>
+      <a href="#links">Link&nbsp;in&nbsp;Bio</a>
+      <a href="#reels">Reels</a>
+      <a href="#posts">Posts</a>
+      <a href="#stories">Stories</a>
+      <a href="#calendar">30-Day&nbsp;Plan</a>
+      <a href="#hashtags">Hashtags</a>
+      <a href="#playbook">Playbook</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="grid-lines" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <span class="pill"><i></i> Built from herronlegacyinsurance.com · The honest-agent engine</span>
+    <h1>Make insurance <span class="grad">impossible to scroll past.</span></h1>
+    <p class="lede">A ready-to-post content system for Connor Herron — reels, feed posts, and stories engineered around the one thing no other agent will do on camera: <em>tell people the truth.</em> Every piece is written to stop the thumb, earn the save, and drive one tap to your calendar.</p>
+    <div class="hero-stats">
+      <div class="hstat"><b>8</b><span>reels, shot-by-shot</span></div>
+      <div class="hstat"><b>10</b><span>feed posts</span></div>
+      <div class="hstat"><b>6</b><span>story sets</span></div>
+      <div class="hstat"><b>30</b><span>day calendar</span></div>
+      <div class="hstat"><b>$0</b><span>your best hook</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ STRATEGY ============ -->
+<section id="strategy">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">The big idea</span>
+      <h2>You're not selling insurance. You're the agent who tells people the truth.</h2>
+      <p>The insurance feed is wall-to-wall fear and hard-sells. Your unfair advantage is the opposite: radical honesty — "I'll tell you <em>not</em> to buy it," "$0 to work with me," "someone promised 12% and no downside? Run." Counterintuitive + useful + human is the exact recipe the algorithm rewards with saves, shares, and comments. Every piece below ladders up to one of four pillars.</p>
+    </div>
+    <div class="pillars">
+      <div class="card pillar reveal"><div class="n">PILLAR 01</div><h4>What agents won't tell you</h4><p>Myth-busts and curtain-pulls. The pattern-interrupt that earns the share: "3 things most agents will never say out loud."</p></div>
+      <div class="card pillar reveal"><div class="n">PILLAR 02</div><h4>Living benefits &amp; real scenarios</h4><p>The emotional core. POV storytelling — "you get diagnosed, and your policy pays <em>you</em>." Relatable, human, save-worthy.</p></div>
+      <div class="card pillar reveal"><div class="n">PILLAR 03</div><h4>Legacy AI — the novelty</h4><p>"An insurance agent built an AI that gives honest advice at 2am and won't upsell you." Genuinely new = genuinely shareable.</p></div>
+      <div class="card pillar reveal"><div class="n">PILLAR 04</div><h4>Lehigh Valley + human trust</h4><p>Your face, your zip code. "Call the number, you get me — not a call center." Local pride travels fast and converts.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LINK IN BIO / META ============ -->
+<section id="links">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="count">Instagram + Meta</span>
+      <span class="eyebrow">The clickable link, done right</span>
+      <h2>One tap from the scroll to your calendar.</h2>
+      <p>Instagram kills links in captions — so every IG piece drives to <b>"link in bio."</b> Facebook &amp; threads <em>do</em> allow clickable links, so those get the full URL inline. Here's the exact bio, the link, and the destinations.</p>
+    </div>
+
+    <div class="linkgrid">
+      <div class="card linkbox reveal">
+        <span class="eyebrow" style="margin-bottom:14px">Your link-in-bio hub</span>
+        <p style="color:var(--ink-70);font-size:14.5px;margin-bottom:8px">A dedicated, mobile-first hub page is included in this kit — big tap targets, your brand, one job: route the click. Set it as your only Instagram link.</p>
+        <ul class="linklist">
+          <li><div class="l"><b>🗓 Book a free 15-min call</b><span>primary CTA · Cal.com</span></div><div class="u">…com/#booking</div></li>
+          <li><div class="l"><b>⚡ Instant quote / Blueprint</b><span>self-serve estimate</span></div><div class="u">…com/#blueprint</div></li>
+          <li><div class="l"><b>🎙 Ask Legacy AI (24/7)</b><span>the novelty magnet</span></div><div class="u">…com/#ai</div></li>
+          <li><div class="l"><b>📞 Call / text Connor</b><span>tap-to-dial</span></div><div class="u">610-360-8583</div></li>
+        </ul>
+        <div class="note"><b>Your bio link →</b> set it to <span class="mono" style="color:var(--brass-bright)">herronlegacyinsurance.com/link</span> (the hub page in this kit). Prefer one link only? Point straight to <span class="mono" style="color:var(--brass-bright)">herronlegacyinsurance.com</span> — the homepage already has Book, Blueprint, and Legacy AI in it.</div>
+      </div>
+
+      <div class="card linkbox biobox reveal">
+        <span class="eyebrow" style="margin-bottom:14px">Copy-paste Instagram bio</span>
+        <div class="bio-preview">
+          <div class="row">
+            <div class="bio-av">
+              <svg viewBox="0 0 240 300" fill="none" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="4.6" stroke-linecap="round"/><circle cx="136" cy="66" r="3" fill="#fff"/></svg>
+            </div>
+            <div class="bio-handle"><b>Herron &amp; Co. Legacy Agency</b><span>@herronlegacy · Personal finance</span></div>
+          </div>
+          <div class="bio-lines">🛡 Life insurance without the sales pitch
+📍 Lehigh Valley · licensed in 13 states
+💬 "I'll tell you if it's NOT right for you"
+🤖 Ask my AI anything — free, 24/7
+👇 Book 15 min · $0 to work with me</div>
+          <div style="margin-top:12px" class="bio-link">🔗 herronlegacyinsurance.com/link</div>
+        </div>
+        <div class="note"><b>Facebook / Threads posts:</b> paste the link <em>inside</em> the caption — <span class="mono">herronlegacyinsurance.com/#booking</span>. <b>Instagram / Reels / TikTok:</b> end the caption with <em>"Link in bio 👆"</em> and pin a comment with the link too.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REELS ============ -->
+<section id="reels">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="count">08 reels</span>
+      <span class="eyebrow">The viral engine · vertical 9:16</span>
+      <h2>Reels do the reach. Here they are, shot by shot.</h2>
+      <p>Each reel: the 3-second hook (say it <em>and</em> put it on screen), the beat sheet, a shot list, an audio call, and a caption you can paste. Keep them 15–35s, subtitles always on, face in the first frame when you can.</p>
+    </div>
+
+    <div class="stack">
+
+      <!-- REEL 1 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 01</span><span class="tag">Pillar 01 · Myth-bust</span><span class="tag save">Save-bait</span></div>
+            <h3>"3 things insurance agents will never tell you"</h3>
+            <div class="goal">Goal: trust + shares · Hook style: authority confession</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "I'm a licensed insurance agent. Here are 3 things most of us will never tell you." (deadpan, straight to camera)</span></li>
+                <li><span class="t">3–11s</span><span><b>1.</b> "You can use your life insurance <em>while you're alive.</em> Cancer, heart attack, stroke — living benefits can pay <em>you</em>, not just your family."</span></li>
+                <li><span class="t">11–20s</span><span><b>2.</b> "An independent agent costs you <em>$0.</em> Your price is identical to buying direct. So if someone pressures you — walk."</span></li>
+                <li><span class="t">20–28s</span><span><b>3.</b> "If a policy's wrong for you, a good agent says <em>don't buy it.</em> I turn people away every week."</span></li>
+                <li><span class="t">28–32s</span><span><b>CTA:</b> "Connor, Lehigh Valley. 15 minutes, no pressure — link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Single talking-head, chest-up, window light. Change your position slightly on each of the 3 points so the cut has rhythm.</li>
+                <li>On-screen text: big number "1 / 2 / 3" top-center on each point (brass on navy lower-third).</li>
+                <li>Audio: trending low-fi / "storytime" beat at ~20% volume under your voice. Captions burned in.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>The 3 sentences your agent hopes you never Google. 👇
+
+1. Living benefits mean your policy can pay YOU while you're alive.
+2. An independent agent is $0 to you — same price as direct.
+3. The right answer is sometimes "don't buy this."
+
+That's the whole job. Save this before your next renewal.
+
+📍 Lehigh Valley · licensed in 13 states · $0 to work with me
+Book 15 min → link in bio 👆</p>
+                <div class="tags-line">#lifeinsurance #insurancetips #personalfinance #financialliteracy #livingbenefits #lehighvalley #moneytok #protectyourfamily #insuranceagent #financetok</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> Honest agent</div>
+                  <div style="margin:auto 0">
+                    <div class="chip" style="margin-bottom:14px">🎙 licensed agent, off the record</div>
+                    <div class="fh">3 things<br>we'll never<br><span style="color:var(--brass-bright)">tell you.</span></div>
+                  </div>
+                  <div class="ffoot">
+                    <span class="fhandle">@herronlegacy</span>
+                    <span class="fcta">Link in bio</span>
+                  </div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 2 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 02</span><span class="tag">Pillar 01 · Shock stat</span></div>
+            <h3>"70% of you will need care. Medicare pays $0."</h3>
+            <div class="goal">Goal: reach via disbelief · Hook style: number + gut-punch</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "70% of people over 65 will need long-term care. Want to know what Medicare pays for it?" <em>(beat)</em> "Nothing."</span></li>
+                <li><span class="t">3–12s</span><span>"A nursing home near us runs $100k+ a year. That comes straight out of the savings you spent 40 years building."</span></li>
+                <li><span class="t">12–22s</span><span>"Old long-term-care insurance was 'use it or lose it.' The new hybrids fix that: they pay for care if you need it — and pay your family if you don't. Money's never wasted."</span></li>
+                <li><span class="t">22–28s</span><span><b>CTA:</b> "If you're 50–68, this is the window. Link in bio — I'll show you the math free."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Talking head + one B-roll cut on "$100k a year" (text slams on screen, sound-effect whoosh).</li>
+                <li>On-screen text does the heavy lifting: "70%", "MEDICARE: $0", "$100,000/yr", "pays either way."</li>
+                <li>Audio: tense/curiosity trending sound. Hard cut on the word "Nothing."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>70% will need long-term care after 65. Medicare covers $0 of it. 😳
+
+The old fix was "use it or lose it" insurance nobody wanted. The new hybrids pay for your care if you need it — and pay your family if you don't. It pays out either way.
+
+Ages 50–68 is the sweet spot. Want the real numbers for your situation? Free, no pressure.
+
+Book 15 min → link in bio 👆
+📍 Lehigh Valley · licensed in 13 states</p>
+                <div class="tags-line">#longtermcare #retirementplanning #medicare #babyboomers #financialplanning #genx #caregiving #lehighvalley #personalfinance #insurancetips</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> The number nobody says</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:64px;line-height:.9">70%</div>
+                    <div class="fsub" style="margin-top:10px;font-size:15px">will need long-term care after 65.</div>
+                    <div class="chip" style="margin-top:16px;background:var(--brass);color:var(--navy-deep);border:none;font-weight:600">Medicare pays: $0</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 3 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 03</span><span class="tag">Pillar 02 · POV story</span><span class="tag save">Save-bait</span></div>
+            <h3>"POV: the diagnosis comes — and your policy pays YOU"</h3>
+            <div class="goal">Goal: emotional saves + DMs · Hook style: POV reframe</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK (on-screen text):</b> "POV: you just got the diagnosis nobody wants." (soft, real tone to camera)</span></li>
+                <li><span class="t">3–13s</span><span>"Most people think life insurance only pays when you die. So they white-knuckle the medical bills and hope."</span></li>
+                <li><span class="t">13–23s</span><span>"But a policy with <em>living benefits</em> can advance you part of the death benefit <em>now</em> — for a critical or chronic illness. Tax-advantaged cash, while you're still here to use it."</span></li>
+                <li><span class="t">23–30s</span><span><b>CTA:</b> "Ask if your policy has living benefits. If it doesn't, ask me why. Link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Quiet, close, honest framing — this one is tone, not hype. No jokes.</li>
+                <li>On-screen text reveal: "life insurance = pays when you die" → strike it through → "living benefits = pays while you LIVE."</li>
+                <li>Audio: soft emotional piano trend, low. Let one line breathe in silence.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Everyone thinks life insurance only pays when you're gone. 🩺
+
+Living benefits change that. A critical or chronic illness — cancer, heart attack, stroke — can trigger an advance of your OWN death benefit, in cash, while you're alive to use it. Rent, treatment, time off. Whatever you need.
+
+Two-minute homework: ask if your policy has living benefit riders. If it doesn't, ask why. Save this for that conversation.
+
+Book 15 min → link in bio 👆</p>
+                <div class="tags-line">#livingbenefits #lifeinsurance #cancerawareness #financialliteracy #protectyourfamily #healthinsurance #personalfinance #lehighvalley #insurancetips #moneytok</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> POV</div>
+                  <div style="margin:auto 0">
+                    <div class="fsub" style="font-size:14px;text-decoration:line-through;opacity:.6;margin-bottom:8px">pays when you die</div>
+                    <div class="fh">It can pay<br>you <span style="color:var(--brass-bright)">while<br>you live.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy · living benefits</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 4 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 04</span><span class="tag">Pillar 03 · Legacy AI</span><span class="tag">Novelty</span></div>
+            <h3>"I built an AI that gives honest insurance advice at 2am"</h3>
+            <div class="goal">Goal: reach beyond the niche · Hook style: "I built…" flex</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "I'm an insurance agent, and I built an AI that will talk you <em>out</em> of a bad policy at 2 in the morning." (screen-record the chat)</span></li>
+                <li><span class="t">3–13s</span><span>"It runs on Claude, on my own server. I wrote its playbook. It can't quote you a rate, can't promise approval, can't sell you anything — by design."</span></li>
+                <li><span class="t">13–22s</span><span>"Ask it 'do I even need IUL?' and it'll tell you when the answer is no. Then it hands you to me — a real licensed human — only if you want that."</span></li>
+                <li><span class="t">22–28s</span><span><b>CTA:</b> "It's free. It doesn't store your chat. Try to stump it — link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Screen-record Legacy AI answering a real question; your face in a small corner cam reacting.</li>
+                <li>On-screen text: "runs on Claude", "can't sell you anything", "won't store your chat".</li>
+                <li>Audio: upbeat curious/tech trend. Fast, punchy cuts on each capability.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>I gave my clients an AI that will argue AGAINST selling them something. 🤖
+
+Legacy AI runs on Claude, on my own server. Hard rules: it can't quote a rate, can't promise you'll be approved, can't upsell. It answers your questions in plain English at any hour, then hands you to a real human (me) only if you want one.
+
+Free. Doesn't store your chat. Go try to stump it.
+
+🔗 link in bio · 📍 Lehigh Valley</p>
+                <div class="tags-line">#ai #insurtech #lifeinsurance #artificialintelligence #fintech #smallbusiness #personalfinance #techtok #lehighvalley #insuranceagent</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> Legacy AI · 24/7</div>
+                  <div style="margin:auto 0">
+                    <div class="chip" style="margin-bottom:12px;border-color:rgba(91,141,239,.5);color:var(--blue-bright)">🤖 runs on Claude</div>
+                    <div class="fh">An AI that<br>won't <span style="color:var(--brass-bright)">upsell<br>you.</span></div>
+                    <div class="fsub" style="margin-top:12px;font-size:13px">Ask it anything. It can't sell you a thing.</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Try it free</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 5 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 05</span><span class="tag">Pillar 01 · Red flags</span><span class="tag save">Save-bait</span></div>
+            <h3>"Someone promised you 12% and no downside? Run."</h3>
+            <div class="goal">Goal: authority + shares · Hook style: call-out</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "If an agent tells you this policy earns 12% with no risk — get up and leave." (point at camera)</span></li>
+                <li><span class="t">3–20s</span><span>"IUL can be a great tool for the right person. But here's what to <em>demand</em> before you sign anything:" — list fast: <b>the guaranteed column</b>, <b>illustrated at 5% not just 7%</b>, <b>the funding schedule in writing</b>, <b>a MEC test</b>.</span></li>
+                <li><span class="t">20–27s</span><span>"A policy sold to someone who can't fund it lapses — and a lapsed policy is worse than no policy. You paid for years and walk away with pennies."</span></li>
+                <li><span class="t">27–32s</span><span><b>CTA:</b> "Bring me any illustration. I'll red-flag it free. Link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Energetic, "protective older-brother" tone. Fast list = fast cuts, each demand as a full-screen text card.</li>
+                <li>On-screen checklist builds line by line; brass check marks appear.</li>
+                <li>Audio: confident/no-nonsense trending beat.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>"12% and no downside." If you hear that, leave. 🚩
+
+IUL is a real tool for the right person — but demand these before you sign ANY illustration:
+✅ The guaranteed column (worst-case the carrier is legally allowed)
+✅ It illustrated at 5%, not just a rosy 7%
+✅ The funding schedule in writing
+✅ A MEC test
+
+A policy you can't fund lapses — and that's worse than never buying. Save this. Send it to whoever's "thinking about it."
+
+Bring me any illustration, I'll red-flag it free → link in bio 👆</p>
+                <div class="tags-line">#iul #indexeduniversallife #lifeinsurance #financialliteracy #moneytok #investing #personalfinance #wealthbuilding #insurancetips #lehighvalley</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> Read before you sign</div>
+                  <div style="margin:auto 0">
+                    <div class="fh">"12% &amp;<br>no risk"?</div>
+                    <div class="chip" style="margin-top:16px;background:var(--brass);color:var(--navy-deep);border:none;font-weight:600;font-size:14px">🚩 Run.</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy · IUL red flags</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 6 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 06</span><span class="tag">Pillar 02 · Final expense</span></div>
+            <h3>"Grief shouldn't come with a bill attached"</h3>
+            <div class="goal">Goal: emotional reach + DMs from adult kids · Hook style: reframe</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "The average funeral costs more than most families have in savings." <em>(let it sit)</em></span></li>
+                <li><span class="t">3–13s</span><span>"When someone passes, the family is grieving <em>and</em> fronting $10–15k in the same week. GoFundMe shouldn't be the plan."</span></li>
+                <li><span class="t">13–22s</span><span>"Final expense is simple whole life built for exactly this. No-exam options, premiums locked for life, approvals often same-day. A little coverage so grief never comes with a bill."</span></li>
+                <li><span class="t">22–28s</span><span><b>CTA:</b> "This is the call people wish they'd made for their parents. Link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Warm, respectful, slow. This converts adult children buying for parents — speak to them.</li>
+                <li>On-screen: "$10,000–$15,000 · in one week" then "locked for life · same-day approval".</li>
+                <li>Audio: gentle, hopeful. Never fear-mongering; the tone is care.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Nobody should be grieving and fundraising in the same week. 🤍
+
+A funeral runs $10–15k — and it lands on the family in the days after a loss. Final expense insurance is simple whole life built for exactly that moment: no-exam options, premiums locked for life, approvals often same-day.
+
+It's a small policy that does one big kind thing. If you've been meaning to sort this for yourself or a parent — this is your reminder.
+
+Book 15 min → link in bio 👆 · $0 to work with me</p>
+                <div class="tags-line">#finalexpense #wholelife #lifeinsurance #estateplanning #caregiving #seniors #familyfirst #personalfinance #lehighvalley #peaceofmind</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> A small policy, a big kindness</div>
+                  <div style="margin:auto 0">
+                    <div class="fh">Grief<br>shouldn't<br>come with a<br><span style="color:var(--brass-bright)">bill.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 7 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 07</span><span class="tag">Pillar 01 · Disability</span></div>
+            <h3>"You insured your phone but not your paycheck?"</h3>
+            <div class="goal">Goal: reach to 25–45 earners · Hook style: hypocrisy call-out</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "You've got insurance on your phone, your car, maybe your dog. What about the thing that pays for all of it?"</span></li>
+                <li><span class="t">3–14s</span><span>"If you're 30 and earn $70k, you'll earn over <em>$2 million</em> before you retire. That paycheck is your single biggest asset — and one injury can switch it off."</span></li>
+                <li><span class="t">14–22s</span><span>"Disability insurance replaces part of your income if you can't work. Self-employed and 1099? Even more important — there's no employer plan behind you."</span></li>
+                <li><span class="t">22–28s</span><span><b>CTA:</b> "Insure the goose, not just the eggs. Link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Punchy, slightly cheeky. Hold up your phone on the hook, gesture on "$2 million."</li>
+                <li>On-screen: "$70k × career = $2,000,000+", "insured: 📱🚗🐕 … 💵?".</li>
+                <li>Audio: upbeat trending. Snappy pace.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Your phone's insured. Your paycheck isn't. Let's fix the priority list. 📱➡️💵
+
+Earn $70k at 30? That's $2M+ over your career — your biggest asset by far. One injury or illness can shut it off. Disability insurance replaces part of your income so a bad break doesn't become a foreclosure.
+
+Self-employed / 1099? Nobody's got a plan behind you. This is the one people skip and regret.
+
+Book 15 min → link in bio 👆</p>
+                <div class="tags-line">#disabilityinsurance #incomeprotection #personalfinance #selfemployed #1099 #financialliteracy #smallbusiness #moneytok #lehighvalley #adulting</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> Insure the goose</div>
+                  <div style="margin:auto 0">
+                    <div class="fsub" style="font-size:15px;margin-bottom:8px">insured: 📱 🚗 🐕</div>
+                    <div class="fh">Your <span style="color:var(--brass-bright)">paycheck?</span></div>
+                    <div class="chip" style="margin-top:16px">$70k → $2,000,000+ career</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- REEL 8 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag reel">Reel 08</span><span class="tag">Pillar 04 · Value + trust</span></div>
+            <h3>"What does a $0 insurance agent actually get you?"</h3>
+            <div class="goal">Goal: convert warm viewers · Hook style: "$0" curiosity</div>
+            <div class="block">
+              <span class="lbl">Beat sheet</span>
+              <ul class="beats">
+                <li><span class="t">0–3s</span><span><b>HOOK:</b> "I don't charge you a dollar. So how do I get paid — and what's the catch?"</span></li>
+                <li><span class="t">3–13s</span><span>"The carrier pays me, and your premium is <em>identical</em> whether you use me or buy direct. So there's no reason to go it alone."</span></li>
+                <li><span class="t">13–23s</span><span>"What you get: I shop 20+ carriers against each other, translate the fine print, and — because I'm independent — I answer to <em>you</em>, not a sales quota. Call the number, you get me. Not a call center."</span></li>
+                <li><span class="t">23–28s</span><span><b>CTA:</b> "Same price, way better outcome. Link in bio."</span></li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Shot list &amp; audio</span>
+              <ul class="shot">
+                <li>Straight-to-camera, confident and warm. This is your "why me" — make eye contact.</li>
+                <li>On-screen: "$0 to you", "20+ carriers", "you get ME, not a call center".</li>
+                <li>Audio: clean, trustworthy trend. Steady, not frantic.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / TikTok / Reels</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>"What's the catch if you're free?" Fair question. 💬
+
+There isn't one. The carrier pays me, and your premium is the SAME whether you buy through me or direct. What you get for that $0: I put 20+ carriers in a cage match, translate the fine print, and — because I'm independent — I work for you, not a quota.
+
+Call the number and you get me. Not a call center. Not a script.
+
+Same price. Better outcome. Book 15 min → link in bio 👆
+📍 Lehigh Valley · licensed in 13 states</p>
+                <div class="tags-line">#insuranceagent #lifeinsurance #independentagent #personalfinance #lehighvalley #smallbusiness #financialliteracy #shoplocal #moneytok #protectyourfamily</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame v">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin">
+                  <div class="feye"><i></i> The $0 question</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:70px;line-height:.9">$0</div>
+                    <div class="fsub" style="margin-top:10px;font-size:15px">to work with me. Same price as direct — <span style="color:var(--brass-bright)">20+ carriers shopped for you.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Reel cover · 1080×1920</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEED POSTS ============ -->
+<section id="posts">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="count">10 posts</span>
+      <span class="eyebrow">Feed &amp; carousels · square 1:1 or 4:5</span>
+      <h2>Posts that get saved, sent, and screenshotted.</h2>
+      <p>Carousels are the save-and-share machine — the algorithm rewards the swipe. Singles are for the one-line gut-punch. Each below has its hook, the slide-by-slide (for carousels), a paste-ready caption, and art direction in your navy-and-brass look.</p>
+    </div>
+
+    <div class="stack">
+
+      <!-- POST 1 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 01</span><span class="tag">Carousel · 6 slides</span><span class="tag save">Save-bait</span></div>
+            <h3>"5 questions to ask before you sign ANY life insurance policy"</h3>
+            <div class="goal">Format: carousel · Goal: saves + authority</div>
+            <div class="block">
+              <span class="lbl">Slides</span>
+              <ul class="shot">
+                <li><b>1 (cover):</b> "5 questions to ask before you sign ANY life insurance policy 🖊️ (save this)"</li>
+                <li><b>2:</b> "Is this shopped across multiple carriers — or just the one you sell?"</li>
+                <li><b>3:</b> "Does it have living benefits? Can it pay me while I'm alive?"</li>
+                <li><b>4:</b> "Show me the guaranteed column — what's the worst case?"</li>
+                <li><b>5:</b> "What happens if I miss a payment? Does it lapse?"</li>
+                <li><b>6 (CTA):</b> "Can't answer these? Get a second opinion — free. @herronlegacy · link in bio"</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Art direction</span>
+              <ul class="shot">
+                <li>Navy gradient + faint grid (like the mock). One big number per slide, brass. Mono eyebrow up top.</li>
+                <li>Consistent lower-third with the heron mark + @herronlegacy so any single slide re-shared still brands you.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Screenshot these 5 questions. Use them on the next person who tries to sell you a policy. 🖊️
+
+1. Are you shopping this across carriers, or just selling yours?
+2. Does it have living benefits — can it pay me while I'm alive?
+3. Show me the guaranteed column. What's the worst case?
+4. What happens if I miss a payment?
+5. Would you put your own parent in this?
+
+A good agent loves these questions. If someone dodges them, that's your answer.
+
+Want me to pressure-test a policy you already have? Free, no pitch. Book 15 min 👇
+🔗 link in bio · 📍 Lehigh Valley, licensed in 13 states</p>
+                <div class="tags-line">#lifeinsurance #financialliteracy #personalfinance #insurancetips #moneytips #protectyourfamily #savethis #lehighvalley #financialplanning #adulting101</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Save this</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:27px">5 questions<br>before you<br>sign <span style="color:var(--brass-bright)">anything.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Swipe →</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Carousel cover · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 2 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 02</span><span class="tag">Single · trust</span><span class="tag">Pillar 04</span></div>
+            <h3>"Call the number. You get me. Not a call center."</h3>
+            <div class="goal">Format: single (your face) · Goal: trust + local reach</div>
+            <div class="block">
+              <span class="lbl">Art direction</span>
+              <ul class="shot">
+                <li>Your headshot on the left, navy panel on the right with the quote in big Sora. Brass "NPN 21556594 · verified" chip.</li>
+                <li>Alt version: plain navy card, quote only, for a clean grid look.</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook / LinkedIn</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>When you call the number on my page, you don't get a call center in another time zone. You get me — Connor — a Lehigh Valley local who'll actually pick up.
+
+I'm independent, so I work for you, not a carrier. Every policy gets shopped across 20+ companies, explained in plain English, and sized to your real budget. And if it's not right for you, I'll be the first to say so.
+
+That's the whole promise. 15 minutes, zero pressure, $0 to work with me.
+👇 link in bio · 610-360-8583</p>
+                <div class="tags-line">#lehighvalley #insuranceagent #shoplocal #lifeinsurance #smallbusiness #allentownpa #bethlehempa #eastonpa #personalfinance #independentagent</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> The promise</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:26px">You get me.<br><span style="color:var(--brass-bright)">Not a call<br>center.</span></div>
+                    <div class="chip" style="margin-top:14px">NPN 21556594 · licensed &amp; verified</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">Connor Herron · Lehigh Valley</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Single · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 3 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 03</span><span class="tag">Carousel · 7 slides</span><span class="tag save">Save-bait</span></div>
+            <h3>"IUL green flags 🟢 vs red flags 🚩"</h3>
+            <div class="goal">Format: carousel · Goal: saves + positions you as the honest expert</div>
+            <div class="block">
+              <span class="lbl">Slides</span>
+              <ul class="shot">
+                <li><b>1 (cover):</b> "Thinking about an IUL? Green flags vs red flags 🟢🚩 (save before any meeting)"</li>
+                <li><b>2 🟢:</b> "You're 1099 with no 401(k) match to leave on the table"</li>
+                <li><b>3 🟢:</b> "You can fund it for 5–7+ years without flinching"</li>
+                <li><b>4 🚩:</b> "You've got credit card debt — pay that first, the return's better"</li>
+                <li><b>5 🚩:</b> "You need the money back in under 10 years"</li>
+                <li><b>6 🚩:</b> "Someone promised 12% and no downside — leave"</li>
+                <li><b>7 (CTA):</b> "Not sure which list you're on? I'll tell you honestly. Link in bio."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>IUL is oversold to people it's wrong for. So here's the honest filter 🟢🚩
+
+GREEN FLAGS:
+🟢 1099 / owner-operator, no 401(k) match
+🟢 Can fund it 5–7+ years without stress
+🟢 Want a death benefit that also works while you're alive
+
+RED FLAGS:
+🚩 Carrying credit card debt (pay that first)
+🚩 Need the cash back in under 10 years
+🚩 Anyone promising "12%, no risk"
+
+An IUL sold to someone who can't fund it lapses — worse than never buying. If you're a green-flag fit, great. If not, I'll quote you term instead and save you money. Save this. 👇 link in bio</p>
+                <div class="tags-line">#iul #indexeduniversallife #wealthbuilding #financialliteracy #investing #personalfinance #1099 #smallbusiness #moneytok #lifeinsurance</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Honest filter</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:29px">IUL:<br>🟢 green vs<br>🚩 red flags</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Swipe →</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Carousel cover · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 4 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 04</span><span class="tag">Carousel · 5 slides</span><span class="tag">Pillar 01</span></div>
+            <h3>"Term vs Whole vs IUL — no sales pitch"</h3>
+            <div class="goal">Format: carousel · Goal: education + saves (the "finally, plain English" post)</div>
+            <div class="block">
+              <span class="lbl">Slides</span>
+              <ul class="shot">
+                <li><b>1 (cover):</b> "Term vs Whole vs IUL, explained like you're my friend (not a prospect)"</li>
+                <li><b>2 — TERM:</b> "Most coverage per dollar. Rent, don't own. Perfect for mortgage + kid years. 'The honest default.'"</li>
+                <li><b>3 — WHOLE:</b> "Lifelong + guaranteed cash value. Costs more. Great for final expense &amp; estate certainty."</li>
+                <li><b>4 — IUL:</b> "Flexible, tax-advantaged growth for high earners who can fund it. Powerful — and easy to sell wrong."</li>
+                <li><b>5 (CTA):</b> "Which one's actually you? 15 min, I'll tell you straight. Link in bio."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook / LinkedIn</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Term vs Whole vs IUL — without anyone trying to sell you one. 🧭
+
+▪️ TERM — most coverage per dollar. You're "renting." Ideal for mortgage + raising-kids years. Honest default for most people.
+▪️ WHOLE — lifelong + guaranteed cash value. Costs more. Shines for final expense and estate certainty.
+▪️ IUL — flexible, tax-advantaged growth for high earners who can fund it for years. Powerful, and the most mis-sold of the three.
+
+There's no "best" — only best for YOU. That's literally my job to figure out, free. Save this + book 15 min 👇 link in bio</p>
+                <div class="tags-line">#lifeinsurance #termlife #wholelife #iul #financialliteracy #personalfinance #moneytips #financialplanning #lehighvalley #insurancetips</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Plain English</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:28px">Term vs<br>Whole vs<br><span style="color:var(--brass-bright)">IUL</span></div>
+                    <div class="fsub" style="margin-top:10px;font-size:13px">no sales pitch. promise.</div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Swipe →</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Carousel cover · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 5 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 05</span><span class="tag">Single · emotional</span><span class="tag">Pillar 02</span></div>
+            <h3>"Grief shouldn't come with a bill attached."</h3>
+            <div class="goal">Format: single · Goal: emotional share (pairs with Reel 06)</div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>"Grief shouldn't come with a bill attached." 🤍
+
+A funeral runs $10–15k, and it lands on a family in the hardest week of their life. Final expense is a small, simple whole-life policy built for exactly that — locked premiums, no-exam options, often same-day approval.
+
+If you've been putting off sorting this for yourself or a parent, let this be the nudge. It's one of the kindest things you can quietly set up. $0 to work with me. 👇 link in bio</p>
+                <div class="tags-line">#finalexpense #lifeinsurance #caregiving #familyfirst #estateplanning #seniors #peaceofmind #lehighvalley #personalfinance #wholelife</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Final expense</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:27px">Grief shouldn't<br>come with a<br><span style="color:var(--brass-bright)">bill.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Single · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 6 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 06</span><span class="tag">Single · local</span><span class="tag">Pillar 04</span></div>
+            <h3>"Lehigh Valley born. Licensed in 13 states."</h3>
+            <div class="goal">Format: single · Goal: local reach + geo-hashtag magnet</div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>Lehigh Valley, I've got you. 🦅
+
+I'm Connor Herron — local independent life insurance agent, licensed in PA and 12 more states. I built this whole practice on one idea: insurance without the runaround. Plain English, 20+ carriers shopped for you, and the truth even when it costs me a sale.
+
+Whether you're in Allentown, Bethlehem, Easton or anywhere in the 610 — if you've got a question about protecting your family, my calendar's open. $0 to work with me. 👇 link in bio · 610-360-8583</p>
+                <div class="tags-line">#lehighvalley #allentownpa #bethlehempa #eastonpa #610 #shoplocalpa #pennsylvania #lifeinsurance #smallbusiness #supportlocal</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Local &amp; independent</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:28px">Lehigh Valley<br>born.<br><span style="color:var(--brass-bright)">13 states<br>licensed.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy · 610-360-8583</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Single · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 7 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 07</span><span class="tag">Carousel · 5 slides</span><span class="tag">Pillar 02</span></div>
+            <h3>"How living benefits actually work (3 real scenarios)"</h3>
+            <div class="goal">Format: carousel · Goal: education + saves</div>
+            <div class="block">
+              <span class="lbl">Slides</span>
+              <ul class="shot">
+                <li><b>1 (cover):</b> "Your life insurance might pay YOU while you're alive. Here's how 👇"</li>
+                <li><b>2:</b> "Scenario 1 — Heart attack at 52. A living benefit rider advances part of your death benefit as cash. Now."</li>
+                <li><b>3:</b> "Scenario 2 — Cancer diagnosis. Use it for treatment, rent, or just time off to heal."</li>
+                <li><b>4:</b> "Scenario 3 — Chronic illness, can't do daily activities. It can help fund care — without draining savings."</li>
+                <li><b>5 (CTA):</b> "Ask if your policy has these riders. Don't have them? Ask me why. Link in bio."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>"Living benefits" is the most underused phrase in insurance. Save this so you actually remember to ask. 👇
+
+Your policy can advance part of the death benefit to YOU — in cash — for a qualifying critical, chronic, or terminal illness. Real life:
+❤️ Heart attack at 52 → cash now, not after
+🎗️ Cancer → treatment, rent, time to heal
+🧩 Chronic illness → help funding care without draining savings
+
+It's your money, working while you're alive to use it. Two-minute task: ask if your policy has living benefit riders. If not, ask why. 🔗 link in bio</p>
+                <div class="tags-line">#livingbenefits #lifeinsurance #financialliteracy #healthawareness #personalfinance #protectyourfamily #insurancetips #moneytok #lehighvalley #savethis</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> 3 real scenarios</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:27px">It can pay<br>you while<br>you're <span style="color:var(--brass-bright)">alive.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Swipe →</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Carousel cover · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 8 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 08</span><span class="tag">Single · Legacy AI</span><span class="tag">Pillar 03</span></div>
+            <h3>"Ask my AI anything at 2am. It won't upsell you."</h3>
+            <div class="goal">Format: single (screenshot of chat) · Goal: novelty clicks to site</div>
+            <div class="block">
+              <span class="lbl">Art direction</span>
+              <ul class="shot">
+                <li>Screenshot of Legacy AI answering a real question, framed in a navy device mock. Brass caption bar: "runs on Claude · can't sell you anything."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook / LinkedIn</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>I built an insurance AI that's not allowed to sell you anything. On purpose. 🤖
+
+Meet Legacy AI — it runs on Claude, on my own server, with a playbook I wrote. It can't quote you a rate, can't promise approval, can't upsell. It just answers your questions in plain English, 24/7, and only hands you to a human (me) if you want one. It doesn't even store your chat.
+
+Have a 2am insurance question you're too embarrassed to ask a person? Ask the robot. Free. 🔗 link in bio</p>
+                <div class="tags-line">#ai #insurtech #fintech #lifeinsurance #artificialintelligence #smallbusiness #innovation #personalfinance #lehighvalley #techtok</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Legacy AI</div>
+                  <div style="margin:auto 0">
+                    <div class="poll" style="margin-bottom:10px"><div class="q" style="font-size:12px;color:var(--blue-bright);font-family:var(--font-mono)">you: do I even need IUL?</div><div style="font-size:12px;color:#fff;line-height:1.5">Legacy AI: Honestly? Maybe not. If you have credit-card debt or need the money within 10 years, term is the better call…</div></div>
+                    <div class="fh" style="font-size:22px">It'll talk you<br><span style="color:var(--brass-bright)">out of it.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Try it free</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Single · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 9 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 09</span><span class="tag">Carousel · 6 slides</span><span class="tag save">Save-bait</span></div>
+            <h3>"4 life insurance myths that cost families thousands"</h3>
+            <div class="goal">Format: carousel · Goal: myth-bust shares</div>
+            <div class="block">
+              <span class="lbl">Slides</span>
+              <ul class="shot">
+                <li><b>1 (cover):</b> "4 life insurance myths that quietly cost families thousands 👇"</li>
+                <li><b>2:</b> "MYTH: 'My work policy is enough.' → It usually ends the day the job does."</li>
+                <li><b>3:</b> "MYTH: 'I'm young/healthy, I'll wait.' → That's exactly when it's cheapest to lock in."</li>
+                <li><b>4:</b> "MYTH: 'It's too expensive.' → Most people guess 3× the real price. Term is cheap."</li>
+                <li><b>5:</b> "MYTH: 'It only pays when I die.' → Living benefits can pay you while you're alive."</li>
+                <li><b>6 (CTA):</b> "Believe any of these? Let's fix it in 15 minutes, free. Link in bio."</li>
+              </ul>
+            </div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>4 myths that keep good families underinsured. Save + send to someone who "keeps meaning to deal with it." 👇
+
+1. "My work policy is enough" → it usually ends the day your job does.
+2. "I'm young, I'll wait" → young + healthy = the cheapest it will ever be.
+3. "It's too expensive" → most people overestimate the cost by 3×.
+4. "It only pays when I die" → living benefits can pay you while you're alive.
+
+Truth is cheaper than the myth. 15 minutes, no pressure, $0 to work with me. 🔗 link in bio</p>
+                <div class="tags-line">#lifeinsurance #mythbusting #financialliteracy #personalfinance #moneytips #protectyourfamily #adulting101 #insurancetips #lehighvalley #savethis</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> Myth-bust</div>
+                  <div style="margin:auto 0">
+                    <div class="fh" style="font-size:28px">4 myths that<br>cost families<br><span style="color:var(--brass-bright)">thousands.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Swipe →</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Carousel cover · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- POST 10 -->
+      <article class="card piece reveal">
+        <div class="piece-top">
+          <div class="piece-body">
+            <div class="piece-tags"><span class="tag post">Post 10</span><span class="tag">Single · value</span><span class="tag">Pillar 04</span></div>
+            <h3>"$0. That's what I cost you."</h3>
+            <div class="goal">Format: single · Goal: the scroll-stopping value flex (pairs with Reel 08)</div>
+            <div class="block">
+              <span class="lbl">Caption</span>
+              <div class="caption">
+                <div class="capbar"><span>Instagram / Facebook / LinkedIn</span><span class="copyhint">tap-hold to copy</span></div>
+                <p>$0. That's what an independent agent costs you. 💸
+
+Your premium is identical whether you buy through me or go direct — the carrier pays me, not you. So the only question is whether you'd rather have one company's shelf… or someone shopping 20+ of them on your behalf, translating the fine print, and telling you the truth.
+
+Same price. Better outcome. No catch. 👇 link in bio · 15 min, zero pressure.</p>
+                <div class="tags-line">#lifeinsurance #personalfinance #insuranceagent #independentagent #moneytips #financialliteracy #lehighvalley #smallbusiness #protectyourfamily #moneytok</div>
+              </div>
+            </div>
+          </div>
+          <div class="mockcol">
+            <div>
+              <div class="frame sq">
+                <div class="fg"></div><div class="fglow"></div>
+                <div class="fin" style="padding:24px">
+                  <div class="feye"><i></i> No catch</div>
+                  <div style="margin:auto 0;text-align:left">
+                    <div class="fh" style="font-size:76px;line-height:.85">$0</div>
+                    <div class="fsub" style="margin-top:12px;font-size:15px">That's what I cost you. <span style="color:var(--brass-bright)">20+ carriers, shopped for you.</span></div>
+                  </div>
+                  <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Link in bio</span></div>
+                </div>
+              </div>
+              <div class="mockcap">Single · 1080×1080</div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ STORIES ============ -->
+<section id="stories">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="count">06 story sets</span>
+      <span class="eyebrow">Daily stories · 9:16 · interactive</span>
+      <h2>Stories keep you top-of-mind and get the tap.</h2>
+      <p>Stories are where the link sticker lives and where you build the para-social trust that turns followers into calls. Use the interactive stickers — polls, quizzes, sliders, question boxes — they're rocket fuel for reach and they hand you warm DMs. Each set is 3 frames: hook → payoff → link.</p>
+    </div>
+
+    <div class="two">
+      <!-- STORY 1 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 01</span><span class="tag">Poll · living benefits</span></div>
+          <h3 style="font-size:19px">"Do you know what your policy actually covers?"</h3>
+          <div class="block">
+            <span class="lbl">3-frame flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Poll:</b> "Does your life insurance pay you while you're ALIVE?" → options: "Yes" / "No idea 👀"</li>
+              <li><b>Frame 2 — Payoff:</b> "Most people vote 'no idea' — and most policies with living benefits CAN. Here's what that means…" (10-sec explainer to cam)</li>
+              <li><b>Frame 3 — Link:</b> "Want me to check your exact policy? Free." + Link sticker → book / DM sticker "send me 'CHECK'"</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> Quick one 👀</div>
+                <div style="margin:auto 0;width:100%">
+                  <div class="poll">
+                    <div class="q">Does your life insurance pay you while you're ALIVE?</div>
+                    <div class="opt">Yes <span>31%</span></div>
+                    <div class="opt hot">No idea 👀 <span>69%</span></div>
+                  </div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Tap to vote</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 1 · poll</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 2 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 02</span><span class="tag">Quiz · shock stat</span></div>
+          <h3 style="font-size:19px">"How much does Medicare pay for long-term care?"</h3>
+          <div class="block">
+            <span class="lbl">3-frame flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Quiz:</b> "Medicare covers ___% of long-term care" → "80% / 50% / $0" (answer: $0)</li>
+              <li><b>Frame 2 — Payoff:</b> "Yep — zero. And 70% of us will need it. Here's the fix that isn't 'use it or lose it'…"</li>
+              <li><b>Frame 3 — Link:</b> "50–68? This is your window. Free math." + Link sticker → book</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> Pop quiz</div>
+                <div style="margin:auto 0;width:100%">
+                  <div class="poll">
+                    <div class="q">Medicare covers ___ of long-term care:</div>
+                    <div class="opt">80%</div>
+                    <div class="opt">50%</div>
+                    <div class="opt hot">$0 ✅</div>
+                  </div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Guess 👀</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 1 · quiz</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 3 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 03</span><span class="tag">Slider · this-or-that</span></div>
+          <h3 style="font-size:19px">"Term or IUL? Slide to guess your fit"</h3>
+          <div class="block">
+            <span class="lbl">3-frame flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Emoji slider:</b> "How confident are you that you know the difference? 😅→🧠"</li>
+              <li><b>Frame 2 — Payoff:</b> Quick "Term = rent, IUL = own-with-conditions" 12-sec explainer.</li>
+              <li><b>Frame 3 — Link:</b> "Not sure which is you? That's the free 15 min. Link 👇" + Link sticker.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> Slide it</div>
+                <div style="margin:auto 0;width:100%">
+                  <div class="fh" style="font-size:20px;margin-bottom:16px">Know the difference?</div>
+                  <div style="background:rgba(255,255,255,.1);border-radius:999px;height:34px;position:relative;display:flex;align-items:center;padding:0 8px">
+                    <div style="position:absolute;left:64%;width:30px;height:30px;border-radius:50%;background:var(--brass);display:flex;align-items:center;justify-content:center;font-size:16px">🧠</div>
+                    <span style="font-size:13px">😅</span><span style="margin-left:auto;font-size:13px">🧠</span>
+                  </div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Term vs IUL</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 1 · slider</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 4 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 04</span><span class="tag">BTS · trust</span></div>
+          <h3 style="font-size:19px">"Why I turned a client away this week"</h3>
+          <div class="block">
+            <span class="lbl">3-frame flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Hook:</b> Selfie-video: "I talked someone out of a sale today. Here's why 👇"</li>
+              <li><b>Frame 2 — Story:</b> "They wanted an IUL but had credit card debt. Wrong move. I told them to pay that first and buy term. Cost me a commission. Worth it."</li>
+              <li><b>Frame 3 — Link:</b> "That's how I work. Want the honest version? Link 👇" + Link sticker + "questions? tap here" DM sticker.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> Real talk</div>
+                <div style="margin:auto 0">
+                  <div class="fh" style="font-size:22px">I talked<br>someone<br><span style="color:var(--brass-bright)">out of a<br>sale today.</span></div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Why 👇</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 1 · BTS hook</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 5 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 05</span><span class="tag">Demo · Legacy AI</span></div>
+          <h3 style="font-size:19px">"Screen-record: watch my AI refuse to upsell"</h3>
+          <div class="block">
+            <span class="lbl">3-frame flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Hook:</b> "Watch me try to get my own AI to oversell me 😏" (screen-record start)</li>
+              <li><b>Frame 2 — Payoff:</b> AI answers honestly / declines to quote a rate → "See? Won't do it."</li>
+              <li><b>Frame 3 — Link:</b> "It's free + doesn't save your chat. Go break it 👇" + Link sticker → /#ai</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> Legacy AI demo</div>
+                <div style="margin:auto 0;width:100%">
+                  <div class="poll"><div class="q" style="font-size:12px;font-family:var(--font-mono);color:var(--blue-bright)">me: just tell me a price 😏</div><div style="font-size:11.5px;color:#fff;line-height:1.5">AI: I can't quote a rate — only underwriting can. But I can explain what drives it and set you up with Connor…</div></div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">Try it 👇</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 2 · demo</div>
+          </div>
+        </div>
+      </article>
+
+      <!-- STORY 6 -->
+      <article class="card piece reveal">
+        <div class="piece-body" style="padding:24px 24px 8px">
+          <div class="piece-tags"><span class="tag story">Story 06</span><span class="tag">Q&amp;A box · engagement</span></div>
+          <h3 style="font-size:19px">"Ask me anything about life insurance"</h3>
+          <div class="block">
+            <span class="lbl">Weekly recurring flow</span>
+            <ul class="shot">
+              <li><b>Frame 1 — Question sticker:</b> "🎙 AMA: ask me anything about life insurance. No question too basic."</li>
+              <li><b>Frames 2–5 — Answers:</b> Screenshot each question, answer to camera in 15s. (Goldmine of reusable Reel content.)</li>
+              <li><b>Final frame — Link:</b> "Want a real answer for YOUR situation? Link 👇"</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mockcol" style="border-left:none;border-top:1px solid var(--line)">
+          <div>
+            <div class="frame v" style="width:210px">
+              <div class="fg"></div><div class="fglow"></div>
+              <div class="fin" style="padding:22px">
+                <div class="feye"><i></i> AMA Friday</div>
+                <div style="margin:auto 0;width:100%">
+                  <div class="fh" style="font-size:21px;margin-bottom:14px">Ask me anything</div>
+                  <div style="background:#fff;border-radius:11px;padding:11px 13px;color:var(--navy-deep);font-size:12px;font-family:var(--font-mono)">Type your question…</div>
+                </div>
+                <div class="ffoot"><span class="fhandle">@herronlegacy</span><span class="fcta">No Q too basic</span></div>
+              </div>
+            </div>
+            <div class="mockcap">Frame 1 · question box</div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CALENDAR ============ -->
+<section id="calendar">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="count">30 days</span>
+      <span class="eyebrow">The posting plan · ~5 posts/week</span>
+      <h2>A month you can run without thinking.</h2>
+      <p>The rhythm: <b>Reels for reach, carousels for saves, stories every day, one human/local post a week.</b> Post reels Tue–Thu, ~6–9pm ET (Lehigh Valley scrolls after dinner). Recycle every reel into a story, and every AMA answer into a new reel. Repeat this month with fresh hooks — the formats keep working.</p>
+    </div>
+    <div class="calwrap reveal">
+      <table class="cal">
+        <thead><tr><th>Week</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat/Sun</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="day">Week 1<br><span style="color:var(--ink-35)">Reach</span></td>
+            <td><span class="fmt story">Story</span><br><b>Poll:</b> covers you alive? <span style="color:var(--ink-35)">(S1)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>3 things agents won't tell you</b> <span style="color:var(--ink-35)">(R1)</span></td>
+            <td><span class="fmt post">Carousel</span><br><b>5 questions before you sign</b> <span style="color:var(--ink-35)">(P1)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>70% need care, Medicare $0</b> <span style="color:var(--ink-35)">(R2)</span></td>
+            <td><span class="fmt story">Story</span><br><b>AMA Friday</b> <span style="color:var(--ink-35)">(S6)</span></td>
+            <td><span class="fmt post">Single</span><br><b>Lehigh Valley / 13 states</b> <span style="color:var(--ink-35)">(P6)</span></td>
+          </tr>
+          <tr>
+            <td class="day">Week 2<br><span style="color:var(--ink-35)">Trust</span></td>
+            <td><span class="fmt story">Story</span><br><b>Quiz:</b> Medicare = $0 <span style="color:var(--ink-35)">(S2)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>POV: diagnosis pays you</b> <span style="color:var(--ink-35)">(R3)</span></td>
+            <td><span class="fmt post">Carousel</span><br><b>Living benefits, 3 scenarios</b> <span style="color:var(--ink-35)">(P7)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>$0 — what's the catch?</b> <span style="color:var(--ink-35)">(R8)</span></td>
+            <td><span class="fmt story">Story</span><br><b>BTS: I turned a client away</b> <span style="color:var(--ink-35)">(S4)</span></td>
+            <td><span class="fmt post">Single</span><br><b>You get me, not a call center</b> <span style="color:var(--ink-35)">(P2)</span></td>
+          </tr>
+          <tr>
+            <td class="day">Week 3<br><span style="color:var(--ink-35)">Authority</span></td>
+            <td><span class="fmt story">Story</span><br><b>Slider:</b> Term vs IUL <span style="color:var(--ink-35)">(S3)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>12% &amp; no downside? Run.</b> <span style="color:var(--ink-35)">(R5)</span></td>
+            <td><span class="fmt post">Carousel</span><br><b>IUL green vs red flags</b> <span style="color:var(--ink-35)">(P3)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>Insured your phone, not pay?</b> <span style="color:var(--ink-35)">(R7)</span></td>
+            <td><span class="fmt story">Story</span><br><b>AMA Friday</b> <span style="color:var(--ink-35)">(S6)</span></td>
+            <td><span class="fmt post">Carousel</span><br><b>Term vs Whole vs IUL</b> <span style="color:var(--ink-35)">(P4)</span></td>
+          </tr>
+          <tr>
+            <td class="day">Week 4<br><span style="color:var(--ink-35)">Novelty + heart</span></td>
+            <td><span class="fmt story">Story</span><br><b>Legacy AI demo</b> <span style="color:var(--ink-35)">(S5)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>AI won't upsell you</b> <span style="color:var(--ink-35)">(R4)</span></td>
+            <td><span class="fmt post">Single</span><br><b>Ask my AI at 2am</b> <span style="color:var(--ink-35)">(P8)</span></td>
+            <td><span class="fmt reel">Reel</span><br><b>Grief shouldn't come w/ a bill</b> <span style="color:var(--ink-35)">(R6)</span></td>
+            <td><span class="fmt story">Story</span><br><b>AMA Friday</b> <span style="color:var(--ink-35)">(S6)</span></td>
+            <td><span class="fmt post">Carousel</span><br><b>4 myths that cost thousands</b> <span style="color:var(--ink-35)">(P9)</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note" style="max-width:none"><b>Bonus singles to sprinkle in / boost:</b> "$0. That's what I cost you." (P10) and "Grief shouldn't come with a bill." (P5) are your best paid-boost candidates on Facebook — high emotion, clear CTA, clickable link inline.</div>
+  </div>
+</section>
+
+<!-- ============ HASHTAGS + HOOKS ============ -->
+<section id="hashtags">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Reach fuel</span>
+      <h2>Hashtag banks &amp; a hook library.</h2>
+      <p>Rotate 8–15 tags per post — mix broad reach, niche intent, and local. Don't paste the same block every time (it can flag as spam); shuffle from the right bank. Lead every caption with a hook from the library.</p>
+    </div>
+
+    <div class="two">
+      <div class="card bank reveal">
+        <h4>🎯 Core life insurance</h4>
+        <div class="desc">every post can pull from here</div>
+        <div class="tags-line">#lifeinsurance #insuranceagent #financialliteracy #personalfinance #protectyourfamily #insurancetips #financialplanning #moneytips #termlife #wholelife #peaceofmind #legacyplanning</div>
+      </div>
+      <div class="card bank reveal">
+        <h4>📍 Lehigh Valley / local</h4>
+        <div class="desc">use on trust + local posts</div>
+        <div class="tags-line">#lehighvalley #allentownpa #bethlehempa #eastonpa #610 #pennsylvania #shoplocalpa #supportlocal #lvpa #poconos #phillymetro #smallbusinesspa</div>
+      </div>
+      <div class="card bank reveal">
+        <h4>📈 Reach / money-tok</h4>
+        <div class="desc">broaden beyond the niche</div>
+        <div class="tags-line">#moneytok #financetok #personalfinance #adulting101 #moneytips #financialfreedom #wealthbuilding #investing #generationalwealth #budgeting #financialeducation</div>
+      </div>
+      <div class="card bank reveal">
+        <h4>🧩 Product-specific</h4>
+        <div class="desc">match to the post's topic</div>
+        <div class="tags-line">#iul #indexeduniversallife #finalexpense #longtermcare #disabilityinsurance #annuities #mortgageprotection #livingbenefits #retirementplanning #incomeprotection</div>
+      </div>
+    </div>
+
+    <div class="card bank reveal" style="margin-top:18px">
+      <h4>🪝 Hook library — steal these first lines</h4>
+      <div class="desc">the first 3 seconds decide everything. say it out loud AND put it on screen.</div>
+      <ul class="hooks">
+        <li>"I'm a licensed insurance agent. Here are 3 things most of us <em>won't</em> tell you."</li>
+        <li>"70% of you will need this. Want to know what Medicare pays? <em>Nothing.</em>"</li>
+        <li>"If an agent promises you 12% with no risk — <em>get up and leave.</em>"</li>
+        <li>"You insured your phone. Your car. Your dog. What about <em>your paycheck?</em>"</li>
+        <li>"POV: you get the diagnosis nobody wants — and your policy pays <em>you.</em>"</li>
+        <li>"I built an AI that will talk you <em>out</em> of a bad policy at 2am."</li>
+        <li>"I don't charge you a dollar. So how do I get paid — and what's the catch?"</li>
+        <li>"The average funeral costs more than most families have in savings."</li>
+        <li>"Stop scrolling if you've got a mortgage and no plan for it."</li>
+        <li>"Your work life insurance ends the day your job does. Here's the fix."</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLAYBOOK ============ -->
+<section id="playbook">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Make it actually go viral</span>
+      <h2>The growth playbook.</h2>
+      <p>Great content is necessary but not sufficient — these are the mechanics that turn good pieces into reach and reach into booked calls.</p>
+    </div>
+    <div class="play">
+      <div class="card"><h4><span class="dot"></span>The first 3 seconds</h4><ul>
+        <li><b>Hook on screen + spoken</b> — most watch muted first.</li>
+        <li><b>Face or motion</b> in frame one; no slow logo intros.</li>
+        <li><b>One idea per piece.</b> Confusion kills retention.</li>
+        <li><b>Burn in captions</b> always — accessibility + silent scroll.</li>
+      </ul></div>
+      <div class="card"><h4><span class="dot"></span>Engineer the save &amp; share</h4><ul>
+        <li><b>Carousels</b> get saved — "save this" belongs on the cover.</li>
+        <li><b>End on a question</b> to spark comments (algorithm gold).</li>
+        <li><b>"Send this to someone who…"</b> drives the share.</li>
+        <li><b>Reply to every comment</b> in the first hour.</li>
+      </ul></div>
+      <div class="card"><h4><span class="dot"></span>Turn reach into calls</h4><ul>
+        <li><b>Every caption ends with the CTA</b> + "link in bio."</li>
+        <li><b>Pin a comment</b> with the link (IG allows the tap).</li>
+        <li><b>DM automation:</b> "comment CHECK and I'll send it."</li>
+        <li><b>Stories link sticker</b> daily — it's your #1 click source.</li>
+      </ul></div>
+      <div class="card"><h4><span class="dot"></span>Cadence &amp; timing</h4><ul>
+        <li><b>~5 feed posts/week</b>, <b>stories daily.</b></li>
+        <li><b>Reels Tue–Thu, 6–9pm ET</b> — after-dinner scroll.</li>
+        <li><b>Repurpose:</b> reel → story → carousel → LinkedIn.</li>
+        <li><b>Batch film</b> 6–8 reels in one sitting, same outfit-swap.</li>
+      </ul></div>
+      <div class="card"><h4><span class="dot"></span>Boost what's working</h4><ul>
+        <li><b>Let organic tell you</b> — boost only proven winners.</li>
+        <li><b>Facebook</b> allows the clickable link — best for boosts.</li>
+        <li><b>Retarget site visitors</b> via Meta pixel (already on site).</li>
+        <li><b>$5–10/day</b> on your top emotional single beats a cold ad.</li>
+      </ul></div>
+      <div class="card"><h4><span class="dot"></span>Stay compliant &amp; trusted</h4><ul>
+        <li><b>Never quote a rate</b> or promise approval on camera.</li>
+        <li><b>"Illustrative, not a guarantee"</b> on any numbers.</li>
+        <li><b>Show your NPN</b> — it builds trust and it's required.</li>
+        <li><b>Honesty IS the brand</b> — never fear-monger for a click.</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <svg class="heron" viewBox="0 0 240 300" fill="none" aria-hidden="true">
+      <path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="136" cy="66" r="2.8" fill="#fff"/>
+    </svg>
+    <p class="big">Herron &amp; Co. Legacy Agency — Viral Content Kit</p>
+    <p>Content system for <a href="https://herronlegacyinsurance.com">herronlegacyinsurance.com</a> · Connor Herron · NPN 21556594 · 610-360-8583 · Lehigh Valley, PA. This kit is a planning and reference tool — it does not modify the live website. Marketing copy is for social use; on any figures, mark them illustrative and never quote a rate or promise approval on camera. Follow each platform's advertising and insurance-marketing rules and your carriers' compliance guidelines.</p>
+  </div>
+</footer>
+
+<script>
+/* gentle scroll reveal — respects reduced motion */
+(function(){
+  var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if(rm || !('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target);} });
+  },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>
