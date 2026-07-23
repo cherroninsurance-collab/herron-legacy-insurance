@@ -6,8 +6,21 @@ A ready-to-run viral content system for **@herronlegacy**. Everything here is **
 
 | File | What it is | How to use |
 |------|-----------|------------|
+| `studio.html` | ⭐ The **Wealth Shield Content Studio** — the showpiece. Built on the uploaded Herron design system (Playfair Display SC · Archivo · Spline Sans Mono) with the site's own **liquid glass** (SVG refraction + drifting blobs). Turns your **Wealth Shield Matrix** and **Protection Blueprint** into 6 tool-powered pieces + a "how to film" playbook. | Open in a browser. This is the "show it off" page and the source for the tool reels. |
 | `content-kit.html` | The **Viral Content Kit** — 8 reels (shot-by-shot), 10 feed posts/carousels, 6 story sets, a 30-day calendar, hashtag banks, a hook library, link-in-bio + Meta setup, and a growth playbook. All in the brand. | Open it in a browser. Tap-hold any caption to copy. Screenshot the mock frames for reference, or rebuild them in Canva/CapCut. |
 | `link-in-bio.html` | A deployable **Link-in-Bio hub** — mobile-first, on-brand, big tap targets. Your single Instagram link. | Deploys with the site. Set it as your Instagram bio link (see below). |
+| `assets/` | Ready-to-post **screenshots** of both tools (desktop + phone) and the heron logo PNG. | Post them directly, or use as thumbnails/reference. Live screen-recording still beats a static shot for reels. |
+
+## The two tools = your best content (studio.html)
+
+Your **Wealth Shield Matrix** (the bucket-and-shield downturn simulator) and **Protection Blueprint** (Care · Paycheck · Home · Legacy shields) are interactive tools no other agent in your market has. `studio.html` weaponizes them:
+
+- **Reel:** "Watch a shield beat the market's worst year" — screen-record the downturn sim.
+- **Reel:** "Your financial life has 4 holes in it" — swipe the Blueprint's four shields.
+- **Reel:** "7 in 10. $6,200/mo. $0 from Medicare." — the Care Shield stat cluster.
+- **Carousel / Story / behind-the-build** pieces, each with a paste-ready caption.
+
+**How to film:** open the tool on your phone → screen-record → tap the money moment (the simulate button / the tabs) → say the hook → caption + trending sound + "link in bio." That's it.
 
 ## The links (all point to your primary domain)
 
