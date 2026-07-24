@@ -123,7 +123,7 @@ void main(){
   float n2 = snoise(vec3(uv * 6.0 + 17.0, uTime * 0.21));
   vRipple  = n1 * 0.72 + n2 * 0.28;
   vec3 p = position;
-  p.z += vRipple * 0.02;                 // real displacement (feeds derivatives)
+  p.z += vRipple * 0.032;                 // real displacement (feeds derivatives)
   gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
 }
 `;
@@ -228,16 +228,16 @@ void main(){
   vec2 gradD = vec2(dFdx(d), dFdy(d));
   vec2 rimDir = gradD / max(length(gradD), 1e-5);
   vec2 rippleGrad = vec2(dFdx(vRipple), dFdy(vRipple)) * 90.0;
-  vec3 N = normalize(vec3(rimDir * slope * 0.55 + rippleGrad * 0.12, 1.0));
+  vec3 N = normalize(vec3(rimDir * slope * 0.62 + rippleGrad * 0.20, 1.0));
 
   /* -- Refraction ----------------------------------------------------------
      Snell-style offset: a thick slab shifts the ray by ~thickness · tan(θ).
      We approximate with  offset = -N.xy · (η·bw·h)  so displacement grows
      with both surface tilt and local glass thickness. The cursor adds a
      small global warp so the interior visibly tracks the hand. */
-  float eta = 0.55;                                // "refractive strength"
+  float eta = 0.75;                                // "refractive strength" (magnified)
   vec2 refr = -N.xy * (eta * bw * (0.35 + 0.65 * h));
-  vec2 warp = uMouse * uSize * 0.018;              // cursor-follow warp
+  vec2 warp = uMouse * uSize * 0.028;              // cursor-follow warp (magnified)
   vec2 suv  = px + refr + warp + vec2(0.0, uScroll);
 
   /* -- Chromatic aberration ------------------------------------------------
@@ -246,11 +246,11 @@ void main(){
      split is proportional to edge (strong at the bevel, ~0 in the middle)
      which is exactly how a real lens smears rainbows at its rim. */
   float edge = slope / 6.0;                        // 0 centre → 1 at rim
-  float ca   = 1.0 + edge * 1.6;
+  float ca   = 1.0 + edge * 2.2;
   vec3 refracted = vec3(
-    scene(px + refr * (0.88 / ca) * ca + warp, t).r,
+    scene(px + refr * (0.80 / ca) * ca + warp, t).r,
     scene(suv, t).g,
-    scene(px + refr * 1.14 + warp, t).b
+    scene(px + refr * 1.24 + warp, t).b
   );
 
   /* -- Glass body ----------------------------------------------------------
@@ -276,7 +276,7 @@ void main(){
   float rim = fres * smoothstep(0.12, 0.9, edge);
   vec3 rimCol = mix(vec3(0.72, 0.82, 1.0), vec3(1.0, 0.86, 0.55),
                     0.5 + 0.5 * dot(normalize(L.xy + 1e-4), -rimDir));
-  col += rimCol * rim * (0.55 + 0.45 * max(dot(N, L), 0.0)) * 1.35;
+  col += rimCol * rim * (0.55 + 0.45 * max(dot(N, L), 0.0)) * 1.55;
 
   // Blinn-Phong specular streak — the "wet highlight" that chases the mouse.
   vec3 H = normalize(L + V);
@@ -285,7 +285,7 @@ void main(){
 
   // Faint moving caustic sheen across the interior (light through liquid).
   float sheen = snoise(vec3(px * 0.006 + uMouse * 0.4, t * 0.20));
-  col += uBlob3 * max(sheen, 0.0) * 0.05 * (1.0 - edge);
+  col += uBlob3 * max(sheen, 0.0) * 0.08 * (1.0 - edge);
 
   /* -- Coverage / alpha ----------------------------------------------------
      fwidth-based AA on the SDF for a crisp silhouette, plus a soft exterior

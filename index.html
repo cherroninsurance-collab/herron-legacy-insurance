@@ -77,13 +77,15 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 .logo-text{line-height:1.12}
 .logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
-.nav-links{display:flex;gap:24px;list-style:none}
-.nav-links a{text-decoration:none;font-weight:500;font-size:14.5px;color:rgba(255,255,255,.72);transition:color .15s}
+.nav-links{display:flex;gap:13px;list-style:none}
+.nav-links a{text-decoration:none;font-weight:500;font-size:13.5px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
 .nav-links a:hover{color:var(--white)}
+/* sticky-nav offset for in-page anchors (category tabs) */
+:where(section,article)[id],#tools,#annuities{scroll-margin-top:86px}
 .nav-cta{display:flex;align-items:center;gap:16px}
 .nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--white)}
 .nav-cta .btn{padding:10px 20px;font-size:14px}
-@media(max-width:1080px){.nav-links,.nav-phone{display:none}}
+@media(max-width:1240px){.nav-links,.nav-phone{display:none}}
 
 /* ---------- HERO ---------- */
 .hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
@@ -590,7 +592,7 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 .nav-sheet a:active{color:var(--brass-bright)}
 .nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--brass-bright);border-bottom:none;margin-top:10px}
 .nav-sheet .btn{margin-top:14px;justify-content:center}
-@media(max-width:1080px){.nav-burger{display:flex}}
+@media(max-width:1240px){.nav-burger{display:flex}}
 
 /* no-blur fallback — keep everything readable */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -603,17 +605,19 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 
 /* ===== .liquid-glass — animated SVG refraction (#liquid-glass-distortion) + heavy blur ===== */
 .liquid-glass{
-  border:1px solid rgba(255,255,255,.35);
-  -webkit-backdrop-filter:blur(25px) saturate(1.35);
-  backdrop-filter:blur(25px) saturate(1.35);
+  border:1px solid rgba(255,255,255,.48);
+  -webkit-backdrop-filter:blur(34px) saturate(1.6);
+  backdrop-filter:blur(34px) saturate(1.6);
   /* browsers that support url() in backdrop-filter (Chromium) get the liquid refraction; others keep the blur above */
-  backdrop-filter:blur(25px) saturate(1.35) url(#liquid-glass-distortion);
+  backdrop-filter:blur(34px) saturate(1.6) url(#liquid-glass-distortion);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    inset 0 -1px 0 rgba(255,255,255,.08),
-    0 2px 6px rgba(8,18,38,.10),
-    0 14px 30px -10px rgba(8,18,38,.22),
-    0 36px 70px -28px rgba(8,18,38,.32);
+    inset 0 1.5px 0 rgba(255,255,255,.55),
+    inset 0 -1px 0 rgba(255,255,255,.12),
+    inset 0 0 28px rgba(255,255,255,.05),
+    0 2px 8px rgba(8,18,38,.14),
+    0 18px 38px -10px rgba(8,18,38,.3),
+    0 48px 90px -30px rgba(8,18,38,.44),
+    0 0 54px -18px rgba(201,151,59,.28);
 }
 /* context tints — glass needs a translucent fill to refract what's behind it */
 nav.liquid-glass{background:rgba(8,18,38,.55)}
@@ -641,10 +645,11 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
    ============================================================ */
 .lg-container{
   position:relative;isolation:isolate;border-radius:30px;
-  background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.22);
-  -webkit-backdrop-filter:blur(20px) saturate(1.35);
-  backdrop-filter:blur(20px) saturate(1.35);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 70px -28px rgba(8,18,38,.55);
+  background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.34);
+  -webkit-backdrop-filter:blur(30px) saturate(1.6);
+  backdrop-filter:blur(30px) saturate(1.6);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.46),inset 0 0 34px rgba(255,255,255,.045),
+    0 38px 90px -28px rgba(8,18,38,.7),0 0 64px -20px rgba(201,151,59,.26);
 }
 .lg-container[data-lg-theme="light"]{
   background:rgba(255,255,255,.5);border-color:rgba(14,31,62,.14);
@@ -675,17 +680,17 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 /* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
    glass so the WebGL refraction has high-contrast shapes to bend. */
-.lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(6px);will-change:transform}
-.lg-blob-purple{width:520px;height:520px;background:radial-gradient(circle,rgba(96,32,168,.34),transparent 62%);animation:lgDrift 26s ease-in-out infinite alternate}
-.lg-blob-indigo{width:620px;height:620px;background:radial-gradient(circle,rgba(70,96,220,.30),transparent 62%);animation:lgDrift 32s ease-in-out -8s infinite alternate-reverse}
-.lg-blob-cyan{width:480px;height:480px;background:radial-gradient(circle,rgba(28,190,214,.26),transparent 62%);animation:lgDrift 22s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.20),transparent 62%)}
-.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.18),transparent 62%)}
-.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.17),transparent 62%)}
+.lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px);will-change:transform}
+.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(96,32,168,.50),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
+.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(70,96,220,.44),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
+.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(28,190,214,.40),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.30),transparent 64%)}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.27),transparent 64%)}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.26),transparent 64%)}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(70px,-50px,0) scale(1.12)}
-  100%{transform:translate3d(-60px,45px,0) scale(.94)}
+  50%{transform:translate3d(110px,-80px,0) scale(1.22)}
+  100%{transform:translate3d(-90px,70px,0) scale(.9)}
 }
 .bp-band,.fitcheck,.quote-band{position:relative;overflow:hidden}
 .bp-band .wrap,.fitcheck .wrap,.quote-band .wrap{position:relative;z-index:1}
@@ -701,9 +706,9 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <defs>
     <filter id="liquid-glass-distortion" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="liquidNoise">
-        <animate attributeName="baseFrequency" dur="18s" values="0.008 0.012;0.012 0.017;0.008 0.012" repeatCount="indefinite"/>
+        <animate attributeName="baseFrequency" dur="14s" values="0.008 0.012;0.015 0.021;0.008 0.012" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="liquidNoise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="liquidNoise" scale="24" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
 </svg>
@@ -721,15 +726,15 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <span class="logo-text"><b>Herron &amp; Co.</b><span>Legacy Agency</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#coverage">Coverage</a></li>
-      <li><a href="#iul-strategy">IUL strategy</a></li>
-      <li><a href="opt-in.html">Free guide</a></li>
-      <li><a href="#ai">Legacy AI</a></li>
-      <li><a href="#blueprint">Blueprint</a></li>
-      <li><a href="#quotes">Quotes</a></li>
+      <li><a href="#mortgage">Mortgage</a></li>
+      <li><a href="#disability">Disability</a></li>
+      <li><a href="#ltc">Long-Term Care</a></li>
+      <li><a href="#final-expense">Final Expense</a></li>
+      <li><a href="#iul-strategy">IUL</a></li>
+      <li><a href="#annuities">Annuities</a></li>
+      <li><a href="#term-whole">Term &amp; Whole</a></li>
+      <li><a href="#tools">Tools</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#booking">Book</a></li>
-      <li><a href="#faq">FAQ</a></li>
     </ul>
     <div class="nav-cta">
       <a class="nav-phone" href="tel:6103608583">610-360-8583</a>
@@ -739,9 +744,14 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   </div>
 </nav>
 <div class="nav-sheet" id="navSheet" aria-label="Menu">
-  <a href="#coverage">Coverage</a>
+  <a href="#mortgage">Mortgage protection</a>
+  <a href="#disability">Disability insurance</a>
+  <a href="#ltc">Hybrid long-term care</a>
+  <a href="#final-expense">Final expense</a>
   <a href="#iul-strategy">IUL strategy</a>
-  <a href="#ai">Legacy AI</a>
+  <a href="#annuities">Annuities — every kind</a>
+  <a href="#term-whole">Term &amp; whole life</a>
+  <a href="#tools">Interactive tools</a>
   <a href="#blueprint">Blueprint</a>
   <a href="#quotes">Instant quotes</a>
   <a href="#about">About Connor</a>
@@ -758,17 +768,17 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-inner">
     <div>
-      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 13 states · AI-powered, human-delivered</span>
+      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 13 states · Life insurance &amp; fixed annuities</span>
       <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
-      <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained by an AI concierge that never sleeps, and closed by a real licensed agent who does.</p>
+      <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
       <div class="hero-ctas rise d3">
-        <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Talk to Legacy AI</a>
+        <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Ask us anything — 24/7</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
       </div>
       <div class="hero-stats rise d4">
         <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
         <div class="hstat"><b data-count="13">13</b><span>states licensed</span></div>
-        <div class="hstat"><b>24<em>/7</em></b><span>AI concierge</span></div>
+        <div class="hstat"><b>24<em>/7</em></b><span>instant answers</span></div>
         <div class="hstat"><b>0<em>$</em></b><span>cost to work with us</span></div>
       </div>
     </div>
@@ -823,14 +833,14 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <p>Every policy is shopped across the market and built around your budget — not a carrier's quota. Start with what you're protecting.</p>
     </div>
     <div class="cover-grid">
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="mortgage">
         <span class="tag">For homeowners</span>
         <h3>Mortgage Protection with Living Benefits</h3>
         <p>Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.</p>
         <ul><li>No medical exam for most applicants</li><li>Critical, chronic &amp; terminal illness riders</li><li>Coverage matched to your mortgage balance</li></ul>
         <button class="go" data-track="mortgage">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="iul">
         <span class="tag">For builders of wealth</span>
         <h3>Indexed Universal Life (IUL)</h3>
         <p>Index-linked growth potential with protection from down years, tax-advantaged access in retirement — built for high earners and owner-operators with no 401(k) in the cab.</p>
@@ -838,35 +848,35 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <button class="go" data-track="iul">Check my fit</button>
         <a class="deep" href="#iul-strategy">See the full IUL strategy ↓</a>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="ltc">
         <span class="tag">For ages 50–68</span>
         <h3>Hybrid Long-Term Care</h3>
         <p>70% of us will need care after 65 — Medicare won't pay. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
         <ul><li>Money is never wasted — pays out either way</li><li>One design can cover both spouses</li><li>Protects retirement savings from care costs</li></ul>
         <button class="go" data-track="ltc">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="final-expense">
         <span class="tag">For peace of mind</span>
         <h3>Final Expense</h3>
         <p>Simple whole life that covers funeral and end-of-life costs — so grief never comes with a bill attached.</p>
         <ul><li>No-exam and guaranteed-issue options</li><li>Premiums locked for life</li><li>Approvals often same-day</li></ul>
         <button class="go" data-track="final">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="annuities-card">
         <span class="tag">For safe growth</span>
         <h3>Fixed Annuities</h3>
         <p>Guaranteed rates with zero market risk — turning savings into tax-deferred growth or income that arrives like a paycheck for life.</p>
         <ul><li>Guaranteed rates from A-rated carriers</li><li>Often outpaces bank CDs</li><li>Income you can't outlive</li></ul>
         <button class="go" data-track="annuity">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="disability">
         <span class="tag">For your paycheck</span>
         <h3>Disability Insurance</h3>
         <p>Your ability to earn is your biggest asset. If illness or injury stops you from working, disability insurance replaces a portion of your income until you're back on your feet.</p>
         <ul><li>Protects your paycheck, not just your life</li><li>Options for self-employed &amp; business owners</li><li>Short and long-term benefit periods</li></ul>
         <button class="go" data-track="disability">Check my fit</button>
       </article>
-      <article class="cover-card wide liquid-glass reveal">
+      <article class="cover-card wide liquid-glass reveal" id="term-whole">
         <span class="tag">The classics, done right</span>
         <h3>Standard Term &amp; Whole Life</h3>
         <p>Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.</p>
@@ -1063,6 +1073,157 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
             <div id="iulCapture"></div>
           </div>
 
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANNUITIES — EVERY KIND ============ -->
+<section class="ann-band" id="annuities">
+<style>
+.ann-band{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden;padding:96px 0}
+.ann-band .wrap{position:relative;z-index:1}
+.ann-head{max-width:760px;margin-bottom:44px}
+.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--white)}
+.ann-head h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ann-head p{color:rgba(255,255,255,.75);font-size:17px;margin-top:16px;max-width:62ch}
+.ann-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:880px){.ann-grid{grid-template-columns:1fr}}
+.ann-card{border-radius:22px;padding:30px 28px;background:linear-gradient(150deg,rgba(14,31,62,.72),rgba(8,18,38,.8));position:relative;overflow:hidden}
+.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-bright);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.ann-card .kind i{width:6px;height:6px;border-radius:50%;background:var(--brass-bright);display:inline-block}
+.ann-card h3{font-family:'Sora';font-size:23px;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.ann-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:rgba(255,255,255,.85);line-height:1.55}
+.ann-card li .em{position:absolute;left:0;top:0;font-size:16px}
+.ann-card li b{color:var(--brass-bright)}
+.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:rgba(255,255,255,.9)}
+.ann-card .key b{color:var(--brass-bright)}
+.ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.ann-note{margin-top:26px;font-size:12.5px;color:rgba(255,255,255,.45);max-width:96ch;line-height:1.65}
+</style>
+  <div class="hero-grid-lines" aria-hidden="true"></div>
+  <div class="glow glow-brass" style="top:-160px;right:-180px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-purple" style="top:-140px;left:-140px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-200px;right:-120px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:36%;left:40%" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="ann-head reveal">
+      <span class="eyebrow">Guaranteed growth &amp; income</span>
+      <h2>Annuities, every kind — <span class="grad">explained like a human.</span></h2>
+      <p>Two anchors hold a retirement steady: a guaranteed-rate vault, and an indexed engine that can become a paycheck for life. Here's each kind, in plain English — and what it's actually for.</p>
+    </div>
+    <div class="ann-grid">
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Fixed annuity · MYGA</span>
+        <h3>The Guaranteed Vault</h3>
+        <ul>
+          <li><span class="em">🏦</span>One interest rate. <b>Guaranteed. In writing.</b></li>
+          <li><span class="em">🔒</span>Locked for the full term you choose.</li>
+          <li><span class="em">🛡</span>Your principal never goes backward.</li>
+          <li><span class="em">🧾</span>Taxes wait until you take money out.</li>
+        </ul>
+        <div class="key"><b>Think CD — built for retirement money.</b> Choose a term. Lock the rate. Sleep well.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Fixed indexed · FIA</span>
+        <h3>The 0% Floor Engine</h3>
+        <ul>
+          <li><span class="em">🪜</span>Your value climbs a ladder — <b>every gain locks in. Permanently.</b></li>
+          <li><span class="em">📉</span>Market falls? Your worst year is 0%.</li>
+          <li><span class="em">🚫</span>You never have to climb back from a loss.</li>
+          <li><span class="em">⚙️</span>Zero is your hero.</li>
+        </ul>
+        <div class="key"><b>Gains ratchet up. Losses never touch you.</b> Growth potential without market risk to principal.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> FIA · how growth is measured</span>
+        <h3>Caps, Participation &amp; Spreads</h3>
+        <ul>
+          <li><span class="em">🧢</span><b>Cap</b> — a ceiling. Keep everything up to it.</li>
+          <li><span class="em">🍰</span><b>Participation</b> — a share. Keep a slice of any gain.</li>
+          <li><span class="em">🎟</span><b>Spread</b> — a toll. Keep everything past it.</li>
+          <li><span class="em">📅</span>The carrier declares these yearly. The 0% floor never moves.</li>
+        </ul>
+        <div class="key"><b>Caps and shares can move — in both directions. The floor cannot.</b> Ask for the guaranteed minimums before you sign.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Lifetime income · SPIA &amp; income riders</span>
+        <h3>The Income Spigot</h3>
+        <ul>
+          <li><span class="em">🛢</span>Your savings fill a tank.</li>
+          <li><span class="em">🚰</span>At retirement, you open the spigot.</li>
+          <li><span class="em">💵</span>Out flows a paycheck. Every year.</li>
+          <li><span class="em">♾️</span><b>The paycheck outlives the tank</b> — guaranteed by contract. For life.</li>
+        </ul>
+        <div class="key"><b>Income you can't outlive.</b> The fix for the retirement question nobody can answer: "how long will I live?"</div>
+      </article>
+    </div>
+    <div class="ann-ctas reveal">
+      <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Walk through it live — the Wealth Shield Matrix ↗</a>
+      <a class="btn btn-ghost-light" href="#booking">Get real rates on a free call</a>
+    </div>
+    <p class="ann-note reveal">Annuity guarantees are backed by the claims-paying ability of the issuing insurance carrier. Caps, participation rates, spreads, and declared rates are set by the carrier and can change per the contract. Withdrawals may be subject to surrender charges and, before 59½, IRS penalties. The descriptions above are educational, not an offer of coverage or a quoted rate — get carrier-specific figures on a free call.</p>
+  </div>
+</section>
+
+<!-- ============ INTERACTIVE TOOLS ============ -->
+<section class="tools-band" id="tools">
+<style>
+.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:96px 0}
+.tools-band .wrap{position:relative;z-index:1}
+.tools-head{max-width:720px;margin-bottom:44px}
+.tools-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
+.tools-head p{color:var(--ink-soft);font-size:17px;margin-top:16px}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:920px){.tools-grid{grid-template-columns:1fr}}
+.tool-pane .lg-content{padding:26px}
+.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
+.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--white);margin:10px 0 8px;letter-spacing:-.01em}
+.tool-pane .t-what{font-size:14.5px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.6}
+.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 50px -20px rgba(3,10,30,.7);margin-bottom:18px}
+.tool-pane .t-bar{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(3,10,30,.8);border-bottom:1px solid rgba(255,255,255,.12)}
+.tool-pane .t-bar i{width:9px;height:9px;border-radius:50%;display:block}
+.tool-pane .t-bar i:nth-child(1){background:#F2645A}.tool-pane .t-bar i:nth-child(2){background:#F5BE4F}.tool-pane .t-bar i:nth-child(3){background:#5BC466}
+.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.55);letter-spacing:.04em}
+.tool-pane .t-shot img{display:block;width:100%;height:auto}
+.tool-pane .t-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 12px}
+</style>
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-160px;right:-120px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-200px;left:-140px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:30%;left:42%" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="tools-head reveal">
+      <span class="eyebrow">Interactive walkthroughs</span>
+      <h2>Don't take our word for it. Play with it.</h2>
+      <p>Most agents hand you a brochure. We built you software — two interactive walkthroughs that make the most confusing products in insurance something you can actually see, tap, and stress-test yourself. Free, no email, no sign-up.</p>
+    </div>
+    <div class="tools-grid">
+      <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+           by liquid-glass.js; content stays on top (z-20, clickable). -->
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-content">
+          <span class="t-kick">Protect · Grow · Distribute</span>
+          <h3>The Wealth Shield Matrix</h3>
+          <p class="t-what">The bucket-and-shield simulator. Crash the market on purpose and watch the shielded bucket hold while the unshielded one drains — then run your own numbers in the projection studio.</p>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the wealth shield matrix</span></div><img src="social/assets/matrix-desktop.png" alt="The Wealth Shield Matrix — bucket and shield downturn simulator" loading="lazy" width="1440" height="1024"></div>
+          <div class="t-feats"><span class="t-feat">IUL Shield</span><span class="t-feat">Annuity Anchors</span><span class="t-feat">Live projections</span><span class="t-feat">Objection dashboard</span></div>
+          <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Open the Matrix ↗</a>
+        </div>
+      </div>
+      <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+           by liquid-glass.js; content stays on top (z-20, clickable). -->
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-content">
+          <span class="t-kick">Care · Paycheck · Home · Legacy</span>
+          <h3>The Protection Blueprint</h3>
+          <p class="t-what">Your whole protection plan on one screen — four shields, each explained honestly, starting with the number nobody says out loud: 7 in 10 will need long-term care, and Medicare pays $0.</p>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the protection blueprint</span></div><img src="social/assets/blueprint-desktop.png" alt="The Protection Blueprint — the Care Shield walkthrough" loading="lazy" width="1440" height="1024"></div>
+          <div class="t-feats"><span class="t-feat">Care Shield</span><span class="t-feat">Paycheck Shield</span><span class="t-feat">Home Shield</span><span class="t-feat">Legacy Shield</span></div>
+          <a class="btn btn-brass" href="protection-blueprint.html" target="_blank" rel="noopener">Open the Blueprint ↗</a>
         </div>
       </div>
     </div>
@@ -2058,7 +2219,7 @@ renderFit();
   b.addEventListener('click',function(){set(!s.classList.contains('open'))});
   s.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
-  matchMedia('(min-width:1081px)').addEventListener('change',function(m){if(m.matches)set(false)});
+  matchMedia('(min-width:1241px)').addEventListener('change',function(m){if(m.matches)set(false)});
 })();
 </script>
 <!-- Liquid Glass WebGL engine (progressive enhancement — if this module or its

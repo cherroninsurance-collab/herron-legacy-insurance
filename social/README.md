@@ -1,5 +1,12 @@
 # Herron Legacy — Social Content Kit
 
+> **Site integration (branch `claude/viral-social-content-creation-af6vpq`):** the Wealth Shield
+> Matrix and Protection Blueprint now ship as real pages — `/wealth-shield-matrix.html` and
+> `/protection-blueprint.html` — featured on the homepage in a new **Tools** band, next to a new
+> **Annuities** band (every kind: MYGA vault · FIA floor · caps/participation/spreads · lifetime
+> income). Nav is category tabs, the hero reads "Life insurance & fixed annuities," and the
+> liquid-glass system is intensified site-wide. Nothing deploys until this branch is merged.
+
 A ready-to-run viral content system for **@herronlegacy**. Everything here is **additive** — it does **not** touch or change the live website. The site was used only as a visual + brand reference.
 
 ## What's in here
@@ -26,7 +33,8 @@ Your **Wealth Shield Matrix** (the bucket-and-shield downturn simulator) and **P
 
 - **Book a call:** `https://herronlegacyinsurance.com/#booking`
 - **Blueprint / instant estimate:** `https://herronlegacyinsurance.com/#blueprint`
-- **Legacy AI:** `https://herronlegacyinsurance.com/#ai`
+- **Wealth Shield Matrix:** `https://herronlegacyinsurance.com/wealth-shield-matrix.html`
+- **Protection Blueprint (tool):** `https://herronlegacyinsurance.com/protection-blueprint.html`
 - **Coverage:** `https://herronlegacyinsurance.com/#coverage`
 - **Call / text:** `610-360-8583`
 
