@@ -756,6 +756,42 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .cov-ctas .btn{font-size:14.5px;padding:13px 22px}
 @media(max-width:560px){.cov-inner{padding:32px 22px 26px}.cov-hero{flex-direction:column;gap:14px}.cov-stat{gap:18px}}
 </style>
+<style id="polish-css">
+/* ===== GLOBAL POLISH / INTENSIFY ===== */
+/* premium diagonal shine-sweep across the coverage + annuity cards on hover */
+.cover-card,.ann-card{overflow:hidden}
+.cover-card::after,.ann-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.16) 50%,transparent 64%);
+  transform:translateX(-130%);opacity:0;transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .3s}
+.cover-card:hover::after,.ann-card:hover::after{transform:translateX(130%);opacity:1}
+.cover-card{transition:transform .24s cubic-bezier(.16,1,.3,1),box-shadow .24s,border-color .24s}
+.cover-card:hover{transform:translateY(-6px)}
+/* brass buttons get a light sweep */
+.btn-brass{position:relative;overflow:hidden}
+.btn-brass::after{content:"";position:absolute;top:0;bottom:0;left:-90%;width:55%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);transition:left .6s ease}
+.btn-brass:hover::after{left:150%}
+/* animated gold underline under nav links */
+.nav-links a{position:relative}
+.nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:3px;height:1.5px;background:var(--brass);
+  transform:scaleX(0);transform-origin:left;transition:transform .22s ease;border-radius:2px}
+.nav-links a:hover::after{transform:scaleX(1)}
+/* state chips + faq lift on hover */
+.state-chip{transition:transform .16s,border-color .16s,background .16s}
+.state-chip:hover{transform:translateY(-2px);border-color:rgba(201,151,59,.5)}
+.faq-item{transition:border-color .18s}
+.faq-item:hover{border-color:rgba(201,151,59,.32)}
+/* carrier logos: subtle lift as the marquee passes under the cursor */
+.carrier{transition:transform .18s,box-shadow .18s}
+.carrier:hover{transform:translateY(-3px);box-shadow:0 12px 26px -12px rgba(0,0,0,.5)}
+/* hero stat cards: gentle glass polish */
+.hstat{transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s}
+.hstat:hover{transform:translateY(-3px);border-color:rgba(201,151,59,.4)}
+@media(prefers-reduced-motion:reduce){
+  .cover-card::after,.ann-card::after,.btn-brass::after{display:none}
+  .cover-card:hover,.state-chip:hover,.carrier:hover,.hstat:hover{transform:none}
+}
+</style>
 </head>
 <body>
 
@@ -828,7 +864,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
     <div>
       <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 12 states · Life insurance &amp; fixed annuities</span>
       <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
-      <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
+      <p class="lede rise d2">Mortgage protection with living benefits, indexed universal life (IUL), hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
       <div class="hero-ctas rise d3">
         <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Ask us anything — 24/7</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
@@ -909,7 +945,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <article class="cover-card liquid-glass reveal" id="ltc">
         <span class="tag">For ages 50–68</span>
         <h3>Hybrid Long-Term Care</h3>
-        <p>70% of us will need care after 65 — Medicare won't pay. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
+        <p>70% of us will need care after 65 — and Medicare generally won't cover long-term care. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
         <ul><li>Money is never wasted — pays out either way</li><li>One design can cover both spouses</li><li>Protects retirement savings from care costs</li></ul>
         <button class="go" data-track="ltc">Check my fit</button>
       </article>
@@ -921,10 +957,10 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <button class="go" data-track="final">Check my fit</button>
       </article>
       <article class="cover-card liquid-glass reveal" id="annuities-card">
-        <span class="tag">For safe growth</span>
+        <span class="tag">For principal protection</span>
         <h3>Fixed Annuities</h3>
-        <p>Guaranteed rates with zero market risk — turning savings into tax-deferred growth or income that arrives like a paycheck for life.</p>
-        <ul><li>Guaranteed rates from A-rated carriers</li><li>Often outpaces bank CDs</li><li>Income you can't outlive</li></ul>
+        <p>Guaranteed rates with protection from market loss — turning savings into tax-deferred growth or income that arrives like a paycheck for life.</p>
+        <ul><li>Guaranteed rates from established carriers</li><li>A CD alternative for retirement money</li><li>Income you can't outlive</li></ul>
         <button class="go" data-track="annuity">Check my fit</button>
       </article>
       <article class="cover-card liquid-glass reveal" id="disability">
@@ -1005,7 +1041,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
             <div class="wt-step"><span class="n">01</span><h3>What an IUL actually is</h3></div>
             <p>Strip the jargon and it's one thing: <b>a permanent life insurance policy with a savings account bolted to it</b>, where the savings account grows based on a stock index without being invested in the market.</p>
             <p>You pay a premium. Part covers the insurance. The rest goes into cash value. That cash value gets credited interest based on how an index — usually the S&amp;P 500 — performed that year. <b>Your money is never actually in the market.</b> The carrier just uses the index as a measuring stick.</p>
-            <p>That distinction is the whole product. It's why you can't lose money to a crash, and it's why you don't get the full gain in a boom.</p>
+            <p>That distinction is the whole product. It's why a market crash doesn't cut your credited interest below the floor — though policy charges still apply — and it's why you don't get the full gain in a boom.</p>
           </div>
 
           <div class="wt-sec">
@@ -1041,7 +1077,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
           <div class="wt-sec">
             <div class="wt-step"><span class="n">04</span><h3>How you get the money out without a tax bill</h3></div>
             <p>You don't withdraw it. <b>You borrow against it.</b></p>
-            <p>The cash value stays in the policy and keeps getting credited. The carrier lends you money using that cash value as collateral. Because a loan isn't income, <b>there's no 1099 and no tax</b>. When you die, the outstanding loan is deducted from the death benefit and the rest goes to your family income-tax-free.</p>
+            <p>The cash value stays in the policy and keeps getting credited. The carrier lends you money using that cash value as collateral. Because a properly structured policy loan generally isn't taxable income, <b>there's typically no 1099 while the policy stays in force</b>. When you die, the outstanding loan is deducted from the death benefit and the rest goes to your family income-tax-free.</p>
             <p>That's the mechanism behind every "tax-free retirement income" pitch you've heard. It's real. It's also the part that goes wrong most often.</p>
             <div class="wt-callout wt-warn">
               <b>Two ways this blows up</b>
@@ -1059,7 +1095,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
                   <tr><td>Contribution cap</td><td>IRS annual limit</td><td>IRS limit + income phase-out</td><td>No IRS dollar cap — limited by your death benefit and MEC</td></tr>
                   <tr><td>Income limits</td><td>None to contribute</td><td>Yes — high earners phase out</td><td>None</td></tr>
                   <tr><td>Tax on growth</td><td>Deferred</td><td>Tax-free</td><td>Deferred</td></tr>
-                  <tr><td>Tax on access</td><td>Ordinary income</td><td>Tax-free after 59½</td><td>Tax-free via loans, if structured and managed right</td></tr>
+                  <tr><td>Tax on access</td><td>Ordinary income</td><td>Tax-free after 59½</td><td>Tax-advantaged via loans, if structured and managed right</td></tr>
                   <tr><td>Access before 59½</td><td>10% penalty</td><td>Contributions only</td><td>Any time, no age penalty</td></tr>
                   <tr><td>Market loss</td><td>Full exposure</td><td>Full exposure</td><td>Floor protects the credit — charges still apply</td></tr>
                   <tr><td>Employer match</td><td>Often</td><td>No</td><td>No</td></tr>
@@ -1168,7 +1204,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="lg-blob lg-blob-cyan" style="top:36%;left:40%" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ann-head reveal">
-      <span class="eyebrow">Guaranteed growth &amp; income</span>
+      <span class="eyebrow">Protected growth &amp; income</span>
       <h2>Annuities, every kind — <span class="grad">explained like a human.</span></h2>
       <p>Two anchors hold a retirement steady: a guaranteed-rate vault, and an indexed engine that can become a paycheck for life. Here's each kind, in plain English — and what it's actually for.</p>
     </div>
@@ -1193,7 +1229,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
           <li><span class="em">🚫</span>You never have to climb back from a loss.</li>
           <li><span class="em">⚙️</span>Zero is your hero.</li>
         </ul>
-        <div class="key"><b>Gains ratchet up. Losses never touch you.</b> Growth potential without market risk to principal.</div>
+        <div class="key"><b>Gains ratchet up. Market losses don’t reduce your locked value.</b> Growth potential without market risk to principal.</div>
       </article>
       <article class="ann-card liquid-glass reveal">
         <span class="kind"><i></i> FIA · how growth is measured</span>
@@ -1689,7 +1725,7 @@ const KB=[
  {k:['truck','driver','owner operator','owner-operator','otr','cdl','rig','fleet'],
   a:`We build IULs specifically around trucking income: flexible funding (more when freight's good, less when it's slow), growth without direct market losses, and family protection while you're on the road — retirement plan and life insurance in one policy, since there's no 401(k) in the cab.\n\nMost drivers who can pass a DOT physical qualify. One call from the cab is all it takes — ${CALL_LINK} or ${BOOK_LINK}.`},
  {k:['long term care','long-term care','ltc','nursing home','assisted living','home care','hybrid'],
-  a:`About 70% of people over 65 will need long-term care, it can run over $100,000 a year, and Medicare doesn't cover it. Hybrid LTC policies fix the old "use it or lose it" problem: if you need care, they pay a monthly benefit; if you never do, your family receives a death benefit instead. The money is never wasted.\n\nThey work best between ages 50–68 while you're healthy, and one design can often cover both spouses. Want a side-by-side comparison for your age and state? ${BOOK_LINK}.`},
+  a:`About 70% of people over 65 will need long-term care, it can run over $100,000 a year, and Medicare generally doesn't cover long-term custodial care. Hybrid LTC policies fix the old "use it or lose it" problem: if you need care, they pay a monthly benefit; if you never do, your family receives a death benefit instead. The money is never wasted.\n\nThey work best between ages 50–68 while you're healthy, and one design can often cover both spouses. Want a side-by-side comparison for your age and state? ${BOOK_LINK}.`},
  {k:['final expense','funeral','burial','end of life','cremation'],
   a:`Final expense is a simple whole life policy — typically $5,000–$50,000 — that covers funeral and end-of-life costs so your family grieves without a bill in their hands. No medical exam (health questions only, and some options have none at all), and premiums are locked for life.\n\nMany clients get approved the same day. ${CALL_LINK} or ${BOOK_LINK}.`},
  {k:['annuit','fixed annuity','guaranteed rate','cd alternative','retirement income','outlive my money','pension','lump sum','safe money'],
@@ -2107,9 +2143,9 @@ const tracks={
  annuity:{name:"Fixed Annuities",questions:[
    {q:"What's your age range?",opts:["Under 50","50 – 59","60 – 70","Over 70"]},
    {q:"Roughly how much are you looking to protect or convert to income?",opts:["Under $50k","$50k – $150k","$150k – $500k","Over $500k"]},
-   {q:"What matters most to you?",opts:["A guaranteed rate with zero market risk","Income I can't outlive","Beating what my bank/CD pays","Not sure — show me options"]}],
-  result:"A fixed annuity looks like your fit — a guaranteed rate with zero market risk, tax-deferred growth, and the option to turn it into income that arrives like a paycheck for life.",
-  next:"Connor pulls today's top guaranteed rates from A-rated carriers for your state and amount — many currently beat bank CDs — and shows you exactly what your money would earn and pay out. No cost, no obligation."},
+   {q:"What matters most to you?",opts:["A guaranteed rate with protection from market loss","Income I can't outlive","Beating what my bank/CD pays","Not sure — show me options"]}],
+  result:"A fixed annuity looks like your fit — a guaranteed rate with protection from market loss, tax-deferred growth, and the option to turn it into income that arrives like a paycheck for life.",
+  next:"Connor pulls today's top guaranteed rates from established carriers for your state and amount — often competitive with bank CDs — and shows you exactly what your money would earn and pay out. No cost, no obligation."},
  term:{name:"Term & Whole Life",questions:[
    {q:"How long do you need the coverage to last?",opts:["Through my mortgage / working years","My entire life","Not sure — that's why I'm here"]},
    {q:"Who depends on your income?",opts:["Spouse or partner","Kids","Both","Just me"]},
@@ -2306,19 +2342,19 @@ renderFit();
     iul:{ic:'📈',eyebrow:'For builders of wealth',title:'Indexed Universal Life (IUL)',
       hook:'Index-linked growth with a floor in down years and tax-advantaged access in retirement — built for high earners and 1099 owner-operators with no 401(k).',
       rows:['Flexible funding, up or down with your income','Tax-advantaged retirement income design','Income-tax-free benefit for your family','A 0% floor so a market crash never drains your cash value'],
-      stat:[['0%','floor — your worst year, never less'],['20+','carriers compared for you']],track:'iul',
+      stat:[['0%','floor — your credited rate never goes negative'],['20+','carriers compared for you']],track:'iul',
       extra:{label:'See the full IUL strategy',href:'#iul-strategy'}},
     ltc:{ic:'🛡️',eyebrow:'For ages 50–68',title:'Hybrid Long-Term Care',
-      hook:'70% of us will need care after 65 — and Medicare pays <em>nothing.</em> Hybrids fix “use it or lose it”: care benefits if you need them, a death benefit for family if you don’t.',
+      hook:'70% of us will need care after 65 — and Medicare generally <em>won’t cover it.</em> Hybrids fix “use it or lose it”: care benefits if you need them, a death benefit for family if you don’t.',
       rows:['Money is never wasted — it pays out either way','One design can cover both spouses','Protects retirement savings from care costs','Locks in while you’re healthy enough to qualify'],
-      stat:[['70%','will need long-term care after 65'],['$0','what Medicare pays toward it']],track:'ltc'},
+      stat:[['70%','will need long-term care after 65'],['$0','Medicare pays toward long-term care']],track:'ltc'},
     final:{ic:'🕊️',eyebrow:'For peace of mind',title:'Final Expense',
       hook:'Simple whole life that covers funeral and end-of-life costs — so <em>grief never comes with a bill attached.</em>',
       rows:['No-exam and guaranteed-issue options','Premiums locked for life','Approvals often same-day','A small policy that does one big, kind thing'],
       stat:[['$10–15k','the bill it quietly covers'],['Same-day','approvals available']],track:'final'},
-    annuity:{ic:'🏦',eyebrow:'For safe growth',title:'Fixed Annuities',
-      hook:'Guaranteed rates with zero market risk — turning savings into tax-deferred growth, or income that arrives like a paycheck for life.',
-      rows:['Guaranteed rates from A-rated carriers','Often outpaces bank CDs','Income you can’t outlive','Your principal never goes backward'],
+    annuity:{ic:'🏦',eyebrow:'For principal protection',title:'Fixed Annuities',
+      hook:'Guaranteed rates with protection from market loss — turning savings into tax-deferred growth, or income that arrives like a paycheck for life.',
+      rows:['Guaranteed rates from established carriers','A CD alternative for retirement money','Income you can’t outlive','Your principal never goes backward'],
       stat:[['0%','market risk to your principal'],['For life','income you can’t outlive']],track:'annuity',
       extra:{label:'See every kind of annuity',href:'#annuities'}},
     disability:{ic:'💪',eyebrow:'For your paycheck',title:'Disability Insurance',

@@ -137,7 +137,7 @@
   <div class="text-center mb-8">
     <p class="kicker mb-2">Protection Strategy</p>
     <h2 class="font-display text-3xl md:text-4xl text-white">The IUL Shield</h2>
-    <p class="mt-2.5 text-slate-400">Max-funded indexed universal life, engineered with the LASER method.</p>
+    <p class="mt-2.5 text-slate-400">Max-funded indexed universal life, engineered with the Herron Method.</p>
     <div class="goldline h-px w-48 mx-auto mt-5 opacity-60"></div>
   </div>
 
@@ -159,7 +159,7 @@
           <li class="flex gap-3"><span>📈</span><span>The bucket grows with the market index.</span></li>
           <li class="flex gap-3"><span>🛡️</span><span>A shield covers the bucket.</span></li>
           <li class="flex gap-3"><span>⛈️</span><span>Market storms cannot drain it.</span></li>
-          <li class="flex gap-3"><span>🔒</span><span>Worst year? You earn 0%. Never less.</span></li>
+          <li class="flex gap-3"><span>🔒</span><span>Worst year? You earn 0%. Never negative.</span></li>
         </ul>
         <button id="stormbtn" class="btn btn-primary mt-6">Simulate a market downturn</button>
       </div>
@@ -188,13 +188,13 @@
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Added Premium Pipeline</h3>
         <ul class="space-y-3 text-lg leading-snug">
           <li class="flex gap-3"><span>🏷️</span><span>Most policies: big insurance, small savings.</span></li>
-          <li class="flex gap-3"><span>🔁</span><span>LASER flips the design.</span></li>
+          <li class="flex gap-3"><span>🔁</span><span>The Herron Method flips the design.</span></li>
           <li class="flex gap-3"><span>📉</span><span>Buy the <em>minimum</em> insurance allowed.</span></li>
           <li class="flex gap-3"><span>🚰</span><span>Pour the <em>maximum</em> cash through the pipeline.</span></li>
           <li class="flex gap-3"><span>🪣</span><span>More of every dollar lands in your bucket.</span></li>
         </ul>
         <div class="mt-6 p-4 rounded-xl bg-navy-950 border border-gold-400/20 text-sm text-slate-300">
-          💡 <span class="text-gold-300 font-semibold">LASER:</span> minimum insurance, maximum cash.
+          💡 <span class="text-gold-300 font-semibold">The Herron Method:</span> minimum insurance, maximum cash.
         </div>
       </div>
       <svg viewBox="0 0 360 250" class="w-full" role="img" aria-label="Premium splits: a thin pipe pays insurance cost, a wide gold pipe overfunds the cash bucket">
@@ -480,7 +480,7 @@
 
   <div class="flex justify-center mb-8">
     <div class="seg" role="group" aria-label="Calculator mode">
-      <button id="modeA-btn" class="modebtn">Mode A&ensp;·&ensp;IUL LASER</button>
+      <button id="modeA-btn" class="modebtn">Mode A&ensp;·&ensp;IUL · Herron Method</button>
       <button id="modeB-btn" class="modebtn">Mode B&ensp;·&ensp;FIA Income</button>
       <button id="modeC-btn" class="modebtn">Mode C&ensp;·&ensp;Fixed Annuity</button>
     </div>
@@ -1008,7 +1008,7 @@ $('modeA-btn').addEventListener('click',()=>{store.mode='A';renderMode();pulseSt
 $('modeB-btn').addEventListener('click',()=>{store.mode='B';renderMode();pulseStats();});
 $('modeC-btn').addEventListener('click',()=>{store.mode='C';renderMode();pulseStats();});
 
-/* Mode A — IUL LASER: age-driven horizon, 1.5% drag policy yrs 1–10 then 0.5%, 6.5% loan draw */
+/* Mode A — IUL Herron Method: age-driven horizon, 1.5% drag policy yrs 1–10 then 0.5%, 6.5% loan draw */
 function iulModel(){
   const age=+$('iul-age').value, rateGoal=+$('iul-retage').value,
         premium=+$('iul-prem').value, rate=+$('iul-rate').value;
@@ -1218,7 +1218,7 @@ function renderMygaCalc(){
 const OBJECTIONS=[
   {icon:'💸',title:'“IULs have high fees.”',
    objection:'I read that IULs are loaded with fees and commissions.',
-   reframe:'True for badly designed policies. The LASER design buys the MINIMUM insurance the IRS allows and overfunds the rest, so cost per dollar of cash value collapses after the early years. Show the drag column in the calculator — 1.5% early, 0.5% later — against the value of never taking a negative year.',
+   reframe:'True for badly designed policies. The Herron Method buys the MINIMUM insurance the IRS allows and overfunds the rest, so cost per dollar of cash value collapses after the early years. Show the drag column in the calculator — 1.5% early, 0.5% later — against the value of never taking a negative year.',
    oneliner:'You are not paying for insurance — you are paying for the floor.'},
   {icon:'📊',title:'“Buy term and invest the difference.”',
    objection:'Term is cheaper. I would rather invest the difference in index funds.',
@@ -1231,7 +1231,7 @@ const OBJECTIONS=[
   {icon:'🏦',title:'“What if the insurance company fails?”',
    objection:'A guarantee is only as good as the company behind it.',
    reframe:'Agree — and make it a selection criterion. Walk through carrier ratings (A or better), statutory reserve requirements, and the state guaranty association backstop. Insurers must hold reserves against every contract; that is why the guarantee is credible.',
-   oneliner:'That is exactly why we only shop A-rated carriers with hundred-year track records.'},
+   oneliner:'That is exactly why we focus on established, financially strong carriers with long track records.'},
   {icon:'📉',title:'“The caps will get lowered.”',
    objection:'Carriers can cut the cap after I buy. Then what?',
    reframe:'Honest answer: yes, caps float with interest rates and options pricing — in both directions. What never moves is the 0% floor, which is contractual. That is why the calculator defaults are conservative rather than showing the current cap as forever.',
