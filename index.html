@@ -647,7 +647,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
    restores this exact look. The layout can never break.
    ============================================================ */
 .lg-container{
-  position:relative;isolation:isolate;border-radius:30px;
+  position:relative;isolation:isolate;border-radius:34px;
   background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.34);
   -webkit-backdrop-filter:blur(30px) saturate(1.6);
   backdrop-filter:blur(30px) saturate(1.6);
@@ -669,7 +669,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;
 }
 .lg-canvas{position:absolute;z-index:10;pointer-events:none}   /* middle layer */
-.lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(14px,2vw,22px)}
+.lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(28px,4.2vw,56px)}
 /* let the refracted scene glow through the chat shell when GL is on */
 .lg-webgl-on .lg-content .chat-shell{
   background:rgba(8,18,38,.44);box-shadow:none;
@@ -687,9 +687,9 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(96,32,168,.50),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
 .lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(70,96,220,.44),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
 .lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(28,190,214,.40),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.30),transparent 64%)}
-.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.27),transparent 64%)}
-.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.26),transparent 64%)}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(128,80,206,.46),transparent 66%);width:720px;height:720px}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(90,116,236,.42),transparent 66%);width:820px;height:820px}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(66,198,220,.40),transparent 66%);width:660px;height:660px}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
   50%{transform:translate3d(110px,-80px,0) scale(1.22)}
@@ -1272,7 +1272,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .tools-head p{color:var(--ink-soft);font-size:17px;margin-top:16px}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:920px){.tools-grid{grid-template-columns:1fr}}
-.tool-pane .lg-content{padding:26px}
+.tool-pane .lg-content{padding:clamp(24px,3vw,42px)}
 .tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
 .tool-pane h3{font-family:'Sora';font-size:26px;color:var(--white);margin:10px 0 8px;letter-spacing:-.01em}
 .tool-pane .t-what{font-size:14.5px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.6}

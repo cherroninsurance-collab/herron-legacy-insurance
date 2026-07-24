@@ -330,7 +330,7 @@ const THEMES = {
   },
 };
 
-const BLEED = 40;         // px apron around the pane for halo/rim overdraw
+const BLEED = 64;         // px apron around the pane for halo/rim overdraw (enlarged)
 const DPR_CAP = 2;        // GUARDRAIL: hard pixel-ratio clamp for mobile GPUs
 
 /* ==========================================================================
