@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life Insurance Made Simple | Lehigh Valley, PA — Herron &amp; Co. Legacy Agency</title>
-<meta name="description" content="Life insurance shouldn't be complicated. Connor Herron — Lehigh Valley local, licensed in 13 states — designs mortgage protection with living benefits, IUL, hybrid long-term care, final expense, annuities, and disability coverage across 20+ carriers. Free 15-minute calls. $0 to work with us.">
+<meta name="description" content="Life insurance shouldn't be complicated. Connor Herron — Lehigh Valley local, licensed in 12 states — designs mortgage protection with living benefits, IUL, hybrid long-term care, final expense, annuities, and disability coverage across 20+ carriers. Free 15-minute calls. $0 to work with us.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Herron &amp; Co. Legacy Agency — Life insurance made simple">
-<meta property="og:description" content="Lehigh Valley local · Licensed in 13 states · 20+ carriers · $0 to work with us · Free 15-minute calls.">
+<meta property="og:description" content="Lehigh Valley local · Licensed in 12 states · 20+ carriers · $0 to work with us · Free 15-minute calls.">
 <meta property="og:url" content="https://herron-legacy-insurance.netlify.app/">
 <meta property="og:image" content="https://herron-legacy-insurance.netlify.app/images/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -77,15 +77,15 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 .logo-text{line-height:1.12}
 .logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
-.nav-links{display:flex;gap:13px;list-style:none}
-.nav-links a{text-decoration:none;font-weight:500;font-size:13.5px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
+.nav-links{display:flex;gap:11px;list-style:none}
+.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
 .nav-links a:hover{color:var(--white)}
 /* sticky-nav offset for in-page anchors (category tabs) */
 :where(section,article)[id],#tools,#annuities{scroll-margin-top:86px}
 .nav-cta{display:flex;align-items:center;gap:16px}
 .nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--white)}
 .nav-cta .btn{padding:10px 20px;font-size:14px}
-@media(max-width:1240px){.nav-links,.nav-phone{display:none}}
+@media(max-width:1320px){.nav-links,.nav-phone{display:none}}
 
 /* ---------- HERO ---------- */
 .hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
@@ -399,19 +399,22 @@ section{padding:96px 0}
 
 /* ---------- FIT CHECK ---------- */
 .fitcheck{background:var(--cloud);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.fit-shell{max-width:720px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.fit-shell{max-width:860px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
 .fit-bar{height:5px;background:var(--mist);position:relative}
 .fit-bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--brass),var(--brass-bright));width:0;transition:width .35s;display:block}
-.fit-body{padding:42px 44px 38px;min-height:340px;display:flex;flex-direction:column}
+.fit-body{padding:46px 48px 40px;min-height:380px;display:flex;flex-direction:column}
 .fit-step-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
 .fit-q{font-family:'Sora';font-weight:600;font-size:clamp(21px,2.5vw,27px);color:var(--navy);margin-bottom:26px;line-height:1.22}
 .fit-opts{display:grid;gap:11px}
 .fit-opt{
-  text-align:left;font-family:'Inter';font-size:15.5px;font-weight:500;color:var(--ink);
-  background:var(--cloud);border:1.5px solid var(--line);border-radius:12px;padding:15px 19px;cursor:pointer;
-  transition:border-color .15s,background .15s,transform .12s;
+  position:relative;text-align:left;font-family:'Inter';font-size:15.5px;font-weight:500;color:var(--ink);
+  background:linear-gradient(135deg,rgba(255,255,255,.9),var(--cloud));border:1.5px solid var(--line);border-radius:13px;
+  padding:16px 20px;cursor:pointer;overflow:hidden;
+  transition:border-color .18s,background .18s,transform .14s,box-shadow .18s;
 }
-.fit-opt:hover{border-color:var(--brass);background:var(--white);transform:translateX(3px)}
+.fit-opt::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%) translateX(6px);opacity:0;color:var(--brass);transition:opacity .18s,transform .18s;font-weight:600}
+.fit-opt:hover{border-color:var(--brass);background:#fff;transform:translateX(4px);box-shadow:0 10px 26px -12px rgba(201,151,59,.5)}
+.fit-opt:hover::after{opacity:1;transform:translateY(-50%) translateX(0)}
 .fit-opt:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .fit-back{margin-top:24px;background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-soft);width:fit-content;padding:4px 0}
 .fit-back:hover{color:var(--navy)}
@@ -592,7 +595,7 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 .nav-sheet a:active{color:var(--brass-bright)}
 .nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--brass-bright);border-bottom:none;margin-top:10px}
 .nav-sheet .btn{margin-top:14px;justify-content:center}
-@media(max-width:1240px){.nav-burger{display:flex}}
+@media(max-width:1320px){.nav-burger{display:flex}}
 
 /* no-blur fallback — keep everything readable */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -695,8 +698,63 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .bp-band,.fitcheck,.quote-band{position:relative;overflow:hidden}
 .bp-band .wrap,.fitcheck .wrap,.quote-band .wrap{position:relative;z-index:1}
 /* fit check pane hugs its narrow quiz card */
-.fitcheck .lg-container{max-width:764px;margin:0 auto}
+.fitcheck .lg-container{max-width:940px;margin:0 auto}
 @media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
+</style>
+<style id="cov-modal-css">
+/* ===== COVERAGE DETAIL MODAL — liquid-glass ===== */
+.cover-card{cursor:pointer}
+.cover-card h3{transition:color .16s}
+.cover-card:hover h3{color:var(--brass)}
+.cover-card.wide:hover h3{color:var(--brass-bright)}
+.cov-more{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);background:none;border:none;cursor:pointer;padding:0;transition:gap .16s,color .16s}
+.cover-card.wide .cov-more{color:var(--brass-bright)}
+.cov-more::after{content:"→";transition:transform .16s}
+.cover-card:hover .cov-more{gap:11px}
+.cov-more:hover::after{transform:translateX(3px)}
+
+.cov-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
+.cov-modal.open{display:flex}
+.cov-scrim{position:absolute;inset:0;background:rgba(3,8,20,.66);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);animation:covFade .3s ease}
+.cov-blobs{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.cov-blobs .lg-blob-purple{top:2%;left:6%}
+.cov-blobs .lg-blob-indigo{bottom:-6%;right:4%}
+.cov-blobs .lg-blob-cyan{top:38%;left:46%}
+.cov-panel{
+  position:relative;z-index:2;width:min(680px,100%);max-height:88vh;overflow:auto;border-radius:28px;color:#fff;
+  background:linear-gradient(150deg,rgba(15,32,64,.74),rgba(8,18,38,.82));
+  border:1px solid rgba(255,255,255,.4);
+  -webkit-backdrop-filter:blur(32px) saturate(1.55);
+  backdrop-filter:blur(32px) saturate(1.55) url(#liquid-glass-distortion);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 0 40px rgba(255,255,255,.05),
+    0 50px 100px -30px rgba(0,0,0,.7),0 0 70px -20px rgba(201,151,59,.3);
+  animation:covRise .42s cubic-bezier(.16,1,.3,1);
+}
+.cov-panel::-webkit-scrollbar{width:10px}
+.cov-panel::-webkit-scrollbar-thumb{background:rgba(201,151,59,.4);border-radius:8px;border:3px solid transparent;background-clip:content-box}
+@keyframes covFade{from{opacity:0}to{opacity:1}}
+@keyframes covRise{from{opacity:0;transform:translateY(26px) scale(.975)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.cov-scrim,.cov-panel{animation:none}}
+.cov-x{position:absolute;top:16px;right:16px;z-index:6;width:42px;height:42px;border-radius:50%;background:rgba(8,18,38,.55);border:1px solid var(--line-light);color:#fff;font-size:15px;cursor:pointer;transition:background .16s,transform .25s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cov-x:hover{background:rgba(201,151,59,.32);transform:rotate(90deg)}
+.cov-inner{position:relative;z-index:3;padding:42px 42px 36px}
+.cov-hero{display:flex;gap:18px;align-items:flex-start}
+.cov-ic{width:66px;height:66px;border-radius:19px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:31px;background:radial-gradient(circle at 30% 24%,rgba(201,151,59,.34),rgba(8,18,38,.5));border:1px solid rgba(201,151,59,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.cov-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
+.cov-title{font-family:'Sora';font-weight:700;font-size:clamp(23px,3.2vw,31px);color:#fff;margin:7px 0 0;line-height:1.08;letter-spacing:-.02em}
+.cov-hook{color:rgba(255,255,255,.84);font-size:16px;line-height:1.56;margin:18px 0 22px}
+.cov-hook em{color:var(--brass-bright);font-style:normal;font-weight:600}
+.cov-rows{display:grid;gap:10px;margin-bottom:22px}
+.cov-row{display:grid;grid-template-columns:30px 1fr;gap:13px;align-items:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:13px 16px;transition:border-color .18s,background .18s,transform .18s}
+.cov-row:hover{border-color:rgba(201,151,59,.55);background:rgba(255,255,255,.09);transform:translateX(4px)}
+.cov-row .ck{width:28px;height:28px;border-radius:9px;background:rgba(201,151,59,.16);border:1px solid rgba(201,151,59,.5);display:flex;align-items:center;justify-content:center;color:var(--brass-bright);font-size:14px;font-weight:700}
+.cov-row span{font-size:14.5px;color:rgba(255,255,255,.92);line-height:1.5}
+.cov-stat{display:flex;gap:26px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(201,151,59,.15),rgba(8,18,38,.28));border:1px solid rgba(201,151,59,.42);border-radius:16px;padding:18px 22px;margin-bottom:24px}
+.cov-stat .s b{font-family:'Sora';font-weight:700;font-size:27px;color:var(--brass-bright);display:block;line-height:1}
+.cov-stat .s span{font-size:12px;color:rgba(255,255,255,.72);font-family:'IBM Plex Mono',monospace;letter-spacing:.02em;margin-top:5px;display:block;max-width:20ch}
+.cov-ctas{display:flex;gap:11px;flex-wrap:wrap}
+.cov-ctas .btn{font-size:14.5px;padding:13px 22px}
+@media(max-width:560px){.cov-inner{padding:32px 22px 26px}.cov-hero{flex-direction:column;gap:14px}.cov-stat{gap:18px}}
 </style>
 </head>
 <body>
@@ -726,7 +784,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <span class="logo-text"><b>Herron &amp; Co.</b><span>Legacy Agency</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#mortgage">Mortgage</a></li>
+      <li><a href="#mortgage">Mortgage&nbsp;Protection</a></li>
       <li><a href="#disability">Disability</a></li>
       <li><a href="#ltc">Long-Term Care</a></li>
       <li><a href="#final-expense">Final Expense</a></li>
@@ -768,7 +826,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-inner">
     <div>
-      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 13 states · Life insurance &amp; fixed annuities</span>
+      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 12 states · Life insurance &amp; fixed annuities</span>
       <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
       <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
       <div class="hero-ctas rise d3">
@@ -777,7 +835,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       </div>
       <div class="hero-stats rise d4">
         <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
-        <div class="hstat"><b data-count="13">13</b><span>states licensed</span></div>
+        <div class="hstat"><b data-count="12">12</b><span>states licensed</span></div>
         <div class="hstat"><b>24<em>/7</em></b><span>instant answers</span></div>
         <div class="hstat"><b>0<em>$</em></b><span>cost to work with us</span></div>
       </div>
@@ -1362,8 +1420,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Where we're licensed</span>
-      <h2>Serving families across 13 states.</h2>
-      <p>Connor Herron is a licensed insurance producer (NPN 21556594) in the following 13 states:</p>
+      <h2>Serving families across 12 states.</h2>
+      <p>Connor Herron is a licensed insurance producer (NPN 21556594) in the following 12 states:</p>
     </div>
     <div class="states-grid reveal">
       <span class="state-chip"><i></i>Pennsylvania</span>
@@ -1372,7 +1430,6 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <span class="state-chip"><i></i>Wisconsin</span>
       <span class="state-chip"><i></i>Iowa</span>
       <span class="state-chip"><i></i>Indiana</span>
-      <span class="state-chip"><i></i>Georgia</span>
       <span class="state-chip"><i></i>Florida</span>
       <span class="state-chip"><i></i>Texas</span>
       <span class="state-chip"><i></i>Massachusetts</span>
@@ -1414,7 +1471,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <div class="npn"><b>Licensed producer</b><span>NPN 21556594</span></div>
       </div>
       <div class="about-copy reveal">
-        <p><b>I'm Connor Herron — a Lehigh Valley local and independent life insurance agent licensed in 13 states.</b></p>
+        <p><b>I'm Connor Herron — a Lehigh Valley local and independent life insurance agent licensed in 12 states.</b></p>
         <p>My job is simple: secure your family's peace of mind with transparent, affordable coverage. Because I'm independent, I work for you — not a carrier. Every policy gets shopped across 20+ national companies, explained in plain English, and sized to your real budget.</p>
         <p>It costs you nothing to work with me — your premium is identical to buying direct. And if a policy isn't right for you, I'll be the first to tell you. When you call the number on this page, you get me. Not a call center.</p>
         <div class="about-sig">— Connor Herron</div>
@@ -1527,7 +1584,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
     <div class="foot-grid">
       <div class="foot-brand">
         <b>Herron &amp; Co. Legacy Agency</b>
-        <p>Life insurance and financial protection for families in 13 states — mortgage protection, IUL, hybrid long-term care, final expense, fixed annuities, and disability insurance.</p>
+        <p>Life insurance and financial protection for families in 12 states — mortgage protection, IUL, hybrid long-term care, final expense, fixed annuities, and disability insurance.</p>
       </div>
       <div>
         <h4>Contact</h4>
@@ -1547,7 +1604,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       </div>
     </div>
     <div class="disclaimer">
-      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, GA, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
+      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
     </div>
   </div>
 </footer>
@@ -1645,10 +1702,10 @@ const KB=[
   a:`Two quick rules of thumb:\n• 10–12× your annual income, or\n• DIME: Debt + Income replacement years + Mortgage balance + Education costs for kids.\n\nExample: $75k income × 10 = $750,000 as a starting point. Or build your <a href="#blueprint">Legacy Blueprint</a> right on this page — it maps your whole picture, no email required. Connor runs your exact number in about five minutes — ${BOOK_LINK}.`},
  {k:['exam','medical','blood','needle','health questions','qualify','pre existing','pre-existing','diabetes'],
   a:`Most of our clients qualify with NO medical exam — carriers now use accelerated underwriting with health questions only. Even with conditions like managed diabetes or past health events, we work with 20+ carriers, and different carriers treat the same condition very differently. That's exactly why an independent agent matters.\n\nTell Connor your situation and he'll match you to the friendliest carrier: ${CALL_LINK}.`},
- {k:['state','licensed','where','pennsylvania','new jersey','jersey','virginia','wisconsin','iowa','indiana','georgia','florida','texas','massachusetts','north carolina','ohio','minnesota','my state'],
-  a:`Connor is a licensed producer (NPN 21556594) in 13 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana, Georgia, Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.\n\nIf you're elsewhere, ${CALL_LINK} — we can often refer you to a trusted licensed partner in your state.`},
+ {k:['state','licensed','where','pennsylvania','new jersey','jersey','virginia','wisconsin','iowa','indiana','florida','texas','massachusetts','north carolina','ohio','minnesota','my state'],
+  a:`Connor is a licensed producer (NPN 21556594) in 12 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana, Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.\n\nIf you're elsewhere, ${CALL_LINK} — we can often refer you to a trusted licensed partner in your state.`},
  {k:['who is connor','about you','who are you','herron','legit','scam','trust','real'],
-  a:`Herron & Co. Legacy Agency is run by Connor Herron, a licensed insurance producer (NPN 21556594) based at 30 S 15th Street in Philadelphia, licensed in 13 states. You can verify any producer license through your state's insurance department.\n\nAnd I'm the Legacy Concierge — I answer from a knowledge base Connor wrote and reviewed, and for anything personal, a licensed human takes over. ${BOOK_LINK}.`},
+  a:`Herron & Co. Legacy Agency is run by Connor Herron, a licensed insurance producer (NPN 21556594) based at 30 S 15th Street in Philadelphia, licensed in 12 states. You can verify any producer license through your state's insurance department.\n\nAnd I'm the Legacy Concierge — I answer from a knowledge base Connor wrote and reviewed, and for anything personal, a licensed human takes over. ${BOOK_LINK}.`},
  {k:['book','appointment','schedule','call me','talk to','human','agent','speak'],
   a:`Absolutely — the fastest paths:\n• ${BOOK_LINK} (pick any open slot, ~15 minutes)\n• ${CALL_LINK} to reach Connor directly\n\nNo pressure either way — the first call is just real numbers and straight answers.`},
  {k:['free','pay you','commission','fee','charge'],
@@ -2219,12 +2276,110 @@ renderFit();
   b.addEventListener('click',function(){set(!s.classList.contains('open'))});
   s.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
-  matchMedia('(min-width:1241px)').addEventListener('change',function(m){if(m.matches)set(false)});
+  matchMedia('(min-width:1321px)').addEventListener('change',function(m){if(m.matches)set(false)});
 })();
 </script>
 <!-- Liquid Glass WebGL engine (progressive enhancement — if this module or its
      Three.js CDN import fails to load, the CSS backdrop-filter glass already
      styled on .lg-container simply remains active). -->
+<!-- ============ COVERAGE DETAIL MODAL ============ -->
+<div class="cov-modal" id="covModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="covTitle">
+  <div class="cov-scrim" data-cov-close></div>
+  <div class="cov-blobs" aria-hidden="true">
+    <div class="lg-blob lg-blob-purple"></div>
+    <div class="lg-blob lg-blob-indigo"></div>
+    <div class="lg-blob lg-blob-cyan"></div>
+  </div>
+  <div class="cov-panel" role="document">
+    <button class="cov-x" data-cov-close aria-label="Close">&#10005;</button>
+    <div class="cov-inner" id="covInner"></div>
+  </div>
+</div>
+<script>
+/* ===== Coverage detail modal ===== */
+(function(){
+  var COV={
+    mortgage:{ic:'🏠',eyebrow:'For homeowners',title:'Mortgage Protection with Living Benefits',
+      hook:'Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.',
+      rows:['No medical exam for most applicants','Critical, chronic &amp; terminal illness riders','Coverage matched to your mortgage balance','Living benefits you can use while you’re alive'],
+      stat:[['$0','out-of-pocket cost to work with us'],['Living','benefits — use it while alive']],track:'mortgage'},
+    iul:{ic:'📈',eyebrow:'For builders of wealth',title:'Indexed Universal Life (IUL)',
+      hook:'Index-linked growth with a floor in down years and tax-advantaged access in retirement — built for high earners and 1099 owner-operators with no 401(k).',
+      rows:['Flexible funding, up or down with your income','Tax-advantaged retirement income design','Income-tax-free benefit for your family','A 0% floor so a market crash never drains your cash value'],
+      stat:[['0%','floor — your worst year, never less'],['20+','carriers compared for you']],track:'iul',
+      extra:{label:'See the full IUL strategy',href:'#iul-strategy'}},
+    ltc:{ic:'🛡️',eyebrow:'For ages 50–68',title:'Hybrid Long-Term Care',
+      hook:'70% of us will need care after 65 — and Medicare pays <em>nothing.</em> Hybrids fix “use it or lose it”: care benefits if you need them, a death benefit for family if you don’t.',
+      rows:['Money is never wasted — it pays out either way','One design can cover both spouses','Protects retirement savings from care costs','Locks in while you’re healthy enough to qualify'],
+      stat:[['70%','will need long-term care after 65'],['$0','what Medicare pays toward it']],track:'ltc'},
+    final:{ic:'🕊️',eyebrow:'For peace of mind',title:'Final Expense',
+      hook:'Simple whole life that covers funeral and end-of-life costs — so <em>grief never comes with a bill attached.</em>',
+      rows:['No-exam and guaranteed-issue options','Premiums locked for life','Approvals often same-day','A small policy that does one big, kind thing'],
+      stat:[['$10–15k','the bill it quietly covers'],['Same-day','approvals available']],track:'final'},
+    annuity:{ic:'🏦',eyebrow:'For safe growth',title:'Fixed Annuities',
+      hook:'Guaranteed rates with zero market risk — turning savings into tax-deferred growth, or income that arrives like a paycheck for life.',
+      rows:['Guaranteed rates from A-rated carriers','Often outpaces bank CDs','Income you can’t outlive','Your principal never goes backward'],
+      stat:[['0%','market risk to your principal'],['For life','income you can’t outlive']],track:'annuity',
+      extra:{label:'See every kind of annuity',href:'#annuities'}},
+    disability:{ic:'💪',eyebrow:'For your paycheck',title:'Disability Insurance',
+      hook:'Your ability to earn is your biggest asset. If illness or injury stops you from working, disability insurance replaces part of your income until you’re back on your feet.',
+      rows:['Protects your paycheck, not just your life','Options for self-employed &amp; business owners','Short and long-term benefit periods','The one coverage people skip and regret'],
+      stat:[['$2M+','a 30-year-old’s lifetime earnings'],['Your','biggest asset, insured']],track:'disability'},
+    term:{ic:'📋',eyebrow:'The classics, done right',title:'Standard Term &amp; Whole Life',
+      hook:'Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.',
+      rows:['Term — the most coverage per dollar','10, 15, 20, or 30-year terms to match your mortgage','Whole life — coverage that never expires','Guaranteed cash value growth and locked premiums'],
+      stat:[['20+','carriers, shopped honestly'],['$0','to work with us']],track:'term'}
+  };
+  var modal=document.getElementById('covModal'), inner=document.getElementById('covInner');
+  if(!modal||!inner) return;
+  var lastFocus=null;
+  function open(key){
+    var d=COV[key]; if(!d) return;
+    var rows=d.rows.map(function(r){return '<div class="cov-row"><span class="ck">✓</span><span>'+r+'</span></div>';}).join('');
+    var stat=d.stat?('<div class="cov-stat">'+d.stat.map(function(x){return '<div class="s"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>';}).join('')+'</div>'):'';
+    var extra=d.extra?('<a class="btn btn-ghost-light" href="'+d.extra.href+'" data-cov-close>'+d.extra.label+'</a>'):'';
+    inner.innerHTML=
+      '<div class="cov-hero"><div class="cov-ic">'+d.ic+'</div><div><span class="cov-eyebrow">'+d.eyebrow+'</span><h3 class="cov-title" id="covTitle">'+d.title+'</h3></div></div>'+
+      '<p class="cov-hook">'+d.hook+'</p>'+
+      '<div class="cov-rows">'+rows+'</div>'+stat+
+      '<div class="cov-ctas"><button class="btn btn-brass" data-cov-fit="'+d.track+'">Check my fit →</button>'+
+      '<a class="btn btn-navy" href="#booking" data-cov-close>Book 15 minutes</a>'+extra+'</div>';
+    lastFocus=document.activeElement;
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    var x=modal.querySelector('.cov-x'); if(x) x.focus();
+  }
+  function close(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    if(lastFocus&&lastFocus.focus){lastFocus.focus();}
+  }
+  modal.addEventListener('click',function(e){
+    if(e.target.classList.contains('cov-scrim')||e.target.closest('[data-cov-close]')){ close(); return; }
+    var fit=e.target.closest('[data-cov-fit]');
+    if(fit){
+      var t=fit.getAttribute('data-cov-fit'); close();
+      try{ if(typeof tracks!=='undefined'&&tracks[t]){ state.track=t; state.step=0; renderFit(); } }catch(err){}
+      setTimeout(function(){ var el=document.getElementById('fitcheck'); if(el) el.scrollIntoView({behavior:'smooth'}); },90);
+    }
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+  // wire every coverage card + add a "Learn more" affordance
+  document.querySelectorAll('.cover-card').forEach(function(card){
+    var btn=card.querySelector('.go[data-track]'); if(!btn) return;
+    var key=btn.getAttribute('data-track'); if(!COV[key]) return;
+    var more=document.createElement('button');
+    more.type='button'; more.className='cov-more'; more.textContent='Learn more';
+    more.setAttribute('aria-label','Learn more about '+(card.querySelector('h3')?card.querySelector('h3').textContent:key));
+    more.addEventListener('click',function(ev){ ev.stopPropagation(); open(key); });
+    (card.querySelector('.deep')||btn).insertAdjacentElement('afterend',more);
+    card.addEventListener('click',function(ev){
+      if(ev.target.closest('.go,.deep,a,button')) return;
+      open(key);
+    });
+  });
+})();
+</script>
 <script type="module" src="liquid-glass.js"></script>
 </body>
 </html>
