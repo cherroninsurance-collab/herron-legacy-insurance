@@ -1,6 +1,6 @@
 // netlify/functions/legacy-ai.js
 //
-// Legacy AI — Herron & Co. Legacy Agency
+// Legacy Concierge — Herron & Co. Legacy Agency
 // Runs on Netlify Functions. Zero GoHighLevel involvement.
 //
 // SETUP (one time):
@@ -24,7 +24,7 @@ const MAX_TOKENS = 500;
 const MAX_INPUT_CHARS = 600;   // reject essays — they're either abuse or a bad fit for chat
 const MAX_TURNS = 12;          // cap conversation length to cap cost
 
-const SYSTEM_PROMPT = `You are Legacy AI, the insurance concierge for Herron & Co. Legacy Agency.
+const SYSTEM_PROMPT = `You are the Legacy Concierge, the automated insurance assistant for Herron & Co. Legacy Agency.
 
 # WHO YOU WORK FOR
 Connor Herron, an independent licensed insurance producer, NPN 21556594.

@@ -1,7 +1,7 @@
 /* ============================================================================
    LIQUID GLASS — physics-based WebGL refraction container
    ----------------------------------------------------------------------------
-   Wraps the "Talk to Legacy AI" chat shell and the "Legacy Blueprint" card in
+   Wraps the Legacy Concierge chat shell and the "Legacy Blueprint" card in
    a superellipse (squircle) pane of simulated thick glass:
 
      • Vertex shader   — low-frequency simplex noise ripples the glass surface
@@ -306,7 +306,7 @@ void main(){
    chromatic split pop hard against them.
    ========================================================================== */
 const THEMES = {
-  // #ai — dark navy band behind the Legacy AI chat shell
+  // #ai — dark navy band behind the Legacy Concierge chat shell
   dark: {
     colA:  [0.043, 0.082, 0.170],   // — matches --navy #0E1F3E region
     colB:  [0.075, 0.060, 0.220],   // lifted indigo
