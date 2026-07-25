@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Herron &amp; Co. — Protection, built to be experienced</title>
+<meta name="description" content="An immersive experience concept for Herron & Co. Legacy Agency — real-time WebGL, liquid-gold typography, and the honest-agent story. Life insurance in Lehigh Valley, licensed in 12 states.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081226'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23E2B45C' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='21' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#081226; --navy:#0E1F3E; --navy-mid:#16305C;
+  --brass:#C9973B; --brass-bright:#E2B45C; --brass-pale:#F3D9A0;
+  --blue:#3E68B8; --blue-bright:#5B8DEF;
+  --chrome:#F6F2E8; --mist:#9FB0CE; --hud:#8FA6CE;
+  --font-disp:'Sora','Arial Black',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--navy-deep);color:var(--chrome);font-family:var(--font-body);overflow-x:hidden;cursor:none;-webkit-font-smoothing:antialiased}
+@media(pointer:coarse){body{cursor:auto}}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--brass);color:var(--navy-deep)}
+
+#gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 92% at 50% 42%,transparent 28%,rgba(8,18,38,.55) 76%,var(--navy-deep) 100%)}
+.grain{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* HUD frame */
+.frame{position:fixed;inset:0;z-index:20;pointer-events:none}
+.frame::before,.frame::after{content:"";position:absolute;left:22px;right:22px;height:1px;background:linear-gradient(90deg,transparent,rgba(226,180,92,.28) 12%,rgba(226,180,92,.28) 88%,transparent)}
+.frame::before{top:70px}.frame::after{bottom:56px}
+.corner{position:fixed;z-index:22;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;color:var(--hud);text-transform:uppercase;pointer-events:none}
+.corner b{color:var(--brass-bright);font-weight:500}
+.c-tl{top:84px;left:26px}.c-tr{top:84px;right:26px;text-align:right}
+.c-bl{bottom:70px;left:26px}.c-br{bottom:70px;right:26px;text-align:right}
+@media(max-width:720px){.c-tr,.c-br{display:none}.frame::before{top:64px}}
+
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:18px 26px;pointer-events:none}
+nav *{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .hmark{width:34px;height:34px;filter:drop-shadow(0 0 8px rgba(226,180,92,.6))}
+.brand .bt{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--chrome);line-height:1.2}
+.brand .bt span{color:var(--brass);font-size:9px;letter-spacing:.22em;display:block}
+.nav-links{display:flex;gap:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist)}
+.nav-links a{position:relative;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-6px;height:1px;background:var(--brass-bright);transition:right .3s}
+.nav-links a:hover{color:var(--chrome)}.nav-links a:hover::after{right:0}
+.enter-btn{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--navy-deep);background:linear-gradient(120deg,var(--brass-bright),var(--brass-pale));padding:9px 18px;border-radius:3px;box-shadow:0 0 24px rgba(226,180,92,.45);transition:transform .2s,box-shadow .2s}
+.enter-btn:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(226,180,92,.75)}
+@media(max-width:820px){.nav-links{display:none}}
+
+/* hero */
+.hero{position:relative;z-index:10;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 0}
+.kicker{font-family:var(--font-mono);font-size:clamp(10px,1.4vw,12.5px);letter-spacing:.42em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:clamp(16px,3vh,30px);opacity:0;animation:fadeUp 1s ease 1.9s forwards;text-indent:.42em}
+.heron-glow{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);width:min(560px,92vw);opacity:.16;z-index:-1;pointer-events:none;filter:drop-shadow(0 0 40px rgba(226,180,92,.5))}
+.heron-glow path{stroke:var(--brass-bright)}
+.word{font-family:var(--font-disp);font-weight:800;font-size:clamp(70px,20vw,290px);line-height:.84;letter-spacing:-.04em;
+  background:linear-gradient(176deg,#FBF3DE 0%,#F3D9A0 15%,#C9973B 32%,#5A431A 48%,#3A2C12 53%,#B78733 62%,#F3D9A0 80%,#E2B45C 91%,#FBF3DE 100%);
+  background-size:100% 230%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 46px rgba(201,151,59,.5)) drop-shadow(0 3px 3px rgba(0,0,0,.7));
+  position:relative;animation:chromeFlow 9s ease-in-out infinite,wordIn 1.4s cubic-bezier(.2,.9,.2,1) .4s both}
+@keyframes chromeFlow{0%,100%{background-position:50% 0}50%{background-position:50% 100%}}
+@keyframes wordIn{0%{opacity:0;letter-spacing:.28em;filter:drop-shadow(0 0 90px rgba(226,180,92,1)) blur(14px)}100%{opacity:1;letter-spacing:-.04em}}
+.word .sheen{position:absolute;inset:0;background:linear-gradient(105deg,transparent 38%,rgba(255,248,225,.9) 50%,transparent 62%);-webkit-background-clip:text;background-clip:text;color:transparent;mix-blend-mode:screen;animation:sheen 6.5s ease-in-out 2.2s infinite}
+@keyframes sheen{0%{background-position:-140% 0}55%,100%{background-position:240% 0}}
+.wordsub{font-family:var(--font-mono);font-size:clamp(10px,1.5vw,13px);letter-spacing:.5em;text-transform:uppercase;color:var(--mist);margin-top:14px;text-indent:.5em;opacity:0;animation:fadeUp 1s ease 2.05s forwards}
+.subline{margin-top:clamp(20px,3.2vh,34px);font-size:clamp(15px,2.1vw,21px);color:var(--mist);max-width:40ch;line-height:1.5;opacity:0;animation:fadeUp 1s ease 2.2s forwards}
+.subline em{color:var(--chrome);font-style:normal}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:clamp(26px,4vh,40px);opacity:0;animation:fadeUp 1s ease 2.4s forwards}
+.btn{font-family:var(--font-disp);font-weight:600;font-size:14.5px;padding:15px 30px;border-radius:4px;transition:transform .22s,box-shadow .22s,background .22s;display:inline-flex;align-items:center;gap:10px}
+.btn-gold{background:linear-gradient(120deg,var(--brass-bright),var(--brass-pale));color:var(--navy-deep);box-shadow:0 0 30px rgba(226,180,92,.45)}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 0 55px rgba(226,180,92,.8)}
+.btn-ghost{border:1px solid rgba(226,180,92,.4);color:var(--chrome)}
+.btn-ghost:hover{transform:translateY(-3px);background:rgba(226,180,92,.08)}
+.scrollcue{position:absolute;bottom:74px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--hud);display:flex;flex-direction:column;align-items:center;gap:9px;opacity:0;animation:fadeUp 1s ease 2.6s forwards}
+.scrollcue .bar{width:1px;height:42px;background:linear-gradient(180deg,var(--brass-bright),transparent);position:relative;overflow:hidden}
+.scrollcue .bar::after{content:"";position:absolute;top:-50%;left:0;width:100%;height:50%;background:var(--brass-pale);animation:drop 1.8s ease-in-out infinite}
+@keyframes drop{0%{top:-50%}100%{top:120%}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* sections */
+main{position:relative;z-index:10}
+.sec{position:relative;padding:clamp(90px,15vh,180px) 26px;max-width:1180px;margin:0 auto}
+.reveal{opacity:0;transform:translateY(38px);transition:opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1)}
+.reveal.in{opacity:1;transform:none}
+.eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass-bright);display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--brass)}
+.big{font-family:var(--font-disp);font-weight:800;font-size:clamp(32px,5.6vw,80px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+.big .g{background:linear-gradient(100deg,var(--brass-bright),var(--brass-pale));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:clamp(16px,2vw,21px);line-height:1.55;color:var(--mist);max-width:52ch;margin-top:24px}
+.lede em{color:var(--chrome);font-style:normal}
+
+/* stat strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;margin-top:60px;background:rgba(226,180,92,.16);border:1px solid rgba(226,180,92,.16)}
+@media(max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+.stat{background:rgba(8,18,38,.72);padding:26px 22px;text-align:left}
+.stat b{font-family:var(--font-disp);font-weight:800;font-size:clamp(30px,4vw,46px);color:var(--chrome);display:block;line-height:1;font-variant-numeric:tabular-nums}
+.stat b em{color:var(--brass-bright);font-style:normal}
+.stat span{font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;color:var(--mist);margin-top:10px;display:block;text-transform:uppercase}
+
+/* coverage experiential rows */
+.cov{margin-top:56px;border-top:1px solid rgba(226,180,92,.18)}
+.cov-row{display:grid;grid-template-columns:66px 1.1fr 1.4fr auto;gap:26px;align-items:center;padding:30px 0;border-bottom:1px solid rgba(226,180,92,.14);position:relative;transition:padding-left .35s,background .35s;cursor:pointer;overflow:hidden}
+.cov-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:linear-gradient(var(--brass-bright),var(--blue-bright));transform:scaleY(0);transform-origin:top;transition:transform .35s}
+.cov-row:hover{padding-left:22px;background:linear-gradient(90deg,rgba(201,151,59,.08),transparent 70%)}
+.cov-row:hover::before{transform:scaleY(1)}
+.cov-row .n{font-family:var(--font-mono);font-size:12px;color:var(--hud)}
+.cov-row .t{font-family:var(--font-disp);font-weight:700;font-size:clamp(19px,2.6vw,30px);letter-spacing:-.02em;color:var(--chrome)}
+.cov-row .d{font-size:14.5px;color:var(--mist);line-height:1.5}
+.cov-row .go{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass-bright);white-space:nowrap;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s}
+.cov-row:hover .go{opacity:1;transform:none}
+@media(max-width:860px){.cov-row{grid-template-columns:44px 1fr;gap:8px 16px}.cov-row .d,.cov-row .go{grid-column:2}.cov-row .d{margin-top:6px}.cov-row .go{display:none}}
+
+/* heron holographic moment */
+.holo-sec{position:relative;z-index:10;min-height:98svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px;overflow:hidden}
+.orbits{position:absolute;inset:0;z-index:-1;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.orbit{position:absolute;border-radius:50%;border:1px solid rgba(226,180,92,.14)}
+.orbit:nth-child(1){width:42vmax;height:42vmax;animation:spin 42s linear infinite}
+.orbit:nth-child(2){width:62vmax;height:62vmax;border-color:rgba(91,141,239,.12);animation:spin 66s linear infinite reverse}
+.orbit:nth-child(3){width:82vmax;height:82vmax;border-color:rgba(226,180,92,.08);animation:spin 96s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.heron-big{width:min(230px,54vw);margin-bottom:30px;filter:drop-shadow(0 0 40px rgba(226,180,92,.6))}
+.heron-big path{stroke:url(#gold);fill:none;stroke-width:3.2;stroke-linecap:round}
+.heron-big .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 3s ease .3s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.holoword{font-family:var(--font-disp);font-weight:800;font-size:clamp(40px,9vw,120px);line-height:.9;letter-spacing:-.03em;
+  background:linear-gradient(115deg,var(--brass),var(--brass-pale) 35%,var(--blue-bright) 60%,var(--brass-bright) 82%,var(--brass-pale));background-size:280% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 50px rgba(226,180,92,.3));animation:holo 8s linear infinite}
+@keyframes holo{to{background-position:280% 0}}
+.holo-sub{margin-top:26px;font-size:clamp(15px,2vw,20px);color:var(--mist);max-width:42ch}
+
+/* grid world / booking */
+.world{position:relative;z-index:10;min-height:96svh;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding-top:15vh;text-align:center}
+.grid-floor{position:absolute;left:50%;bottom:-6vh;width:260vw;height:66vh;transform:translateX(-50%) perspective(340px) rotateX(70deg);background-image:linear-gradient(rgba(201,151,59,.45) 1.5px,transparent 1.5px),linear-gradient(90deg,rgba(201,151,59,.45) 1.5px,transparent 1.5px);background-size:64px 64px;mask-image:linear-gradient(transparent,#000 58%);animation:floor 3.6s linear infinite}
+@keyframes floor{to{background-position-y:64px}}
+.world-copy{position:relative;max-width:44ch}
+.pledge{margin-top:34px;display:flex;flex-direction:column;gap:12px;font-family:var(--font-mono);font-size:13px;color:var(--mist);align-items:center}
+.pledge span b{color:var(--brass-bright)}
+
+footer{position:relative;z-index:10;padding:44px 26px 90px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px 30px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--hud);border-top:1px solid rgba(226,180,92,.14)}
+footer a:hover{color:var(--brass-bright)}
+.legal{width:100%;font-family:var(--font-body);font-size:10.5px;letter-spacing:0;text-transform:none;color:rgba(159,176,206,.5);line-height:1.6;margin-top:8px}
+
+.cur,.cur-ring{position:fixed;top:0;left:0;z-index:60;pointer-events:none;border-radius:50%;mix-blend-mode:screen}
+.cur{width:7px;height:7px;background:var(--brass-pale);transform:translate(-50%,-50%);box-shadow:0 0 10px var(--brass-bright)}
+.cur-ring{width:34px;height:34px;border:1px solid rgba(226,180,92,.7);transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+.cur-ring.hot{width:56px;height:56px;border-color:var(--blue-bright)}
+@media(pointer:coarse){.cur,.cur-ring,.frame{display:none}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important}
+  .word,.kicker,.subline,.wordsub,.hero-cta,.scrollcue{opacity:1}
+  .heron-big .draw{stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="scrim"></div>
+<div class="grain"></div>
+<div class="frame"></div>
+<div class="corner c-tl">HERRON &amp; CO <b>//</b> LEHIGH VALLEY</div>
+<div class="corner c-tr" id="clock">SESSION 00:00</div>
+<div class="corner c-bl">PROTECTION, <b>BUILT TO BE EXPERIENCED</b></div>
+<div class="corner c-br">NPN 21556594 · <b>12 STATES</b></div>
+
+<nav>
+  <a class="brand" href="#top">
+    <svg class="hmark" viewBox="0 0 240 300" fill="none" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="4.4" stroke-linecap="round"/><circle cx="136" cy="66" r="3" fill="#fff"/></svg>
+    <span class="bt">Herron &amp; Co.<span>Legacy Agency</span></span>
+  </a>
+  <div class="nav-links"><a href="#protect">Protect</a><a href="#numbers">Why us</a><a href="#legacy">Legacy</a></div>
+  <a class="enter-btn" href="index.html">Enter the site ↗</a>
+</nav>
+
+<header class="hero" id="top">
+  <svg class="heron-glow" viewBox="0 0 240 300" fill="none" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="2.6" stroke-linecap="round"/></svg>
+  <div class="kicker">Lehigh Valley · Licensed in 12 states</div>
+  <div class="word" data-word="HERRON">HERRON<span class="sheen">HERRON</span></div>
+  <div class="wordsub">&amp; Co. Legacy Agency</div>
+  <p class="subline">Protection built for your life. <em>Delivered at the speed of it.</em> Life insurance, made simple — and built to be felt.</p>
+  <div class="hero-cta">
+    <a class="btn btn-gold" href="index.html#booking">Book your free call</a>
+    <a class="btn btn-ghost" href="index.html">Enter the full site →</a>
+  </div>
+  <div class="scrollcue"><span>Scroll to enter</span><span class="bar"></span></div>
+</header>
+
+<main>
+  <section class="sec" id="numbers">
+    <div class="reveal">
+      <div class="eyebrow">The thesis</div>
+      <h2 class="big">Life insurance<br>shouldn't be <span class="g">complicated.</span></h2>
+      <p class="lede">Because I'm independent, I work for you — not a carrier. Every policy gets shopped across 20+ national companies, explained in plain English, and sized to your real budget. And if a policy isn't right for you, <em>I'll be the first to tell you.</em></p>
+    </div>
+    <div class="stats reveal">
+      <div class="stat"><b><span data-count="20">0</span><em>+</em></b><span>carriers compared</span></div>
+      <div class="stat"><b data-count="12">0</b><span>states licensed</span></div>
+      <div class="stat"><b>24<em>/7</em></b><span>instant answers</span></div>
+      <div class="stat"><b>0<em>$</em></b><span>cost to work with us</span></div>
+    </div>
+  </section>
+
+  <section class="sec" id="protect">
+    <div class="reveal">
+      <div class="eyebrow">What we protect</div>
+      <h2 class="big">The right coverage<br>for every stage.</h2>
+    </div>
+    <div class="cov reveal">
+      <div class="cov-row"><span class="n">/01</span><span class="t">Mortgage Protection</span><span class="d">Pays off the house if you pass — and pays you if a critical illness stops your income.</span><span class="go">Living benefits →</span></div>
+      <div class="cov-row"><span class="n">/02</span><span class="t">Indexed Universal Life</span><span class="d">Index-linked growth with a floor in down years, and tax-advantaged access in retirement.</span><span class="go">For builders →</span></div>
+      <div class="cov-row"><span class="n">/03</span><span class="t">Hybrid Long-Term Care</span><span class="d">Care benefits if you need them, a death benefit for family if you don't. It pays either way.</span><span class="go">Ages 50–68 →</span></div>
+      <div class="cov-row"><span class="n">/04</span><span class="t">Final Expense</span><span class="d">Simple whole life so grief never comes with a bill attached. Locked premiums for life.</span><span class="go">Peace of mind →</span></div>
+      <div class="cov-row"><span class="n">/05</span><span class="t">Fixed Annuities</span><span class="d">Guaranteed rates with protection from market loss — income you can't outlive.</span><span class="go">Every kind →</span></div>
+      <div class="cov-row"><span class="n">/06</span><span class="t">Disability Income</span><span class="d">Your paycheck is your biggest asset. Replace part of your income if you can't work.</span><span class="go">Protect it →</span></div>
+    </div>
+  </section>
+
+  <section class="holo-sec" id="legacy">
+    <div class="orbits"><span class="orbit"></span><span class="orbit"></span><span class="orbit"></span></div>
+    <div class="reveal">
+      <svg class="heron-big" viewBox="0 0 240 300" fill="none" aria-hidden="true">
+        <defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3D9A0"/><stop offset=".5" stop-color="#E2B45C"/><stop offset="1" stop-color="#C9973B"/></linearGradient></defs>
+        <path class="draw" d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262"/>
+        <circle cx="136" cy="66" r="3.4" fill="#fff"/>
+      </svg>
+      <div class="eyebrow" style="justify-content:center">The promise</div>
+      <div class="holoword">Your legacy,<br>secured.</div>
+      <p class="holo-sub">When you call the number, you get me — Connor — not a call center. Fifteen minutes, real numbers, zero pressure.</p>
+    </div>
+  </section>
+
+  <section class="world">
+    <div class="grid-floor"></div>
+    <div class="world-copy reveal">
+      <div class="eyebrow" style="justify-content:center">Step inside</div>
+      <h2 class="big">Fifteen minutes.<br><span class="g">Real numbers.</span></h2>
+      <div class="pledge">
+        <span><b>$0</b> to work with us — your price is identical to buying direct.</span>
+        <span><b>20+</b> carriers shopped for you by an independent agent.</span>
+        <span>The honest answer, <b>even when it costs us the sale.</b></span>
+      </div>
+      <div class="hero-cta" style="opacity:1;animation:none;margin-top:38px">
+        <a class="btn btn-gold" href="index.html#booking">Book your free 15-minute call</a>
+        <a class="btn btn-ghost" href="tel:6103608583">Call / text 610-360-8583</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span>Herron &amp; Co. Legacy Agency</span>
+  <span>Connor Herron · NPN 21556594 · Lehigh Valley, PA</span>
+  <span><a href="index.html">herronlegacyinsurance.com ↗</a></span>
+  <p class="legal">Immersive experience concept. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Annuity guarantees are backed by the claims-paying ability of the issuing carrier. Figures shown are illustrative, not offers of coverage or quoted rates. © 2026 Herron &amp; Co. Legacy Agency.</p>
+</footer>
+
+<div class="cur"></div>
+<div class="cur-ring"></div>
+
+<script>
+/* ===== WEBGL GOLD ENERGY FIELD (Herron navy/brass/blue) ===== */
+(function(){
+  var cv=document.getElementById('gl');
+  var gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});
+  var reduce=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!gl){cv.style.background='radial-gradient(120% 92% at 50% 44%,#16305C,#081226 72%)';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=[
+  'precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;',
+  'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
+  'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);',
+  'return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}',
+  'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}',
+  'void main(){',
+  'vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;float t=uTime*.045;',
+  'vec2 q=vec2(fbm(uv*1.45+t),fbm(uv*1.45+vec2(5.2,1.3)-t));',
+  'vec2 r=vec2(fbm(uv*1.45+q*1.6+t*1.2+vec2(1.7,9.2)),fbm(uv*1.45+q*1.6-t+vec2(8.3,2.8)));',
+  'float f=fbm(uv*1.45+r*1.9);',
+  'float d=length(uv-ms*.45);float core=exp(-d*2.3)*1.1;',
+  'vec3 space=vec3(0.03,0.055,0.115);',   // navy
+  'vec3 gold=vec3(0.79,0.59,0.23);',      // brass #C9973B
+  'vec3 hot=vec3(1.0,0.90,0.66);',        // brass-pale hot
+  'vec3 blu=vec3(0.24,0.41,0.72);',       // blue accent
+  'vec3 col=space;',
+  'col=mix(col,gold*1.05,smoothstep(.30,.72,f));',
+  'float e=smoothstep(.42,.92,f)+core;',
+  'col=mix(col,hot,clamp(pow(e,2.2)*.8,0.,1.));',
+  'float fil=smoothstep(.55,.585,f)-smoothstep(.585,.63,f);',
+  'col+=blu*fil*.6*(0.5+0.5*sin(uv.x*7.+uTime*1.1));',
+  'col+=gold*pow(core,1.6)*1.5;',
+  'float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.55;col*=clamp(vig,0.,1.);',
+  'col=pow(col,vec3(.9));gl_FragColor=vec4(col,1.);}'].join('\n');
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))console.warn(gl.getShaderInfoLog(o));return o;}
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var uRes=gl.getUniformLocation(pr,'uRes'),uTime=gl.getUniformLocation(pr,'uTime'),uMouse=gl.getUniformLocation(pr,'uMouse');
+  var DPR=Math.min(devicePixelRatio||1,1.7),mx,my,tmx,tmy;
+  function rs(){cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';gl.viewport(0,0,cv.width,cv.height);}
+  rs();addEventListener('resize',rs);tmx=mx=cv.width/2;tmy=my=cv.height/2;
+  addEventListener('pointermove',function(e){tmx=e.clientX*DPR;tmy=(innerHeight-e.clientY)*DPR;},{passive:true});
+  var start=performance.now();
+  function loop(now){mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uRes,cv.width,cv.height);gl.uniform1f(uTime,reduce?12:(now-start)/1000);gl.uniform2f(uMouse,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!reduce)requestAnimationFrame(loop);}
+  requestAnimationFrame(loop);
+  if(reduce){gl.uniform2f(uRes,cv.width,cv.height);gl.uniform1f(uTime,12);gl.uniform2f(uMouse,cv.width/2,cv.height/2);gl.drawArrays(gl.TRIANGLES,0,3);}
+})();
+/* cursor */
+(function(){if(matchMedia('(pointer:coarse)').matches)return;var c=document.querySelector('.cur'),r=document.querySelector('.cur-ring'),rx=0,ry=0,x=0,y=0;
+addEventListener('pointermove',function(e){x=e.clientX;y=e.clientY;c.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)';},{passive:true});
+(function rg(){rx+=(x-rx)*.18;ry+=(y-ry)*.18;r.style.transform='translate('+rx+'px,'+ry+'px) translate(-50%,-50%)';requestAnimationFrame(rg);})();
+document.querySelectorAll('a,.cov-row,.stat').forEach(function(el){el.addEventListener('pointerenter',function(){r.classList.add('hot');});el.addEventListener('pointerleave',function(){r.classList.remove('hot');});});})();
+/* reveal + count-up + clock */
+(function(){
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');
+    x.target.querySelectorAll&&x.target.querySelectorAll('[data-count]').forEach(function(el){var to=+el.getAttribute('data-count'),s=performance.now();
+      (function tk(n){var p=Math.min((n-s)/1100,1);el.textContent=Math.round(to*(p<1?1-Math.pow(1-p,3):1));if(p<1)requestAnimationFrame(tk);})(s);});
+    io.unobserve(x.target);}})},{threshold:.14});
+  document.querySelectorAll('.reveal').forEach(function(e){io.observe(e);});
+  var s=Date.now(),el=document.getElementById('clock');setInterval(function(){var d=Math.floor((Date.now()-s)/1000);el.textContent='SESSION '+String(Math.floor(d/60)).padStart(2,'0')+':'+String(d%60).padStart(2,'0');},1000);
+})();
+</script>
+</body>
+</html>
