@@ -813,7 +813,7 @@ html{overflow-x:clip}
   background:linear-gradient(135deg,rgba(91,141,239,.10),rgba(226,180,92,.05) 55%,rgba(91,141,239,.11));
   -webkit-backdrop-filter:blur(2px) saturate(1.45);backdrop-filter:blur(2px) saturate(1.45)}
 .hs-sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,224,.34) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:screen;animation:shieldSheen 5.5s ease-in-out infinite}
-.hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px rgba(226,180,92,.95)) drop-shadow(0 0 15px rgba(226,180,92,.5))}
+.hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 6px rgba(226,180,92,.85)) drop-shadow(0 0 2px rgba(6,14,30,.9))}
 .hs-scan{position:absolute;inset:0;-webkit-clip-path:var(--sh);clip-path:var(--sh);opacity:.5;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(120,170,255,.06) 4px 5px)}
 /* forcefield — energized tri/hex mesh + pulse ripple + edge glow */
 .hs-force{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(60deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(120deg,transparent 0 12px,rgba(226,180,92,.22) 12px 13px);-webkit-mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);opacity:.72;animation:forcePulse 3.4s ease-in-out infinite}
@@ -954,7 +954,7 @@ html{overflow-x:clip}
         <canvas id="heroHeron" class="hero-heron" role="img" aria-label="Herron & Co. — liquid-chrome heron emblem"></canvas>
         <div class="hero-shield" aria-hidden="true">
           <div class="hs-glass"><span class="hs-force"></span><span class="hs-scan"></span><span class="hs-sheen"></span></div>
-          <svg class="hs-frame" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCEFCB"/><stop offset=".5" stop-color="#F3D9A0"/><stop offset="1" stop-color="#E2B45C"/></linearGradient></defs><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="rgba(6,14,30,.6)" stroke-width="3.6" stroke-linejoin="round"/><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="url(#hsg)" stroke-width="2.1" stroke-linejoin="round"/></svg>
+          <svg class="hs-frame" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCEFCB"/><stop offset=".5" stop-color="#F3D9A0"/><stop offset="1" stop-color="#E2B45C"/></linearGradient></defs><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="url(#hsg)" stroke-width="2.4" stroke-linejoin="round" vector-effect="non-scaling-stroke" style="stroke-width:2.4px"/></svg>
         </div>
         <div class="chiplet chip-1"><b>Living benefits</b>Use it while you're alive</div>
         <div class="chiplet chip-2"><b>NPN 21556594</b>Licensed &amp; verified</div>
@@ -2517,13 +2517,14 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
   var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse');
-  var DPR=Math.min(devicePixelRatio||1,1.6),mx,my,tmx,tmy;
+  var coarse=matchMedia('(pointer:coarse)').matches;var DPR=Math.min(devicePixelRatio||1,coarse?1.2:1.6),mx,my,tmx,tmy,run=true;
   function rs(){var w=hero.clientWidth||innerWidth,h=hero.clientHeight||innerHeight;cv.width=Math.max(2,Math.round(w*DPR));cv.height=Math.max(2,Math.round(h*DPR));gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(hero);
   tmx=mx=cv.width/2;tmy=my=cv.height*0.6;
   addEventListener('pointermove',function(e){var r=hero.getBoundingClientRect();tmx=(e.clientX-r.left)*DPR;tmy=(r.height-(e.clientY-r.top))*DPR;},{passive:true});
   var start=performance.now();
-  function loop(now){mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  function loop(now){if(!run)return;mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(hero);}
   requestAnimationFrame(loop);
   if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.drawArrays(gl.TRIANGLES,0,3);}
 })();
@@ -2589,14 +2590,15 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uMo=gl.getUniformLocation(pr,'uMorph');
   function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
   function morphAt(ts){if(ts<2.6)return 1-sstep(0.3,2.6,ts);var c=((ts-2.6)%16)/16;if(c<0.55)return 0;if(c<0.66)return sstep(0.55,0.66,c);if(c<0.74)return 1;if(c<0.9)return 1-sstep(0.74,0.9,c);return 0;}
-  var DPR=Math.min(devicePixelRatio||1,1.5),tmx=0,tmy=0,mx=0,my=0;
+  var coarse=matchMedia('(pointer:coarse)').matches;var DPR=Math.min(devicePixelRatio||1,coarse?1.1:1.5),tmx=0,tmy=0,mx=0,my=0,run=true;
   function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(cv);
   addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-.5);tmy=-(e.clientY/innerHeight-.5);},{passive:true});
   gl.clearColor(0,0,0,0);
   var start=performance.now();
-  function loop(now){var ts=RM?3.0:(now-start)/1000;var mo=morphAt(ts);
+  function loop(now){if(!run)return;var ts=RM?3.0:(now-start)/1000;var mo=morphAt(ts);
     mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uMo,mo);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
   requestAnimationFrame(loop);
 })();
 
