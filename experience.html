@@ -338,41 +338,41 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   ' col+=vec3(1.,.78,.42)*ry*cone*smoothstep(1.30,.02,rr)*(.20+.80*smoothstep(-.28,.40,uv.y))*.42;',
   /* gateway geometry is normalised to WIDTH (nx: 0 centre → 1 frame edge) so the
      canyon holds its proportions on any aspect, phone through ultrawide */
-  ' float sd=uv.x<0.?0.:1.;float lit=exp(-dr*2.7);',
+  ' float sd=uv.x<0.?0.:1.;float lit=exp(-dr*4.0);',
   ' float nx=abs(uv.x)/max(uRes.x/uRes.y*.5,.28);',
   /* DEPTH 1 — distant outer spires, hazed back into the atmosphere */
-  ' float t3=twr(nx,0.92,1.30,0.050,-0.060,sd+9.);',
+  ' float t3=twr(nx,0.95,1.34,0.135,0.010,sd+9.);',
   ' col=mix(col,vec3(.026,.038,.070),smoothstep(t3+.005,t3-.005,uv.y)*.62);',
-  ' float t2=twr(nx,0.64,0.90,0.155,0.060,sd+5.);',
+  ' float t2=twr(nx,0.66,0.93,0.290,0.140,sd+5.);',
   ' col=mix(col,vec3(.018,.029,.056),smoothstep(t2+.004,t2-.004,uv.y)*.82);',
   /* backlit cloud banks massing in the lower frame — drift IN FRONT of the far spires */
-  ' float lw=exp(-dr*1.8);',
-  ' vec3 cc=mix(vec3(.062,.080,.128),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
+  ' float lw=exp(-dr*3.0);',
+  ' vec3 cc=mix(vec3(.038,.052,.090),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
   ' cc=mix(cc,vec3(1.,.88,.68),clamp(pow(lw,2.2)*1.2,0.,1.));',
   ' float cA=cld(uv*1.7+vec2(t*1.2,0.),t);',
   ' cc*=.62+.82*smoothstep(.42,.86,cA);',
-  ' float dens=smoothstep(.44,.68,cA)*.95;',
-  ' dens+=smoothstep(.52,.80,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.50;',
+  ' float dens=smoothstep(.43,.67,cA)*.97;',
+  ' dens+=smoothstep(.51,.78,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.52;',
   /* gold rim-light along the cloud shoulders facing the burst */
-  ' cc+=vec3(1.,.72,.34)*(smoothstep(.44,.50,cA)-smoothstep(.50,.60,cA))*lit*1.5;',
-  ' col=mix(col,cc,clamp(dens*smoothstep(.60,-.34,uv.y),0.,1.));',
+  ' cc+=vec3(1.,.72,.34)*(smoothstep(.43,.49,cA)-smoothstep(.49,.59,cA))*lit*1.6;',
+  ' col=mix(col,cc,clamp(dens*smoothstep(.30,-.34,uv.y),0.,1.));',
   /* DEPTH 2 — the gateway itself: two near monoliths flanking the light */
-  ' float tt=twr(nx,0.255,0.605,0.400,0.255,sd);',
-  ' vec3 mc=vec3(.007,.013,.028);',
-  ' mc+=vec3(.10,.13,.20)*noise(vec2(uv.x*38.,uv.y*22.))*.5;',
-  /* rock striations + atmospheric haze so the faces read as stone, not flat panels */
-  ' mc+=vec3(.055,.065,.095)*fbm(vec2(uv.x*9.,uv.y*3.2))*.9;',
-  ' mc+=vec3(1.,.70,.34)*lit*.30;',
+  ' float tt=twr(nx,0.228,0.640,0.500,0.300,sd);',
+  ' vec3 mc=vec3(.006,.011,.024);',
+  ' mc+=vec3(.10,.13,.20)*noise(vec2(uv.x*38.,uv.y*22.))*.22;',
+  /* rock striations + haze that settles LOW, so the peaks stay near-black */
+  ' mc+=vec3(.048,.056,.082)*fbm(vec2(uv.x*9.,uv.y*3.2))*.42;',
+  ' mc+=vec3(1.,.70,.34)*lit*.13*smoothstep(.34,-.30,uv.y);',
   ' mc+=vec3(1.,.72,.34)*smoothstep(.030,0.,tt-uv.y)*.85;',
-  ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.255,0.)*7.)*.42;',
+  ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.228,0.)*15.)*.30;',
   ' col=mix(col,mc,smoothstep(tt+.0035,tt-.0035,uv.y));',
   /* foreground cloud veil drifting in front of the towers */
   /* DEPTH 3 — the cloud sea the monoliths rise out of, backlit by the burst */
   ' float fA=cld(uv*1.32+vec2(-t*1.5,-.55),t);',
   ' float fB=cld(uv*2.85+vec2(t*2.2,-1.1),t*1.3);',
-  ' float fd=(smoothstep(.40,.68,fA)*1.0+smoothstep(.48,.76,fB)*.60)*smoothstep(.50,-.40,uv.y);',
-  ' float gl2=exp(-dr*1.7);',
-  ' vec3 fc=mix(vec3(.088,.108,.158),vec3(.98,.66,.30),clamp(gl2*1.45,0.,1.));',
+  ' float fd=(smoothstep(.39,.66,fA)*1.0+smoothstep(.47,.74,fB)*.62)*smoothstep(.16,-.42,uv.y);',
+  ' float gl2=exp(-dr*2.8);',
+  ' vec3 fc=mix(vec3(.052,.068,.110),vec3(.98,.66,.30),clamp(gl2*1.45,0.,1.));',
   ' fc=mix(fc,vec3(1.,.92,.74),clamp(pow(gl2,2.4)*1.35,0.,1.));',
   /* fake self-shadowing so the billows read as volume, not fog */
   ' fc*=.58+.88*smoothstep(.40,.86,fA);',
