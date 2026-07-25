@@ -2479,34 +2479,94 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   var gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});
   if(!gl){cv.style.display='none';return;}
   var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;',
+  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform vec2 uSun;',
   'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
   'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}',
   'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}',
-  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;float t=uTime*.045;',
-  'vec2 q=vec2(fbm(uv*1.45+t),fbm(uv*1.45+vec2(5.2,1.3)-t));',
-  'vec2 r=vec2(fbm(uv*1.45+q*1.6+t*1.2+vec2(1.7,9.2)),fbm(uv*1.45+q*1.6-t+vec2(8.3,2.8)));',
-  'float f=fbm(uv*1.45+r*1.9);float d=length(uv-ms*.45);float core=exp(-d*2.7)*0.42;',
-  'vec3 space=vec3(0.03,0.055,0.115);vec3 gold=vec3(0.79,0.59,0.23);vec3 hot=vec3(1.0,0.90,0.66);vec3 blu=vec3(0.24,0.41,0.72);',
-  'vec3 col=space;col=mix(col,gold*1.05,smoothstep(.30,.72,f));float e=smoothstep(.42,.92,f)+core;',
-  'col=mix(col,hot,clamp(pow(e,2.2)*.8,0.,1.));float fil=smoothstep(.55,.585,f)-smoothstep(.585,.63,f);',
-  'col+=blu*fil*.6*(0.5+0.5*sin(uv.x*7.+uTime*1.1));col+=gold*pow(core,1.6)*0.7;',
-  'float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.55;col*=clamp(vig,0.,1.);col=pow(col,vec3(.9));gl_FragColor=vec4(col,1.);}'].join('\n');
+  'float cld(vec2 p,float t){vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));',
+  ' vec2 r=vec2(fbm(p+q*1.7+vec2(1.7,9.2)+t*.6),fbm(p+q*1.7+vec2(8.3,2.8)-t*.5));',
+  ' return fbm(p+r*1.9);}',
+  'float twr(float x,float lo,float hi,float h0,float h1,float s){if(x<lo)return -9.;if(x>hi)return -9.;',
+  ' float u=(x-lo)/(hi-lo);float h=mix(h0,h1,u);',
+  ' h+=0.115*floor(noise(vec2(u*4.6+s*31.,s*11.))*3.)/3.;',
+  ' h+=0.038*floor(noise(vec2(u*15.+s*7.,s*3.))*3.)/3.;',
+  ' return h;}',
+  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;',
+  ' uv+=ms*.010;float t=uTime*.012;',
+  /* the gateway centres on the heron emblem, wherever the layout puts it */
+  ' vec2 sun=(uSun-.5*uRes)/uRes.y;vec2 dv=uv-sun;float dr=length(dv*vec2(1.,1.15));',
+  ' vec3 col=mix(vec3(.058,.043,.022),vec3(.010,.022,.050),smoothstep(-.55,.55,uv.y));',
+  ' col+=vec3(1.,.70,.30)*exp(-dr*5.4)*.52;',
+  ' col+=vec3(1.,.93,.78)*exp(-dr*27.)*.90;',
+  ' float ang=atan(dv.x,dv.y),rr=length(dv);',
+  ' float ry=noise(vec2(ang*11.,rr*1.1-uTime*.03));',
+  ' ry+=noise(vec2(ang*23.+4.,rr*1.5+uTime*.02));',
+  ' ry+=noise(vec2(ang*41.+9.,rr*2.0-uTime*.015));',
+  ' ry=pow(max(ry/3.,0.),2.8);',
+  ' float cone=smoothstep(2.6,.35,abs(dv.x)/max(abs(dv.y),.09));',
+  ' col+=vec3(1.,.78,.42)*ry*cone*smoothstep(1.30,.02,rr)*(.20+.80*smoothstep(-.28,.40,uv.y))*.30;',
+  ' float sd=uv.x<sun.x?0.:1.;float lit=exp(-dr*4.0);',
+  ' float hw=max(uRes.x/uRes.y*.5,.28);float nx=abs(uv.x-sun.x)/hw;',
+  ' float t3=twr(nx,0.95,1.34,0.135,0.010,sd+9.);',
+  ' col=mix(col,vec3(.026,.038,.070),smoothstep(t3+.005,t3-.005,uv.y)*.62);',
+  ' float t2=twr(nx,0.66,0.93,0.290,0.140,sd+5.);',
+  ' col=mix(col,vec3(.018,.029,.056),smoothstep(t2+.004,t2-.004,uv.y)*.82);',
+  ' float lw=exp(-dr*3.0);',
+  ' vec3 cc=mix(vec3(.038,.052,.090),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
+  ' cc=mix(cc,vec3(1.,.88,.68),clamp(pow(lw,2.2)*1.2,0.,1.));',
+  ' float cA=cld(uv*1.7+vec2(t*1.2,0.),t);',
+  ' cc*=.62+.82*smoothstep(.42,.86,cA);',
+  ' float dens=smoothstep(.43,.67,cA)*.97;',
+  ' dens+=smoothstep(.51,.78,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.52;',
+  ' cc+=vec3(1.,.72,.34)*(smoothstep(.43,.49,cA)-smoothstep(.49,.59,cA))*lit*1.6;',
+  ' col=mix(col,cc,clamp(dens*smoothstep(.24,-.38,uv.y),0.,1.));',
+  ' float tt=twr(nx,0.228,0.640,0.500,0.300,sd);',
+  ' vec3 mc=vec3(.006,.011,.024);',
+  ' mc+=vec3(.10,.13,.20)*noise(vec2(uv.x*38.,uv.y*22.))*.22;',
+  ' mc+=vec3(.048,.056,.082)*fbm(vec2(uv.x*9.,uv.y*3.2))*.42;',
+  ' mc+=vec3(1.,.70,.34)*lit*.13*smoothstep(.34,-.30,uv.y);',
+  ' mc+=vec3(1.,.72,.34)*smoothstep(.030,0.,tt-uv.y)*.85;',
+  ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.228,0.)*15.)*.30;',
+  ' col=mix(col,mc,smoothstep(tt+.0035,tt-.0035,uv.y));',
+  ' float fA=cld(uv*1.32+vec2(-t*1.5,-.55),t);',
+  ' float fB=cld(uv*2.85+vec2(t*2.2,-1.1),t*1.3);',
+  ' float fd=(smoothstep(.39,.66,fA)*1.0+smoothstep(.47,.74,fB)*.62)*smoothstep(.10,-.44,uv.y);',
+  ' float gl2=exp(-dr*2.8);',
+  ' vec3 fc=mix(vec3(.052,.068,.110),vec3(.98,.66,.30),clamp(gl2*1.45,0.,1.));',
+  ' fc=mix(fc,vec3(1.,.92,.74),clamp(pow(gl2,2.4)*1.35,0.,1.));',
+  ' fc*=.58+.88*smoothstep(.40,.86,fA);',
+  ' fc+=vec3(1.,.74,.36)*(smoothstep(.40,.47,fA)-smoothstep(.47,.58,fA))*gl2*2.0;',
+  ' col=mix(col,fc,clamp(fd,0.,1.));',
+  ' float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.42;col*=clamp(vig,0.,1.);',
+  ' col=pow(max(col,0.),vec3(.92));gl_FragColor=vec4(col,1.);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
-  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse');
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uS=gl.getUniformLocation(pr,'uSun');
   var coarse=matchMedia('(pointer:coarse)').matches;var DPR=Math.min(devicePixelRatio||1,coarse?1.2:1.6),mx,my,tmx,tmy,run=true;
-  function rs(){var w=hero.clientWidth||innerWidth,h=hero.clientHeight||innerHeight;cv.width=Math.max(2,Math.round(w*DPR));cv.height=Math.max(2,Math.round(h*DPR));gl.viewport(0,0,cv.width,cv.height);}
+  /* anchor the gateway's light gap on the heron emblem, wherever the layout puts it
+     (right column on desktop, centred once the hero stacks) — measured, not guessed */
+  var crest=document.querySelector('.crest'),sx=0,sy=0;
+  function sun(){
+    sx=cv.width*.72;sy=cv.height*.56;
+    if(!crest)return;
+    var r=crest.getBoundingClientRect(),hr=hero.getBoundingClientRect();
+    if(!r.width||!hr.height)return;
+    sx=(r.left+r.width*.5-hr.left)*DPR;
+    sy=(hr.height-(r.top+r.height*.46-hr.top))*DPR;
+  }
+  function rs(){var w=hero.clientWidth||innerWidth,h=hero.clientHeight||innerHeight;cv.width=Math.max(2,Math.round(w*DPR));cv.height=Math.max(2,Math.round(h*DPR));gl.viewport(0,0,cv.width,cv.height);sun();}
   rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(hero);
+  addEventListener('load',sun);setTimeout(sun,400);setTimeout(sun,1600);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sun);
   tmx=mx=cv.width/2;tmy=my=cv.height*0.6;
   addEventListener('pointermove',function(e){var r=hero.getBoundingClientRect();tmx=(e.clientX-r.left)*DPR;tmy=(r.height-(e.clientY-r.top))*DPR;},{passive:true});
   var start=performance.now();
-  function loop(now){if(!run)return;mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  function loop(now){if(!run)return;mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.uniform2f(uS,sx,sy);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
   if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(hero);}
   requestAnimationFrame(loop);
-  if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.uniform2f(uS,sx,sy);gl.drawArrays(gl.TRIANGLES,0,3);}
 })();
 
 /* ---- morphing liquid-chrome heron ---- */
