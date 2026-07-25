@@ -73,11 +73,11 @@ nav *{pointer-events:auto}
 #blob{position:relative;width:100%;height:100%;display:block}
 /* holographic shield crest */
 .hero-shield{position:absolute;inset:0;z-index:2;pointer-events:none;--sh:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);animation:emblemIn 1.6s cubic-bezier(.2,.9,.2,1) 1.7s both}
-.hs-glass{position:absolute;inset:0;overflow:hidden;-webkit-clip-path:var(--sh);clip-path:var(--sh);background:linear-gradient(135deg,rgba(91,141,239,.10),rgba(226,180,92,.05) 55%,rgba(91,141,239,.11));-webkit-backdrop-filter:blur(2px) saturate(1.45);backdrop-filter:blur(2px) saturate(1.45)}
+.hs-glass{position:absolute;inset:0;overflow:hidden;-webkit-clip-path:var(--sh);clip-path:var(--sh);background:linear-gradient(135deg,rgba(91,141,239,.06),rgba(226,180,92,.03) 55%,rgba(91,141,239,.07))}
 .hs-sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,224,.34) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:screen;animation:shieldSheen 5.5s ease-in-out infinite}
 .hs-scan{position:absolute;inset:0;-webkit-clip-path:var(--sh);clip-path:var(--sh);opacity:.5;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(120,170,255,.06) 4px 5px)}
 .hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 2px #050c1a) drop-shadow(0 0 2px #050c1a) drop-shadow(0 0 2px #050c1a) drop-shadow(0 0 1.5px #050c1a) drop-shadow(0 0 9px rgba(226,180,92,.92)) drop-shadow(0 0 20px rgba(226,180,92,.5))}
-.hs-force{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(60deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(120deg,transparent 0 12px,rgba(226,180,92,.22) 12px 13px);-webkit-mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);opacity:.72;animation:forcePulse 3.4s ease-in-out infinite}
+.hs-force{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(60deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(120deg,transparent 0 12px,rgba(226,180,92,.22) 12px 13px);-webkit-mask:radial-gradient(126% 120% at 50% 47%,transparent 33%,rgba(0,0,0,.5) 57%,#000 86%);mask:radial-gradient(126% 120% at 50% 47%,transparent 33%,rgba(0,0,0,.5) 57%,#000 86%);opacity:.72;animation:forcePulse 3.4s ease-in-out infinite}
 .hs-force::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,rgba(140,185,255,.55),transparent 60%);mix-blend-mode:screen;animation:forceRipple 3.4s ease-out infinite}
 @keyframes forcePulse{0%,100%{opacity:.5}50%{opacity:.95}}
 @keyframes forceRipple{0%{transform:scale(.2);opacity:.6}70%{opacity:0}100%{transform:scale(1.6);opacity:0}}
@@ -394,7 +394,7 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var Q=new URLSearchParams(location.search),FM=Q.has('m')?parseFloat(Q.get('m')):null,FT=Q.has('ft')?parseFloat(Q.get('ft')):null;
   function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
   function morphAt(ts){if(ts<2.6)return 1-sstep(0.3,2.6,ts);var c=((ts-2.6)%16)/16;if(c<0.55)return 0;if(c<0.66)return sstep(0.55,0.66,c);if(c<0.74)return 1;if(c<0.9)return 1-sstep(0.74,0.9,c);return 0;}
-  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?1.1:1.5),tmx=0,tmy=0,mx=0,my=0;
+  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?1.5:2),tmx=0,tmy=0,mx=0,my=0;
   function rs(){var w=cv.clientWidth||320,h=cv.clientHeight||320;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver){new ResizeObserver(rs).observe(cv);}
   addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-.5);tmy=-(e.clientY/innerHeight-.5);},{passive:true});
