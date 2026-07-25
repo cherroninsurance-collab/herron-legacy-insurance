@@ -811,7 +811,7 @@ html{overflow-x:clip}
 .hero-shield{position:absolute;inset:0;z-index:2;pointer-events:none;--sh:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);animation:shieldIn 1.3s cubic-bezier(.2,.9,.2,1) 1.7s both}
 .hs-glass{position:absolute;inset:0;overflow:hidden;-webkit-clip-path:var(--sh);clip-path:var(--sh);
   background:linear-gradient(135deg,rgba(91,141,239,.10),rgba(226,180,92,.05) 55%,rgba(91,141,239,.11));
-  -webkit-backdrop-filter:blur(2px) saturate(1.45) url(#liquid-glass-distortion);backdrop-filter:blur(2px) saturate(1.45) url(#liquid-glass-distortion)}
+  -webkit-backdrop-filter:blur(2px) saturate(1.45);backdrop-filter:blur(2px) saturate(1.45)}
 .hs-sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,224,.34) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:screen;animation:shieldSheen 5.5s ease-in-out infinite}
 .hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px rgba(226,180,92,.95)) drop-shadow(0 0 15px rgba(226,180,92,.5))}
 .hs-scan{position:absolute;inset:0;-webkit-clip-path:var(--sh);clip-path:var(--sh);opacity:.5;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(120,170,255,.06) 4px 5px)}
