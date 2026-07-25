@@ -70,6 +70,8 @@ nav *{pointer-events:auto}
 .hero-stage{will-change:transform}
 .heron3d{position:relative;width:min(470px,72vw);aspect-ratio:1/1;margin:-40px auto -80px;animation:emblemIn 1.9s cubic-bezier(.2,.9,.2,1) 1.4s both}
 .heron3d::before{content:"";position:absolute;inset:6%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(226,180,92,.24),rgba(226,180,92,.07) 44%,transparent 70%);filter:blur(13px)}
+/* phones: shrink the emblem and stop the wordmark riding up over the shield tip */
+@media(max-width:720px){.heron3d{width:min(300px,58vw);margin:0 auto 12px}}
 #blob{position:relative;width:100%;height:100%;display:block}
 /* holographic shield crest */
 .hero-shield{position:absolute;inset:0;z-index:2;pointer-events:none;--sh:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);animation:emblemIn 1.6s cubic-bezier(.2,.9,.2,1) 1.7s both}
@@ -308,15 +310,76 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
   'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}',
   'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}',
-  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;float t=uTime*.045;',
-  'vec2 q=vec2(fbm(uv*1.45+t),fbm(uv*1.45+vec2(5.2,1.3)-t));',
-  'vec2 r=vec2(fbm(uv*1.45+q*1.6+t*1.2+vec2(1.7,9.2)),fbm(uv*1.45+q*1.6-t+vec2(8.3,2.8)));',
-  'float f=fbm(uv*1.45+r*1.9);float d=length(uv-ms*.45);float core=exp(-d*2.7)*0.42;',
-  'vec3 space=vec3(0.03,0.055,0.115);vec3 gold=vec3(0.79,0.59,0.23);vec3 hot=vec3(1.0,0.90,0.66);vec3 blu=vec3(0.24,0.41,0.72);',
-  'vec3 col=space;col=mix(col,gold*1.42,smoothstep(.24,.66,f));float e=smoothstep(.40,.90,f)+core;',
-  'col=mix(col,hot,clamp(pow(e,2.2)*.8,0.,1.));float fil=smoothstep(.55,.585,f)-smoothstep(.585,.63,f);',
-  'col+=blu*fil*.6*(0.5+0.5*sin(uv.x*7.+uTime*1.1));col+=gold*pow(core,1.6)*0.7;',
-  'float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.40;col*=clamp(vig,0.,1.);col=pow(col,vec3(.9));gl_FragColor=vec4(col,1.);}'].join('\n');
+  /* domain-warped cloud density — billowing cumulus */
+  'float cld(vec2 p,float t){vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));',
+  ' vec2 r=vec2(fbm(p+q*1.7+vec2(1.7,9.2)+t*.6),fbm(p+q*1.7+vec2(8.3,2.8)-t*.5));',
+  ' return fbm(p+r*1.9);}',
+  /* a monolith: vertical pillar between lo..hi with a stepped, broken-rock top edge */
+  'float twr(float x,float lo,float hi,float h0,float h1,float s){if(x<lo)return -9.;if(x>hi)return -9.;',
+  ' float u=(x-lo)/(hi-lo);float h=mix(h0,h1,u);',
+  ' h+=0.115*floor(noise(vec2(u*4.6+s*31.,s*11.))*3.)/3.;',
+  ' h+=0.038*floor(noise(vec2(u*15.+s*7.,s*3.))*3.)/3.;',
+  ' return h;}',
+  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;',
+  ' uv+=ms*.014;float t=uTime*.012;',
+  /* the light source sits behind the shield, in the gateway gap */
+  ' vec2 sun=vec2(0.,0.085);vec2 dv=uv-sun;float dr=length(dv*vec2(1.,1.15));',
+  /* sky: near-black navy up top falling to a warm gold horizon */
+  ' vec3 col=mix(vec3(.066,.048,.024),vec3(.008,.020,.048),smoothstep(-.55,.55,uv.y));',
+  ' col+=vec3(1.,.70,.30)*exp(-dr*5.2)*.60;',
+  ' col+=vec3(1.,.93,.78)*exp(-dr*26.)*1.10;',
+  /* volumetric god-rays, held to a vertical cone so they shaft UP through the gap */
+  ' float ang=atan(dv.x,dv.y),rr=length(dv);',
+  ' float ry=noise(vec2(ang*11.,rr*1.1-uTime*.03));',
+  ' ry+=noise(vec2(ang*23.+4.,rr*1.5+uTime*.02));',
+  ' ry+=noise(vec2(ang*41.+9.,rr*2.0-uTime*.015));',
+  ' ry=pow(max(ry/3.,0.),2.8);',
+  ' float cone=smoothstep(2.6,.35,abs(dv.x)/max(abs(dv.y),.09));',
+  ' col+=vec3(1.,.78,.42)*ry*cone*smoothstep(1.30,.02,rr)*(.20+.80*smoothstep(-.28,.40,uv.y))*.42;',
+  /* gateway geometry is normalised to WIDTH (nx: 0 centre → 1 frame edge) so the
+     canyon holds its proportions on any aspect, phone through ultrawide */
+  ' float sd=uv.x<0.?0.:1.;float lit=exp(-dr*2.7);',
+  ' float nx=abs(uv.x)/max(uRes.x/uRes.y*.5,.28);',
+  /* DEPTH 1 — distant outer spires, hazed back into the atmosphere */
+  ' float t3=twr(nx,0.92,1.30,0.050,-0.060,sd+9.);',
+  ' col=mix(col,vec3(.026,.038,.070),smoothstep(t3+.005,t3-.005,uv.y)*.62);',
+  ' float t2=twr(nx,0.64,0.90,0.155,0.060,sd+5.);',
+  ' col=mix(col,vec3(.018,.029,.056),smoothstep(t2+.004,t2-.004,uv.y)*.82);',
+  /* backlit cloud banks massing in the lower frame — drift IN FRONT of the far spires */
+  ' float lw=exp(-dr*1.8);',
+  ' vec3 cc=mix(vec3(.062,.080,.128),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
+  ' cc=mix(cc,vec3(1.,.88,.68),clamp(pow(lw,2.2)*1.2,0.,1.));',
+  ' float cA=cld(uv*1.7+vec2(t*1.2,0.),t);',
+  ' cc*=.62+.82*smoothstep(.42,.86,cA);',
+  ' float dens=smoothstep(.44,.68,cA)*.95;',
+  ' dens+=smoothstep(.52,.80,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.50;',
+  /* gold rim-light along the cloud shoulders facing the burst */
+  ' cc+=vec3(1.,.72,.34)*(smoothstep(.44,.50,cA)-smoothstep(.50,.60,cA))*lit*1.5;',
+  ' col=mix(col,cc,clamp(dens*smoothstep(.60,-.34,uv.y),0.,1.));',
+  /* DEPTH 2 — the gateway itself: two near monoliths flanking the light */
+  ' float tt=twr(nx,0.255,0.605,0.400,0.255,sd);',
+  ' vec3 mc=vec3(.007,.013,.028);',
+  ' mc+=vec3(.10,.13,.20)*noise(vec2(uv.x*38.,uv.y*22.))*.5;',
+  /* rock striations + atmospheric haze so the faces read as stone, not flat panels */
+  ' mc+=vec3(.055,.065,.095)*fbm(vec2(uv.x*9.,uv.y*3.2))*.9;',
+  ' mc+=vec3(1.,.70,.34)*lit*.30;',
+  ' mc+=vec3(1.,.72,.34)*smoothstep(.030,0.,tt-uv.y)*.85;',
+  ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.255,0.)*7.)*.42;',
+  ' col=mix(col,mc,smoothstep(tt+.0035,tt-.0035,uv.y));',
+  /* foreground cloud veil drifting in front of the towers */
+  /* DEPTH 3 — the cloud sea the monoliths rise out of, backlit by the burst */
+  ' float fA=cld(uv*1.32+vec2(-t*1.5,-.55),t);',
+  ' float fB=cld(uv*2.85+vec2(t*2.2,-1.1),t*1.3);',
+  ' float fd=(smoothstep(.40,.68,fA)*1.0+smoothstep(.48,.76,fB)*.60)*smoothstep(.50,-.40,uv.y);',
+  ' float gl2=exp(-dr*1.7);',
+  ' vec3 fc=mix(vec3(.088,.108,.158),vec3(.98,.66,.30),clamp(gl2*1.45,0.,1.));',
+  ' fc=mix(fc,vec3(1.,.92,.74),clamp(pow(gl2,2.4)*1.35,0.,1.));',
+  /* fake self-shadowing so the billows read as volume, not fog */
+  ' fc*=.58+.88*smoothstep(.40,.86,fA);',
+  ' fc+=vec3(1.,.74,.36)*(smoothstep(.40,.47,fA)-smoothstep(.47,.58,fA))*gl2*2.0;',
+  ' col=mix(col,fc,clamp(fd,0.,1.));',
+  ' float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.40;col*=clamp(vig,0.,1.);',
+  ' col=pow(max(col,0.),vec3(.92));gl_FragColor=vec4(col,1.);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
