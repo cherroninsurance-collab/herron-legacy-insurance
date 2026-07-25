@@ -815,6 +815,11 @@ html{overflow-x:clip}
 .hs-sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,224,.34) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:screen;animation:shieldSheen 5.5s ease-in-out infinite}
 .hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px rgba(226,180,92,.95)) drop-shadow(0 0 15px rgba(226,180,92,.5))}
 .hs-scan{position:absolute;inset:0;-webkit-clip-path:var(--sh);clip-path:var(--sh);opacity:.5;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(120,170,255,.06) 4px 5px)}
+/* forcefield — energized tri/hex mesh + pulse ripple + edge glow */
+.hs-force{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(60deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(120deg,transparent 0 12px,rgba(226,180,92,.22) 12px 13px);-webkit-mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);opacity:.72;animation:forcePulse 3.4s ease-in-out infinite}
+.hs-force::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,rgba(140,185,255,.55),transparent 60%);mix-blend-mode:screen;animation:forceRipple 3.4s ease-out infinite}
+@keyframes forcePulse{0%,100%{opacity:.5}50%{opacity:.95}}
+@keyframes forceRipple{0%{transform:scale(.2);opacity:.6}70%{opacity:0}100%{transform:scale(1.6);opacity:0}}
 @keyframes shieldSheen{0%{background-position:170% 0}55%,100%{background-position:-110% 0}}
 @keyframes shieldIn{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
 /* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
@@ -823,6 +828,13 @@ html{overflow-x:clip}
 .cover-grid>.reveal:nth-child(even),.ann-grid>.reveal:nth-child(even){transform:rotateY(60deg) translateZ(-24px);transform-origin:right center}
 .cover-grid>.reveal.in,.ann-grid>.reveal.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){.cover-grid>.reveal,.ann-grid>.reveal{transform:none}}
+/* state chips cascade flip-up — parent .reveal handles the hide, so chips can never get stuck invisible */
+.states-grid{perspective:900px}
+.states-grid .state-chip{transform-origin:center top}
+.states-grid.in .state-chip{animation:chipIn .55s cubic-bezier(.16,1,.3,1) both}
+.states-grid.in .state-chip:nth-child(1){animation-delay:.03s}.states-grid.in .state-chip:nth-child(2){animation-delay:.07s}.states-grid.in .state-chip:nth-child(3){animation-delay:.11s}.states-grid.in .state-chip:nth-child(4){animation-delay:.15s}.states-grid.in .state-chip:nth-child(5){animation-delay:.19s}.states-grid.in .state-chip:nth-child(6){animation-delay:.23s}.states-grid.in .state-chip:nth-child(7){animation-delay:.27s}.states-grid.in .state-chip:nth-child(8){animation-delay:.31s}.states-grid.in .state-chip:nth-child(9){animation-delay:.35s}.states-grid.in .state-chip:nth-child(10){animation-delay:.39s}.states-grid.in .state-chip:nth-child(11){animation-delay:.43s}.states-grid.in .state-chip:nth-child(12){animation-delay:.47s}
+@keyframes chipIn{0%{opacity:0;transform:rotateX(-58deg) translateY(8px)}100%{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.states-grid.in .state-chip{animation:none}}
 .crest .chiplet{z-index:3}
 .hero-ctas .btn{will-change:transform}
 /* cinematic ignition intro */
@@ -941,7 +953,7 @@ html{overflow-x:clip}
       <div class="crest">
         <canvas id="heroHeron" class="hero-heron" role="img" aria-label="Herron & Co. — liquid-chrome heron emblem"></canvas>
         <div class="hero-shield" aria-hidden="true">
-          <div class="hs-glass"><span class="hs-scan"></span><span class="hs-sheen"></span></div>
+          <div class="hs-glass"><span class="hs-force"></span><span class="hs-scan"></span><span class="hs-sheen"></span></div>
           <svg class="hs-frame" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCEFCB"/><stop offset=".5" stop-color="#F3D9A0"/><stop offset="1" stop-color="#E2B45C"/></linearGradient></defs><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="rgba(6,14,30,.6)" stroke-width="3.6" stroke-linejoin="round"/><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="url(#hsg)" stroke-width="2.1" stroke-linejoin="round"/></svg>
         </div>
         <div class="chiplet chip-1"><b>Living benefits</b>Use it while you're alive</div>
@@ -2560,7 +2572,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' vec3 k2=normalize(vec3(-0.6,-0.1,0.5));col+=vec3(0.28,0.46,0.85)*pow(max(0.,dot(rd,k2)),10.)*0.7;',
   ' vec3 k3=normalize(vec3(-0.25,0.6,0.7));col+=vec3(1.0,0.96,0.82)*pow(max(0.,dot(rd,k3)),46.)*1.5;return col;}',
   'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
-  ' vec3 ro=vec3(0.,0.,4.20);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
+  ' vec3 ro=vec3(0.,0.,4.85);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
   ' float t=0.,md=1e5,hit=0.;',
   ' for(int i=0;i<110;i++){vec3 p=ro+rd*t;float d=map(p);md=min(md,d);if(d<0.0016){hit=1.;break;}t+=d*0.75;if(t>7.)break;}',
   ' vec3 col=vec3(0.);float alpha=0.;',

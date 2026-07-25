@@ -77,6 +77,10 @@ nav *{pointer-events:auto}
 .hs-sheen{position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,rgba(255,246,224,.34) 50%,transparent 60%);background-size:300% 100%;mix-blend-mode:screen;animation:shieldSheen 5.5s ease-in-out infinite}
 .hs-scan{position:absolute;inset:0;-webkit-clip-path:var(--sh);clip-path:var(--sh);opacity:.5;background:repeating-linear-gradient(0deg,transparent 0 4px,rgba(120,170,255,.06) 4px 5px)}
 .hs-frame{position:absolute;inset:0;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 0 5px rgba(226,180,92,.95)) drop-shadow(0 0 15px rgba(226,180,92,.5))}
+.hs-force{position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(60deg,transparent 0 12px,rgba(110,160,255,.32) 12px 13px),repeating-linear-gradient(120deg,transparent 0 12px,rgba(226,180,92,.22) 12px 13px);-webkit-mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);mask:radial-gradient(122% 122% at 50% 46%,rgba(0,0,0,.5) 10%,#000 80%);opacity:.72;animation:forcePulse 3.4s ease-in-out infinite}
+.hs-force::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 46%,rgba(140,185,255,.55),transparent 60%);mix-blend-mode:screen;animation:forceRipple 3.4s ease-out infinite}
+@keyframes forcePulse{0%,100%{opacity:.5}50%{opacity:.95}}
+@keyframes forceRipple{0%{transform:scale(.2);opacity:.6}70%{opacity:0}100%{transform:scale(1.6);opacity:0}}
 @keyframes shieldSheen{0%{background-position:170% 0}55%,100%{background-position:-110% 0}}
 /* 4-point sparkle motif */
 .sparks{position:absolute;inset:0;z-index:11;pointer-events:none}
@@ -202,7 +206,7 @@ footer a:hover{color:var(--brass-bright)}
   <div class="hero-stage" id="stage">
     <div class="heron3d" id="heron"><canvas id="blob"></canvas>
       <div class="hero-shield" aria-hidden="true">
-        <div class="hs-glass"><span class="hs-scan"></span><span class="hs-sheen"></span></div>
+        <div class="hs-glass"><span class="hs-force"></span><span class="hs-scan"></span><span class="hs-sheen"></span></div>
         <svg class="hs-frame" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="hsg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCEFCB"/><stop offset=".5" stop-color="#F3D9A0"/><stop offset="1" stop-color="#E2B45C"/></linearGradient></defs><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="rgba(6,14,30,.6)" stroke-width="3.6" stroke-linejoin="round"/><path d="M9 7 L91 7 L91 47 L85 64 L71 81 L50 96 L29 81 L15 64 L9 47 Z" fill="none" stroke="url(#hsg)" stroke-width="2.1" stroke-linejoin="round"/></svg>
       </div>
     </div>
@@ -372,7 +376,7 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   ' vec3 k2=normalize(vec3(-0.6,-0.1,0.5));col+=vec3(0.28,0.46,0.85)*pow(max(0.,dot(rd,k2)),10.)*0.7;',
   ' vec3 k3=normalize(vec3(-0.25,0.6,0.7));col+=vec3(1.0,0.96,0.82)*pow(max(0.,dot(rd,k3)),46.)*1.5;return col;}',
   'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
-  ' vec3 ro=vec3(0.,0.,4.20);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
+  ' vec3 ro=vec3(0.,0.,4.85);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
   ' float t=0.,md=1e5,hit=0.;',
   ' for(int i=0;i<110;i++){vec3 p=ro+rd*t;float d=map(p);md=min(md,d);if(d<0.0016){hit=1.;break;}t+=d*0.75;if(t>7.)break;}',
   ' vec3 col=vec3(0.);float alpha=0.;',
