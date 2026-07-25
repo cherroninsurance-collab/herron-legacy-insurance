@@ -29,7 +29,7 @@ a{color:inherit;text-decoration:none}
 
 #gl{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
 #emb{position:fixed;inset:0;width:100vw;height:100vh;z-index:2;pointer-events:none}
-.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 92% at 50% 44%,transparent 26%,rgba(8,18,38,.5) 74%,var(--navy-deep) 100%)}
+.scrim{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(120% 92% at 50% 44%,transparent 32%,rgba(8,18,38,.32) 74%,var(--navy-deep) 100%)}
 .grain{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.045;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ignition intro */
@@ -69,7 +69,7 @@ nav *{pointer-events:auto}
 .hero{position:relative;z-index:10;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:78px 20px 0}
 .hero-stage{will-change:transform}
 .heron3d{position:relative;width:min(470px,72vw);aspect-ratio:1/1;margin:-40px auto -80px;animation:emblemIn 1.9s cubic-bezier(.2,.9,.2,1) 1.4s both}
-.heron3d::before{content:"";position:absolute;inset:2%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(226,180,92,.30),rgba(226,180,92,.09) 44%,transparent 70%);filter:blur(22px)}
+.heron3d::before{content:"";position:absolute;inset:6%;z-index:-1;border-radius:50%;background:radial-gradient(closest-side,rgba(226,180,92,.24),rgba(226,180,92,.07) 44%,transparent 70%);filter:blur(13px)}
 #blob{position:relative;width:100%;height:100%;display:block}
 /* holographic shield crest */
 .hero-shield{position:absolute;inset:0;z-index:2;pointer-events:none;--sh:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);animation:emblemIn 1.6s cubic-bezier(.2,.9,.2,1) 1.7s both}
@@ -313,10 +313,10 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   'vec2 r=vec2(fbm(uv*1.45+q*1.6+t*1.2+vec2(1.7,9.2)),fbm(uv*1.45+q*1.6-t+vec2(8.3,2.8)));',
   'float f=fbm(uv*1.45+r*1.9);float d=length(uv-ms*.45);float core=exp(-d*2.7)*0.42;',
   'vec3 space=vec3(0.03,0.055,0.115);vec3 gold=vec3(0.79,0.59,0.23);vec3 hot=vec3(1.0,0.90,0.66);vec3 blu=vec3(0.24,0.41,0.72);',
-  'vec3 col=space;col=mix(col,gold*1.05,smoothstep(.30,.72,f));float e=smoothstep(.42,.92,f)+core;',
+  'vec3 col=space;col=mix(col,gold*1.42,smoothstep(.24,.66,f));float e=smoothstep(.40,.90,f)+core;',
   'col=mix(col,hot,clamp(pow(e,2.2)*.8,0.,1.));float fil=smoothstep(.55,.585,f)-smoothstep(.585,.63,f);',
   'col+=blu*fil*.6*(0.5+0.5*sin(uv.x*7.+uTime*1.1));col+=gold*pow(core,1.6)*0.7;',
-  'float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.55;col*=clamp(vig,0.,1.);col=pow(col,vec3(.9));gl_FragColor=vec4(col,1.);}'].join('\n');
+  'float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.40;col*=clamp(vig,0.,1.);col=pow(col,vec3(.9));gl_FragColor=vec4(col,1.);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
@@ -384,7 +384,7 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   '  float fres=pow(1.-max(0.,dot(-rd,n)),3.);vec3 base=vec3(0.98,0.74,0.40);',
   '  vec3 chrome=mix(rc*base,rc,0.42);chrome+=vec3(1.0,0.90,0.62)*fres*1.15;',
   '  chrome+=base*max(0.,dot(n,normalize(vec3(0.45,0.7,0.5))))*0.12;col=chrome;alpha=1.;}',
-  ' else{float aa=smoothstep(0.045,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.7;alpha=aa;}',
+  ' else{float aa=smoothstep(0.015,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.5;alpha=aa;}',
   ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
