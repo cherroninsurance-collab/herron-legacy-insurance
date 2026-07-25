@@ -805,7 +805,7 @@ html{overflow-x:clip}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
 .crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%)}
-.crest::before{background:radial-gradient(closest-side,rgba(226,180,92,.26),rgba(226,180,92,.07) 46%,transparent 72%)!important;inset:5%!important;border-radius:50%;filter:blur(16px)}
+.crest::before{background:rgba(6,13,28,.9)!important;inset:-6%!important;-webkit-clip-path:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);clip-path:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);border-radius:0;filter:blur(3px)}
 .hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
 /* holographic shield crest — glowing gold perimeter + see-through liquid-glass middle */
 .hero-shield{position:absolute;inset:0;z-index:2;pointer-events:none;--sh:polygon(9% 7%,91% 7%,91% 47%,85% 64%,71% 81%,50% 96%,29% 81%,15% 64%,9% 47%);animation:shieldIn 1.3s cubic-bezier(.2,.9,.2,1) 1.7s both}
