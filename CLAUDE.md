@@ -117,3 +117,10 @@ the Deploy Preview. **Nothing is on production** — merging is gated on an expl
 **"Licensed in 13 states"** — it should say 12, and it carries the retired tagline.
 Numbered homepage screenshots (01 hero … 15 mobile) are the agreed way the user points at
 sections.
+
+The premium-upgrade layer (docs/premium-upgrade-spec.md) is implemented: hx-hero-card
+glass, the GSAP 3D product wheel (self-hosted vendor/gsap — desktop fine-pointer only,
+guards return the plain grid everywhere else; anchor shim keeps the five card nav links
+working; js/hx-wheel.js), the #why grid, and the hx-cta-note micro-copy. Cascade rule
+learned the hard way: never rely on !important tie-breaking against GSAP inline styles —
+drive states with explicit classes (.hx-dim/.hx-front) and plain specificity.
