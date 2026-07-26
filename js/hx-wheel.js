@@ -16,7 +16,7 @@
   /* ---- phone/tablet: coverage cards become a snap carousel with dots ---- */
   function initCarousel() {
     var coarse = matchMedia('(pointer:coarse)').matches;
-    if (!(coarse || innerWidth < 1024)) return;            // plain grid elsewhere
+    if (!(coarse || innerWidth < 1180)) return;            // plain grid elsewhere
     var grid = document.querySelector('.cover-grid');
     var cov = document.getElementById('coverage');
     if (!grid || !cov) return;
@@ -54,7 +54,7 @@
   var OK = window.gsap && window.ScrollTrigger;
   var fine = matchMedia('(pointer:fine)').matches;
   var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (!OK || !fine || calm || innerWidth < 1024) {         // grid/carousel path
+  if (!OK || !fine || calm || innerWidth < 1180) {         // grid/carousel path
     initCarousel();
     return;
   }
@@ -101,6 +101,19 @@
   }
   face(0);
 
+  /* The spin is its own paused tween so the highlight can ride the tween's playhead.
+     It must NOT ride ScrollTrigger's onUpdate: with scrub smoothing that fires the
+     instant the scrollbar moves — while the tween is still at its old position — and
+     no further onUpdate arrives once scrolling stops, so the highlight froze one card
+     behind the face actually pointing at the camera. The tween's own onUpdate runs on
+     every smoothed frame, so the two can never disagree. */
+  var spin = gsap.to(wheel, {
+    rotationY: -(step * (n - 1)),
+    ease: 'none',
+    paused: true,
+    onUpdate: function () { face(Math.round(spin.progress() * (n - 1))); }
+  });
+
   var st = ScrollTrigger.create({
     id: 'hxWheel',
     trigger: stage,
@@ -108,15 +121,9 @@
     end: '+=' + (n * 320),
     pin: true,
     pinSpacing: true,
-    scrub: true,
+    scrub: 1,          /* 1s catch-up smoothing — reads more premium than a hard lock */
     anticipatePin: 1,
-    animation: gsap.to(wheel, {
-      rotationY: -(step * (n - 1)),
-      ease: 'none'
-    }),
-    onUpdate: function (self) {
-      face(Math.round(self.progress * (n - 1)));
-    }
+    animation: spin
   });
 
   /* Anchor shim: five nav links (desktop + mobile sheet) point INTO these cards.
@@ -135,6 +142,11 @@
        spinning the wheel — suspend it just for the programmatic scroll */
     document.documentElement.classList.add('hx-pinned');
     window.scrollTo({ top: y, behavior: 'auto' });
+    /* scrub:1 would spin through every card on the way; sync the trigger to the new
+       scroll position and finish the catch-up now, so a nav click lands on its card. */
+    ScrollTrigger.update();
+    var tw = st.getTween && st.getTween();
+    if (tw) tw.progress(1);
     face(idx);
     setTimeout(function () { document.documentElement.classList.remove('hx-pinned'); }, 80);
     /* if the mobile sheet is open, close it through its own toggle so body

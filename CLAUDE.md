@@ -102,13 +102,30 @@ Measured 482ms → 84ms per frame on a throttled phone profile.
   is blocked in the sandbox (`ERR_CONNECTION_RESET` is harmless), and it can make
   `page.screenshot` time out waiting on fonts — wrap shots in try/except.
 - `index.html` sets `scroll-behavior:smooth`, which silently defeats scripted scrolling —
-  force `auto` first or every shot comes back as the hero.
+  force `auto` first or every shot comes back as the hero. Note `scrollTo({behavior:'auto'})`
+  does **not** opt out: `auto` means "use the CSS value", so it still smooth-scrolls. A probe
+  that skipped this reported the annuity disclaimer and the states fallback line as stuck at
+  `opacity:0` — it had simply never reached the bottom of the page. Both are fine.
+- **Contrast cannot be computed from CSS on this site.** The hero sits on a WebGL canvas and
+  the tool panes are liquid-glass, so walking up `backgroundColor` finds nothing opaque and
+  falls back to the wrong answer — it read the why-cards as 1.28:1 (really 16.35:1) and the
+  quote-band note as white-on-white (really 7.18:1). Screenshot the element's box and measure
+  the actual pixels instead.
+- ScrollTrigger's `onUpdate` fires the moment the scrollbar moves, **before** a `scrub`
+  tween has caught up, and no further `onUpdate` arrives once scrolling stops. Anything that
+  must agree with what is on screen has to hang off the *tween's* own `onUpdate`.
 - Scroll-reveal sections start at `opacity:0`; force `.reveal/.rise` visible and add `.in`
   or white sections shoot blank. `full_page=True` mangles the `100svh` hero — tile instead.
 - Full-viewport WebGL at high DPR (e.g. 3200x2000) times out under swiftshader — keep the
   cover at DPR 1.
 - The fetch proxy 403s the Netlify preview domain, so the live URL can't be verified from
   the sandbox. That is the proxy, not the site.
+- `#ignite` is a `z-index:9000` full-viewport curtain, and **every inline script block on the
+  page shares one IIFE** — so a single throw anywhere in it used to leave that curtain up
+  forever and the whole site was a blank navy screen. It now also retires via a CSS animation
+  at 3.4s (after the scripted 1.5s fade / 2.7s DOM removal, so the normal path is untouched),
+  and a `<noscript>` block hides it outright. Verify with Playwright's
+  `java_script_enabled=False` — the page must render nav, headline, CTAs and disclosures.
 
 ## Where things stand
 Everything is on branch `claude/viral-social-content-creation-af6vpq` / PR #6, reviewed on
