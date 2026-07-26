@@ -19,7 +19,6 @@
                      (or drag) to rotate it; it keeps spinning with inertia.
      • Swarm         256 instanced gold cubes that scatter and re-assemble into
                      a lattice column as the chapters advance.
-     • Orbits        Chrome and gold spheres on slow Lissajous orbits.
      • Dust          Additive motes drifting through the key light.
      • Post          Hand-rolled bloom (bright pass → separable blur ping-pong)
                      composited with ACES tone mapping, chromatic aberration at
@@ -374,25 +373,74 @@ function buildGround() {
    a living core. Everything is built from primitives so it costs nothing to
    ship and looks hand-machined under the studio environment.
    ========================================================================== */
-function roundedRectShape(w, h, r) {
+function shieldShape(w, h, r) {
+  /* A heraldic crest, not a rounded rectangle: square shoulders with a small
+     radius, straight flanks down to the waist, then two sweeping curves that
+     meet at a point. Drawn once here so the extrude, the bevel and the
+     silhouette all agree. */
   const s = new THREE.Shape();
-  const x = -w / 2, y = -h / 2;
-  s.moveTo(x + r, y);
-  s.lineTo(x + w - r, y);      s.quadraticCurveTo(x + w, y, x + w, y + r);
-  s.lineTo(x + w, y + h - r);  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  s.lineTo(x + r, y + h);      s.quadraticCurveTo(x, y + h, x, y + h - r);
-  s.lineTo(x, y + r);          s.quadraticCurveTo(x, y, x + r, y);
+  const W = w / 2, H = h / 2;
+  const waist = -H * 0.14;          // where the flanks stop and the sweep starts
+
+  s.moveTo(-W + r, H);
+  s.lineTo(W - r, H);
+  s.quadraticCurveTo(W, H, W, H - r);          // top-right shoulder
+  s.lineTo(W, waist);                           // right flank
+  s.bezierCurveTo(W, -H * 0.58, W * 0.56, -H * 0.86, 0, -H);   // sweep to the point
+  s.bezierCurveTo(-W * 0.56, -H * 0.86, -W, -H * 0.58, -W, waist);
+  s.lineTo(-W, H - r);                          // left flank
+  s.quadraticCurveTo(-W, H, -W + r, H);         // top-left shoulder
+  s.closePath();
   return s;
+}
+
+/* --------------------------------------------------------------------------
+   LIQUID GOLD — a shader patch, not a texture.
+   Three's standard material is compiled with the normal already in hand, so
+   we splice two octaves of drifting simplex noise into the normal right
+   before lighting. The geometry never moves; only what it *reflects* does,
+   which is exactly how molten metal reads: a still object with a moving skin.
+   -------------------------------------------------------------------------- */
+function makeLiquid(material, amount = 0.16, speed = 0.22) {
+  material.userData.uTime = { value: 0 };
+  material.onBeforeCompile = (shader) => {
+    shader.uniforms.uTime = material.userData.uTime;
+    shader.uniforms.uFlow = { value: amount };
+    shader.uniforms.uSpeed = { value: speed };
+    shader.vertexShader = shader.vertexShader
+      .replace('#include <common>', '#include <common>\nvarying vec3 vLiquidPos;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\n  vLiquidPos = position;');
+    shader.fragmentShader = shader.fragmentShader
+      .replace('#include <common>',
+        '#include <common>\nuniform float uTime;\nuniform float uFlow;\nuniform float uSpeed;\nvarying vec3 vLiquidPos;\n' + NOISE)
+      .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+        {
+          vec3 lp = vLiquidPos * 0.85;
+          float t = uTime * uSpeed;
+          // central-difference the noise field to get its gradient, then tilt
+          // the shading normal along it
+          float e = 0.16;
+          float n0 = snoise(vec3(lp.x, lp.y, t));
+          float nx = snoise(vec3(lp.x + e, lp.y, t));
+          float ny = snoise(vec3(lp.x, lp.y + e, t));
+          vec3 grad = vec3((nx - n0) / e, (ny - n0) / e, 0.0);
+          float n1 = snoise(vec3(lp.xy * 1.5 + 7.0, t * 0.9));
+          normal = normalize(normal + grad * uFlow + vec3(n1, -n1, 0.0) * uFlow * 0.28);
+        }`);
+  };
+  // a changed onBeforeCompile needs a fresh program
+  material.customProgramCacheKey = () => 'liquid' + amount.toFixed(3);
+  return material;
 }
 
 function buildMonolith(env) {
   const group = new THREE.Group();
 
-  const gold = new THREE.MeshPhysicalMaterial({
-    color: 0xC9973B, metalness: 1.0, roughness: 0.14,
-    clearcoat: 0.65, clearcoatRoughness: 0.14,
-    envMap: env, envMapIntensity: 1.28,
-  });
+  const gold = makeLiquid(new THREE.MeshPhysicalMaterial({
+    color: 0xBE8C33, metalness: 1.0, roughness: 0.15,
+    clearcoat: 0.8, clearcoatRoughness: 0.10,
+    envMap: env, envMapIntensity: 1.18,
+  }), 0.055, 0.16);
   const goldDark = new THREE.MeshPhysicalMaterial({
     color: 0x6E4F1C, metalness: 1.0, roughness: 0.42,
     envMap: env, envMapIntensity: 1.05,
@@ -404,7 +452,7 @@ function buildMonolith(env) {
 
   /* --- the slab: rounded rect, extruded with a generous bevel so the rim
          catches the strip lights as it turns --- */
-  const slabGeo = new THREE.ExtrudeGeometry(roundedRectShape(1.72, 2.86, 0.34), {
+  const slabGeo = new THREE.ExtrudeGeometry(shieldShape(1.90, 2.74, 0.20), {
     depth: 0.20, bevelEnabled: true, bevelThickness: 0.055,
     bevelSize: 0.055, bevelSegments: 5, curveSegments: 24,
   });
@@ -415,20 +463,17 @@ function buildMonolith(env) {
   /* --- Face layout. The three elements each get their own band so none of
          them fights the others: aperture up top, heron inlay in the middle,
          engraved rule lines at the foot. --- */
-  const APERTURE_Y = 0.72, HERON_Y = -0.52;
-
-  for (let i = 0; i < 4; i++) {
-    const bar = new THREE.Mesh(new THREE.BoxGeometry(0.74 - i * 0.10, 0.014, 0.02), goldDark);
-    bar.position.set(0, -1.16 - i * 0.085, 0.152);
-    group.add(bar);
-  }
+  // On a crest the mark IS the content: the heron sits large and centred, the
+  // aperture becomes a small jewel at the collar, and the rule lines are gone
+  // — they would have run straight into the point.
+  const APERTURE_Y = 1.06, HERON_Y = -0.22;
 
   /* --- the aperture: a chrome ring inset into the face --- */
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.034, 20, 96), chrome);
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(0.185, 0.020, 20, 96), chrome);
   ring.position.set(0, APERTURE_Y, 0.155);
   group.add(ring);
 
-  const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(0.55, 0.012, 14, 96), gold);
+  const ringOuter = new THREE.Mesh(new THREE.TorusGeometry(0.265, 0.008, 14, 96), gold);
   ringOuter.position.set(0, APERTURE_Y, 0.150);
   group.add(ringOuter);
 
@@ -468,7 +513,7 @@ function buildMonolith(env) {
         gl_FragColor = vec4(col*uInt, a);
       }`,
   });
-  const core = new THREE.Mesh(new THREE.CircleGeometry(0.55, 64), coreMat);
+  const core = new THREE.Mesh(new THREE.CircleGeometry(0.26, 64), coreMat);
   core.position.set(0, APERTURE_Y, 0.168);
   group.add(core);
 
@@ -479,10 +524,10 @@ function buildMonolith(env) {
          recentres on the box. --- */
   const heron = new THREE.Group();
   const heronInner = new THREE.Group();
-  const inlay = new THREE.MeshPhysicalMaterial({
-    color: 0xF3D9A0, metalness: 1.0, roughness: 0.09,
-    envMap: env, envMapIntensity: 1.40,
-  });
+  const inlay = makeLiquid(new THREE.MeshPhysicalMaterial({
+    color: 0xE8B84B, metalness: 1.0, roughness: 0.10,
+    envMap: env, envMapIntensity: 1.10,
+  }), 0.035, 0.26);
   const p = (x, y) => new THREE.Vector3((x - 50) / 50, (50 - y) / 50, 0);
   // Each entry is one subpath of:
   //   M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56
@@ -510,14 +555,14 @@ function buildMonolith(env) {
         cur = end;
       }
     });
-    heronInner.add(new THREE.Mesh(new THREE.TubeGeometry(path, 64, 0.030, 8, false), inlay));
+    heronInner.add(new THREE.Mesh(new THREE.TubeGeometry(path, 64, 0.036, 8, false), inlay));
   });
   // The mark's ink sits around y ≈ -0.05 in that box; nudge it onto centre.
   heronInner.position.y = 0.05;
   heron.add(heronInner);
   // Proud of the face so it catches the key light as inlay, not buried in it.
-  heron.position.set(0, HERON_Y, 0.176);
-  heron.scale.setScalar(0.62);
+  heron.position.set(0, HERON_Y, 0.178);
+  heron.scale.setScalar(1.02);
   group.add(heron);
 
   /* --- halo: a wide emissive ring behind the slab that reads as the
@@ -546,17 +591,19 @@ function buildMonolith(env) {
 
   /* --- gyro rings: two thin chrome bands orbiting on different axes --- */
   const gyro = new THREE.Group();
-  // Near-horizontal (π/2 lays a torus flat in XZ): they orbit the artifact
-  // like ring systems instead of drawing a wire across its face.
-  const g1 = new THREE.Mesh(new THREE.TorusGeometry(1.42, 0.009, 10, 128), chrome);
-  const g2 = new THREE.Mesh(new THREE.TorusGeometry(1.78, 0.006, 10, 128), gold);
-  g1.rotation.set(1.36, 0, 0.10);
-  g2.rotation.set(1.62, 0, -0.14);
+  // One material, laid near-flat (π/2 puts a torus in the XZ plane) and set
+  // wide enough to orbit the crest rather than draw a wire across it. The
+  // chrome ring that used to sit inside this cut straight through the mark.
+  const g1 = new THREE.Mesh(new THREE.TorusGeometry(2.05, 0.007, 10, 128), gold);
+  const g2 = new THREE.Mesh(new THREE.TorusGeometry(2.34, 0.005, 10, 128), gold);
+  g1.rotation.set(1.50, 0, 0.06);
+  g2.rotation.set(1.60, 0, -0.09);
   gyro.add(g1, g2);
   group.add(gyro);
 
   return { group, coreMat, haloMat, gyro, slab, ring, ringOuter, heron,
-           mats: [gold, goldDark, chrome, inlay] };
+           mats: [gold, goldDark, chrome, inlay],
+           liquid: [gold, inlay] };
 }
 
 /* ===========================================================================
@@ -619,41 +666,7 @@ function buildSwarm(env, mobile) {
 }
 
 /* ===========================================================================
-   7. ORBS — chrome and gold spheres on slow Lissajous orbits, the "planets"
-   from the reference film.
-   ========================================================================== */
-function buildOrbs(env) {
-  const group = new THREE.Group();
-  // xOff biases every orbit into the right half of the frame, where the
-  // artifact lives — the left third belongs to the headline.
-  const specs = [
-    // zOff keeps every orbit BEHIND the artifact's plane. An orb that swings
-    // between the lens and the subject reads as an accident, not a planet.
-    { r: 0.62, col: 0xE8EEF8, rough: 0.04, orbit: [3.4, 1.7, 2.2], xOff: 3.6, zOff: -6.5, sp: [0.09, 0.13, 0.07], ph: 0.0 },
-    { r: 0.40, col: 0xC9973B, rough: 0.16, orbit: [4.2, 2.6, 2.6], xOff: 4.4, zOff: -8.5, sp: [0.06, 0.09, 0.05], ph: 2.1 },
-    { r: 0.26, col: 0x5B8DEF, rough: 0.11, orbit: [2.8, 2.1, 2.0], xOff: 3.0, zOff: -5.5, sp: [0.14, 0.10, 0.11], ph: 4.4 },
-    // the distant world: dielectric and rough, so it stays a silhouette
-    // instead of turning into a chrome bauble
-    { r: 1.30, col: 0x141838, rough: 0.88, metal: 0.05, envI: 0.30, orbit: [15.0, 4.2, 6.0], zOff: -14, sp: [0.04, 0.06, 0.035], ph: 1.2 },
-  ];
-  const orbs = specs.map(s => {
-    const m = new THREE.Mesh(
-      new THREE.SphereGeometry(s.r, 48, 32),
-      new THREE.MeshPhysicalMaterial({
-        color: s.col,
-        metalness: s.metal !== undefined ? s.metal : 1.0,
-        roughness: s.rough,
-        envMap: env, envMapIntensity: s.envI !== undefined ? s.envI : 1.1,
-      })
-    );
-    group.add(m);
-    return { mesh: m, spec: s };
-  });
-  return { group, orbs };
-}
-
-/* ===========================================================================
-   8. DUST — additive motes catching the key light.
+   7. DUST — additive motes catching the key light.
    ========================================================================== */
 function buildDust(count) {
   const pos = new Float32Array(count * 3);
@@ -694,7 +707,7 @@ function buildDust(count) {
 }
 
 /* ===========================================================================
-   9. POST — hand-rolled bloom + grade.
+   8. POST — hand-rolled bloom + grade.
    ========================================================================== */
 const QUAD_VERT = `varying vec2 vUv; void main(){ vUv=uv; gl_Position=vec4(position.xy,0.0,1.0); }`;
 
@@ -770,7 +783,7 @@ const COMPOSITE_FRAG = /* glsl */`
   }`;
 
 /* ===========================================================================
-   10. THE FILM — chapters. Each is a camera keyframe plus scene state. The
+   9. THE FILM — chapters. Each is a camera keyframe plus scene state. The
    DOM copy for each chapter lives in the markup ([data-chapter]); this list
    only drives the 3D.
    ========================================================================== */
@@ -920,8 +933,6 @@ class Vault {
     this._s = new THREE.Vector3();
 
     /* --- orbs + dust --- */
-    this.orbs = buildOrbs(this.env);
-    this.scene.add(this.orbs.group);
     this.dust = buildDust(this.mobile ? 260 : 520);
     this.dust.mat.uniforms.uPR.value = this.dpr;
     this.scene.add(this.dust.points);
@@ -1186,6 +1197,8 @@ class Vault {
     this.sky.mat.uniforms.uProg.value = this.p;
     this.ground.mat.uniforms.uTime.value = t;
     this.ground.mat.uniforms.uGlow.value = f.glow;
+    // the molten skin
+    this.mono.liquid.forEach(m => { if (m.userData.uTime) m.userData.uTime.value = t; });
     this.mono.coreMat.uniforms.uTime.value = t;
     this.mono.coreMat.uniforms.uInt.value = f.core;
     this.mono.haloMat.uniforms.uTime.value = t;
@@ -1196,17 +1209,6 @@ class Vault {
     this.ridges.forEach(r => {
       r.mesh.position.x = -px * r.par * 6;
       r.mesh.position.y = r.base.y - py * r.par * 3;
-    });
-
-    /* -- orbs -- */
-    this.orbs.orbs.forEach(({ mesh, spec }, i) => {
-      const [ox, oy, oz] = spec.orbit, [sx, sy, sz] = spec.sp;
-      mesh.position.set(
-        Math.cos(t * sx + spec.ph) * ox + (spec.xOff || 0),
-        Math.sin(t * sy + spec.ph * 1.7) * oy + 0.6,
-        Math.sin(t * sz + spec.ph) * oz - 3.0 + (spec.zOff || 0)
-      );
-      mesh.rotation.y = t * 0.12 + i;
     });
 
     /* -- swarm: lerp each cube between scattered and assembled -- */

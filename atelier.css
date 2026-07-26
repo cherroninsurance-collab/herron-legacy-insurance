@@ -226,7 +226,9 @@
    same thing via a look-at offset) */
 .vault-crest{
   position:absolute;left:68%;top:46%;transform:translate(-50%,-50%);
-  width:min(30vmin,240px);aspect-ratio:.62;border-radius:22% / 14%;
+  width:min(30vmin,240px);aspect-ratio:.70;
+  /* a heraldic crest, matching the 3D artifact's silhouette */
+  border-radius:12% 12% 46% 46% / 8% 8% 60% 60%;
   background:linear-gradient(158deg,var(--m-gold-2) 0%,var(--m-gold-3) 44%,var(--m-gold-4) 78%,var(--m-gold-3) 100%);
   box-shadow:
     inset 0 2px 0 rgba(255,248,225,.85), inset 0 -3px 6px rgba(74,55,18,.7),
@@ -235,11 +237,11 @@
   animation:crestFloat 8s ease-in-out infinite alternate;
 }
 .vault-crest::after{
-  content:"";position:absolute;width:44%;aspect-ratio:1;border-radius:50%;
+  content:"";position:absolute;top:9%;width:17%;aspect-ratio:1;border-radius:50%;
   border:2px solid rgba(255,250,235,.85);
-  box-shadow:0 0 24px rgba(255,240,205,.6), inset 0 0 22px rgba(255,240,205,.5);
+  box-shadow:0 0 18px rgba(255,240,205,.6), inset 0 0 14px rgba(255,240,205,.5);
 }
-.vault-crest svg{width:52%;position:relative;z-index:2;filter:drop-shadow(0 2px 4px rgba(60,40,10,.6))}
+.vault-crest svg{width:60%;margin-top:8%;position:relative;z-index:2;filter:drop-shadow(0 2px 4px rgba(60,40,10,.6))}
 @keyframes crestFloat{to{transform:translate(-50%,calc(-50% - 14px))}}
 @media(max-width:900px){ .vault-crest{left:50%;top:38%;width:min(34vmin,190px)} }
 /* once the film is running, hide the stand-in */
