@@ -11,7 +11,9 @@
 <meta property="og:url" content="https://herron-legacy-insurance.netlify.app/">
 <meta property="og:image" content="https://herron-legacy-insurance.netlify.app/images/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='150%2080%20200%20252'%3E%3Crect%20x='150'%20y='80'%20width='200'%20height='252'%20rx='40'%20fill='%23081226'/%3E%3Cpath%20d='M253%20116%20L259%20106%20M248%20126%20L307%20144%20M248%20126%20C238%20116%20225%20119%20223%20132%20C221%20148%20228%20158%20238%20169%20C243%20174%20246%20176%20250%20178%20M250%20178%20C282%20186%20294%20218%20274%20242%20C262%20256%20238%20258%20228%20248%20M228%20248%20C212%20236%20202%20214%20206%20197%20C209%20184%20218%20176%20228%20172%20M233%20224%20L230%20296%20M248%20227%20L244%20291%20M222%20297%20L240%20297'%20stroke='%23E8B54D'%20stroke-width='10'%20fill='none'%20stroke-linecap='round'/%3E%3Ccircle%20cx='243'%20cy='124'%20r='8'%20fill='%23fff'/%3E%3Cpath%20d='M180%20312%20C220%20316%20280%20313%20318%20309'%20stroke='%234C7EE8'%20stroke-width='9'%20fill='none'%20stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="logos/mark/favicon-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="logos/mark/favicon-32.png">
+<link rel="apple-touch-icon" href="logos/mark/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -113,7 +115,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
   width:40px;height:40px;border-radius:11px;background:linear-gradient(150deg,var(--navy-mid),var(--navy-deep));
   border:1px solid rgba(201,151,59,.5);display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
-.logo-mark svg{width:34px;height:34px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
+.logo-mark img{height:34px;width:auto;display:block;filter:drop-shadow(0 1px 1px rgba(0,0,0,.45))}
 .logo-text{line-height:1.12}
 .logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
@@ -382,6 +384,7 @@ section{padding:96px 0}
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .chat-head .avatar svg{width:22px;height:22px}
+.avatar img{height:20px;width:auto;display:block}
 .chat-head b{font-family:'Sora';font-size:15px;color:var(--white);display:block;line-height:1.2}
 .chat-head span{font-size:11.5px;color:#7ADB8F;display:flex;align-items:center;gap:6px}
 .chat-head span i{width:7px;height:7px;border-radius:50%;background:#7ADB8F;display:inline-block;animation:pulse 2s infinite}
@@ -432,6 +435,7 @@ section{padding:96px 0}
 }
 #fabChat:hover{transform:scale(1.08)}
 #fabChat svg{width:32px;height:32px}
+#fabChat img{height:30px;width:auto;display:block}
 #fabPanel{
   position:fixed;bottom:96px;right:22px;z-index:400;width:min(400px,calc(100vw - 32px));
   display:none;
@@ -961,7 +965,12 @@ html{overflow-x:clip}
   <div class="nav-inner">
     <a href="#top" class="logo" aria-label="Herron and Co. Legacy Agency home">
       <span class="logo-mark">
-        <svg viewBox="160 90 180 232" fill="none" aria-hidden="true"><defs><linearGradient id="lmNav" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F9EBC4"/><stop offset=".3" stop-color="#E8B54D"/><stop offset=".6" stop-color="#C08F31"/><stop offset=".82" stop-color="#F6E0AC"/><stop offset="1" stop-color="#C9973B"/></linearGradient></defs><g fill="none" stroke="url(#lmNav)" stroke-width="9.5" stroke-linecap="round"><path d="M253 116 L259 106"/><path d="M248 126 L307 144"/><path d="M248 126 C238 116 225 119 223 132 C221 148 228 158 238 169 C243 174 246 176 250 178"/><path d="M250 178 C282 186 294 218 274 242 C262 256 238 258 228 248"/><path d="M228 248 C212 236 202 214 206 197 C209 184 218 176 228 172"/><path d="M233 224 L230 296"/><path d="M248 227 L244 291"/><path d="M222 297 L240 297"/></g><circle cx="243" cy="124" r="11" fill="#fff"/><path d="M180 312 C220 316 280 313 318 309" fill="none" stroke="#4C7EE8" stroke-width="13" stroke-linecap="round"/></svg>
+        <picture>
+          <source srcset="logos/mark/nav.avif 1x, logos/mark/nav@2x.avif 2x, logos/mark/nav@3x.avif 3x" type="image/avif">
+          <source srcset="logos/mark/nav.webp 1x, logos/mark/nav@2x.webp 2x, logos/mark/nav@3x.webp 3x" type="image/webp">
+          <img src="logos/mark/nav.png" srcset="logos/mark/nav@2x.png 2x, logos/mark/nav@3x.png 3x"
+               width="25" height="34" alt="" aria-hidden="true" decoding="async">
+        </picture>
       </span>
       <span class="logo-text"><b>Herron &amp; Co.</b><span>Legacy Agency</span></span>
     </a>
@@ -1786,9 +1795,7 @@ html{overflow-x:clip}
 <!-- ============ FLOATING CHAT ============ -->
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
 <button id="fabChat" aria-label="Open Legacy Concierge chat">
-  <svg viewBox="160 90 180 232" fill="none" aria-hidden="true">
-    <path d="M253 116 L259 106 M248 126 L307 144 M248 126 C238 116 225 119 223 132 C221 148 228 158 238 169 C243 174 246 176 250 178 M250 178 C282 186 294 218 274 242 C262 256 238 258 228 248 M228 248 C212 236 202 214 206 197 C209 184 218 176 228 172 M233 224 L230 296 M248 227 L244 291 M222 297 L240 297 M180 312 C220 316 280 313 318 309" stroke="#081226" stroke-width="9" stroke-linecap="round"/>
-  </svg>
+  <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
 </button>
 
 <script>
@@ -1956,7 +1963,7 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 function buildChat(container, compact){
   container.innerHTML = `
     <div class="chat-head">
-      <span class="avatar"><svg viewBox="160 90 180 232" fill="none"><path d="M253 116 L259 106 M248 126 L307 144 M248 126 C238 116 225 119 223 132 C221 148 228 158 238 169 C243 174 246 176 250 178 M250 178 C282 186 294 218 274 242 C262 256 238 258 228 248 M228 248 C212 236 202 214 206 197 C209 184 218 176 228 172 M233 224 L230 296 M248 227 L244 291 M222 297 L240 297 M180 312 C220 316 280 313 318 309" stroke="#081226" stroke-width="9" stroke-linecap="round"/></svg></span>
+      <span class="avatar"><img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async"></span>
       <div><b>Legacy Concierge</b><span><i></i> Online · answers in seconds</span></div>
       <button class="spk" type="button" title="Toggle spoken replies">🔈 Voice replies</button>
     </div>
