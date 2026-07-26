@@ -405,7 +405,8 @@ document.addEventListener('visibilitychange',()=>{ run = !document.hidden; if(ru
 
 ### 4.7 Accessibility gaps a buyer's audit will flag
 
-- The FAQ `+` toggles need `aria-expanded` + `aria-controls`.
+- The FAQ toggles already set `aria-expanded` (13 uses) — good. What is missing is
+  `aria-controls` pairing each button to its panel id (only 2 uses on the page).
 - The 4-stat count-up should be wrapped in `aria-live="off"` so screen readers announce the
   final value once, not every tick.
 - `cursor:none` on the cover page (`experience.html`) with a custom cursor div is a

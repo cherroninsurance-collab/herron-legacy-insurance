@@ -14,7 +14,9 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081226'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23E2B45C' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='21' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <style>
 :root{
   --navy-deep:#081226;
@@ -33,6 +35,29 @@
   --line-light:rgba(255,255,255,.14);
   --radius:16px;
   --shadow:0 24px 60px -24px rgba(8,18,38,.35);
+  /* brass is 2.43:1 on --cloud, which fails AA for text. This one is 4.95:1 —
+     use it for any small brass-coloured text on a light background. */
+  --brass-deep:#8A6420;
+  /* fluid modular type scale (1.25 ratio) — every size on the page comes from here */
+  --step--1:clamp(.83rem,.80rem + .15vw,.94rem);
+  --step-0:clamp(1rem,.95rem + .25vw,1.13rem);
+  --step-1:clamp(1.25rem,1.15rem + .5vw,1.55rem);
+  --step-2:clamp(1.56rem,1.35rem + 1.05vw,2.15rem);
+  --step-3:clamp(1.95rem,1.55rem + 2vw,3rem);
+  --step-4:clamp(2.44rem,1.7rem + 3.7vw,4.2rem);
+  --step-5:clamp(3.05rem,1.6rem + 7.25vw,5.8rem);
+  /* 8pt spacing scale — replaces the hand-nudged 34/38/46/48px values */
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-6:1.5rem;
+  --sp-8:2rem;--sp-12:3rem;--sp-16:4rem;--sp-24:6rem;--sp-32:8rem;
+  /* layered elevation — real objects cast more than one shadow */
+  --e-1:0 1px 2px rgba(8,18,38,.06),0 2px 8px -2px rgba(8,18,38,.08);
+  --e-2:0 2px 4px rgba(8,18,38,.06),0 8px 24px -8px rgba(8,18,38,.14);
+  --e-3:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28);
+  /* one spring, used everywhere */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:.18s;--dur:.42s;--dur-slow:.9s;
+  --w-text:68ch;--w-wide:1160px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -41,6 +66,21 @@ body{
   background:var(--white);line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased;
 }
 h1,h2,h3{font-family:'Sora',sans-serif;font-weight:600;line-height:1.12;letter-spacing:-.02em}
+/* no orphan words in headlines; readable measure in body copy */
+h1,h2,h3,.big{text-wrap:balance;letter-spacing:-.022em}
+p,.lede{text-wrap:pretty}
+/* counting stats must not wobble as the digits change width */
+.hstat b,.stat b,[data-count],.q-out b,.big-num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+/* one vertical rhythm for every band — replaces 96px/78px/70px ad-hoc values */
+#coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
+.bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-32) 0}
+@media(max-width:880px){
+  #coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
+  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-24) 0}
+}
+/* long page: skip layout/paint for bands that are still far off-screen */
+.iul-band,.ann-band,.tools-band,.fitcheck,.bp-band,
+.quote-band,.states-band,.about-band,.booking,#faq{content-visibility:auto;contain-intrinsic-size:auto 900px}
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
   color:var(--brass);font-weight:500;display:block;margin-bottom:16px;
@@ -154,7 +194,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
   background:var(--white);border-radius:12px;padding:10px 18px;display:flex;align-items:center;justify-content:center;
   height:56px;border:1px solid rgba(255,255,255,.08);
 }
-.carrier img{max-height:32px;max-width:126px;object-fit:contain}
+/* explicit height + auto width lets the intrinsic width/height attrs reserve the
+   right box before load (no CLS) without the two max-* caps distorting aspect */
+.carrier img{height:32px;width:auto;max-width:126px;object-fit:contain}
+.carrier picture{display:contents}
 
 /* ---------- LEAD CAPTURE (fit check + estimate studio) ---------- */
 .cap-card{margin-top:18px;background:var(--white);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:14px;padding:18px 20px}
@@ -533,6 +576,14 @@ section{padding:96px 0}
 .final h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
 .final p{color:var(--ink-soft);max-width:56ch;margin:0 auto 36px;font-size:17.5px}
 .final .hero-ctas{justify-content:center}
+/* risk-reversal line under a primary CTA — this is what removes hesitation */
+.cta-sub{display:block;margin-top:var(--sp-3);font-size:var(--step--1);color:var(--ink-soft);letter-spacing:.01em}
+.hero .cta-sub{color:rgba(255,255,255,.66)}
+.final .cta-sub{margin-top:var(--sp-4)}
+/* the single escape hatch, deliberately quieter than the primary */
+.final p.final-alt{margin:var(--sp-8) auto 0;max-width:60ch;font-size:var(--step--1);color:var(--ink-soft);line-height:1.6}
+.final p.final-alt a{color:var(--brass-deep);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.final p.final-alt a:hover{color:var(--navy)}
 
 /* ---------- FOOTER ---------- */
 .foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:#fff!important}
@@ -806,7 +857,12 @@ html{overflow-x:clip}
 .hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
-.crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%)}
+/* the emblem is a bare canvas now — kill every remnant of the old framed card.
+   the backdrop-filter especially: it was invisible over the flat nebula, but it
+   blurs a hard-edged rectangle out of the threshold scene's rays and rock. */
+.crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%);
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
+.crest::after{display:none!important}
 .hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
 /* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
 .cover-grid,.ann-grid{perspective:1500px;perspective-origin:50% 42%}
@@ -881,7 +937,7 @@ html{overflow-x:clip}
     </ul>
     <div class="nav-cta">
       <a class="nav-phone" href="tel:6103608583">610-360-8583</a>
-      <a class="btn btn-brass" href="#booking">Book a call</a>
+      <a class="btn btn-brass" href="#booking">Get my numbers</a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navSheet"><span></span><span></span><span></span></button>
     </div>
   </div>
@@ -901,7 +957,7 @@ html{overflow-x:clip}
   <a href="#faq">FAQ</a>
   <a href="opt-in.html">Free protection guide</a>
   <a class="sheet-phone" href="tel:6103608583">Call/text 610-360-8583</a>
-  <a class="btn btn-brass" href="#booking">Book a free 15-minute call</a>
+  <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
 </div>
 
 <!-- ============ HERO ============ -->
@@ -926,9 +982,10 @@ html{overflow-x:clip}
       <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
       <p class="lede rise d2">Mortgage protection with living benefits, indexed universal life (IUL), hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
       <div class="hero-ctas rise d3">
-        <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Ask us anything — 24/7</a>
+        <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
       </div>
+      <span class="cta-sub rise d3">No email required to start · $0 to work with us · A real licensed agent, not a call center</span>
       <div class="hero-stats rise d4">
         <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
         <div class="hstat"><b data-count="12">12</b><span>states licensed</span></div>
@@ -951,24 +1008,24 @@ html{overflow-x:clip}
   <p class="cap">Quoting the nation's leading carriers, including</p>
   <div class="marquee" aria-label="Insurance carriers we quote">
     <div class="marquee-track" id="marqueeTrack">
-      <span class="carrier" title="Ethos"><img src="logos/ethos.png" alt="Ethos" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Foresters Financial"><img src="logos/foresters.png" alt="Foresters Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Americo"><img src="logos/americo.png" alt="Americo" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Transamerica"><img src="logos/transamerica.jpg" alt="Transamerica" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Ameritas"><img src="logos/ameritas.svg" alt="Ameritas" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Protective"><img src="logos/protective.png" alt="Protective" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="John Hancock"><img src="logos/john-hancock.png" alt="John Hancock" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="TruStage"><img src="logos/trustage.png" alt="TruStage" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="North American"><img src="logos/north-american.jpg" alt="North American" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="National Life Group"><img src="logos/national-life-group.png" alt="National Life Group" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Lincoln Financial"><img src="logos/lincoln-financial.png" alt="Lincoln Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Prudential"><img src="logos/prudential.png" alt="Prudential" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Nationwide"><img src="logos/nationwide.png" alt="Nationwide" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Legal & General"><img src="logos/legal-and-general.png" alt="Legal & General" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Allianz"><img src="logos/allianz.png" alt="Allianz" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Gerber Life"><img src="logos/gerber-life.png" alt="Gerber Life" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Symetra"><img src="logos/symetra.png" alt="Symetra" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="American-Amicable"><img src="logos/american-amicable.png" alt="American-Amicable" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
+      <span class="carrier" title="Ethos"><picture><source srcset="logos/opt/ethos.avif" type="image/avif"><source srcset="logos/opt/ethos.webp" type="image/webp"><img src="logos/opt/ethos.png" alt="Ethos" width="163" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Foresters Financial"><picture><source srcset="logos/opt/foresters.avif" type="image/avif"><source srcset="logos/opt/foresters.webp" type="image/webp"><img src="logos/opt/foresters.png" alt="Foresters Financial" width="190" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Americo"><picture><source srcset="logos/opt/americo.avif" type="image/avif"><source srcset="logos/opt/americo.webp" type="image/webp"><img src="logos/opt/americo.png" alt="Americo" width="207" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Transamerica"><picture><source srcset="logos/opt/transamerica.avif" type="image/avif"><source srcset="logos/opt/transamerica.webp" type="image/webp"><img src="logos/opt/transamerica.png" alt="Transamerica" width="72" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Ameritas"><img src="logos/ameritas.svg" alt="Ameritas" width="96" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
+      <span class="carrier" title="Protective"><picture><source srcset="logos/opt/protective.avif" type="image/avif"><source srcset="logos/opt/protective.webp" type="image/webp"><img src="logos/opt/protective.png" alt="Protective" width="129" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="John Hancock"><picture><source srcset="logos/opt/john-hancock.avif" type="image/avif"><source srcset="logos/opt/john-hancock.webp" type="image/webp"><img src="logos/opt/john-hancock.png" alt="John Hancock" width="129" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="TruStage"><picture><source srcset="logos/opt/trustage.avif" type="image/avif"><source srcset="logos/opt/trustage.webp" type="image/webp"><img src="logos/opt/trustage.png" alt="TruStage" width="219" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="North American"><picture><source srcset="logos/opt/north-american.avif" type="image/avif"><source srcset="logos/opt/north-american.webp" type="image/webp"><img src="logos/opt/north-american.png" alt="North American" width="130" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="National Life Group"><picture><source srcset="logos/opt/national-life-group.avif" type="image/avif"><source srcset="logos/opt/national-life-group.webp" type="image/webp"><img src="logos/opt/national-life-group.png" alt="National Life Group" width="164" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Lincoln Financial"><picture><source srcset="logos/opt/lincoln-financial.avif" type="image/avif"><source srcset="logos/opt/lincoln-financial.webp" type="image/webp"><img src="logos/opt/lincoln-financial.png" alt="Lincoln Financial" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Prudential"><picture><source srcset="logos/opt/prudential.avif" type="image/avif"><source srcset="logos/opt/prudential.webp" type="image/webp"><img src="logos/opt/prudential.png" alt="Prudential" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Nationwide"><picture><source srcset="logos/opt/nationwide.avif" type="image/avif"><source srcset="logos/opt/nationwide.webp" type="image/webp"><img src="logos/opt/nationwide.png" alt="Nationwide" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Legal & General"><picture><source srcset="logos/opt/legal-and-general.avif" type="image/avif"><source srcset="logos/opt/legal-and-general.webp" type="image/webp"><img src="logos/opt/legal-and-general.png" alt="Legal & General" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Allianz"><picture><source srcset="logos/opt/allianz.avif" type="image/avif"><source srcset="logos/opt/allianz.webp" type="image/webp"><img src="logos/opt/allianz.png" alt="Allianz" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Gerber Life"><picture><source srcset="logos/opt/gerber-life.avif" type="image/avif"><source srcset="logos/opt/gerber-life.webp" type="image/webp"><img src="logos/opt/gerber-life.png" alt="Gerber Life" width="114" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Symetra"><picture><source srcset="logos/opt/symetra.avif" type="image/avif"><source srcset="logos/opt/symetra.webp" type="image/webp"><img src="logos/opt/symetra.png" alt="Symetra" width="108" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="American-Amicable"><picture><source srcset="logos/opt/american-amicable.avif" type="image/avif"><source srcset="logos/opt/american-amicable.webp" type="image/webp"><img src="logos/opt/american-amicable.png" alt="American-Amicable" width="217" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
     </div>
   </div>
 </div>
@@ -1310,8 +1367,8 @@ html{overflow-x:clip}
       </article>
     </div>
     <div class="ann-ctas reveal">
-      <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Walk through it live — the Wealth Shield Matrix ↗</a>
-      <a class="btn btn-ghost-light" href="#booking">Get real rates on a free call</a>
+      <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Open the Matrix ↗</a>
+      <a class="btn btn-ghost-light" href="#booking">Get my numbers — 15 min</a>
     </div>
     <p class="ann-note reveal">Annuity guarantees are backed by the claims-paying ability of the issuing insurance carrier. Caps, participation rates, spreads, and declared rates are set by the carrier and can change per the contract. Withdrawals may be subject to surrender charges and, before 59½, IRS penalties. The descriptions above are educational, not an offer of coverage or a quoted rate — get carrier-specific figures on a free call.</p>
   </div>
@@ -1399,7 +1456,7 @@ html{overflow-x:clip}
           <div class="ai-feat"><span class="ic">🧠</span><div><b>Knows every product</b><span>Mortgage protection, IUL, hybrid LTC, final expense, annuities — and the fine print.</span></div></div>
           <div class="ai-feat"><span class="ic">📅</span><div><b>Hands off to a human</b><span>When you're ready, it books you straight onto Connor's calendar. No bots pretending to be people.</span></div></div>
         </div>
-        <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask your first question →</button>
+        <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask the Concierge</button>
       </div>
       <div class="reveal">
         <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
@@ -1567,7 +1624,7 @@ html{overflow-x:clip}
         <p>It costs you nothing to work with me — your premium is identical to buying direct. And if a policy isn't right for you, I'll be the first to tell you. When you call the number on this page, you get me. Not a call center.</p>
         <div class="about-sig">— Connor Herron</div>
         <div class="about-ctas">
-          <a class="btn btn-brass" href="#booking">Book 15 minutes with me</a>
+          <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
           <a class="btn-line" href="https://nipr.com/help/look-up-your-license" target="_blank" rel="noopener">Verify my license ↗</a>
         </div>
       </div>
@@ -1644,30 +1701,15 @@ html{overflow-x:clip}
 <section class="final">
   <div class="wrap reveal">
     <span class="eyebrow">One conversation. Decades of certainty.</span>
-    <h2>Your family's plan shouldn't be <span class="grad">"hope nothing happens."</span></h2>
-    <p>Ask the Legacy Concierge anything, build your Blueprint, or go straight to Connor's calendar. Whichever door you pick, you'll leave knowing exactly where your family stands.</p>
+    <h2>Fifteen minutes now, or a phone call your family <span class="grad">can't afford later.</span></h2>
+    <p>You'll leave knowing exactly where your family stands — the number, the carrier, and the monthly cost. Whether you buy is genuinely up to you.</p>
     <div class="hero-ctas">
-      <a class="btn btn-navy" href="#booking">Book your free call</a>
-      <a class="btn btn-ghost-dark" href="#blueprint">Build my Blueprint</a>
-      <a class="btn btn-ghost-dark" href="https://agents.ethoslife.com/invite/baecc" target="_blank" rel="noopener">Buy online with Ethos ↗</a>
+      <a class="btn btn-navy" href="#booking">Get my numbers — 15 min</a>
     </div>
+    <span class="cta-sub">No email required to start · $0 to work with us · Licensed in 12 states</span>
+    <p class="final-alt">Not ready to talk? <a href="#blueprint">Build your Blueprint privately</a> — no email, no salesperson. Or <a href="https://agents.ethoslife.com/invite/baecc" target="_blank" rel="noopener">buy online with Ethos ↗</a>.</p>
   </div>
 </section>
-
-<!-- ============ OPT-IN ============ -->
-<section class="optin" style="background:var(--cloud);border-top:1px solid var(--line);padding:70px 0">
-  <div class="wrap reveal" style="display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center" id="optinGrid">
-    <div>
-      <span class="eyebrow">Not ready to talk yet?</span>
-      <h2 style="font-size:clamp(26px,3vw,36px);color:var(--navy);margin-bottom:14px">Then don't. Build your Blueprint instead.</h2>
-      <p style="color:var(--ink-soft);max-width:52ch">No email, no phone number, no salesperson. Work out what you're protecting and what it's worth on your own time — and when you want real numbers from 20+ carriers, we'll be right here.</p>
-    </div>
-    <div style="display:flex;justify-content:flex-end">
-      <a class="btn btn-navy" href="#blueprint" style="font-size:16.5px;padding:18px 34px">Build my Blueprint →</a>
-    </div>
-  </div>
-</section>
-<style>@media(max-width:820px){#optinGrid{grid-template-columns:1fr!important}#optinGrid>div:last-child{justify-content:flex-start!important}}</style>
 
 <!-- ============ FOOTER ============ -->
 <footer>
@@ -1681,7 +1723,7 @@ html{overflow-x:clip}
         <h4>Contact</h4>
         <a href="tel:6103608583" class="foot-phone">610-360-8583</a>
         <a href="mailto:cherron.insurance@gmail.com">cherron.insurance@gmail.com</a>
-        <a href="#booking">Book a call</a>
+        <a href="#booking">Get my numbers</a>
         <p style="margin-top:12px">30 S 15th Street, Suite 1550<br>Philadelphia, PA 19102</p>
       </div>
       <div>
@@ -2339,7 +2381,7 @@ renderFit();
 </script>
 <div class="mobilebar" id="mobilebar">
   <a class="mb-call" href="tel:6103608583">Call Connor</a>
-  <a class="mb-book" href="#booking">Book 15 min — free</a>
+  <a class="mb-book" href="#booking">Get my numbers</a>
 </div>
 <style>
 .mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(8,18,38,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
