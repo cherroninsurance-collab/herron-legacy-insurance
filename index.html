@@ -800,6 +800,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .hero-inner>div{min-width:0}
 .hero .pill{max-width:100%}
 html{overflow-x:clip}
+/* film grain over the hero scene — sits above the canvas, under the copy */
+.hero-grain{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
 .hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
@@ -905,6 +907,7 @@ html{overflow-x:clip}
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
   <canvas id="heroGl" class="hero-gl" aria-hidden="true"></canvas>
+  <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-veil" aria-hidden="true"></div>
   <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
@@ -2491,6 +2494,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' h+=0.115*floor(noise(vec2(u*4.6+s*31.,s*11.))*3.)/3.;',
   ' h+=0.038*floor(noise(vec2(u*15.+s*7.,s*3.))*3.)/3.;',
   ' return h;}',
+  'vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}',
   'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;',
   ' uv+=ms*.010;float t=uTime*.012;',
   /* the gateway centres on the heron emblem, wherever the layout puts it */
@@ -2537,8 +2541,20 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' fc*=.58+.88*smoothstep(.40,.86,fA);',
   ' fc+=vec3(1.,.74,.36)*(smoothstep(.40,.47,fA)-smoothstep(.47,.58,fA))*gl2*2.0;',
   ' col=mix(col,fc,clamp(fd,0.,1.));',
+  /* anamorphic highlight streak through the gap — cheap, and reads as real lens glass */
+  ' float strk=exp(-abs(dv.y)*54.)*exp(-abs(dv.x)*1.9);',
+  ' col+=vec3(1.,.86,.62)*strk*.17;',
   ' float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.42;col*=clamp(vig,0.,1.);',
-  ' col=pow(max(col,0.),vec3(.92));gl_FragColor=vec4(col,1.);}'].join('\n');
+  /* CINEMATIC GRADE — filmic tonemap, then split-tone (navy shadows / gold highlights),
+     a gentle S-curve, and an ordered dither so the big sky gradients never band */
+  ' col=aces(col*1.10);',
+  ' float lum=dot(col,vec3(.2126,.7152,.0722));',
+  ' col+=vec3(-.016,.002,.052)*(1.-lum);',
+  ' col+=vec3(.050,.025,-.018)*lum;',
+  ' col=mix(col,col*col*(3.-2.*col),.26);',
+  ' col=mix(vec3(lum),col,1.05);',
+  ' col=clamp(col,0.,1.)+(hash(gl_FragCoord.xy*1.7)-.5)*.0055;',
+  ' gl_FragColor=vec4(col,1.);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
