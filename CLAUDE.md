@@ -39,52 +39,81 @@ serves serverless functions from `netlify/functions`.
 
 Both heroes render a real-time WebGL **"threshold gateway"** scene, translated from a
 reference design reel (dark monoliths forming a canyon, a sun burst in the gap, volumetric
-god-rays, backlit cloud banks) into navy/gold. Composited in depth order inside one
-fragment shader: sky gradient → sun halo + core → god-rays (held to a vertical cone) →
-distant spire tiers → mid cloud bank → near monoliths (broken-rock tops, striations,
-low-settling haze, gold rim-light on lit faces) → foreground cloud sea → vignette.
+god-rays, backlit cloud banks) into navy/gold. Composited in depth order in one fragment
+shader: sky → sun halo/core → god-rays (held to a vertical cone) → distant spire tiers →
+mid cloud bank → near monoliths (broken tops, striations, low haze, gold rim-light) →
+foreground cloud sea → vignette → **cinematic grade** (ACES-ish tonemap, navy-shadow /
+gold-highlight split tone, S-curve, anamorphic streak, ordered dither).
 
-- **`experience.html` (cover):** gateway centred; the liquid-chrome heron sits inside the
-  **gold heraldic shield** in the light gap, backlit — "stepping through the threshold".
-- **`index.html` (homepage):** **no shield** — the chrome heron stands alone (camera
-  `ro.z 4.85`, sway `0.40`). The light gap is anchored to the emblem's **measured**
-  position via a `uSun` uniform (`sun()` re-measures `.crest` on resize/load/fonts-ready),
-  so the burst sits behind the logo in the right column on desktop and re-centres when the
-  hero stacks on mobile. The left monolith shades the copy column, which helps headline
-  contrast. Rays/clouds are dialled back vs. the cover so the scene never fights the copy.
+- **`experience.html` (cover):** gateway centred; the emblem sits in the **gold shield** in
+  the light gap, backlit. Saved as a downloadable image in `images/cover/`.
+- **`index.html` (homepage):** **no shield** — emblem alone. The light gap is anchored to
+  the emblem's **measured** position via the `uSun` uniform (`sun()` re-measures `.crest`
+  on resize/load/fonts-ready), so the burst sits behind the logo on desktop and re-centres
+  when the hero stacks. The left monolith shades the copy column, helping headline contrast.
 
-Main tunables (same names in both files): `twr(nx, lo, hi, h0, h1, seed)` tower bands,
-`nx` (gateway width, normalised to viewport width so proportions hold on any aspect),
-`lit`/`lw`/`gl2` warm falloffs, cloud `dens`/`fd` thresholds and their `smoothstep` ceilings.
+Tunables (same names in both files): `twr(nx, lo, hi, h0, h1, seed)` tower bands, `nx`
+(gateway width, normalised to viewport width), `lit`/`lw`/`gl2` warm falloffs, cloud
+`dens`/`fd` thresholds and their `smoothstep` ceilings.
 
-Also live: ALCHE-style 3D flip-open reveals on the coverage/annuity cards, a 12-state chip
-cascade (keyframe-based so chips can never stick invisible), and off-screen WebGL pausing
-via IntersectionObserver with reduced DPR on coarse-pointer devices.
+## The logo — read this before touching it
+The brand mark is a fine-line heron: **crest tuft, long beak, small white eye, S-neck,
+OPEN body curve, two legs, one foot bar, and a curved BLUE (`#4C7EE8`) line beneath it.**
+Two wrong versions were shipped before the real one:
+1. a hand-coded glyph with a closed round body and no underline;
+2. the Wealth Shield Matrix header version — also a different drawing.
+The truth is the supplied artwork, now keyed to transparency in `logos/mark/mark-full.png`.
+- **Nav/favicons** use raster derivatives (`logos/mark/nav{,@2x,@3x}`) generated at *exact*
+  device sizes so the browser never resamples and shrinks the detail away. Strokes are
+  dilated before downscaling; **the eye is the artist's own white pixels grown slightly**,
+  not a synthetic dot (drawing one produced a huge blob over the head).
+- **The liquid-metal emblem** SDF is generated from the same artwork: skeletonised, chains
+  merged end-to-end, simplified to ~53 segments, swept as a 2D polyline set into a 3D tube
+  with a bounding-box early-out. The underline keeps its blue; the eye is pale chrome.
+- At nav size the literal 3px strokes fall under one device pixel, so some optical
+  thickening is unavoidable. **Verify by rendering at real 1x/2x and magnifying the actual
+  pixels — never by screenshotting at high DPR, which hides sub-pixel loss.**
+
+## Premium pass (docs/premium-audit.md)
+Priorities 1-4 of that audit are **done**: single close (the double CTA is gone), one CTA
+vocabulary ("Get my numbers — 15 min"), design tokens + one band rhythm, and the image
+pipeline (all images sized, AVIF/WebP, 4K logos rebuilt). **Not done:** §3.1's restructure
+(collapsing the five front doors / tabbing IUL+annuities+tools) — needs sign-off since it
+reorders sections and anchors.
+
+## Mobile performance
+Profiling showed cost was **cumulative compositing**, not one hot spot — hiding both WebGL
+canvases barely moved frame time. Fixes: heron SDF no longer evaluates both shapes per
+step; phones get fewer march steps, half the fbm octaves, no foreground cloud layer, 0.75x
+render scale and throttled loops (30/24fps); `liquid-glass.js` is gated off on touch (it was
+a third live renderer); and a `@media (pointer:coarse)` block drops `backdrop-filter`
+(45 declarations, up to blur(34px)) using the existing `@supports not` fallback colours.
+Measured 482ms → 84ms per frame on a throttled phone profile.
 
 ## Hard-won gotchas
-- **Screenshots lie about advanced CSS/WebGL.** Headless Chromium falls back to
-  swiftshader, which ignores/differs on `backdrop-filter: url(#svg-filter)` and stacked
-  `drop-shadow`s. Several real bugs looked fine in screenshots. **Trust the user's
-  real-GPU reports over local renders.**
-- Screenshot recipe: serve with `python3 -m http.server 8099 --directory <repo>`, then
-  Playwright with `executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"`
-  and args `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader`.
-  Do **not** run `playwright install`.
-- `wait_until="networkidle"` hangs on these animated pages — use `"load"` + a timeout.
-- Google Fonts is blocked in the sandbox; the resulting `ERR_CONNECTION_RESET` console
-  error is harmless and expected.
-- `index.html` sets `scroll-behavior:smooth`, which silently defeats scripted
-  `scrollTo`/`scrollIntoView` — override to `auto` before scripted scrolling, or every
-  screenshot comes back as the hero.
-- Scroll-reveal sections start at `opacity:0`; for full-page captures force
-  `.reveal/.rise{opacity:1!important;transform:none!important}` and add `.in`, otherwise
-  white sections shoot blank.
-- `full_page=True` screenshots mangle this layout (the `100svh` hero balloons and repeats).
-  Capture fixed-viewport tiles instead.
-- The heron is a raymarched SDF of the logo strokes; framing is resolution-independent, so
-  size/position problems are real code issues, not GPU differences.
+- **Screenshots lie about advanced CSS/WebGL.** Headless Chromium uses swiftshader, which
+  differs on `backdrop-filter` and stacked `drop-shadow`s. **Trust the user's real-GPU
+  reports over local renders.**
+- Serve with `python3 -m http.server 8099 --directory <repo>`; Playwright with
+  `executable_path="/opt/pw-browsers/chromium-1194/chrome-linux/chrome"` and
+  `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader`. Never run
+  `playwright install`.
+- `wait_until="networkidle"` hangs on these pages — use `"load"` + a timeout. Google Fonts
+  is blocked in the sandbox (`ERR_CONNECTION_RESET` is harmless), and it can make
+  `page.screenshot` time out waiting on fonts — wrap shots in try/except.
+- `index.html` sets `scroll-behavior:smooth`, which silently defeats scripted scrolling —
+  force `auto` first or every shot comes back as the hero.
+- Scroll-reveal sections start at `opacity:0`; force `.reveal/.rise` visible and add `.in`
+  or white sections shoot blank. `full_page=True` mangles the `100svh` hero — tile instead.
+- Full-viewport WebGL at high DPR (e.g. 3200x2000) times out under swiftshader — keep the
+  cover at DPR 1.
+- The fetch proxy 403s the Netlify preview domain, so the live URL can't be verified from
+  the sandbox. That is the proxy, not the site.
 
-## Open thread
-Awaiting the user's verdict on the threshold heroes as seen on their own GPU. Offered
-tuning dials: canyon slot width, cloud density, warm/cool colour grade. Nothing is on
-production yet — merging PR #6 is gated on an explicit **"ship it"**.
+## Where things stand
+Everything is on branch `claude/viral-social-content-creation-af6vpq` / PR #6, reviewed on
+the Deploy Preview. **Nothing is on production** — merging is gated on an explicit
+**"ship it"**. Known outstanding item: `images/og.png` (the social share card) still claims
+**"Licensed in 13 states"** — it should say 12, and it carries the retired tagline.
+Numbered homepage screenshots (01 hero … 15 mobile) are the agreed way the user points at
+sections.
