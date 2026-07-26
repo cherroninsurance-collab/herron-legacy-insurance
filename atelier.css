@@ -1,0 +1,1503 @@
+/* ============================================================================
+   ATELIER — the Herron & Co. cinematic design system
+   ----------------------------------------------------------------------------
+   Three materials, used consistently everywhere:
+
+     GLASS   translucent, blurred, refracting — panels that float above content
+     METAL   polished / brushed gold and steel — surfaces you can "touch":
+             rails, plates, keys, bezels, readouts
+     LIGHT   emissive gold and cyan — progress, focus, results, anything alive
+
+   Layer order in this file:
+     0  tokens
+     1  primitives (.plate, .rail, .foil, .engrave, .sweep, .bezel …)
+     2  the cinematic cover ("The Vault")
+     3  the home page — nav, hero handoff, coverage, IUL, AI
+     4  the instruments — fit check quiz, estimate studio, forms
+     5  the facts — stats, gauges, states, FAQ, footer
+     6  motion + reduced-motion + no-blur fallbacks
+
+   Everything here is additive. Remove this stylesheet and the original page
+   still renders correctly — every rule is an upgrade, never a dependency.
+   ========================================================================== */
+
+/* ==========================================================================
+   0 — TOKENS
+   ========================================================================== */
+:root{
+  /* metal */
+  --m-gold-1:#FBE9BE;   /* highlight */
+  --m-gold-2:#E2B45C;   /* light face */
+  --m-gold-3:#C9973B;   /* body */
+  --m-gold-4:#8E6822;   /* shade */
+  --m-gold-5:#4A3712;   /* deep shade */
+  --m-steel-1:#F2F6FF;
+  --m-steel-2:#C3CEE2;
+  --m-steel-3:#8C9AB4;
+  --m-steel-4:#414D66;
+  --m-steel-5:#1A2138;
+
+  /* cinematic ambience */
+  --v-abyss:#04091A;
+  --v-navy:#0A1330;
+  --v-indigo:#1D2160;
+  --v-violet:#4C2A86;
+  --v-cyan:#2FB6C9;
+  --v-gold:#E2B45C;
+
+  /* light */
+  --glow-gold:0 0 0 1px rgba(226,180,92,.32), 0 0 24px -4px rgba(226,180,92,.55);
+  --glow-cyan:0 0 0 1px rgba(47,182,201,.30), 0 0 26px -6px rgba(47,182,201,.5);
+
+  --ease-cine:cubic-bezier(.19,1,.22,1);
+  --ease-mech:cubic-bezier(.5,.02,.2,1);
+}
+
+/* ==========================================================================
+   1 — PRIMITIVES
+   ========================================================================== */
+
+/* ---- polished gold foil text -------------------------------------------
+   Six stops, not two: real gold reads as alternating bright/dark bands
+   because it reflects a whole room, not a single lamp. The slow drift makes
+   the bands travel like a light passing over the surface. */
+.foil{
+  background:linear-gradient(100deg,
+    var(--m-gold-4) 0%, var(--m-gold-2) 16%, var(--m-gold-1) 30%,
+    var(--m-gold-3) 46%, var(--m-gold-1) 62%, var(--m-gold-2) 78%, var(--m-gold-4) 100%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foilDrift 9s var(--ease-cine) infinite alternate;
+}
+@keyframes foilDrift{ to{ background-position:100% 0 } }
+
+/* steel variant for cool surfaces */
+.foil-steel{
+  background:linear-gradient(100deg,
+    var(--m-steel-4) 0%, var(--m-steel-2) 20%, var(--m-steel-1) 34%,
+    var(--m-steel-3) 52%, var(--m-steel-1) 68%, var(--m-steel-2) 82%, var(--m-steel-4) 100%);
+  background-size:280% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foilDrift 11s var(--ease-cine) infinite alternate;
+}
+
+/* ---- engraved / embossed type on metal ---------------------------------- */
+.engrave{ text-shadow:0 1px 0 rgba(255,255,255,.22), 0 -1px 1px rgba(0,0,0,.55) }
+.emboss{ text-shadow:0 -1px 0 rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.30) }
+
+/* ---- .plate — a machined metal surface ----------------------------------
+   Four stacked layers: brushed micro-grain, an anisotropic sheen band, the
+   body gradient, and a bevel drawn entirely in inset shadows. */
+.plate{
+  position:relative;isolation:isolate;
+  background:
+    repeating-linear-gradient(96deg, rgba(255,255,255,.030) 0 1px, transparent 1px 3px),
+    linear-gradient(168deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 34%),
+    linear-gradient(160deg, #16223F 0%, #0B142C 55%, #060C1E 100%);
+  background-color:#0B142C;
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.55),
+    inset 1px 0 0 rgba(255,255,255,.05),
+    inset -1px 0 0 rgba(0,0,0,.3),
+    0 24px 60px -28px rgba(0,0,0,.85);
+}
+/* gold-anodised variant */
+.plate-gold{
+  background:
+    repeating-linear-gradient(96deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    linear-gradient(168deg, rgba(255,255,255,.24) 0%, rgba(255,255,255,0) 40%),
+    linear-gradient(158deg, var(--m-gold-2) 0%, var(--m-gold-3) 42%, var(--m-gold-4) 76%, var(--m-gold-3) 100%);
+  border-color:rgba(255,235,190,.5);
+  box-shadow:
+    inset 0 1px 0 rgba(255,248,225,.75),
+    inset 0 -2px 2px rgba(74,55,18,.6),
+    0 18px 44px -20px rgba(201,151,59,.6);
+}
+
+/* ---- .bezel — a thin machined ring around a component ------------------- */
+.bezel{
+  border:1px solid rgba(226,180,92,.30);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.22),
+    inset 0 -1px 0 rgba(0,0,0,.45),
+    0 0 0 1px rgba(0,0,0,.35);
+}
+
+/* ---- .sweep — a specular highlight that travels across on hover --------- */
+.sweep{position:relative;overflow:hidden}
+.sweep::after{
+  content:"";position:absolute;inset:-40% -60%;pointer-events:none;z-index:3;
+  background:linear-gradient(74deg,transparent 38%,rgba(255,255,255,.30) 47%,rgba(255,255,255,.62) 50%,rgba(255,255,255,.30) 53%,transparent 62%);
+  transform:translateX(-130%);
+  transition:transform 1.05s var(--ease-cine);
+}
+.sweep:hover::after,.sweep:focus-within::after{transform:translateX(130%)}
+
+/* ---- .rail — a recessed channel (sliders, progress, tracks) ------------- */
+.rail{
+  background:linear-gradient(180deg,#05091A 0%,#0D1630 100%);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.8), inset 0 -1px 0 rgba(255,255,255,.10);
+  border-radius:999px;
+}
+.rail-fill{
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-3) 30%,var(--m-gold-1) 55%,var(--m-gold-2) 80%,var(--m-gold-3));
+  box-shadow:0 0 12px -2px rgba(226,180,92,.85), inset 0 1px 0 rgba(255,255,255,.6);
+  border-radius:999px;
+}
+
+/* ---- .hairline — the thin luminous top edge on glass -------------------- */
+.hairline{position:relative}
+.hairline::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;z-index:4;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55) 30%,rgba(255,235,190,.75) 50%,rgba(255,255,255,.55) 70%,transparent);
+}
+
+/* ---- .mono — the technical label voice ---------------------------------- */
+.mono{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;font-weight:500;
+}
+
+/* ==========================================================================
+   2 — THE VAULT (cinematic cover)
+   ========================================================================== */
+.vault{
+  position:relative;
+  /* five chapters × ~90vh of travel each, plus the opening hold */
+  height:520vh;
+  background:var(--v-abyss);
+  color:#fff;
+  isolation:isolate;
+}
+.vault-stage{
+  position:sticky;top:0;height:100vh;width:100%;overflow:hidden;
+  display:grid;place-items:stretch;
+}
+/* the WebGL canvas lands in here (z-index 1, pointer-events none) */
+.vault-canvas-host{position:absolute;inset:0;z-index:1}
+
+/* ---- CSS-only cinematic (always present; the film draws on top of it) ----
+   Aurora dome, ridge silhouettes, a light column and a gold crest. On a
+   device that gets WebGL this is simply covered; on one that doesn't, it IS
+   the cover — and it still looks like a film. */
+.vault-fallback{position:absolute;inset:0;z-index:0;overflow:hidden;background:
+  radial-gradient(120% 80% at 50% 108%, rgba(76,42,134,.55) 0%, transparent 62%),
+  radial-gradient(80% 60% at 62% 22%, rgba(29,33,96,.75) 0%, transparent 70%),
+  linear-gradient(180deg,#04091A 0%,#070E28 46%,#0B1030 74%,#120C2C 100%);
+}
+.vault-aurora{
+  position:absolute;left:-20%;right:-20%;top:26%;height:46vh;pointer-events:none;
+  background:
+    radial-gradient(60% 42% at 30% 60%, rgba(47,182,201,.32), transparent 70%),
+    radial-gradient(52% 38% at 68% 42%, rgba(120,60,190,.34), transparent 72%),
+    radial-gradient(40% 30% at 50% 76%, rgba(226,180,92,.20), transparent 70%);
+  filter:blur(28px);
+  animation:auroraDrift 26s ease-in-out infinite alternate;
+}
+@keyframes auroraDrift{
+  0%{transform:translate3d(-4%,0,0) scale(1)}
+  50%{transform:translate3d(3%,-3%,0) scale(1.10)}
+  100%{transform:translate3d(5%,2%,0) scale(.96)}
+}
+.vault-sun{
+  position:absolute;left:52%;top:52%;width:46vmin;height:46vmin;transform:translate(-50%,-50%);
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,rgba(255,238,200,.95) 0%,rgba(226,180,92,.55) 22%,rgba(226,180,92,.16) 44%,transparent 70%);
+  filter:blur(6px);
+  animation:sunPulse 7s ease-in-out infinite alternate;
+}
+@keyframes sunPulse{to{transform:translate(-50%,-50%) scale(1.09);opacity:.86}}
+.vault-ridge{position:absolute;left:0;right:0;bottom:0;width:100%;pointer-events:none;display:block}
+.vault-ridge-1{height:38vh;opacity:.95}
+.vault-ridge-2{height:30vh;opacity:.8}
+.vault-ridge-3{height:23vh;opacity:.6}
+.vault-mirror{
+  position:absolute;left:0;right:0;bottom:0;height:22vh;pointer-events:none;
+  background:
+    radial-gradient(50% 100% at 50% 0%, rgba(226,180,92,.34), transparent 72%),
+    repeating-linear-gradient(90deg, rgba(120,150,220,.05) 0 2px, transparent 2px 7px),
+    linear-gradient(180deg, rgba(76,42,134,.30), transparent 80%);
+  filter:blur(1.5px);
+}
+/* the crest that stands in for the 3D artifact — sits right of centre so the
+   headline block on the left never has to fight it (the 3D camera does the
+   same thing via a look-at offset) */
+.vault-crest{
+  position:absolute;left:68%;top:46%;transform:translate(-50%,-50%);
+  width:min(30vmin,240px);aspect-ratio:.70;
+  /* a heraldic crest, matching the 3D artifact's silhouette */
+  border-radius:12% 12% 46% 46% / 8% 8% 60% 60%;
+  background:linear-gradient(158deg,var(--m-gold-2) 0%,var(--m-gold-3) 44%,var(--m-gold-4) 78%,var(--m-gold-3) 100%);
+  box-shadow:
+    inset 0 2px 0 rgba(255,248,225,.85), inset 0 -3px 6px rgba(74,55,18,.7),
+    0 0 70px -10px rgba(226,180,92,.65), 0 40px 90px -30px rgba(0,0,0,.9);
+  display:grid;place-items:center;
+  animation:crestFloat 8s ease-in-out infinite alternate;
+}
+.vault-crest::after{
+  content:"";position:absolute;top:9%;width:17%;aspect-ratio:1;border-radius:50%;
+  border:2px solid rgba(255,250,235,.85);
+  box-shadow:0 0 18px rgba(255,240,205,.6), inset 0 0 14px rgba(255,240,205,.5);
+}
+.vault-crest svg{width:60%;margin-top:8%;position:relative;z-index:2;filter:drop-shadow(0 2px 4px rgba(60,40,10,.6))}
+@keyframes crestFloat{to{transform:translate(-50%,calc(-50% - 14px))}}
+@media(max-width:900px){ .vault-crest{left:50%;top:38%;width:min(34vmin,190px)} }
+/* once the film is running, hide the stand-in */
+.vault-gl-on .vault-fallback{opacity:0;transition:opacity .9s ease .25s;pointer-events:none}
+
+/* ---- grab surface: the click-and-hold rotate layer ---------------------- */
+.vault-grab{
+  position:absolute;inset:0;z-index:2;cursor:grab;touch-action:pan-y;
+  background:transparent;
+}
+.vault:not(.vault-gl-on) .vault-grab{display:none}
+.vault.is-grabbing .vault-grab{cursor:grabbing}
+
+/* ---- the scrim: cinema always grades down the side the type sits on ----- */
+.vault-stage::before{
+  content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+  background:
+    linear-gradient(96deg, rgba(4,9,26,.88) 0%, rgba(4,9,26,.60) 26%, rgba(4,9,26,.14) 50%, transparent 66%),
+    linear-gradient(0deg, rgba(4,9,26,.70) 0%, transparent 30%),
+    linear-gradient(180deg, rgba(4,9,26,.55) 0%, transparent 22%);
+}
+@media(max-width:900px){
+  /* Vertical split: a light top wash for the HUD, a hard floor from 52% down
+     so the headline never has to sit on top of the artifact. */
+  .vault-stage::before{
+    background:linear-gradient(180deg,
+      rgba(4,9,26,.62) 0%, rgba(4,9,26,.18) 20%, rgba(4,9,26,.10) 40%,
+      rgba(4,9,26,.72) 58%, rgba(4,9,26,.92) 78%, rgba(4,9,26,.97) 100%);
+  }
+}
+
+/* ---- the UI plate over the film ---------------------------------------- */
+.vault-ui{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+  display:grid;grid-template-rows:auto 1fr auto;
+  padding:clamp(84px,11vh,132px) clamp(20px,5vw,68px) clamp(24px,4vh,44px);
+  max-width:1440px;margin:0 auto;width:100%;
+}
+.vault-ui a,.vault-ui button{pointer-events:auto}
+
+/* top strip: the technical HUD */
+.vault-hud{display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:rgba(255,255,255,.55)}
+.vault-hud .mono{font-size:10px;letter-spacing:.24em}
+.vault-hud .dot{width:6px;height:6px;border-radius:50%;background:var(--v-gold);box-shadow:0 0 10px var(--v-gold);animation:pulse 2.4s infinite}
+.vault-hud .sep{flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.22),transparent);min-width:20px}
+
+/* ---- chapter copy: left-anchored, uppercase, cross-faded ----------------
+   All five chapters occupy the same grid cell, so they cross-fade in place
+   without absolute positioning or a measured height. */
+.vault-chapters{position:relative;display:grid;align-self:stretch;min-height:0}
+.vault-chapter{
+  grid-area:1 / 1;
+  display:flex;flex-direction:column;justify-content:center;
+  max-width:min(44ch,50vw);
+  opacity:0;visibility:hidden;
+  transform:translateY(26px);
+  transition:opacity .7s var(--ease-cine), transform .9s var(--ease-cine), visibility 0s .7s;
+}
+.vault-chapter.is-live{opacity:1;visibility:visible;transform:none;transition-delay:0s,0s,0s}
+.vault-chapter .idx{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  color:var(--v-gold);
+}
+.vault-chapter .idx b{
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;font-weight:500;
+}
+.vault-chapter .idx i{width:38px;height:1px;background:linear-gradient(90deg,var(--v-gold),transparent);display:block}
+.vault-chapter h1,
+.vault-chapter h2{
+  font-family:'Sora',sans-serif;font-weight:700;
+  font-size:clamp(27px,4.1vw,56px);line-height:.96;letter-spacing:-.035em;
+  text-transform:uppercase;color:#fff;
+  text-shadow:0 2px 40px rgba(0,0,0,.8), 0 1px 3px rgba(0,0,0,.7);
+  text-wrap:balance;
+}
+.vault-chapter h1 em,
+.vault-chapter h2 em{font-style:normal;display:block}
+/* The gold line is the *accent*, not a second headline — half the size,
+   wider tracking, its own glow instead of a dark shadow. That keeps a five
+   word headline to three lines instead of six. */
+.vault-chapter em.foil{
+  font-size:.50em;letter-spacing:-.01em;line-height:1.12;margin-top:.55em;
+  text-shadow:none;filter:drop-shadow(0 4px 26px rgba(226,180,92,.45));
+}
+.vault-chapter p{
+  margin-top:20px;max-width:44ch;font-size:clamp(14.5px,1.35vw,17px);
+  color:rgba(255,255,255,.76);line-height:1.62;
+  text-shadow:0 1px 20px rgba(0,0,0,.8);
+}
+.vault-chapter .more{
+  display:inline-flex;align-items:center;gap:10px;margin-top:26px;
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--v-gold);text-decoration:none;
+  border-bottom:1px solid rgba(226,180,92,.35);padding-bottom:7px;
+  transition:color .2s,border-color .2s,gap .2s;
+}
+.vault-chapter .more:hover{color:#fff;border-color:rgba(255,255,255,.7);gap:16px}
+.vault-chapter .more span{font-size:15px;line-height:1}
+
+/* chapter CTAs (first + last chapters carry the real buttons) */
+.vault-acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+
+/* ---- the chapter rail (right edge) ------------------------------------- */
+.vault-rail{
+  position:absolute;right:clamp(14px,3vw,40px);top:50%;translate:0 -50%;z-index:6;
+  display:flex;flex-direction:column;gap:16px;align-items:flex-end;pointer-events:auto;
+}
+.vault-rail button{
+  display:flex;align-items:center;gap:12px;background:none;border:none;cursor:pointer;padding:4px 0;
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,255,255,.30);transition:color .3s var(--ease-cine);
+}
+.vault-rail button .lbl{
+  opacity:0;transform:translateX(8px);transition:opacity .35s,transform .35s var(--ease-cine);
+  white-space:nowrap;
+}
+.vault-rail button i{
+  width:26px;height:2px;border-radius:2px;background:rgba(255,255,255,.24);display:block;flex-shrink:0;
+  transition:width .45s var(--ease-cine),background .35s,box-shadow .35s;
+}
+.vault-rail button:hover{color:rgba(255,255,255,.75)}
+.vault-rail button:hover .lbl{opacity:1;transform:none}
+.vault-rail button.is-past i{background:rgba(226,180,92,.5)}
+.vault-rail button.is-live{color:#fff}
+.vault-rail button.is-live .lbl{opacity:1;transform:none}
+.vault-rail button.is-live i{
+  width:52px;background:linear-gradient(90deg,var(--m-gold-3),var(--m-gold-1));
+  box-shadow:0 0 14px -1px rgba(226,180,92,.9);
+}
+.vault-rail button:focus-visible{outline:2px solid var(--v-gold);outline-offset:4px;border-radius:3px}
+
+/* ---- bottom strip: hold-hint + scroll cue + progress -------------------- */
+.vault-foot{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.vault-hold{
+  display:inline-flex;align-items:center;gap:11px;padding:9px 16px;border-radius:999px;
+  background:rgba(8,14,32,.5);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.14);
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.72);
+  transition:opacity .5s ease;
+}
+.vault-hold .ring{
+  width:15px;height:15px;border-radius:50%;border:1.5px solid var(--v-gold);position:relative;flex-shrink:0;
+}
+.vault-hold .ring::after{
+  content:"";position:absolute;inset:3px;border-radius:50%;background:var(--v-gold);
+  animation:holdPulse 1.9s var(--ease-cine) infinite;
+}
+@keyframes holdPulse{0%,100%{transform:scale(.55);opacity:.5}50%{transform:scale(1);opacity:1}}
+.vault:not(.vault-gl-on) .vault-hold{display:none}
+.vault.has-grabbed .vault-hold{opacity:0;pointer-events:none}
+
+.vault-scroll{
+  display:flex;align-items:center;gap:11px;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(255,255,255,.45);
+}
+.vault-scroll i{
+  width:1px;height:34px;background:linear-gradient(180deg,rgba(255,255,255,.6),transparent);
+  display:block;position:relative;overflow:hidden;
+}
+.vault-scroll i::after{
+  content:"";position:absolute;left:0;width:1px;height:12px;background:var(--v-gold);
+  box-shadow:0 0 8px var(--v-gold);
+  animation:scrollTick 2.1s var(--ease-cine) infinite;
+}
+@keyframes scrollTick{0%{top:-12px}70%,100%{top:34px}}
+/* the cue retires once you've started */
+.vault[data-chapter]:not([data-chapter="0"]) .vault-scroll{opacity:0;transition:opacity .4s}
+
+.vault-progress{
+  position:absolute;left:0;right:0;bottom:0;height:2px;z-index:7;
+  background:rgba(255,255,255,.08);
+}
+.vault-progress::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:calc(var(--vault-p,0) * 100%);
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-2) 60%,var(--m-gold-1));
+  box-shadow:0 0 16px -1px rgba(226,180,92,.9);
+  transition:width .12s linear;
+}
+
+/* ---- the handoff: stats plate that rides the bottom of the last chapter -- */
+.vault-stats{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:30px;
+}
+.vault-stat{
+  padding:11px 15px;border-radius:13px;min-width:0;
+  background:rgba(10,17,38,.44);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);
+  border:1px solid rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26);
+}
+.vault-stat b{
+  font-family:'Sora',sans-serif;font-weight:700;font-size:25px;line-height:1;display:block;
+  letter-spacing:-.02em;color:#fff;white-space:nowrap;font-variant-numeric:tabular-nums;
+}
+.vault-stat b em{font-style:normal;color:var(--m-gold-2)}
+/* direct child only — the count-up <span> lives INSIDE the <b> and must not
+   inherit the caption's 9.5px block styling */
+.vault-stat > span{
+  font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:rgba(255,255,255,.55);display:block;margin-top:6px;
+}
+.vault-stat b span{font:inherit;color:inherit;letter-spacing:inherit;text-transform:none;display:inline;margin:0}
+
+@media(max-width:900px){
+  .vault{height:460vh}
+  /* the sticky mobile call bar owns the last ~70px of the viewport */
+  .vault-ui{padding:88px 20px calc(104px + env(safe-area-inset-bottom))}
+  .vault-chapters{max-width:none}
+  /* bottom-aligned: the film owns the top half, the words own the bottom */
+  .vault-chapter{justify-content:flex-end;max-width:none}
+  .vault-chapter p{max-width:none;margin-top:14px}
+  .vault-chapter .idx{margin-bottom:14px}
+  .vault-chapter em.foil{font-size:.56em;margin-top:.4em}
+  .vault-acts{margin-top:20px;gap:9px}
+  /* 46% basis: two short labels share a row, two long ones wrap cleanly
+     instead of overflowing the viewport */
+  .vault-acts .btn{padding:13px 16px;font-size:14px;flex:1 1 46%;min-width:0;justify-content:center}
+  .vault-hud{gap:8px;font-size:9px}
+  .vault-hud .sep{display:none}
+  .vault-hud .mono{font-size:9px;letter-spacing:.18em}
+  .vault-hud .mono:last-child{display:none}   /* the NPN line repeats in the footer */
+  .vault-foot{margin-top:14px}
+  .vault-rail{right:10px;gap:13px}
+  .vault-rail button .lbl{display:none}
+  .vault-scroll span{display:none}
+  .vault-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .vault-stat{padding:10px 12px}
+  .vault-stat b{font-size:21px}
+}
+@media(max-width:520px){
+  .vault-chapter h1,.vault-chapter h2{font-size:clamp(27px,8.6vw,40px)}
+  .vault-hold{font-size:9.5px;padding:8px 12px}
+}
+@media(max-width:430px){ .vault-acts .btn{flex:1 1 100%} }
+
+/* ==========================================================================
+   3 — THE HOME PAGE
+   ========================================================================== */
+
+/* ---- nav: a machined bar --------------------------------------------- */
+nav.liquid-glass{
+  background:linear-gradient(180deg,rgba(10,17,38,.72),rgba(5,9,26,.62));
+  border-bottom:1px solid rgba(255,255,255,.10);
+  box-shadow:0 1px 0 rgba(255,255,255,.10) inset, 0 18px 46px -26px rgba(0,0,0,.9);
+}
+nav .logo-mark{
+  background:linear-gradient(155deg,#1B2A4E,#070E22);
+  border:1px solid rgba(226,180,92,.55);
+  box-shadow:inset 0 1px 0 rgba(255,235,190,.4), 0 6px 18px -8px rgba(226,180,92,.5);
+}
+.nav-links a{position:relative}
+.nav-links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:-6px;height:1px;
+  background:linear-gradient(90deg,var(--m-gold-3),var(--m-gold-1));
+  transform:scaleX(0);transform-origin:left;transition:transform .32s var(--ease-cine);
+}
+.nav-links a:hover::after{transform:scaleX(1)}
+
+/* ---- buttons: struck metal keys --------------------------------------- */
+.btn{
+  position:relative;overflow:hidden;isolation:isolate;
+  transition:transform .22s var(--ease-cine), box-shadow .22s var(--ease-cine), background .22s, color .22s, border-color .22s;
+}
+.btn::after{
+  content:"";position:absolute;inset:-40% -60%;z-index:-1;pointer-events:none;
+  background:linear-gradient(74deg,transparent 40%,rgba(255,255,255,.42) 49%,rgba(255,255,255,.75) 51%,rgba(255,255,255,.42) 53%,transparent 62%);
+  transform:translateX(-130%);transition:transform .95s var(--ease-cine);
+}
+.btn:hover::after{transform:translateX(130%)}
+.btn-brass{
+  background:linear-gradient(158deg,var(--m-gold-2) 0%,var(--m-gold-3) 46%,var(--m-gold-4) 100%);
+  color:#160E02;border-color:rgba(255,240,205,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,250,232,.85),
+    inset 0 -2px 3px rgba(74,55,18,.55),
+    0 12px 30px -14px rgba(201,151,59,.75);
+  text-shadow:0 1px 0 rgba(255,244,214,.5);
+}
+.btn-brass:hover{
+  background:linear-gradient(158deg,var(--m-gold-1) 0%,var(--m-gold-2) 46%,var(--m-gold-3) 100%);
+  transform:translateY(-2px);
+  box-shadow:inset 0 1px 0 rgba(255,252,242,.95), inset 0 -2px 3px rgba(74,55,18,.5), 0 20px 44px -16px rgba(226,180,92,.85);
+}
+.btn-brass:active{transform:translateY(0);box-shadow:inset 0 2px 5px rgba(74,55,18,.7)}
+.btn-ghost-light{
+  border-color:rgba(255,255,255,.24);
+  background:rgba(255,255,255,.045);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.18);
+}
+.btn-ghost-light:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.42);transform:translateY(-2px)}
+.btn-navy{
+  background:linear-gradient(160deg,#1A2C52,#080F24);
+  border-color:rgba(255,255,255,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.20), inset 0 -2px 3px rgba(0,0,0,.6), 0 14px 32px -16px rgba(0,0,0,.8);
+}
+.btn-navy:hover{transform:translateY(-2px);box-shadow:inset 0 1px 0 rgba(255,255,255,.26), 0 20px 40px -16px rgba(0,0,0,.9)}
+.btn-ghost-dark{
+  border-color:rgba(14,31,62,.22);background:linear-gradient(180deg,#fff,#EEF2F9);
+  box-shadow:inset 0 1px 0 #fff, 0 6px 18px -10px rgba(8,18,38,.4);
+}
+.btn-ghost-dark:hover{border-color:rgba(201,151,59,.6);transform:translateY(-2px)}
+
+/* ---- section headings: gold rule + technical eyebrow ------------------- */
+.eyebrow{position:relative;display:inline-flex;align-items:center;gap:11px}
+.eyebrow::before{
+  content:"";width:26px;height:1px;flex-shrink:0;
+  background:linear-gradient(90deg,var(--m-gold-3),transparent);
+}
+
+/* ---- coverage cards: glass over metal, with a live edge ---------------- */
+.cover-card{
+  border-radius:20px;
+  transition:transform .4s var(--ease-cine), box-shadow .4s var(--ease-cine), border-color .3s;
+}
+.cover-card::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;z-index:3;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);
+}
+/* the specular sweep, on hover */
+.cover-card::after{
+  content:"";position:absolute;inset:-40% -60%;z-index:2;pointer-events:none;
+  background:linear-gradient(74deg,transparent 42%,rgba(255,255,255,.22) 49%,rgba(255,255,255,.45) 51%,rgba(255,255,255,.22) 53%,transparent 60%);
+  transform:translateX(-130%);transition:transform 1.1s var(--ease-cine);
+}
+.cover-card:hover::after{transform:translateX(130%)}
+.cover-card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(226,180,92,.62);
+  box-shadow:0 40px 80px -34px rgba(8,18,38,.6), 0 0 0 1px rgba(226,180,92,.22);
+}
+.cover-card .tag{
+  display:inline-block;padding:5px 11px;border-radius:999px;
+  background:rgba(91,141,239,.10);border:1px solid rgba(91,141,239,.28);
+  color:var(--blue);margin-bottom:18px;font-size:9.5px;letter-spacing:.2em;
+}
+.cover-card.wide .tag{background:rgba(226,180,92,.12);border-color:rgba(226,180,92,.4);color:var(--m-gold-2)}
+.cover-card li::before{
+  background:linear-gradient(90deg,var(--m-gold-3),var(--m-gold-1));
+  box-shadow:0 0 6px -1px rgba(226,180,92,.8);
+}
+.cover-card .go{
+  position:relative;padding:11px 0 0;border-top:1px solid rgba(14,31,62,.10);width:100%;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  transition:color .2s,letter-spacing .3s var(--ease-cine);
+}
+.cover-card.wide .go{border-top-color:rgba(255,255,255,.14)}
+.cover-card .go:hover{letter-spacing:.24em}
+
+/* ---- coverage: a lit gallery, not a form ------------------------------- */
+#coverage{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 70% at 50% -10%, rgba(226,180,92,.10) 0%, transparent 55%),
+    radial-gradient(90% 60% at 8% 40%, rgba(91,141,239,.08) 0%, transparent 60%),
+    linear-gradient(180deg,#FFFFFF 0%,#F6F8FC 40%,#EEF2F9 100%);
+}
+/* the same 56px layout grid the cover's shader refracts — it ties the light
+   sections to the film without shouting */
+#coverage::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(14,31,62,.035) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(14,31,62,.035) 1px,transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(80% 60% at 50% 40%,#000,transparent 78%);
+}
+#coverage .wrap{position:relative;z-index:1}
+
+/* catalogue numbering: 01 · FOR HOMEOWNERS */
+.cover-grid{counter-reset:cov}
+.cover-card{counter-increment:cov}
+.cover-card .tag{align-self:flex-start}   /* flex children stretch by default */
+.cover-card .tag::before{
+  content:counter(cov,decimal-leading-zero) " · ";
+  color:var(--m-gold-3);font-weight:600;
+}
+.cover-card.wide .tag::before{color:var(--m-gold-1)}
+/* the action row sits on a common baseline across cards of unequal length */
+.cover-card .go{margin-top:auto}
+
+/* ---- IUL band: the gauge treatment ------------------------------------ */
+.iul-point .ic{
+  background:linear-gradient(158deg,rgba(226,180,92,.22),rgba(201,151,59,.06));
+  border-color:rgba(226,180,92,.5);
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.35), 0 6px 16px -10px rgba(226,180,92,.6);
+}
+.iul-bar .track{
+  height:12px;
+  background:linear-gradient(180deg,#05091A,#0D1630);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.85), inset 0 -1px 0 rgba(255,255,255,.10);
+  border-radius:999px;position:relative;overflow:hidden;
+}
+/* tick marks etched into the gauge */
+.iul-bar .track::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:repeating-linear-gradient(90deg,transparent 0 9.9%,rgba(255,255,255,.13) 9.9% 10%);
+}
+.iul-bar .fill{
+  /* <i> is inline by default, so width/height were being ignored and the
+     gauge never filled — a pre-existing bug the bigger gauge made visible. */
+  display:block;
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-3) 28%,var(--m-gold-1) 56%,var(--m-gold-2) 82%,var(--m-gold-3));
+  box-shadow:0 0 14px -2px rgba(226,180,92,.9), inset 0 1px 0 rgba(255,255,255,.6);
+  transition:width 1.2s var(--ease-cine);
+}
+.iul-bar.down .fill{
+  background:linear-gradient(90deg,#2E3A4E,#5A6B78);
+  box-shadow:0 0 10px -4px rgba(120,140,165,.7), inset 0 1px 0 rgba(255,255,255,.22);
+}
+.iul-bar{grid-template-columns:84px 1fr}
+.iul-bar .yr{letter-spacing:.04em;font-size:11px;white-space:nowrap}
+
+/* the floor: the whole point of the chart, so it gets drawn */
+.iul-preview{position:relative}
+.iul-bars{position:relative}
+.iul-bar.down .track::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:5.5%;z-index:3;
+  background:linear-gradient(90deg,rgba(226,180,92,.55),transparent);
+  border-left:1.5px solid var(--m-gold-2);
+  box-shadow:0 0 10px -1px rgba(226,180,92,.9);
+}
+.iul-preview .cap{display:flex;align-items:center;gap:10px}
+.iul-preview .cap::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(226,180,92,.4),transparent)}
+
+/* ---- walkthrough tables: struck plate headers ------------------------- */
+.wt-table{border-radius:16px;box-shadow:inset 0 1px 0 #fff, 0 18px 40px -26px rgba(8,18,38,.5)}
+.wt-table thead th{
+  background:linear-gradient(180deg,#14213F,#080F24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+  color:var(--m-gold-2);
+}
+.wt-table tbody tr{transition:background .2s}
+.wt-table tbody tr:hover{background:rgba(226,180,92,.07)}
+.fitbox{border-radius:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+
+/* ---- FAQ answers read as documents, not paragraphs -------------------- */
+.faq-a p{border-left:2px solid rgba(226,180,92,.28);padding-left:18px;margin-bottom:8px}
+
+/* ---- AI band: the concierge console ----------------------------------- */
+.ai-feat .ic{
+  background:linear-gradient(158deg,rgba(226,180,92,.22),rgba(201,151,59,.06));
+  border-color:rgba(226,180,92,.5);
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.35);
+}
+.chat-head .avatar{
+  background:linear-gradient(150deg,var(--m-gold-1),var(--m-gold-3) 55%,var(--m-gold-4));
+  box-shadow:inset 0 1px 0 rgba(255,252,240,.9), 0 6px 16px -8px rgba(226,180,92,.8);
+}
+.msg.user{
+  background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-3));
+  box-shadow:inset 0 1px 0 rgba(255,250,232,.7), 0 8px 18px -12px rgba(201,151,59,.9);
+}
+.chip{
+  background:rgba(226,180,92,.06);
+  transition:background .2s,border-color .2s,transform .2s var(--ease-cine),box-shadow .2s;
+}
+.chip:hover{background:rgba(226,180,92,.18);transform:translateY(-1px);box-shadow:0 6px 14px -8px rgba(226,180,92,.8)}
+.icon-btn.send{
+  background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-4));
+  box-shadow:inset 0 1px 0 rgba(255,250,232,.8), 0 8px 18px -10px rgba(201,151,59,.8);
+}
+#fabChat{
+  background:linear-gradient(150deg,var(--m-gold-1),var(--m-gold-3) 50%,var(--m-gold-4));
+  box-shadow:inset 0 1px 0 rgba(255,252,240,.9), 0 18px 40px -12px rgba(201,151,59,.7);
+}
+
+/* ==========================================================================
+   4 — THE INSTRUMENTS (quiz, studio, forms)
+   ========================================================================== */
+
+/* ---- FIT CHECK: a precision instrument -------------------------------- */
+.fit-shell{
+  border-radius:24px;overflow:hidden;position:relative;
+  background:linear-gradient(180deg,#FFFFFF 0%,#F7F9FD 100%);
+  border:1px solid rgba(14,31,62,.10);
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 40px 90px -40px rgba(8,18,38,.45),
+    0 0 0 1px rgba(226,180,92,.14);
+}
+/* the machined header rail with the progress bar milled into it */
+.fit-bar{
+  height:6px;background:linear-gradient(180deg,#0A1128,#131E3C);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.6);
+  position:relative;overflow:hidden;
+}
+.fit-bar::before{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent 0 24.9%,rgba(255,255,255,.20) 24.9% 25%);
+}
+.fit-bar i{
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-3) 30%,var(--m-gold-1) 62%,var(--m-gold-2));
+  box-shadow:0 0 18px 0 rgba(226,180,92,.9);
+  transition:width .55s var(--ease-cine);
+}
+.fit-step-label{
+  display:inline-flex;align-items:center;gap:10px;
+}
+.fit-step-label::before{
+  content:"";width:22px;height:1px;background:linear-gradient(90deg,var(--m-gold-3),transparent);flex-shrink:0;
+}
+.fit-q{
+  font-size:clamp(22px,2.7vw,30px);letter-spacing:-.025em;
+  animation:fitIn .55s var(--ease-cine) both;
+}
+.fit-opts{animation:fitIn .55s var(--ease-cine) .06s both}
+@keyframes fitIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* option keys: pressable metal-edged tiles */
+.fit-opt{
+  position:relative;overflow:hidden;isolation:isolate;
+  border-radius:14px;padding:17px 22px 17px 21px;
+  background:linear-gradient(180deg,#FFFFFF,#F2F5FB);
+  border:1.5px solid rgba(14,31,62,.10);
+  box-shadow:inset 0 1px 0 #fff, 0 2px 6px -3px rgba(8,18,38,.22);
+  transition:transform .28s var(--ease-cine), border-color .22s, box-shadow .28s, padding-left .28s var(--ease-cine);
+}
+/* the gold edge that lights up on hover */
+.fit-opt::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;z-index:2;
+  background:linear-gradient(180deg,var(--m-gold-1),var(--m-gold-3),var(--m-gold-4));
+  transform:scaleY(0);transform-origin:center;
+  transition:transform .34s var(--ease-cine);
+}
+.fit-opt::after{
+  content:"";position:absolute;inset:-40% -60%;z-index:1;pointer-events:none;
+  background:linear-gradient(74deg,transparent 42%,rgba(255,255,255,.55) 50%,transparent 58%);
+  transform:translateX(-130%);transition:transform .9s var(--ease-cine);
+}
+.fit-opt:hover{
+  transform:translateX(0) translateY(-2px);padding-left:27px;
+  border-color:rgba(226,180,92,.55);
+  box-shadow:inset 0 1px 0 #fff, 0 14px 30px -16px rgba(201,151,59,.7), 0 0 0 1px rgba(226,180,92,.16);
+}
+.fit-opt:hover::before{transform:scaleY(1)}
+.fit-opt:hover::after{transform:translateX(130%)}
+.fit-opt:active{transform:translateY(0);box-shadow:inset 0 2px 6px rgba(8,18,38,.18)}
+
+.fit-back{
+  display:inline-flex;align-items:center;gap:8px;letter-spacing:.14em;text-transform:uppercase;font-size:10.5px;
+  transition:gap .25s var(--ease-cine),color .2s;
+}
+.fit-back:hover{gap:13px;color:var(--m-gold-4)}
+
+/* the result: a certificate, not a paragraph */
+.fit-result{animation:fitIn .7s var(--ease-cine) both}
+.fit-result h3{
+  font-size:clamp(24px,3vw,32px);letter-spacing:-.025em;
+  display:flex;align-items:flex-start;gap:14px;
+}
+.fit-result h3::before{
+  content:"";width:34px;height:34px;border-radius:50%;flex-shrink:0;margin-top:2px;
+  background:radial-gradient(circle at 34% 28%,var(--m-gold-1),var(--m-gold-3) 55%,var(--m-gold-4));
+  box-shadow:inset 0 1px 0 rgba(255,252,240,.9), 0 6px 18px -8px rgba(226,180,92,.9);
+  position:relative;
+}
+.fit-result .next{
+  background:linear-gradient(160deg,#0E1F3E,#070E22);
+  color:rgba(255,255,255,.82);border:1px solid rgba(226,180,92,.28);
+  border-radius:16px;padding:22px 24px;position:relative;overflow:hidden;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 20px 44px -26px rgba(8,18,38,.8);
+}
+.fit-result .next::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.75),transparent);
+}
+.fit-result .next b{color:var(--m-gold-2)}
+
+/* ---- ESTIMATE STUDIO: the machined console ---------------------------- */
+.q-shell{
+  border-radius:26px;overflow:hidden;
+  background:
+    repeating-linear-gradient(96deg,rgba(255,255,255,.022) 0 1px,transparent 1px 3px),
+    linear-gradient(160deg,#122145 0%,#0A1330 52%,#060C1E 100%);
+  border:1px solid rgba(226,180,92,.26);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.20),
+    inset 0 -1px 0 rgba(0,0,0,.6),
+    0 44px 90px -40px rgba(0,0,0,.85);
+}
+.q-tabs{
+  gap:7px;padding:16px 20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,0));
+  border-bottom:1px solid rgba(255,255,255,.10);
+}
+.q-tab{
+  border-radius:11px;padding:9px 17px;font-size:12.5px;letter-spacing:.02em;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16);
+  transition:all .26s var(--ease-cine);
+}
+.q-tab:hover{background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));transform:translateY(-1px)}
+.q-tab.on{
+  background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-4));
+  border-color:rgba(255,240,205,.6);color:#160E02;
+  box-shadow:inset 0 1px 0 rgba(255,250,232,.85), 0 10px 22px -12px rgba(226,180,92,.9);
+  text-shadow:0 1px 0 rgba(255,244,214,.4);
+}
+
+/* sliders — a real machined rail with a knurled thumb */
+.q-field label b{
+  font-family:'IBM Plex Mono',monospace;
+  color:var(--m-gold-2);
+  padding:2px 9px;border-radius:6px;
+  background:rgba(226,180,92,.10);border:1px solid rgba(226,180,92,.24);
+  text-shadow:0 0 12px rgba(226,180,92,.6);
+}
+.q-field input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:26px;background:transparent;cursor:pointer;
+}
+.q-field input[type=range]::-webkit-slider-runnable-track{
+  height:7px;border-radius:999px;
+  background:linear-gradient(180deg,#04081A,#0D1630);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.9), inset 0 -1px 0 rgba(255,255,255,.10);
+}
+.q-field input[type=range]::-moz-range-track{
+  height:7px;border-radius:999px;
+  background:linear-gradient(180deg,#04081A,#0D1630);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.9);
+}
+.q-field input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;width:24px;height:24px;border-radius:50%;margin-top:-8.5px;
+  background:
+    repeating-conic-gradient(from 0deg, rgba(0,0,0,.22) 0deg 6deg, transparent 6deg 12deg),
+    radial-gradient(circle at 36% 30%, var(--m-gold-1), var(--m-gold-3) 52%, var(--m-gold-4) 100%);
+  border:1px solid rgba(255,244,214,.65);
+  box-shadow:
+    inset 0 1px 0 rgba(255,252,242,.9),
+    inset 0 -2px 3px rgba(74,55,18,.7),
+    0 4px 12px -3px rgba(0,0,0,.8),
+    0 0 18px -4px rgba(226,180,92,.9);
+  transition:transform .18s var(--ease-cine), box-shadow .18s;
+}
+.q-field input[type=range]::-moz-range-thumb{
+  width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,244,214,.65);
+  background:radial-gradient(circle at 36% 30%, var(--m-gold-1), var(--m-gold-3) 52%, var(--m-gold-4) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,252,242,.9), 0 4px 12px -3px rgba(0,0,0,.8), 0 0 18px -4px rgba(226,180,92,.9);
+}
+.q-field input[type=range]:hover::-webkit-slider-thumb{transform:scale(1.12)}
+.q-field input[type=range]:active::-webkit-slider-thumb{transform:scale(1.04);box-shadow:inset 0 2px 4px rgba(74,55,18,.8),0 0 22px -2px rgba(226,180,92,1)}
+.q-field input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(226,180,92,.35), 0 0 20px -3px rgba(226,180,92,1)}
+
+/* segmented keys */
+.q-seg button{
+  border-radius:10px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.015));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+  transition:all .24s var(--ease-cine);
+}
+.q-seg button:hover{background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.04));transform:translateY(-1px)}
+.q-seg button.on{
+  background:linear-gradient(180deg,rgba(226,180,92,.28),rgba(201,151,59,.10));
+  border-color:rgba(226,180,92,.75);color:var(--m-gold-1);
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.4), 0 0 18px -6px rgba(226,180,92,.9);
+}
+
+/* the readout — the money shot */
+.q-out{
+  position:relative;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(226,180,92,.10), transparent 62%),
+    linear-gradient(180deg,rgba(255,255,255,.03),transparent);
+}
+.q-out::before{
+  content:"";position:absolute;left:50%;top:0;translate:-50% 0;width:64%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.7),transparent);
+}
+.q-out .cap{display:inline-flex;align-items:center;gap:9px;justify-content:center}
+.q-out .cap::before,.q-out .cap::after{content:"";width:18px;height:1px;background:rgba(226,180,92,.45)}
+.q-price{
+  position:relative;
+  filter:drop-shadow(0 6px 26px rgba(226,180,92,.35));
+  animation:readout .5s var(--ease-cine);
+}
+.q-price em{
+  background:linear-gradient(100deg,var(--m-gold-4) 0%,var(--m-gold-2) 18%,var(--m-gold-1) 34%,var(--m-gold-2) 52%,var(--m-gold-1) 68%,var(--m-gold-3) 100%);
+  background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foilDrift 7s var(--ease-cine) infinite alternate;
+}
+@keyframes readout{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
+
+/* ---- LEAD CAPTURE FORMS: glass fields, gold focus ---------------------- */
+.cap-card{
+  position:relative;overflow:hidden;border-radius:18px;border-left-width:1px;
+  background:linear-gradient(160deg,#0E1F3E 0%,#070E22 92%);
+  border:1px solid rgba(226,180,92,.26);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 26px 60px -34px rgba(0,0,0,.85);
+  padding:24px 24px 22px;
+}
+.cap-card::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.8),transparent);
+}
+.cap-card h4{color:#fff;font-size:17px;display:flex;align-items:center;gap:10px}
+.cap-card h4::before{
+  content:"";width:7px;height:7px;border-radius:50%;flex-shrink:0;
+  background:var(--m-gold-2);box-shadow:0 0 10px var(--m-gold-2);
+}
+.cap-card .sub{color:rgba(255,255,255,.62)}
+.cap-card input[type=text],
+.cap-card input[type=email],
+.cap-card input[type=tel]{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:11px;color:#fff;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.35);
+  transition:border-color .22s, box-shadow .22s, background .22s;
+}
+.cap-card input::placeholder{color:rgba(255,255,255,.38)}
+.cap-card input[type=text]:focus,
+.cap-card input[type=email]:focus,
+.cap-card input[type=tel]:focus{
+  background:rgba(255,255,255,.09);
+  border-color:rgba(226,180,92,.75);
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.3), 0 0 0 3px rgba(226,180,92,.18), 0 0 22px -6px rgba(226,180,92,.8);
+  outline:none;
+}
+.cap-consent label{color:rgba(255,255,255,.55)}
+.cap-consent label a{color:var(--m-gold-2)}
+.cap-consent input{accent-color:var(--m-gold-3)}
+.cap-done b{color:#fff}
+.cap-done span{color:rgba(255,255,255,.65)}
+.cap-done a{color:var(--m-gold-2)}
+.cap-err{color:#FF8A8A}
+/* on the light fit-check card the dark form still reads correctly */
+.fit-result .cap-card{margin-top:24px}
+
+/* ---- the walkthrough (IUL) -------------------------------------------- */
+.wt{border-radius:24px;box-shadow:0 44px 100px -46px rgba(8,18,38,.6), 0 0 0 1px rgba(226,180,92,.14)}
+.wt-bar{
+  background:linear-gradient(180deg,#101C38,#070E22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.14);
+}
+.wt-step{border-top-width:1px;border-top-color:rgba(14,31,62,.14);position:relative}
+.wt-step::before{
+  content:"";position:absolute;left:0;top:-1px;width:58px;height:2px;
+  background:linear-gradient(90deg,var(--m-gold-3),var(--m-gold-1));
+  box-shadow:0 0 10px -1px rgba(226,180,92,.9);
+}
+.wt-callout{
+  border-radius:14px;border-left-width:2px;
+  background:linear-gradient(160deg,#F8FAFE,#EEF2F9);
+  box-shadow:inset 0 1px 0 #fff;
+}
+.flow-box{
+  background:linear-gradient(180deg,#FFFFFF,#F1F5FB);
+  border-radius:14px;box-shadow:inset 0 1px 0 #fff, 0 8px 20px -14px rgba(8,18,38,.35);
+  transition:transform .3s var(--ease-cine),box-shadow .3s;
+}
+.flow-box:hover{transform:translateY(-3px);box-shadow:0 18px 34px -20px rgba(8,18,38,.45)}
+
+/* ==========================================================================
+   5 — THE FACTS
+   ========================================================================== */
+
+/* ---- hero stat chips → machined counters ------------------------------- */
+.hstat{
+  border-radius:15px;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.30), 0 12px 30px -20px rgba(0,0,0,.8);
+  transition:transform .32s var(--ease-cine),border-color .3s,box-shadow .32s;
+}
+.hstat:hover{transform:translateY(-3px);border-color:rgba(226,180,92,.5);box-shadow:0 18px 36px -20px rgba(226,180,92,.5)}
+.hstat b{font-variant-numeric:tabular-nums}
+.hstat b em{
+  background:linear-gradient(100deg,var(--m-gold-2),var(--m-gold-1),var(--m-gold-3));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* ---- state chips: engraved plaques ------------------------------------ */
+.state-chip{
+  border-radius:13px;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#FFFFFF,#F2F5FB);
+  border:1px solid rgba(14,31,62,.10);
+  box-shadow:inset 0 1px 0 #fff, 0 4px 12px -8px rgba(8,18,38,.3);
+  transition:transform .3s var(--ease-cine),border-color .25s,box-shadow .3s;
+}
+.state-chip::after{
+  content:"";position:absolute;inset:-40% -60%;pointer-events:none;
+  background:linear-gradient(74deg,transparent 42%,rgba(255,255,255,.7) 50%,transparent 58%);
+  transform:translateX(-130%);transition:transform .85s var(--ease-cine);
+}
+.state-chip:hover::after{transform:translateX(130%)}
+.state-chip:hover{transform:translateY(-3px);border-color:rgba(226,180,92,.6);box-shadow:0 14px 26px -16px rgba(201,151,59,.6)}
+.state-chip i{
+  background:radial-gradient(circle at 34% 30%,var(--m-gold-1),var(--m-gold-3) 60%,var(--m-gold-4));
+  box-shadow:0 0 8px -1px rgba(226,180,92,.9), inset 0 1px 0 rgba(255,252,240,.8);
+}
+
+/* ---- FAQ: milled rows -------------------------------------------------- */
+.faq-item{position:relative;transition:background .3s}
+.faq-item::before{
+  content:"";position:absolute;left:0;bottom:-1px;height:1px;width:0;z-index:2;
+  background:linear-gradient(90deg,var(--m-gold-3),var(--m-gold-1),transparent);
+  transition:width .5s var(--ease-cine);
+}
+.faq-item:hover::before,.faq-item.open::before{width:100%}
+.faq-item button{transition:padding-left .3s var(--ease-cine),color .2s}
+.faq-item:hover button{padding-left:8px}
+.faq-item button::after{
+  width:30px;height:30px;border-radius:50%;right:0;
+  display:grid;place-items:center;font-size:20px;line-height:1;
+  background:linear-gradient(180deg,rgba(226,180,92,.14),rgba(226,180,92,.04));
+  border:1px solid rgba(226,180,92,.32);
+  transition:transform .3s var(--ease-cine),background .25s;
+}
+.faq-item.open button::after{background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-4));color:#160E02}
+
+/* ---- about / booking / final: shared "document" surfaces --------------- */
+.about-band{
+  background:
+    radial-gradient(90% 60% at 88% 8%, rgba(226,180,92,.10), transparent 60%),
+    linear-gradient(180deg,#FFFFFF,#F6F8FC);
+}
+.booking{position:relative}
+.booking::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.5),transparent);
+}
+.book-point .n{
+  background:linear-gradient(180deg,rgba(226,180,92,.16),rgba(226,180,92,.04));
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.3);
+}
+.book-frame{
+  border-radius:20px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 44px 90px -44px rgba(0,0,0,.8);
+}
+.final{
+  position:relative;
+  background:
+    radial-gradient(90% 70% at 50% 0%, rgba(226,180,92,.12), transparent 62%),
+    linear-gradient(180deg,#FFFFFF,#F4F7FC);
+}
+.final::before{
+  content:"";position:absolute;left:50%;top:0;translate:-50% 0;width:min(420px,60%);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.8),transparent);
+}
+
+/* ---- section seams: a hairline of light between bands ------------------ */
+.iul-band,.ai-band,.fitcheck,.bp-band,.quote-band,.states-band,.about-band,.booking,.final{
+  position:relative;
+}
+.iul-band::after,.ai-band::after,.booking::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.35),transparent);
+}
+
+/* ---- carrier marquee: cards on a lit rail ------------------------------ */
+.carriers{
+  background:linear-gradient(180deg,#04091A,#080F26);
+  position:relative;
+}
+.carriers::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.4),transparent);
+}
+.carrier{
+  border-radius:13px;
+  box-shadow:inset 0 1px 0 #fff, 0 8px 22px -14px rgba(0,0,0,.9);
+  transition:transform .3s var(--ease-cine),box-shadow .3s;
+}
+.carrier:hover{transform:translateY(-3px);box-shadow:0 16px 30px -16px rgba(226,180,92,.6)}
+
+/* ---- footer: the maker's plate ---------------------------------------- */
+footer{position:relative;background:linear-gradient(180deg,#060C1E,#04091A)}
+footer::before{
+  content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(226,180,92,.45),transparent);
+}
+.foot-grid a{transition:color .2s,padding-left .25s var(--ease-cine)}
+.foot-grid a:hover{padding-left:6px;color:var(--m-gold-2)}
+
+/* ---- mobile bar -------------------------------------------------------- */
+.mobilebar{background:linear-gradient(180deg,rgba(10,17,38,.90),rgba(4,9,26,.96))}
+.mb-book{
+  background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-4));color:#160E02;
+  box-shadow:inset 0 1px 0 rgba(255,250,232,.8);
+}
+
+/* ==========================================================================
+   6 — MOTION, FALLBACKS, ACCESSIBILITY
+   ========================================================================== */
+
+/* staged reveal for the sections below the cover */
+.reveal{transition:opacity .8s var(--ease-cine),transform .8s var(--ease-cine)}
+
+/* no backdrop-filter: fill everything so nothing turns unreadable */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .vault-stat{background:rgba(10,17,38,.9)}
+  .vault-hold{background:rgba(8,14,32,.92)}
+  .btn-ghost-light{background:rgba(255,255,255,.12)}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .foil,.foil-steel,.q-price em{animation:none;background-position:0 0}
+  .vault-aurora,.vault-sun,.vault-crest,.vault-hold .ring::after,.vault-scroll i::after{animation:none}
+  .vault{height:auto}
+  .vault-stage{position:relative;height:auto;min-height:100vh}
+  .vault-chapter{
+    position:relative;top:auto;translate:none;opacity:1;visibility:visible;transform:none;
+    margin-bottom:64px;
+  }
+  .vault-chapters{max-width:none}
+  .vault-rail,.vault-scroll,.vault-progress{display:none}
+  .sweep::after,.btn::after,.cover-card::after,.fit-opt::after,.state-chip::after{display:none}
+  .fit-q,.fit-opts,.fit-result,.q-price{animation:none}
+}
+
+/* keyboard focus is always visible, on every material */
+.vault-rail button:focus-visible,
+.fit-opt:focus-visible,
+.q-tab:focus-visible,
+.q-seg button:focus-visible{
+  outline:2px solid var(--m-gold-2);outline-offset:3px;
+}
+
+/* print: strip the film entirely */
+@media print{
+  .vault{height:auto;background:#fff;color:#000}
+  .vault-stage{position:static;height:auto}
+  .vault-fallback,.vault-canvas-host,.vault-rail,.vault-progress,.vault-hold,.vault-scroll{display:none}
+  .vault-chapter{position:static;opacity:1;visibility:visible;transform:none;color:#000}
+  .vault-chapter h2,.vault-chapter p{color:#000;text-shadow:none}
+}
+
+/* ==========================================================================
+   7 — THE DECK LAYER
+   Components derived from the reference films:
+     · blueprint grid + registration marks   (Alche — the hairline overlay)
+     · floating capsule nav                  (textura / Peachweb)
+     · 3D coverflow carrier deck + marquee   (textura)
+     · bento mosaic + rider tracks + chips   (Peachweb bento, textura cards)
+   ========================================================================== */
+
+/* ---- BLUEPRINT GRID -----------------------------------------------------
+   A full-bleed hairline grid with corner registration ticks, masked so it
+   fades away from the edges. It sits ABOVE the film and BELOW the UI, which
+   is what makes the 3D read as "captured" rather than pasted on. */
+.vault-stage::after{
+  content:"";position:absolute;inset:0;z-index:4;pointer-events:none;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:clamp(84px,9vw,132px) 100%, 100% clamp(84px,9vw,132px);
+  mask-image:linear-gradient(90deg,#000 0%,rgba(0,0,0,.25) 22%,rgba(0,0,0,.25) 78%,#000 100%);
+}
+.vault-marks{position:absolute;inset:0;z-index:5;pointer-events:none}
+.vault-marks span{
+  position:absolute;width:18px;height:18px;
+  border:0 solid rgba(226,180,92,.55);
+}
+.vault-marks span:nth-child(1){top:74px;left:22px;border-top-width:1px;border-left-width:1px}
+.vault-marks span:nth-child(2){top:74px;right:22px;border-top-width:1px;border-right-width:1px}
+.vault-marks span:nth-child(3){bottom:22px;left:22px;border-bottom-width:1px;border-left-width:1px}
+.vault-marks span:nth-child(4){bottom:22px;right:22px;border-bottom-width:1px;border-right-width:1px}
+
+/* ---- FLOATING CAPSULE NAV ---------------------------------------------- */
+nav.liquid-glass{
+  position:fixed;top:14px;left:50%;translate:-50% 0;
+  width:min(1340px,calc(100% - 28px));
+  border-radius:20px;border:1px solid rgba(255,255,255,.13);
+  transition:width .5s var(--ease-cine), top .5s var(--ease-cine),
+             border-radius .5s var(--ease-cine), background .4s, box-shadow .4s;
+}
+/* A capsule has a fixed width, so nothing inside it may wrap — one long
+   label reflowing turns the whole bar into three ragged rows. */
+nav.liquid-glass .nav-inner{
+  padding:11px 14px 11px 16px;gap:18px;flex-wrap:nowrap;max-width:none;
+}
+nav.liquid-glass .logo{flex-shrink:0}
+nav.liquid-glass .logo-text b,
+nav.liquid-glass .logo-text span{white-space:nowrap}
+nav.liquid-glass .nav-links{gap:19px;flex-wrap:nowrap;min-width:0}
+nav.liquid-glass .nav-links a{white-space:nowrap;font-size:13.5px}
+nav.liquid-glass .nav-cta{flex-shrink:0;gap:12px}
+nav.liquid-glass .nav-phone{white-space:nowrap}
+nav.liquid-glass .nav-cta .btn{white-space:nowrap;padding:9px 16px}
+/* A capsule earns its look by being SHORT. The desktop bar carries the seven
+   links that lead somewhere on this page; Free guide, About and FAQ live in
+   the mobile sheet and the footer, where they were already duplicated. */
+nav .nav-opt{display:none}
+@media(max-width:1240px){ nav .nav-phone{display:none} }
+nav.liquid-glass.is-condensed{
+  width:min(1040px,calc(100% - 24px));top:10px;
+  background:linear-gradient(180deg,rgba(10,17,38,.86),rgba(5,9,26,.80));
+  box-shadow:0 22px 50px -26px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.16);
+}
+/* the fixed capsule no longer occupies flow — give the page its height back */
+body{padding-top:0}
+.vault-ui{padding-top:clamp(96px,12vh,144px)}
+section,.carriers,.deck-band{scroll-margin-top:86px}
+
+/* ---- HEADLINE MARQUEE ---------------------------------------------------
+   Two identical spans in a flex row, the pair translated -50%: the seam is
+   always off-screen, so the loop is invisible without JS or duplication. */
+.deck-marquee{
+  position:absolute;left:0;right:0;top:50%;translate:0 -50%;z-index:0;
+  overflow:hidden;pointer-events:none;
+  mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);
+}
+.deck-marquee-track{display:flex;width:max-content;animation:deckSlide 38s linear infinite}
+.deck-marquee span{
+  font-family:'Sora',sans-serif;font-weight:700;
+  font-size:clamp(58px,12vw,168px);line-height:1;letter-spacing:-.045em;
+  text-transform:uppercase;white-space:nowrap;padding-right:.35em;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.10);
+}
+@keyframes deckSlide{to{transform:translateX(-50%)}}
+
+/* ---- CARRIER DECK ------------------------------------------------------- */
+.deck-band{
+  position:relative;overflow:hidden;padding:88px 0 76px;
+  background:
+    radial-gradient(90% 60% at 50% 0%, rgba(76,42,134,.30), transparent 62%),
+    radial-gradient(70% 50% at 82% 100%, rgba(47,182,201,.14), transparent 66%),
+    linear-gradient(180deg,#04091A 0%,#070E24 55%,#0A1330 100%);
+  color:#fff;
+}
+.deck-head{
+  position:relative;z-index:2;text-align:center;margin-bottom:34px;
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+}
+.deck-head .mono{color:rgba(255,255,255,.5)}
+.deck-head h2{
+  font-family:'Sora',sans-serif;font-weight:700;color:#fff;
+  font-size:clamp(24px,3.2vw,40px);letter-spacing:-.03em;text-transform:uppercase;
+}
+
+/* the 3D rail */
+.deck-stage{
+  position:relative;z-index:2;height:clamp(210px,26vw,300px);
+  perspective:1400px;perspective-origin:50% 50%;
+  touch-action:pan-y;cursor:grab;outline:none;
+}
+.deck-live.is-dragging .deck-stage{cursor:grabbing}
+.deck-card{
+  position:absolute;left:50%;top:50%;
+  width:clamp(190px,22vw,268px);height:clamp(132px,15vw,178px);
+  margin:calc(clamp(132px,15vw,178px) / -2) 0 0 calc(clamp(190px,22vw,268px) / -2);
+  transform-style:preserve-3d;backface-visibility:hidden;
+  border-radius:20px;overflow:hidden;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:20px 18px;
+  background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(232,238,250,.9));
+  border:1px solid rgba(255,255,255,.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 30px 60px -30px rgba(0,0,0,.95);
+  transition:transform .72s var(--ease-cine), opacity .55s var(--ease-cine),
+             box-shadow .5s var(--ease-cine), border-color .4s;
+}
+.deck-live.is-dragging .deck-card{transition:none}
+.deck-card img{max-height:44%;max-width:76%;object-fit:contain;display:block}
+.deck-card b{
+  font-family:'Sora',sans-serif;font-weight:600;font-size:13px;color:#0E1F3E;
+  letter-spacing:-.01em;text-align:center;
+}
+/* the active card gets the gold bezel and lifts out of the rail */
+.deck-card.is-active{
+  border-color:rgba(226,180,92,.85);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    0 0 0 1px rgba(226,180,92,.45),
+    0 40px 80px -28px rgba(226,180,92,.45),
+    0 30px 60px -30px rgba(0,0,0,.95);
+}
+/* a specular bar that sweeps only the front card */
+.deck-card::after{
+  content:"";position:absolute;inset:-40% -60%;pointer-events:none;
+  background:linear-gradient(74deg,transparent 42%,rgba(255,255,255,.75) 50%,transparent 58%);
+  transform:translateX(-130%);
+}
+.deck-card.is-active::after{animation:deckSheen 2.6s var(--ease-cine) .25s}
+@keyframes deckSheen{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+
+.deck-controls{
+  position:relative;z-index:3;display:flex;align-items:center;justify-content:center;
+  gap:18px;margin-top:30px;
+}
+.deck-btn{
+  width:44px;height:44px;border-radius:50%;cursor:pointer;flex-shrink:0;
+  display:grid;place-items:center;font-size:16px;color:#fff;
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.24);
+  transition:transform .28s var(--ease-cine),background .25s,border-color .25s;
+}
+.deck-btn:hover{transform:scale(1.08);background:rgba(226,180,92,.18);border-color:rgba(226,180,92,.6)}
+.deck-btn:focus-visible{outline:2px solid var(--m-gold-2);outline-offset:3px}
+.deck-count{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;
+  color:var(--m-gold-2);min-width:76px;text-align:center;font-variant-numeric:tabular-nums;
+}
+.deck-progress{
+  position:relative;width:min(220px,32vw);height:2px;border-radius:2px;
+  background:rgba(255,255,255,.12);overflow:hidden;
+}
+.deck-progress::after{
+  content:"";position:absolute;left:0;top:0;bottom:0;
+  width:calc(8% + var(--deck-p,0) * 92%);
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-1));
+  box-shadow:0 0 12px -1px rgba(226,180,92,.9);
+  transition:width .6s var(--ease-cine);
+}
+.deck-foot{
+  position:relative;z-index:2;text-align:center;margin-top:26px;
+  font-size:13.5px;color:rgba(255,255,255,.55);
+}
+/* NO-JS / pre-boot: a plain scroller that still shows every logo */
+.deck-stage:not(.deck-live *) {}
+.deck-band:not(.deck-live) .deck-stage{
+  height:auto;display:flex;gap:14px;overflow-x:auto;padding-bottom:12px;perspective:none;
+}
+.deck-band:not(.deck-live) .deck-card{
+  position:relative;left:auto;top:auto;margin:0;flex:0 0 auto;opacity:1;transform:none;
+}
+@media(max-width:760px){
+  .deck-band{padding:64px 0 58px}
+  .deck-controls{gap:12px}
+  .deck-progress{width:34vw}
+}
+
+/* ---- LIVING BENEFITS: bento mosaic + rider tracks ----------------------- */
+.riders-band{
+  position:relative;overflow:hidden;color:#fff;
+  background:
+    radial-gradient(80% 55% at 12% 0%, rgba(47,182,201,.16), transparent 62%),
+    radial-gradient(80% 60% at 92% 88%, rgba(76,42,134,.30), transparent 64%),
+    linear-gradient(180deg,#0A1330 0%,#060C1E 60%,#04091A 100%);
+}
+.riders-band .sec-head h2{color:#fff}
+.riders-band .sec-head p{color:rgba(255,255,255,.68)}
+
+.bento{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:16px;
+  position:relative;z-index:1;
+}
+.bento-tile{
+  position:relative;isolation:isolate;overflow:hidden;
+  border-radius:22px;padding:26px 26px 24px;
+  background:linear-gradient(168deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.13);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22), 0 30px 64px -34px rgba(0,0,0,.9);
+  opacity:0;transform:translateY(26px);
+  transition:opacity .8s var(--ease-cine), transform .8s var(--ease-cine),
+             border-color .4s, box-shadow .5s;
+}
+.bento-tile.is-in{opacity:1;transform:none}
+/* pointer-tracked sheen — two custom properties, no extra DOM */
+.bento-tile::after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),
+             rgba(255,255,255,.10), transparent 62%);
+  opacity:0;transition:opacity .35s;
+}
+.bento-tile:hover::after{opacity:1}
+.bento-tile:hover{border-color:rgba(226,180,92,.42)}
+.bento-span-3{grid-column:span 3}
+.bento-span-2{grid-column:span 2}
+.bento-span-6{grid-column:span 6}
+@media(max-width:940px){
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .bento-span-3,.bento-span-2,.bento-span-6{grid-column:span 2}
+}
+
+/* a rider track: label, meter, copy, chips */
+.rider-h{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.rider-h .n{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;
+  color:var(--m-gold-3);
+}
+.rider-h h3{
+  font-family:'Sora',sans-serif;font-weight:600;font-size:20px;color:#fff;letter-spacing:-.02em;
+}
+.rider-meter{
+  position:relative;height:8px;border-radius:999px;margin:16px 0 16px;
+  background:linear-gradient(180deg,#04081A,#0D1630);
+  box-shadow:inset 0 2px 4px rgba(0,0,0,.9), inset 0 -1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.rider-meter::before{
+  content:"";position:absolute;inset:0;z-index:2;
+  background:repeating-linear-gradient(90deg,transparent 0 19.9%,rgba(255,255,255,.14) 19.9% 20%);
+}
+/* the fill is driven purely by --rider-p, written once per frame by JS */
+.rider-meter i{
+  position:absolute;inset:0 auto 0 0;display:block;border-radius:999px;
+  width:calc(var(--rider-p,0) * 100%);
+  background:linear-gradient(90deg,var(--m-gold-4),var(--m-gold-3) 30%,var(--m-gold-1) 62%,var(--m-gold-2));
+  box-shadow:0 0 16px -2px rgba(226,180,92,.95), inset 0 1px 0 rgba(255,255,255,.55);
+}
+.rider-tile p{color:rgba(255,255,255,.68);font-size:14.5px;line-height:1.6}
+.rider-tile{
+  border-color:rgba(255,255,255,.13);
+  transition:border-color .5s, box-shadow .6s, transform .6s var(--ease-cine),
+             opacity .8s var(--ease-cine);
+}
+.rider-tile.is-lit{
+  border-color:rgba(226,180,92,calc(.18 + var(--rider-p,0) * .52));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.26),
+    0 0 calc(var(--rider-p,0) * 60px) calc(var(--rider-p,0) * -26px) rgba(226,180,92,.65),
+    0 30px 64px -34px rgba(0,0,0,.9);
+}
+.rider-tile.is-full{transform:translateY(-4px)}
+
+/* condition chips — they ignite left to right as the track fills */
+.chip-rail{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip-rail .pill{
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;padding:7px 13px;border-radius:999px;
+  color:rgba(255,255,255,.42);
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.10);
+  transition:color .45s var(--ease-cine), background .45s, border-color .45s, box-shadow .45s, transform .45s var(--ease-cine);
+}
+.chip-rail .pill.is-on{
+  color:#0E1017;transform:translateY(-2px);
+  background:linear-gradient(158deg,var(--m-gold-2),var(--m-gold-3));
+  border-color:rgba(255,244,214,.6);
+  box-shadow:inset 0 1px 0 rgba(255,250,232,.8), 0 8px 20px -10px rgba(226,180,92,.9);
+}
+/* cyan variant for the "what it is not" rail */
+.chip-rail.cool .pill.is-on{
+  color:#04121A;
+  background:linear-gradient(158deg,#6FE0EE,var(--v-cyan));
+  border-color:rgba(190,245,255,.6);
+  box-shadow:inset 0 1px 0 rgba(220,250,255,.8), 0 8px 20px -10px rgba(47,182,201,.9);
+}
+.rider-note{
+  grid-column:1/-1;font-size:12.5px;color:rgba(255,255,255,.42);line-height:1.7;
+  border-top:1px solid rgba(255,255,255,.10);padding-top:18px;margin-top:4px;
+}
+
+/* big stat tile */
+.bento-stat b{
+  font-family:'Sora',sans-serif;font-weight:700;line-height:.95;letter-spacing:-.04em;
+  font-size:clamp(44px,6vw,84px);display:block;
+  background:linear-gradient(100deg,var(--m-gold-4),var(--m-gold-2) 22%,var(--m-gold-1) 40%,var(--m-gold-2) 62%,var(--m-gold-3));
+  background-size:250% 100%;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:foilDrift 8s var(--ease-cine) infinite alternate;
+}
+.bento-stat span{
+  display:block;margin-top:10px;color:rgba(255,255,255,.62);font-size:14.5px;max-width:34ch;
+}
+
+@media(prefers-reduced-motion:reduce){
+  .deck-marquee-track,.bento-stat b,.deck-card.is-active::after{animation:none}
+  .bento-tile{opacity:1;transform:none}
+  .deck-card{transition:none}
+  nav.liquid-glass{transition:none}
+}

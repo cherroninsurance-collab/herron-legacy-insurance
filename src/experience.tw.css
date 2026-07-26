@@ -1,0 +1,51 @@
+/* Tailwind source for experience.html. Compiled to /experience.css — see
+   tailwind.config.js for the build command. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root { color-scheme: dark; }
+    body { @apply bg-obsidian text-slate-300 font-sans antialiased; }
+    ::selection { @apply bg-amber-400 text-obsidian; }
+    :focus-visible { @apply outline-none ring-2 ring-amber-400/70 ring-offset-2 ring-offset-obsidian; }
+  }
+
+  @layer components {
+    /* ---- the one label style, used everywhere a tag or eyebrow appears ---- */
+    .tag {
+      @apply text-xs uppercase tracking-[0.2em] font-semibold text-amber-400/80;
+    }
+
+    /* ---- glass: a sheet, not a tint. The inner top highlight is what sells
+           it — real glass catches a line of light on its top edge. ---- */
+    .glass {
+      @apply relative bg-slate-900/40 backdrop-blur-xl border border-white/10 rounded-2xl;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        inset 0 -1px 0 rgba(0,0,0,.40),
+        0 24px 60px -30px rgba(0,0,0,.95);
+    }
+    .glass-hover {
+      @apply transition-all duration-500 ease-out;
+    }
+    .glass-hover:hover {
+      @apply border-amber-400/30 -translate-y-1;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.16),
+        0 34px 70px -30px rgba(0,0,0,1),
+        0 0 0 1px rgba(251,191,36,.10);
+    }
+
+    /* ---- the display voice ---- */
+    .display {
+      @apply font-display font-medium tracking-[-0.01em] text-white;
+      text-wrap: balance;
+    }
+
+    /* ---- hairline rules that read as drafting, not decoration ---- */
+    .hairline {
+      @apply h-px w-full;
+      background: linear-gradient(90deg, rgba(251,191,36,.55), rgba(251,191,36,.06) 40%, transparent);
+    }
+  }
