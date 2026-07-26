@@ -693,6 +693,9 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .fitcheck .lg-container{max-width:764px;margin:0 auto}
 @media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
 </style>
+<!-- Atelier — the cinematic cover + the metal/glass design system. Loaded last
+     so it layers on top of the base sheet above; the page is complete without it. -->
+<link rel="stylesheet" href="atelier.css">
 </head>
 <body>
 
@@ -722,14 +725,15 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
     </a>
     <ul class="nav-links">
       <li><a href="#coverage">Coverage</a></li>
+      <li><a href="#living-benefits">Living benefits</a></li>
       <li><a href="#iul-strategy">IUL strategy</a></li>
-      <li><a href="opt-in.html">Free guide</a></li>
+      <li class="nav-opt"><a href="opt-in.html">Free guide</a></li>
       <li><a href="#ai">Legacy AI</a></li>
       <li><a href="#blueprint">Blueprint</a></li>
       <li><a href="#quotes">Quotes</a></li>
-      <li><a href="#about">About</a></li>
+      <li class="nav-opt"><a href="#about">About</a></li>
       <li><a href="#booking">Book</a></li>
-      <li><a href="#faq">FAQ</a></li>
+      <li class="nav-opt"><a href="#faq">FAQ</a></li>
     </ul>
     <div class="nav-cta">
       <a class="nav-phone" href="tel:6103608583">610-360-8583</a>
@@ -740,6 +744,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 </nav>
 <div class="nav-sheet" id="navSheet" aria-label="Menu">
   <a href="#coverage">Coverage</a>
+  <a href="#living-benefits">Living benefits</a>
   <a href="#iul-strategy">IUL strategy</a>
   <a href="#ai">Legacy AI</a>
   <a href="#blueprint">Blueprint</a>
@@ -751,68 +756,241 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <a class="btn btn-brass" href="#booking">Book a free 15-minute call</a>
 </div>
 
-<!-- ============ HERO ============ -->
-<header class="hero" id="top">
-  <div class="hero-grid-lines" aria-hidden="true"></div>
-  <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
-  <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
-  <div class="hero-inner">
-    <div>
-      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 13 states · AI-powered, human-delivered</span>
-      <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
-      <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained by an AI concierge that never sleeps, and closed by a real licensed agent who does.</p>
-      <div class="hero-ctas rise d3">
-        <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Talk to Legacy AI</a>
-        <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
-      </div>
-      <div class="hero-stats rise d4">
-        <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
-        <div class="hstat"><b data-count="13">13</b><span>states licensed</span></div>
-        <div class="hstat"><b>24<em>/7</em></b><span>AI concierge</span></div>
-        <div class="hstat"><b>0<em>$</em></b><span>cost to work with us</span></div>
-      </div>
-    </div>
-    <div class="hero-visual rise d2">
-      <div class="crest">
-        <svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
-          <path class="heron-stroke" d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/>
-          <path class="heron-stroke" d="M144 62 C152 50 150 38 142 32" stroke="#E2B45C" stroke-width="2.4" stroke-linecap="round"/>
-          <circle cx="136" cy="66" r="2.8" fill="#fff"/>
-          <path class="heron-stroke" d="M28 282 C70 276 120 288 168 282 C192 279 212 282 216 282" stroke="#3E68B8" stroke-width="2.4" stroke-linecap="round"/>
+<!-- ============ THE VAULT — cinematic cover ============
+     Five chapters play as you scroll. The 3D film (cinematic.js) is a
+     progressive enhancement: .vault-fallback below is a complete CSS-only
+     cinematic that stands on its own if WebGL is unavailable, blocked, or
+     the visitor prefers reduced motion. All copy lives in the DOM, so the
+     page reads identically to a crawler either way. -->
+<header class="vault" id="top" data-chapter="0">
+  <div class="vault-stage">
+
+    <!-- CSS-only cinematic (always rendered; the film covers it when live) -->
+    <div class="vault-fallback" aria-hidden="true">
+      <div class="vault-aurora"></div>
+      <div class="vault-sun"></div>
+      <div class="vault-crest">
+        <svg viewBox="0 0 240 300" fill="none">
+          <path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262" stroke="#3A2A08" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+          <path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262" stroke="#FFF3D6" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="136" cy="66" r="3" fill="#fff"/>
         </svg>
-        <div class="chiplet chip-1"><b>Living benefits</b>Use it while you're alive</div>
-        <div class="chiplet chip-2"><b>NPN 21556594</b>Licensed &amp; verified</div>
+      </div>
+      <svg class="vault-ridge vault-ridge-3" viewBox="0 0 1440 220" preserveAspectRatio="none">
+        <path d="M0 220 L0 150 L90 96 L180 138 L270 74 L360 122 L470 58 L560 110 L660 66 L780 124 L880 78 L1000 130 L1110 82 L1220 128 L1330 90 L1440 134 L1440 220 Z" fill="#22225C"/>
+      </svg>
+      <svg class="vault-ridge vault-ridge-2" viewBox="0 0 1440 220" preserveAspectRatio="none">
+        <path d="M0 220 L0 168 L120 112 L240 160 L340 90 L450 148 L580 78 L690 140 L800 96 L930 152 L1050 100 L1170 156 L1300 108 L1440 158 L1440 220 Z" fill="#141A45"/>
+      </svg>
+      <svg class="vault-ridge vault-ridge-1" viewBox="0 0 1440 220" preserveAspectRatio="none">
+        <path d="M0 220 L0 186 L140 130 L280 178 L400 112 L520 170 L640 104 L760 166 L900 118 L1030 174 L1160 124 L1300 178 L1440 132 L1440 220 Z" fill="#0A1030"/>
+      </svg>
+      <div class="vault-mirror"></div>
+    </div>
+
+    <!-- WebGL canvas mounts here (z-1, pointer-events:none) -->
+    <div class="vault-canvas-host" data-vault-canvas aria-hidden="true"></div>
+
+    <!-- transparent grab surface: click &amp; hold to rotate the artifact -->
+    <div class="vault-grab" data-vault-grab aria-hidden="true"></div>
+
+    <!-- registration marks: the corner ticks that frame the shot -->
+    <div class="vault-marks" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+
+    <!-- UI plate -->
+    <div class="vault-ui">
+      <div class="vault-hud">
+        <span class="dot" aria-hidden="true"></span>
+        <span class="mono">Herron &amp; Co. Legacy Agency</span>
+        <span class="sep" aria-hidden="true"></span>
+        <span class="mono">NPN 21556594 · Licensed in 13 states</span>
+      </div>
+
+      <div class="vault-chapters">
+
+        <!-- CHAPTER 01 — the reveal -->
+        <article class="vault-chapter is-live" data-chapter="0">
+          <div class="idx"><b>01 — Protection</b><i></i></div>
+          <h1>Protection built<em>for your life.</em><em class="foil">Delivered at the speed of it.</em></h1>
+          <p>Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities and disability income — designed around your life, not a carrier's quota.</p>
+          <div class="vault-acts">
+            <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Talk to Legacy AI</a>
+            <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
+          </div>
+        </article>
+
+        <!-- CHAPTER 02 — independence -->
+        <article class="vault-chapter" data-chapter="1">
+          <div class="idx"><b>02 — The market</b><i></i></div>
+          <h2>Twenty-plus carriers.<em class="foil">One advocate.</em></h2>
+          <p>We're independent. Every policy is shopped across the whole market and built around your budget — and it costs you nothing, because the premium is identical whether you buy through an agent or direct from the company. The difference is who picks up the phone in year ten.</p>
+          <a class="more" href="#coverage">See what we design <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- CHAPTER 03 — the IUL strategy -->
+        <article class="vault-chapter" data-chapter="2">
+          <div class="idx"><b>03 — The strategy</b><i></i></div>
+          <h2>Growth when<em>the market runs.</em><em class="foil">A floor when it doesn't.</em></h2>
+          <p>An IUL isn't a product off a shelf — it's a design. Index-linked cash value growth, protection from down years, tax-advantaged access in retirement, and an income-tax-free benefit for your family. Built for high earners and owner-operators with no 401(k) in the cab.</p>
+          <a class="more" href="#iul-strategy">Open the IUL strategy <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- CHAPTER 04 — the intelligence -->
+        <article class="vault-chapter" data-chapter="3">
+          <div class="idx"><b>04 — The intelligence</b><i></i></div>
+          <h2>An intelligence<em class="foil">that never sleeps.</em></h2>
+          <p>Legacy AI answers from a knowledge base Connor wrote and reviewed — costs, living benefits, IUL mechanics, long-term care, carriers, underwriting. Ask out loud or type. Two in the morning is fine.</p>
+          <a class="more" href="#ai">Ask your first question <span aria-hidden="true">→</span></a>
+        </article>
+
+        <!-- CHAPTER 05 — the human -->
+        <article class="vault-chapter" data-chapter="4">
+          <div class="idx"><b>05 — The agent</b><i></i></div>
+          <h2>And a licensed human<em class="foil">who closes it.</em></h2>
+          <p>Connor Herron — Lehigh Valley local, licensed producer in 13 states. Free 15-minute calls, real carrier numbers, zero pressure, $0 to work with us.</p>
+          <div class="vault-stats">
+            <div class="vault-stat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
+            <div class="vault-stat"><b data-count="13">13</b><span>states licensed</span></div>
+            <div class="vault-stat"><b>24<em>/7</em></b><span>AI concierge</span></div>
+            <div class="vault-stat"><b>0<em>$</em></b><span>cost to you</span></div>
+          </div>
+          <div class="vault-acts">
+            <a class="btn btn-brass" href="#booking">Book a free 15-minute call</a>
+            <a class="btn btn-ghost-light" href="tel:6103608583">Call 610-360-8583</a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="vault-foot">
+        <span class="vault-hold" data-hold-hint>
+          <span class="ring" aria-hidden="true"></span>
+          Click &amp; hold to rotate
+        </span>
+        <span class="vault-scroll" aria-hidden="true">
+          <i></i><span>Scroll</span>
+        </span>
       </div>
     </div>
+
+    <!-- chapter rail. A <div>, not a <nav>: the sheet's global nav{} rule
+         (sticky, blurred bar) would otherwise style it. -->
+    <div class="vault-rail" role="group" aria-label="Cover chapters">
+      <button type="button" data-rail-dot class="is-live" aria-label="Chapter 1 — Protection"><span class="lbl">Protection</span><i aria-hidden="true"></i></button>
+      <button type="button" data-rail-dot aria-label="Chapter 2 — The market"><span class="lbl">The market</span><i aria-hidden="true"></i></button>
+      <button type="button" data-rail-dot aria-label="Chapter 3 — The strategy"><span class="lbl">The strategy</span><i aria-hidden="true"></i></button>
+      <button type="button" data-rail-dot aria-label="Chapter 4 — Intelligence"><span class="lbl">Intelligence</span><i aria-hidden="true"></i></button>
+      <button type="button" data-rail-dot aria-label="Chapter 5 — The agent"><span class="lbl">The agent</span><i aria-hidden="true"></i></button>
+    </div>
+
+    <div class="vault-progress" data-vault-progress aria-hidden="true"></div>
   </div>
 </header>
 
-<!-- ============ CARRIERS ============ -->
-<div class="carriers">
-  <p class="cap">Quoting the nation's leading carriers, including</p>
-  <div class="marquee" aria-label="Insurance carriers we quote">
-    <div class="marquee-track" id="marqueeTrack">
-      <span class="carrier" title="Ethos"><img src="logos/ethos.png" alt="Ethos" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Foresters Financial"><img src="logos/foresters.png" alt="Foresters Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Americo"><img src="logos/americo.png" alt="Americo" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Transamerica"><img src="logos/transamerica.jpg" alt="Transamerica" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Ameritas"><img src="logos/ameritas.svg" alt="Ameritas" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Protective"><img src="logos/protective.png" alt="Protective" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="John Hancock"><img src="logos/john-hancock.png" alt="John Hancock" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="TruStage"><img src="logos/trustage.png" alt="TruStage" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="North American"><img src="logos/north-american.jpg" alt="North American" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="National Life Group"><img src="logos/national-life-group.png" alt="National Life Group" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Lincoln Financial"><img src="logos/lincoln-financial.png" alt="Lincoln Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Prudential"><img src="logos/prudential.png" alt="Prudential" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Nationwide"><img src="logos/nationwide.png" alt="Nationwide" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Legal & General"><img src="logos/legal-and-general.png" alt="Legal & General" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Allianz"><img src="logos/allianz.png" alt="Allianz" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Gerber Life"><img src="logos/gerber-life.png" alt="Gerber Life" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Symetra"><img src="logos/symetra.png" alt="Symetra" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="American-Amicable"><img src="logos/american-amicable.png" alt="American-Amicable" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
+<!-- ============ CARRIER DECK ============
+     A 3D coverflow rail (deck.js) replaces the old logo marquee. Before the
+     script boots — and if it never does — the same markup renders as a plain
+     horizontal scroller, so every logo is always reachable. -->
+<section class="deck-band" id="carriers" data-deck>
+  <div class="deck-marquee" aria-hidden="true">
+    <div class="deck-marquee-track">
+      <span>Twenty-plus carriers · One advocate · </span><span>Twenty-plus carriers · One advocate · </span>
     </div>
   </div>
-</div>
+
+  <div class="wrap">
+    <div class="deck-head">
+      <span class="mono">The market, not a menu</span>
+      <h2>Quoting the nation&rsquo;s leading carriers</h2>
+    </div>
+
+    <div class="deck-stage" data-deck-stage role="listbox" tabindex="0"
+         aria-label="Carriers we quote — use the arrow keys or drag to browse">
+      <article class="deck-card" data-deck-card role="option" aria-label="Ethos">
+        <img src="logos/ethos.png" alt="Ethos" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Ethos</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Foresters Financial">
+        <img src="logos/foresters.png" alt="Foresters Financial" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Foresters Financial</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Americo">
+        <img src="logos/americo.png" alt="Americo" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Americo</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Transamerica">
+        <img src="logos/transamerica.jpg" alt="Transamerica" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Transamerica</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Ameritas">
+        <img src="logos/ameritas.svg" alt="Ameritas" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Ameritas</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Protective">
+        <img src="logos/protective.png" alt="Protective" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Protective</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="John Hancock">
+        <img src="logos/john-hancock.png" alt="John Hancock" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>John Hancock</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="TruStage">
+        <img src="logos/trustage.png" alt="TruStage" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>TruStage</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="North American">
+        <img src="logos/north-american.jpg" alt="North American" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>North American</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="National Life Group">
+        <img src="logos/national-life-group.png" alt="National Life Group" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>National Life Group</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Lincoln Financial">
+        <img src="logos/lincoln-financial.png" alt="Lincoln Financial" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Lincoln Financial</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Prudential">
+        <img src="logos/prudential.png" alt="Prudential" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Prudential</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Nationwide">
+        <img src="logos/nationwide.png" alt="Nationwide" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Nationwide</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Legal & General">
+        <img src="logos/legal-and-general.png" alt="Legal & General" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Legal & General</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Allianz">
+        <img src="logos/allianz.png" alt="Allianz" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Allianz</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Gerber Life">
+        <img src="logos/gerber-life.png" alt="Gerber Life" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Gerber Life</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="Symetra">
+        <img src="logos/symetra.png" alt="Symetra" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>Symetra</b>
+      </article>
+      <article class="deck-card" data-deck-card role="option" aria-label="American-Amicable">
+        <img src="logos/american-amicable.png" alt="American-Amicable" loading="lazy" decoding="async" onerror="this.style.display='none'">
+        <b>American-Amicable</b>
+      </article>
+    </div>
+
+    <div class="deck-controls">
+      <button class="deck-btn" type="button" data-deck-prev aria-label="Previous carrier">&#8592;</button>
+      <span class="deck-count" data-deck-count aria-live="off">01 / 18</span>
+      <span class="deck-progress" data-deck-progress aria-hidden="true"></span>
+      <button class="deck-btn" type="button" data-deck-next aria-label="Next carrier">&#8594;</button>
+    </div>
+
+    <p class="deck-foot">Independent means we work for you. Your premium is the same
+      whether you buy through an agent or direct from the company.</p>
+  </div>
+</section>
 
 <!-- ============ COVERAGE ============ -->
 <section id="coverage">
@@ -884,6 +1062,90 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         </div>
         <button class="go" data-track="term">Check my fit</button>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LIVING BENEFITS (bento + scroll-driven rider tracks) ============
+     Each track's meter, glow and condition chips are driven by one custom
+     property (--rider-p) that deck.js writes from section scroll progress.
+     With JS off the meters sit at 0 and every word is still readable. -->
+<section class="riders-band" id="living-benefits" data-riders>
+  <div class="wrap">
+    <div class="sec-head reveal" style="max-width:720px">
+      <span class="eyebrow">Living benefits</span>
+      <h2>Insurance you can use <span class="foil">while you&rsquo;re alive.</span></h2>
+      <p>Living benefits are riders on qualifying policies that let you access a portion of your own
+         death benefit before you die. It turns life insurance from something your family uses someday
+         into something that can protect you now.</p>
+    </div>
+
+    <div class="bento">
+
+      <!-- 01 — critical -->
+      <article class="bento-tile rider-tile bento-span-2" data-bento data-rider>
+        <div class="rider-h"><span class="n">01</span><h3>Critical illness</h3></div>
+        <div class="rider-meter"><i></i></div>
+        <p>A qualifying diagnosis can release part of your benefit as cash — for treatment,
+           the mortgage, or simply replacing the income that stopped.</p>
+        <div class="chip-rail">
+          <span class="pill" data-chip>Heart attack</span>
+          <span class="pill" data-chip>Stroke</span>
+          <span class="pill" data-chip>Invasive cancer</span>
+        </div>
+      </article>
+
+      <!-- 02 — chronic -->
+      <article class="bento-tile rider-tile bento-span-2" data-bento data-rider>
+        <div class="rider-h"><span class="n">02</span><h3>Chronic illness</h3></div>
+        <div class="rider-meter"><i></i></div>
+        <p>Triggered when you can no longer perform the activities of daily living on your own.
+           Carriers usually require a set number of them, certified by a physician.</p>
+        <div class="chip-rail">
+          <span class="pill" data-chip>Bathing</span>
+          <span class="pill" data-chip>Dressing</span>
+          <span class="pill" data-chip>Toileting</span>
+          <span class="pill" data-chip>Transferring</span>
+          <span class="pill" data-chip>Eating</span>
+        </div>
+      </article>
+
+      <!-- 03 — terminal -->
+      <article class="bento-tile rider-tile bento-span-2" data-bento data-rider>
+        <div class="rider-h"><span class="n">03</span><h3>Terminal illness</h3></div>
+        <div class="rider-meter"><i></i></div>
+        <p>With a terminal diagnosis, an accelerated payout puts money in your hands now —
+           while you still get to decide what it&rsquo;s for.</p>
+        <div class="chip-rail">
+          <span class="pill" data-chip>Terminal diagnosis</span>
+          <span class="pill" data-chip>Accelerated payout</span>
+        </div>
+      </article>
+
+      <!-- the number -->
+      <article class="bento-tile bento-stat bento-span-2" data-bento>
+        <b>3</b>
+        <span>ways a policy can pay out before it ever pays a death claim &mdash; and most of our
+          clients qualify with no medical exam.</span>
+      </article>
+
+      <!-- the honest part -->
+      <article class="bento-tile bento-span-4" data-bento data-rider>
+        <div class="rider-h"><span class="n">The fine print</span></div>
+        <div class="rider-meter"><i></i></div>
+        <p>Living benefits are an acceleration of your own death benefit, not extra money on top of it.
+           Read these three lines before anyone sells you one:</p>
+        <div class="chip-rail cool">
+          <span class="pill" data-chip>Rider on qualifying policies</span>
+          <span class="pill" data-chip>Accelerating reduces the death benefit</span>
+          <span class="pill" data-chip>Terms vary by carrier &amp; state</span>
+        </div>
+      </article>
+
+      <p class="rider-note">Riders, triggers, waiting periods and payout formulas differ between
+        carriers and between states, and not every policy offers every rider. Connor reviews the exact
+        language of whatever you&rsquo;re quoted &mdash; line by line, before you sign anything. Nothing on
+        this page is an offer of coverage or a quoted rate.</p>
     </div>
   </div>
 </section>
@@ -1404,18 +1666,25 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-/* ================= COUNT-UP STATS ================= */
+/* ================= COUNT-UP STATS =================
+   The stats live in the cover's final chapter, so they count up when that
+   chapter arrives — not on a timer that would finish before anyone sees it.
+   The 12s fallback covers the case where the film never reports a chapter. */
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
-  document.querySelectorAll('[data-count]').forEach(el=>{
-    const target=parseInt(el.dataset.count,10); let cur=0;
-    const step=()=>{cur+=Math.max(1,Math.ceil(target/28)); if(cur>=target){el.textContent=target;} else {el.textContent=cur; requestAnimationFrame(step);}};
-    setTimeout(step,500);
-  });
+  const STAT_CHAPTER = 4;
+  let counted = false;
+  const runCount = () => {
+    if (counted) return; counted = true;
+    document.querySelectorAll('[data-count]').forEach(el=>{
+      const target=parseInt(el.dataset.count,10); let cur=0;
+      const step=()=>{cur+=Math.max(1,Math.ceil(target/28)); if(cur>=target){el.textContent=target;} else {el.textContent=cur; requestAnimationFrame(step);}};
+      step();
+    });
+  };
+  window.addEventListener('vault:chapter', e=>{ if(e.detail.index >= STAT_CHAPTER) runCount(); });
+  setTimeout(runCount, 12000);
 }
 
-/* ================= MARQUEE (duplicate for seamless loop) ================= */
-const track = document.getElementById('marqueeTrack');
-track.innerHTML += track.innerHTML;
 
 /* ================= IUL: floor bars + lazy embed ================= */
 const barsIO=new IntersectionObserver(es=>{es.forEach(e=>{
@@ -2065,5 +2334,11 @@ renderFit();
      Three.js CDN import fails to load, the CSS backdrop-filter glass already
      styled on .lg-container simply remains active). -->
 <script type="module" src="liquid-glass.js"></script>
+<!-- The Vault — cinematic WebGL cover (progressive enhancement; the CSS-only
+     cinematic in .vault-fallback is already live and stands alone). -->
+<script type="module" src="cinematic.js"></script>
+<!-- Carrier deck, rider tracks, bento reveal, floating nav. Plain module —
+     every component degrades to static markup if it never runs. -->
+<script type="module" src="deck.js"></script>
 </body>
 </html>
