@@ -216,7 +216,7 @@ footer a:hover{color:var(--brass-bright)}
     <div class="wordsub">Legacy Agency · Lehigh Valley</div>
     <p class="subline">Protection built for your life. <em>Delivered at the speed of it.</em> Life insurance, made simple — and built to be felt.</p>
     <div class="hero-cta">
-      <a class="btn btn-gold mag" href="index.html#booking">Book your free call</a>
+      <a class="btn btn-gold mag" href="index.html#booking">Get my numbers — 15 min</a>
       <a class="btn btn-ghost mag" href="index.html">Enter the full site →</a>
     </div>
   </div>
@@ -281,7 +281,7 @@ footer a:hover{color:var(--brass-bright)}
         <span>The honest answer, <b>even when it costs us the sale.</b></span>
       </div>
       <div class="hero-cta" style="opacity:1;animation:none;margin-top:38px">
-        <a class="btn btn-gold mag" href="index.html#booking">Book your free 15-minute call</a>
+        <a class="btn btn-gold mag" href="index.html#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost mag" href="tel:6103608583">Call / text 610-360-8583</a>
       </div>
     </div>
@@ -398,7 +398,7 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
   var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse');
-  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?1.2:1.7),mx,my,tmx,tmy;
+  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?.8:1.7),mx,my,tmx,tmy;
   function rs(){cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;cv.style.width=innerWidth+'px';cv.style.height=innerHeight+'px';gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);tmx=mx=cv.width/2;tmy=my=cv.height/2;
   addEventListener('pointermove',function(e){tmx=e.clientX*DPR;tmy=(innerHeight-e.clientY)*DPR;},{passive:true});
@@ -444,6 +444,10 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   ' d=min(d,sdCap(p,vec3(-0.242,-0.898,-0.02),vec3(-0.100,-0.902,-0.02),0.024));',
   ' return d;}',
   'float map(vec3 p){float sway=sin(uTime*0.28)*0.22;p.xz*=rot(sway+uMouse.x*0.30);p.xy*=rot(-0.05+uMouse.y*0.10);',
+  /* uMorph is a uniform, so these branches are fully coherent across the whole
+     draw — they skip an entire SDF instead of evaluating both every step */
+  ' if(uMorph<0.002) return mapHeron(p);',
+  ' if(uMorph>0.998) return mapBlob(p);',
   ' return mix(mapHeron(p),mapBlob(p),uMorph);}',
   'vec3 nrm(vec3 p){vec2 e=vec2(0.0013,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
   'vec3 env(vec3 rd){vec3 col=mix(vec3(0.015,0.03,0.07),vec3(0.05,0.10,0.20),rd.y*0.5+0.5);',
@@ -470,7 +474,7 @@ var RM=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var Q=new URLSearchParams(location.search),FM=Q.has('m')?parseFloat(Q.get('m')):null,FT=Q.has('ft')?parseFloat(Q.get('ft')):null;
   function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
   function morphAt(ts){if(ts<2.6)return 1-sstep(0.3,2.6,ts);var c=((ts-2.6)%16)/16;if(c<0.55)return 0;if(c<0.66)return sstep(0.55,0.66,c);if(c<0.74)return 1;if(c<0.9)return 1-sstep(0.74,0.9,c);return 0;}
-  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?1.5:2),tmx=0,tmy=0,mx=0,my=0;
+  var DPR=Math.min(devicePixelRatio||1,matchMedia('(pointer:coarse)').matches?.9:2),tmx=0,tmy=0,mx=0,my=0;
   function rs(){var w=cv.clientWidth||320,h=cv.clientHeight||320;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver){new ResizeObserver(rs).observe(cv);}
   addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-.5);tmy=-(e.clientY/innerHeight-.5);},{passive:true});

@@ -523,7 +523,11 @@ class LiquidGlass {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lowMemory = navigator.deviceMemory !== undefined && navigator.deviceMemory <= 2;
   const lowCores = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 2;
-  if (reducedMotion || lowMemory || lowCores) return;
+  // Touch devices too: the homepage hero already runs two fragment-heavy shaders, and
+  // this would be a third live WebGL renderer competing with them. Phones keep the CSS
+  // glass, which is visually close and costs nothing.
+  const touch = matchMedia('(pointer:coarse)').matches;
+  if (reducedMotion || lowMemory || lowCores || touch) return;
 
   // Cheap WebGL probe before pulling in renderers.
   const probe = document.createElement('canvas');

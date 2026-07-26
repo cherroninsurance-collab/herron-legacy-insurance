@@ -864,6 +864,50 @@ html{overflow-x:clip}
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
 .crest::after{display:none!important}
 .hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
+/* ============================================================
+   MOBILE-LITE — phones pay for two fragment shaders already, and profiling
+   showed the remaining cost is cumulative compositing, not one hot spot:
+   stripping the decorative layers cut frame time ~38%. So on coarse pointers
+   we drop backdrop-filter (the priciest effect on a phone GPU, used on every
+   glass surface at blur(14-34px), one of them with an SVG url() filter),
+   flatten the big blurred decor, and stop the purely ornamental loops.
+   Solid fills below are the same ones the @supports-not fallbacks already use,
+   so contrast and legibility are unchanged.
+   ============================================================ */
+/* the primary CTA label is longer than the old "Book a call", which wrapped the
+   phone nav onto three lines. Keep it on one line, and below 520px drop it entirely —
+   the sticky bottom bar already carries the same action. */
+@media(max-width:880px){
+  .nav-cta .btn,.mobilebar a{white-space:nowrap}
+  .brand-txt,.logo-txt,.brand{white-space:nowrap}
+  .nav-cta .btn{padding:9px 14px;font-size:13px}
+}
+@media(max-width:520px){ .nav-cta .btn{display:none} }
+/* the floating chiplets overlap the emblem once the hero stacks */
+@media(max-width:880px){ .crest .chiplet{display:none} }
+@media (pointer:coarse){
+  nav,.crest,.crest .chiplet,.mobilebar,.nav-sheet,.nav-burger,.chat-shell,
+  .hstat,.book-point,.iul-preview,.cov-scrim,.cov-x,.cover-card,.lg-container,
+  .liquid-glass,.glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  nav{background:rgba(8,18,38,.96)}
+  .nav-sheet{background:rgba(8,18,38,.985)}
+  .mobilebar{background:rgba(8,18,38,.96)}
+  .chat-shell{background:var(--navy-deep)}
+  .hstat,.book-point{background:rgba(255,255,255,.05)}
+  .crest .chiplet{background:rgba(8,18,38,.88)}
+  .cover-card.liquid-glass{background:var(--cloud)}
+  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,var(--navy) 0%,var(--navy-deep) 90%)}
+  .iul-preview.liquid-glass{background:rgba(8,18,38,.62)}
+  .lg-container{background:rgba(8,18,38,.9)}
+  .lg-container[data-lg-theme="light"]{background:var(--cloud)}
+  .cov-scrim{background:rgba(3,8,20,.86)}
+  /* big blur radii are paint-bound: keep the colour wash, drop the blur */
+  .glow,.lg-blob{filter:none!important;opacity:.34}
+  .lg-blob{animation:none!important}
+  /* ornamental, always-running, and invisible at phone size */
+  .hero-sparks,.sparks{display:none!important}
+  .hero-grain{display:none!important}
+}
 /* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
 .cover-grid,.ann-grid{perspective:1500px;perspective-origin:50% 42%}
 .cover-grid>.reveal,.ann-grid>.reveal{opacity:0;transform:rotateY(-60deg) translateZ(-24px);transform-origin:left center;backface-visibility:hidden;transition:opacity .8s cubic-bezier(.16,1,.3,1),transform 1.05s cubic-bezier(.16,1,.3,1)}
@@ -888,7 +932,7 @@ html{overflow-x:clip}
 #ignite .imk path{stroke:#E2B45C;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
 @keyframes igmk{0%,20%{opacity:0}45%,100%{opacity:1}}
 @keyframes igdr{to{stroke-dashoffset:0}}
-@media(max-width:880px){.hero{min-height:auto;display:block}.hero-veil{background:linear-gradient(180deg,rgba(8,18,38,.55),rgba(8,18,38,.2) 40%,transparent 60%)}.crest{width:min(300px,80%)!important}}
+@media(max-width:880px){.hero{min-height:auto;display:block}.hero-veil{background:linear-gradient(180deg,rgba(8,18,38,.55),rgba(8,18,38,.2) 40%,transparent 60%)}.crest{width:min(205px,52%)!important}}
 @media(prefers-reduced-motion:reduce){.hero-spark{display:none}#ignite{display:none}}
 </style>
 </head>
@@ -979,8 +1023,8 @@ html{overflow-x:clip}
   <div class="hero-inner">
     <div>
       <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 12 states · Life insurance &amp; fixed annuities</span>
-      <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
-      <p class="lede rise d2">Mortgage protection with living benefits, indexed universal life (IUL), hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained in plain English by a concierge that never sleeps, and closed by a real licensed agent who does.</p>
+      <h1 class="rise d1">Your family keeps the house. <span class="grad">Even if the worst happens tomorrow.</span></h1>
+      <p class="lede rise d2">Mortgage protection with living benefits, IUL, hybrid long-term care, final expense, fixed annuities and disability income — shopped across 20+ national carriers by an independent agent who gets paid the same either way. Fifteen minutes, real numbers, and the honest answer even when it costs us the sale.</p>
       <div class="hero-ctas rise d3">
         <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
@@ -1415,7 +1459,7 @@ html{overflow-x:clip}
           <span class="t-kick">Protect · Grow · Distribute</span>
           <h3>The Wealth Shield Matrix</h3>
           <p class="t-what">The bucket-and-shield simulator. Crash the market on purpose and watch the shielded bucket hold while the unshielded one drains — then run your own numbers in the projection studio.</p>
-          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the wealth shield matrix</span></div><img src="images/matrix-desktop.png" alt="The Wealth Shield Matrix — bucket and shield downturn simulator" loading="lazy" width="1440" height="1024"></div>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the wealth shield matrix</span></div><picture><source srcset="images/matrix-desktop.avif" type="image/avif"><source srcset="images/matrix-desktop.webp" type="image/webp"><img src="images/matrix-desktop.png" alt="The Wealth Shield Matrix — bucket and shield downturn simulator" loading="lazy" decoding="async" width="1440" height="1024"></picture></div>
           <div class="t-feats"><span class="t-feat">IUL Shield</span><span class="t-feat">Annuity Anchors</span><span class="t-feat">Live projections</span><span class="t-feat">Objection dashboard</span></div>
           <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Open the Matrix ↗</a>
         </div>
@@ -1427,7 +1471,7 @@ html{overflow-x:clip}
           <span class="t-kick">Care · Paycheck · Home · Legacy</span>
           <h3>The Protection Blueprint</h3>
           <p class="t-what">Your whole protection plan on one screen — four shields, each explained honestly, starting with the number nobody says out loud: 7 in 10 will need long-term care, and Medicare pays $0.</p>
-          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the protection blueprint</span></div><img src="images/blueprint-desktop.png" alt="The Protection Blueprint — the Care Shield walkthrough" loading="lazy" width="1440" height="1024"></div>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the protection blueprint</span></div><picture><source srcset="images/blueprint-desktop.avif" type="image/avif"><source srcset="images/blueprint-desktop.webp" type="image/webp"><img src="images/blueprint-desktop.png" alt="The Protection Blueprint — the Care Shield walkthrough" loading="lazy" decoding="async" width="1440" height="1024"></picture></div>
           <div class="t-feats"><span class="t-feat">Care Shield</span><span class="t-feat">Paycheck Shield</span><span class="t-feat">Home Shield</span><span class="t-feat">Legacy Shield</span></div>
           <a class="btn btn-brass" href="protection-blueprint.html" target="_blank" rel="noopener">Open the Blueprint ↗</a>
         </div>
@@ -1615,7 +1659,7 @@ html{overflow-x:clip}
     </div>
     <div class="about-grid">
       <div class="about-photo reveal">
-        <img src="images/connor.jpg" alt="Connor Herron, independent life insurance agent" width="640" height="800" loading="lazy">
+        <picture><source srcset="images/connor.avif" type="image/avif"><source srcset="images/connor.webp" type="image/webp"><img src="images/connor.jpg" alt="Connor Herron, independent life insurance agent" width="640" height="800" loading="lazy" decoding="async"></picture>
         <div class="npn"><b>Licensed producer</b><span>NPN 21556594</span></div>
       </div>
       <div class="about-copy reveal">
@@ -2524,7 +2568,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   var gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});
   if(!gl){cv.style.display='none';return;}
   var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
-  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform vec2 uSun;',
+  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform vec2 uSun;uniform float uLow;',
   'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
   'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}',
   'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}',
@@ -2574,6 +2618,9 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' mc+=vec3(1.,.72,.34)*smoothstep(.030,0.,tt-uv.y)*.85;',
   ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.228,0.)*15.)*.30;',
   ' col=mix(col,mc,smoothstep(tt+.0035,tt-.0035,uv.y));',
+  /* foreground cloud sea — the most expensive layer (10 fbm evaluations).
+     uLow is a uniform, so phones skip the whole block coherently. */
+  ' if(uLow<.5){',
   ' float fA=cld(uv*1.32+vec2(-t*1.5,-.55),t);',
   ' float fB=cld(uv*2.85+vec2(t*2.2,-1.1),t*1.3);',
   ' float fd=(smoothstep(.39,.66,fA)*1.0+smoothstep(.47,.74,fB)*.62)*smoothstep(.10,-.44,uv.y);',
@@ -2582,7 +2629,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' fc=mix(fc,vec3(1.,.92,.74),clamp(pow(gl2,2.4)*1.35,0.,1.));',
   ' fc*=.58+.88*smoothstep(.40,.86,fA);',
   ' fc+=vec3(1.,.74,.36)*(smoothstep(.40,.47,fA)-smoothstep(.47,.58,fA))*gl2*2.0;',
-  ' col=mix(col,fc,clamp(fd,0.,1.));',
+  ' col=mix(col,fc,clamp(fd,0.,1.));}',
   /* anamorphic highlight streak through the gap — cheap, and reads as real lens glass */
   ' float strk=exp(-abs(dv.y)*54.)*exp(-abs(dv.x)*1.9);',
   ' col+=vec3(1.,.86,.62)*strk*.17;',
@@ -2598,11 +2645,18 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' col=clamp(col,0.,1.)+(hash(gl_FragCoord.xy*1.7)-.5)*.0055;',
   ' gl_FragColor=vec4(col,1.);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
-  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var coarse=matchMedia('(pointer:coarse)').matches;
+  /* phones: halve the fbm octaves (6 -> 3). Clouds read chunkier at phone size but
+     the per-pixel cost roughly halves, and the scene is ~150 noise taps deep. */
+  var fsrc=coarse?fs.replace(/i<6;i\+\+/g,'i<3;i++'):fs;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fsrc));gl.linkProgram(pr);gl.useProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){cv.style.display='none';return;}
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
-  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uS=gl.getUniformLocation(pr,'uSun');
-  var coarse=matchMedia('(pointer:coarse)').matches;var DPR=Math.min(devicePixelRatio||1,coarse?1.2:1.6),mx,my,tmx,tmy,run=true;
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uS=gl.getUniformLocation(pr,'uSun'),uL=gl.getUniformLocation(pr,'uLow');
+  /* render the full-screen scene BELOW 1:1 on phones and let the compositor upscale —
+     the single biggest win available for a fragment-heavy hero */
+  var DPR=coarse?Math.min(devicePixelRatio||1,.75):Math.min(devicePixelRatio||1,1.6),mx,my,tmx,tmy,run=true;
   /* anchor the gateway's light gap on the heron emblem, wherever the layout puts it
      (right column on desktop, centred once the hero stacks) — measured, not guessed */
   var crest=document.querySelector('.crest'),sx=0,sy=0;
@@ -2621,10 +2675,16 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   tmx=mx=cv.width/2;tmy=my=cv.height*0.6;
   addEventListener('pointermove',function(e){var r=hero.getBoundingClientRect();tmx=(e.clientX-r.left)*DPR;tmy=(r.height-(e.clientY-r.top))*DPR;},{passive:true});
   var start=performance.now();
-  function loop(now){if(!run)return;mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.uniform2f(uS,sx,sy);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  /* phones: draw at ~30fps instead of every vsync. The scene is ambient drift, so
+     halving the draw count is invisible and halves the GPU work. */
+  var minDt=coarse?1000/30:0,lastDraw=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(minDt&&now-lastDraw<minDt)return; lastDraw=now;
+    mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.uniform2f(uS,sx,sy);gl.uniform1f(uL,coarse?1:0);gl.drawArrays(gl.TRIANGLES,0,3);}
   if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(hero);}
   requestAnimationFrame(loop);
-  if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.uniform2f(uS,sx,sy);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.uniform2f(uS,sx,sy);gl.uniform1f(uL,coarse?1:0);gl.drawArrays(gl.TRIANGLES,0,3);}
 })();
 
 /* ---- morphing liquid-chrome heron ---- */
@@ -2663,6 +2723,10 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' d=min(d,sdCap(p,vec3(-0.242,-0.898,-0.02),vec3(-0.100,-0.902,-0.02),0.024));',
   ' return d;}',
   'float map(vec3 p){float sway=sin(uTime*0.28)*0.40;p.xz*=rot(sway+uMouse.x*0.55);p.xy*=rot(-0.05+uMouse.y*0.16);',
+  /* uMorph is a uniform, so these branches are fully coherent across the whole
+     draw — they skip an entire SDF instead of evaluating both every step */
+  ' if(uMorph<0.002) return mapHeron(p);',
+  ' if(uMorph>0.998) return mapBlob(p);',
   ' return mix(mapHeron(p),mapBlob(p),uMorph);}',
   'vec3 nrm(vec3 p){vec2 e=vec2(0.0013,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
   'vec3 env(vec3 rd){vec3 col=mix(vec3(0.015,0.03,0.07),vec3(0.05,0.10,0.20),rd.y*0.5+0.5);',
@@ -2682,20 +2746,30 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' else{float aa=smoothstep(0.045,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.7;alpha=aa;}',
   ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
-  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var coarseH=matchMedia('(pointer:coarse)').matches;
+  /* 110 march steps x a ~30-primitive SDF is the single most expensive thing on
+     the page; phones get 56, which still resolves the emblem at their size */
+  var hsrc=coarseH?fs.replace('i<110;i++','i<56;i++'):fs;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,hsrc));gl.linkProgram(pr);gl.useProgram(pr);
   var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
   var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uMo=gl.getUniformLocation(pr,'uMorph');
   function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
   function morphAt(ts){if(ts<2.6)return 1-sstep(0.3,2.6,ts);var c=((ts-2.6)%16)/16;if(c<0.55)return 0;if(c<0.66)return sstep(0.55,0.66,c);if(c<0.74)return 1;if(c<0.9)return 1-sstep(0.74,0.9,c);return 0;}
-  var coarse=matchMedia('(pointer:coarse)').matches;var DPR=Math.min(devicePixelRatio||1,coarse?1.1:1.5),tmx=0,tmy=0,mx=0,my=0,run=true;
+  var coarse=coarseH;var DPR=Math.min(devicePixelRatio||1,coarse?.85:1.5),tmx=0,tmy=0,mx=0,my=0,run=true;
   function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(cv);
   addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-.5);tmy=-(e.clientY/innerHeight-.5);},{passive:true});
   gl.clearColor(0,0,0,0);
   var start=performance.now();
-  function loop(now){if(!run)return;var ts=RM?3.0:(now-start)/1000;var mo=morphAt(ts);
-    mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uMo,mo);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);if(!RM)requestAnimationFrame(loop);}
+  /* phones: ~24fps. This is the most expensive shader on the page, and the emblem's
+     motion is a slow sway — the cadence reads fine and the cost drops with it. */
+  var hMinDt=coarse?1000/24:0,hLast=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(hMinDt&&now-hLast<hMinDt)return; hLast=now;
+    var ts=RM?3.0:(now-start)/1000;var mo=morphAt(ts);
+    mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uMo,mo);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);}
   if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
   requestAnimationFrame(loop);
 })();
