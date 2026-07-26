@@ -80,9 +80,9 @@ p,.lede{text-wrap:pretty}
   #coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
   .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-24) 0}
 }
-/* long page: skip layout/paint for bands that are still far off-screen */
-.iul-band,.ann-band,.tools-band,.fitcheck,.bp-band,
-.quote-band,.states-band,.about-band,.booking,#faq{content-visibility:auto;contain-intrinsic-size:auto 900px}
+/* NOTE: content-visibility:auto was tried here and reverted — nearly every band
+   is an in-page anchor target, and estimated intrinsic sizes make hash jumps and
+   scrollIntoView land short while heights resolve. Perf win wasn't worth it. */
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
   color:var(--brass);font-weight:500;display:block;margin-bottom:16px;
@@ -656,6 +656,12 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
   position:absolute;top:50%;left:50%;width:min(520px,88vw);margin:0;
   transform-style:preserve-3d;will-change:transform,opacity;
   pointer-events:none;
+  /* real-GPU fixes: cards rotating in 3D must not sample a backdrop (Chrome
+     glitches badly with blur+url() SVG filters on transformed layers), and a
+     card facing away must not show mirrored text. Solid surface instead. */
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  background:var(--white);
 }
 /* reveal-neutraliser + dim/front states. Deliberately NO !important anywhere in
    this trio: the flip-reveal hide is .cover-grid>.reveal (0,2,0), the neutraliser
@@ -673,6 +679,15 @@ html.hx-pinned{scroll-behavior:auto!important}
 #coverage.hx-on ~ * .hx-progress,#coverage.hx-on .hx-progress{display:flex}
 .hx-progress i{width:26px;height:3px;border-radius:2px;background:rgba(226,180,92,.24);transition:background .3s,transform .3s}
 .hx-progress i.on{background:var(--brass-bright);transform:scaleY(1.8)}
+
+/* ---- phone/tablet coverage carousel (JS adds .hx-car/.hx-carousel; no GSAP) ---- */
+#coverage.hx-car .hx-progress{display:flex}
+.hx-carousel{display:flex;align-items:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;margin-inline:-24px;padding:4px 24px 18px;
+  scroll-padding-inline:24px;scrollbar-width:none}
+.hx-carousel::-webkit-scrollbar{display:none}
+.hx-carousel>.cover-card{flex:0 0 84%;max-width:430px;scroll-snap-align:center;margin:0;scroll-margin:76px 12px}
+@media(min-width:720px){.hx-carousel>.cover-card{flex-basis:46%}}
 
 /* ---- why-us grid ---- */
 .hx-why{background:var(--cloud);padding:var(--sp-32) 0}

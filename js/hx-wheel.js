@@ -13,11 +13,51 @@
     c.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }, { passive: true });
 
+  /* ---- phone/tablet: coverage cards become a snap carousel with dots ---- */
+  function initCarousel() {
+    var coarse = matchMedia('(pointer:coarse)').matches;
+    if (!(coarse || innerWidth < 1024)) return;            // plain grid elsewhere
+    var grid = document.querySelector('.cover-grid');
+    var cov = document.getElementById('coverage');
+    if (!grid || !cov) return;
+    var cards = Array.prototype.slice.call(grid.querySelectorAll('.cover-card'));
+    if (cards.length < 2) return;
+    cov.classList.add('hx-car');
+    grid.classList.add('hx-carousel');
+    var progress = document.querySelector('.hx-progress');
+    if (progress) progress.innerHTML = cards.map(function () { return '<i></i>'; }).join('');
+    var dots = progress ? Array.prototype.slice.call(progress.children) : [];
+    function mark(i) { dots.forEach(function (d, j) { d.classList.toggle('on', j === i); }); }
+    mark(0);
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (en) {
+        if (en.isIntersecting) mark(cards.indexOf(en.target));
+      });
+    }, { root: grid, threshold: 0.6 });
+    cards.forEach(function (c) { io.observe(c); });
+    /* card anchors: let the native hash jump handle vertical, then centre the
+       card inside the scroller. No preventDefault — nothing else is intercepted. */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = a.getAttribute('href').slice(1);
+      var card = null;
+      cards.some(function (c) { if (c.id === id) { card = c; return true; } });
+      if (!card) return;
+      setTimeout(function () {
+        card.scrollIntoView({ behavior: 'auto', inline: 'center', block: 'nearest' });
+      }, 40);
+    }, true);
+  }
+
   /* ---- 3D product wheel ---- */
   var OK = window.gsap && window.ScrollTrigger;
   var fine = matchMedia('(pointer:fine)').matches;
   var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (!OK || !fine || calm || innerWidth < 1024) return;   // grid stays, untouched
+  if (!OK || !fine || calm || innerWidth < 1024) {         // grid/carousel path
+    initCarousel();
+    return;
+  }
 
   var stage = document.querySelector('.hx-stage');
   var wheel = stage && stage.querySelector('.hx-wheel');
@@ -27,7 +67,6 @@
   if (cards.length < 3) return;
 
   gsap.registerPlugin(ScrollTrigger);
-  document.documentElement.classList.add('hx-pinned');
   stage.classList.add('hx-on');
   document.getElementById('coverage').classList.add('hx-on');
 
@@ -91,9 +130,13 @@
     var idx = ids.indexOf(id);
     if (idx < 0) return;
     e.preventDefault();
-    var y = st.start + (st.end - st.start) * (idx / (n - 1));
+    var y = st.start + (st.end - st.start) * (idx / (n - 1)) + (idx === 0 ? 1 : 0);
+    /* CSS scroll-behavior:smooth would animate this jump straight through the pin,
+       spinning the wheel — suspend it just for the programmatic scroll */
+    document.documentElement.classList.add('hx-pinned');
     window.scrollTo({ top: y, behavior: 'auto' });
     face(idx);
+    setTimeout(function () { document.documentElement.classList.remove('hx-pinned'); }, 80);
     /* if the mobile sheet is open, close it through its own toggle so body
        overflow + aria state are restored by the site's existing handler */
     var sheet = document.getElementById('navSheet');
@@ -111,9 +154,11 @@
     setTimeout(function () {
       var fit = document.getElementById('fitcheck');
       if (!fit) return;
+      document.documentElement.classList.add('hx-pinned');
       window.scrollTo({ top: st.end + 10, behavior: 'auto' });
       requestAnimationFrame(function () {
         fit.scrollIntoView({ behavior: 'auto', block: 'start' });
+        setTimeout(function () { document.documentElement.classList.remove('hx-pinned'); }, 80);
       });
     }, 60);
   }, false);
