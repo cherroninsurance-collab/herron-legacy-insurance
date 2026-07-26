@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generational architecture, fully insulated — Herron &amp; Co. Legacy Agency</title>
+<meta name="description" content="Life insurance and wealth preservation designed as architecture: term insulation, strategic IUL accumulation, and built-in living benefits — shopped across 20+ national carriers by a licensed independent agency.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23030712'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23FBBF24' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+
+<!-- Type is self-hosted alongside the main site: no third-party request in the
+     critical path, nothing to be down, no visitor IP handed to another host. -->
+<link rel="stylesheet" href="fonts.css">
+<link rel="preload" as="font" type="font/woff2" href="fonts/PlayfairDisplay-500-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/Inter-400-latin.woff2" crossorigin>
+
+<!-- Tailwind, compiled. Source in src/experience.tw.css + tailwind.config.js;
+     rebuild with the command noted at the top of the config. No CDN: the Play
+     CDN is a dev convenience and compiles in the browser on every load. -->
+<link rel="stylesheet" href="experience.css">
+
+
+
+<style>
+/* ==========================================================================
+   AMBIENT LIGHT — three blurred radial blobs drifting behind everything.
+   Pre-blurred gradients on transform-only keyframes: the compositor moves
+   them, so the whole field costs nothing per frame.
+   ========================================================================== */
+.blob { position: fixed; border-radius: 9999px; pointer-events: none; z-index: 0; filter: blur(90px); will-change: transform; }
+.blob-a { width: 46vw; height: 46vw; top: -12vw; left: -8vw;  background: radial-gradient(circle, #0F172A 0%, transparent 68%); animation: driftA 34s ease-in-out infinite alternate; }
+.blob-b { width: 54vw; height: 54vw; top: 26vh;  right: -14vw; background: radial-gradient(circle, #1E1B4B 0%, transparent 68%); animation: driftB 46s ease-in-out infinite alternate; }
+.blob-c { width: 40vw; height: 40vw; bottom: -8vw; left: 22vw; background: radial-gradient(circle, #0B132B 0%, transparent 70%); animation: driftC 40s ease-in-out infinite alternate; }
+@keyframes driftA { 0% { transform: translate3d(0,0,0) scale(1); } 100% { transform: translate3d(9vw,7vh,0) scale(1.18); } }
+@keyframes driftB { 0% { transform: translate3d(0,0,0) scale(1.06); } 100% { transform: translate3d(-11vw,-6vh,0) scale(.9); } }
+@keyframes driftC { 0% { transform: translate3d(0,0,0) scale(.94); } 100% { transform: translate3d(7vw,-9vh,0) scale(1.14); } }
+
+/* fine drafting grid, masked so it never reaches the edges */
+.grid-field {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(148,163,184,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: radial-gradient(120% 80% at 50% 30%, #000 0%, transparent 78%);
+  -webkit-mask-image: radial-gradient(120% 80% at 50% 30%, #000 0%, transparent 78%);
+}
+
+/* ==========================================================================
+   LIQUID BORDER — the intake field's focus state.
+   A conic gradient rotates behind the field and is punched out to a 1px ring
+   with a two-layer mask, so the highlight travels around the border instead
+   of just switching colour.
+   ========================================================================== */
+.liquid-ring { position: relative; }
+.liquid-ring::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px;
+  background: conic-gradient(from var(--angle, 0deg),
+    transparent 0deg, rgba(251,191,36,.05) 60deg, #FBBF24 130deg,
+    #FDE68A 160deg, #FBBF24 190deg, rgba(251,191,36,.05) 260deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0; transition: opacity .5s cubic-bezier(0.16,1,0.3,1); pointer-events: none;
+}
+.liquid-ring:focus-within::before { opacity: 1; animation: spin 4s linear infinite; }
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes spin { to { --angle: 360deg; } }
+/* Firefox and anything without @property still gets a static gold ring */
+@supports not (background: conic-gradient(from var(--a,0deg), red, blue)) {
+  .liquid-ring:focus-within::before { opacity: 1; background: rgba(251,191,36,.7); animation: none; }
+}
+
+/* ==========================================================================
+   SCROLL REVEAL
+   ========================================================================== */
+.rise { opacity: 0; transform: translateY(22px); transition: opacity .9s cubic-bezier(0.16,1,0.3,1), transform .9s cubic-bezier(0.16,1,0.3,1); }
+.rise.in { opacity: 1; transform: none; }
+
+/* ==========================================================================
+   THE PILLAR MATRIX — cross-fade, driven by class, never by display:none
+   (a hidden panel cannot transition).
+   ========================================================================== */
+.pane { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateY(14px);
+  transition: opacity .5s ease-out, transform .5s cubic-bezier(0.16,1,0.3,1), visibility 0s .5s; }
+.pane.live { opacity: 1; visibility: visible; transform: none; transition-delay: 0s, 0s, 0s; }
+
+/* the meter inside each pane */
+.meter { position: relative; height: 6px; border-radius: 999px; overflow: hidden;
+  background: linear-gradient(180deg, #020617, #0F172A); box-shadow: inset 0 2px 4px rgba(0,0,0,.9); }
+.meter > i { position: absolute; inset: 0 auto 0 0; display: block; border-radius: 999px; width: 0;
+  background: linear-gradient(90deg, #B45309, #FBBF24 55%, #FDE68A);
+  box-shadow: 0 0 14px -2px rgba(251,191,36,.9);
+  transition: width 1.1s cubic-bezier(0.16,1,0.3,1); }
+.pane.live .meter > i { width: var(--fill, 60%); }
+
+/* the pillar keys */
+.pillar { transition: all .5s cubic-bezier(0.16,1,0.3,1); }
+.pillar[aria-selected="true"] { background: rgba(251,191,36,.07); border-color: rgba(251,191,36,.45); }
+.pillar[aria-selected="true"] .pillar-idx { color: #FDE68A; }
+.pillar-bar { transition: transform .5s cubic-bezier(0.16,1,0.3,1); transform: scaleY(0); transform-origin: center; }
+.pillar[aria-selected="true"] .pillar-bar { transform: scaleY(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .blob, .liquid-ring:focus-within::before { animation: none !important; }
+  .rise { opacity: 1; transform: none; }
+  .pane { transition-duration: .01ms; }
+  .meter > i { transition-duration: .01ms; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+
+<body class="relative min-h-screen overflow-x-hidden">
+
+<!-- ambient field -->
+<div class="blob blob-a" aria-hidden="true"></div>
+<div class="blob blob-b" aria-hidden="true"></div>
+<div class="blob blob-c" aria-hidden="true"></div>
+<div class="grid-field" aria-hidden="true"></div>
+
+<!-- =====================================================================
+     NAV — a floating capsule
+     ===================================================================== -->
+<header class="fixed inset-x-0 top-4 z-50 px-4">
+  <nav class="glass mx-auto flex max-w-6xl items-center gap-6 rounded-full px-5 py-3">
+    <a href="#top" class="flex shrink-0 items-center gap-3" aria-label="Herron and Co. Legacy Agency">
+      <span class="grid h-9 w-9 place-items-center rounded-xl border border-amber-400/40 bg-gradient-to-br from-slate-800 to-obsidian">
+        <svg viewBox="0 0 100 100" class="h-5 w-5" fill="none" aria-hidden="true">
+          <path d="M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80"
+                stroke="#FBBF24" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="leading-tight">
+        <b class="block font-display text-[15px] font-medium text-white">Herron &amp; Co.</b>
+        <span class="tag text-[9px]">Legacy Agency</span>
+      </span>
+    </a>
+    <ul class="ml-auto hidden items-center gap-7 text-sm text-slate-400 lg:flex">
+      <li><a class="transition-colors duration-500 ease-out hover:text-white" href="#matrix">Trust matrix</a></li>
+      <li><a class="transition-colors duration-500 ease-out hover:text-white" href="#pillars">The three pillars</a></li>
+      <li><a class="transition-colors duration-500 ease-out hover:text-white" href="#intake">Intake</a></li>
+    </ul>
+    <a href="#intake"
+       class="ml-auto shrink-0 rounded-full border border-amber-400/50 bg-gradient-to-b from-amber-300 to-amber-600 px-5 py-2.5 text-sm font-semibold text-obsidian shadow-[inset_0_1px_0_rgba(255,255,255,.6)] transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-[0_16px_30px_-12px_rgba(251,191,36,.7)] lg:ml-0">
+      Begin intake
+    </a>
+  </nav>
+</header>
+
+<main id="top" class="relative z-10">
+
+<!-- =====================================================================
+     HERO
+     ===================================================================== -->
+<section class="mx-auto grid max-w-6xl items-center gap-16 px-6 pb-24 pt-40 lg:grid-cols-[1.05fr_.95fr] lg:pt-52">
+
+  <div class="rise">
+    <p class="tag mb-8 flex items-center gap-3">
+      <span class="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_10px_#FBBF24]"></span>
+      Licensed independent agency &middot; NPN 21556594
+    </p>
+
+    <h1 class="display text-[clamp(2.6rem,6vw,5rem)] leading-[0.95]">
+      Generational architecture.
+      <!-- pb + leading: background-clip:text crops to the line box, so a tight
+           leading guillotines the descender on "Fully" -->
+      <span class="block bg-gradient-to-r from-amber-200 via-amber-400 to-amber-600 bg-clip-text pb-[0.12em] leading-[1.08] text-transparent">
+        Fully insulated.
+      </span>
+    </h1>
+
+    <p class="mt-8 max-w-[52ch] text-lg leading-relaxed text-slate-400">
+      Most policies are sold off a shelf. We design them &mdash; sized to what you are
+      actually protecting, insulated against the years that go wrong, and shopped
+      across more than twenty national carriers before a single number is quoted.
+    </p>
+
+    <!-- structural line-work: three stacked rules that read as strata -->
+    <div class="mt-12 flex flex-col gap-3" aria-hidden="true">
+      <span class="hairline"></span>
+      <span class="hairline opacity-60"></span>
+      <span class="hairline opacity-30"></span>
+    </div>
+
+    <dl class="mt-10 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10">
+      <div class="bg-obsidian/80 p-5">
+        <dt class="tag text-[10px]">Carriers</dt>
+        <dd class="mt-2 font-display text-3xl text-white tabular-nums">20<span class="text-amber-400">+</span></dd>
+      </div>
+      <div class="bg-obsidian/80 p-5">
+        <dt class="tag text-[10px]">States</dt>
+        <dd class="mt-2 font-display text-3xl text-white tabular-nums">13</dd>
+      </div>
+      <div class="bg-obsidian/80 p-5">
+        <dt class="tag text-[10px]">Your cost</dt>
+        <dd class="mt-2 font-display text-3xl text-white tabular-nums">$0</dd>
+      </div>
+    </dl>
+  </div>
+
+  <!-- ---- INSTANT STRATEGIC INTAKE ---- -->
+  <div class="rise glass p-8 sm:p-10" id="intake" style="transition-delay:.12s">
+    <p class="tag">Instant strategic intake</p>
+    <h2 class="display mt-4 text-3xl leading-tight">What are you insulating?</h2>
+    <p class="mt-3 text-sm leading-relaxed text-slate-400">
+      Three fields. No obligation, and nothing is quoted until a licensed human has
+      read it.
+    </p>
+
+    <form class="mt-8 flex flex-col gap-5" id="intakeForm" novalidate>
+      <label class="block">
+        <span class="tag text-[10px] text-slate-500">Full name</span>
+        <span class="liquid-ring mt-2 block rounded-xl">
+          <input required name="name" type="text" autocomplete="name" placeholder="Connor Herron"
+                 class="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-white placeholder-slate-600 shadow-[inset_0_2px_6px_rgba(0,0,0,.45)] transition-all duration-500 ease-out focus:border-transparent focus:bg-white/[0.07] focus:outline-none focus:ring-0">
+        </span>
+      </label>
+
+      <label class="block">
+        <span class="tag text-[10px] text-slate-500">Email</span>
+        <span class="liquid-ring mt-2 block rounded-xl">
+          <input required name="email" type="email" autocomplete="email" placeholder="you@email.com"
+                 class="w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-white placeholder-slate-600 shadow-[inset_0_2px_6px_rgba(0,0,0,.45)] transition-all duration-500 ease-out focus:border-transparent focus:bg-white/[0.07] focus:outline-none focus:ring-0">
+        </span>
+      </label>
+
+      <label class="block">
+        <span class="tag text-[10px] text-slate-500">Primary objective</span>
+        <span class="liquid-ring mt-2 block rounded-xl">
+          <select required name="objective"
+                  class="w-full appearance-none rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3.5 text-white shadow-[inset_0_2px_6px_rgba(0,0,0,.45)] transition-all duration-500 ease-out focus:border-transparent focus:bg-white/[0.07] focus:outline-none focus:ring-0">
+            <option class="bg-slate-900" value="">Select one&hellip;</option>
+            <option class="bg-slate-900">Replace my income if I die</option>
+            <option class="bg-slate-900">Pay off the house</option>
+            <option class="bg-slate-900">Tax-advantaged retirement accumulation</option>
+            <option class="bg-slate-900">Protect savings from long-term care</option>
+            <option class="bg-slate-900">Cover final expenses</option>
+            <option class="bg-slate-900">Not sure yet &mdash; walk me through it</option>
+          </select>
+        </span>
+      </label>
+
+      <p class="text-[11px] leading-relaxed text-slate-500" id="intakeConsent">
+        Submitting asks a licensed producer to contact you about coverage. Not a
+        condition of purchase. Nothing here is an offer of insurance or a quoted rate.
+      </p>
+
+      <button type="submit"
+              class="group mt-1 flex w-full items-center justify-center gap-3 rounded-xl border border-amber-400/50 bg-gradient-to-b from-amber-300 to-amber-600 px-6 py-4 font-semibold text-obsidian shadow-[inset_0_1px_0_rgba(255,255,255,.65)] transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-16px_rgba(251,191,36,.85)] disabled:opacity-60">
+        <span>Open my file</span>
+        <span class="transition-transform duration-500 ease-out group-hover:translate-x-1" aria-hidden="true">&rarr;</span>
+      </button>
+
+      <p class="hidden text-sm text-amber-300" id="intakeDone" role="status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- =====================================================================
+     BENTO TRUST MATRIX
+     ===================================================================== -->
+<section class="mx-auto max-w-6xl px-6 py-24" id="matrix">
+
+  <div class="rise mb-12 flex flex-col gap-4">
+    <p class="tag">The trust matrix</p>
+    <h2 class="display max-w-[20ch] text-[clamp(2rem,4vw,3.4rem)] leading-[1.02]">
+      Strength you can verify, not adjectives.
+    </h2>
+    <p class="max-w-[62ch] text-slate-400">
+      An agency does not carry a financial-strength rating &mdash; the carriers behind
+      your policy do. These are the figures we hold ourselves to when choosing which
+      of them to place your coverage with.
+    </p>
+  </div>
+
+  <div class="grid auto-rows-[minmax(150px,auto)] grid-cols-2 gap-4 lg:grid-cols-4">
+
+    <!-- the headline cell, deliberately oversized -->
+    <article class="rise glass glass-hover col-span-2 row-span-2 flex flex-col justify-between overflow-hidden p-8">
+      <div class="flex items-start justify-between gap-4">
+        <p class="tag">Carrier financial strength</p>
+        <span class="rounded-full border border-white/10 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">AM Best</span>
+      </div>
+      <!-- an abstract strength plot: pure CSS bars, no chart library -->
+      <div class="my-8 flex h-24 items-end gap-2" aria-hidden="true">
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/30 to-amber-400/70" style="height:38%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/30 to-amber-400/70" style="height:56%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/30 to-amber-400/70" style="height:47%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/40 to-amber-300" style="height:88%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/30 to-amber-400/70" style="height:64%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/30 to-amber-400/70" style="height:72%"></span>
+        <span class="flex-1 rounded-t bg-gradient-to-t from-amber-700/40 to-amber-300" style="height:94%"></span>
+      </div>
+      <div>
+        <p class="font-display text-[clamp(3rem,7vw,5.5rem)] leading-none text-white">A<span class="text-amber-400">+</span></p>
+        <p class="mt-3 max-w-[40ch] text-sm leading-relaxed text-slate-400">
+          The minimum AM Best rating we place business at. Every carrier's current
+          rating is shown to you before you sign anything &mdash; ratings move, and
+          you should see the live one, not ours.
+        </p>
+      </div>
+    </article>
+
+    <article class="rise glass glass-hover flex flex-col justify-between p-6">
+      <p class="tag">Underwriting</p>
+      <div>
+        <p class="font-display text-4xl leading-none text-white">No exam</p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">for most applicants &mdash; accelerated underwriting, health questions only</p>
+      </div>
+    </article>
+
+    <article class="rise glass glass-hover flex flex-col justify-between p-6">
+      <p class="tag">Decision speed</p>
+      <div>
+        <p class="font-display text-4xl leading-none text-white tabular-nums">24&ndash;72<span class="text-amber-400 text-2xl">h</span></p>
+        <p class="mt-2 text-xs leading-relaxed text-slate-500">typical approval window once the e-application is in</p>
+      </div>
+    </article>
+
+    <article class="rise glass glass-hover col-span-2 flex items-center gap-6 p-6">
+      <!-- a glowing vector line, drawn not imported -->
+      <svg viewBox="0 0 120 60" class="h-16 w-28 shrink-0" fill="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#B45309" stop-opacity=".2"/>
+            <stop offset=".55" stop-color="#FBBF24"/>
+            <stop offset="1" stop-color="#FDE68A"/>
+          </linearGradient>
+        </defs>
+        <path d="M2 50 L22 44 L42 47 L62 28 L82 33 L102 12 L118 6" stroke="url(#lineGrad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="118" cy="6" r="3.5" fill="#FDE68A"/>
+        <circle cx="118" cy="6" r="7" fill="#FBBF24" opacity=".25"/>
+      </svg>
+      <div>
+        <p class="tag">Independence</p>
+        <p class="mt-2 font-display text-2xl leading-tight text-white">Paid by carriers, not by you.</p>
+        <p class="mt-2 max-w-[46ch] text-xs leading-relaxed text-slate-500">
+          Your premium is identical whether you buy through an agent or direct from the
+          company. The difference is who shops it, and who picks up the phone in year ten.
+        </p>
+      </div>
+    </article>
+
+    <article class="rise glass glass-hover col-span-2 flex flex-col justify-between p-6">
+      <p class="tag">Claims payment</p>
+      <div class="mt-4">
+        <p class="font-display text-4xl leading-none text-slate-600">&mdash;&mdash;<span class="text-slate-700">%</span></p>
+        <p class="mt-3 max-w-[44ch] text-xs leading-relaxed text-slate-500">
+          <span class="font-semibold text-amber-400/80">Placeholder.</span>
+          A claims-paid percentage is a carrier statistic, not an agency one, and it
+          differs by carrier and year. Drop in a figure you can cite from a named
+          source and date &mdash; or leave this tile out entirely.
+        </p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- =====================================================================
+     THE THREE-PILLAR MATRIX
+     ===================================================================== -->
+<section class="mx-auto max-w-6xl px-6 py-24" id="pillars">
+
+  <div class="rise mb-12 flex flex-col gap-4">
+    <p class="tag">The three-pillar matrix</p>
+    <h2 class="display max-w-[22ch] text-[clamp(2rem,4vw,3.4rem)] leading-[1.02]">
+      Three structures. One building.
+    </h2>
+    <p class="max-w-[62ch] text-slate-400">
+      Almost every plan we design is some combination of these. Select one to open it.
+    </p>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-[minmax(0,360px)_1fr]">
+
+    <!-- the keys -->
+    <div class="flex flex-col gap-3" role="tablist" aria-label="Coverage pillars" id="pillarList">
+
+      <button type="button" role="tab" id="tab-0" aria-controls="pane-0" aria-selected="true"
+              class="pillar glass flex items-start gap-4 p-5 text-left">
+        <span class="pillar-bar mt-1 h-10 w-[3px] shrink-0 rounded bg-gradient-to-b from-amber-200 to-amber-600"></span>
+        <span class="min-w-0">
+          <span class="pillar-idx tag block text-slate-500">Pillar one</span>
+          <span class="mt-1.5 block font-display text-xl leading-tight text-white">Term Insulation</span>
+          <span class="mt-1.5 block text-sm leading-relaxed text-slate-500">The most coverage per dollar, for the years that carry the most risk.</span>
+        </span>
+      </button>
+
+      <button type="button" role="tab" id="tab-1" aria-controls="pane-1" aria-selected="false" tabindex="-1"
+              class="pillar glass flex items-start gap-4 p-5 text-left">
+        <span class="pillar-bar mt-1 h-10 w-[3px] shrink-0 rounded bg-gradient-to-b from-amber-200 to-amber-600"></span>
+        <span class="min-w-0">
+          <span class="pillar-idx tag block text-slate-500">Pillar two</span>
+          <span class="mt-1.5 block font-display text-xl leading-tight text-white">Strategic IUL Accumulation</span>
+          <span class="mt-1.5 block text-sm leading-relaxed text-slate-500">Index-linked growth with a floor beneath it, engineered under MEC limits.</span>
+        </span>
+      </button>
+
+      <button type="button" role="tab" id="tab-2" aria-controls="pane-2" aria-selected="false" tabindex="-1"
+              class="pillar glass flex items-start gap-4 p-5 text-left">
+        <span class="pillar-bar mt-1 h-10 w-[3px] shrink-0 rounded bg-gradient-to-b from-amber-200 to-amber-600"></span>
+        <span class="min-w-0">
+          <span class="pillar-idx tag block text-slate-500">Pillar three</span>
+          <span class="mt-1.5 block font-display text-xl leading-tight text-white">Built-In Living Benefits</span>
+          <span class="mt-1.5 block text-sm leading-relaxed text-slate-500">Access part of your own benefit while you are alive, not after.</span>
+        </span>
+      </button>
+    </div>
+
+    <!-- the viewport -->
+    <div class="glass grid min-h-[30rem] overflow-hidden p-8 sm:p-10">
+
+      <article class="pane live" role="tabpanel" id="pane-0" aria-labelledby="tab-0">
+        <p class="tag">Term Insulation</p>
+        <h3 class="display mt-4 text-[clamp(1.6rem,2.6vw,2.4rem)] leading-tight">
+          Cover the window where a loss would be structural.
+        </h3>
+        <p class="mt-5 max-w-[58ch] leading-relaxed text-slate-400">
+          Term buys the largest death benefit per dollar, for a fixed span &mdash; ten to
+          thirty years. It is sized to the obligations that end: the mortgage, the years
+          until the kids are out, the runway your household needs if your income stops.
+          No cash value, and that is the point; nothing is spent on accumulation.
+        </p>
+        <div class="mt-8 grid gap-5 sm:grid-cols-3">
+          <div><p class="tag text-[10px] text-slate-500">Typical span</p><p class="mt-2 font-display text-2xl text-white">10&ndash;30 yr</p></div>
+          <div><p class="tag text-[10px] text-slate-500">Cash value</p><p class="mt-2 font-display text-2xl text-white">None</p></div>
+          <div><p class="tag text-[10px] text-slate-500">Convertible</p><p class="mt-2 font-display text-2xl text-white">Often</p></div>
+        </div>
+        <div class="mt-8">
+          <p class="tag mb-3 text-[10px] text-slate-500">Coverage per dollar</p>
+          <div class="meter" style="--fill:94%"><i></i></div>
+        </div>
+        <p class="mt-6 border-l-2 border-amber-400/40 pl-4 text-sm leading-relaxed text-slate-500">
+          Most quality term includes a conversion privilege &mdash; you can move to permanent
+          coverage without a new medical exam, locked at your original health class, until
+          a deadline. If your health has changed, that clause is often worth more than the
+          policy.
+        </p>
+      </article>
+
+      <article class="pane" role="tabpanel" id="pane-1" aria-labelledby="tab-1" hidden>
+        <p class="tag">Strategic IUL Accumulation</p>
+        <h3 class="display mt-4 text-[clamp(1.6rem,2.6vw,2.4rem)] leading-tight">
+          Growth when the index runs. A floor when it does not.
+        </h3>
+        <p class="mt-5 max-w-[58ch] leading-relaxed text-slate-400">
+          An indexed universal life policy credits interest tied to a market index, with a
+          floor that stops the credited rate going negative in a down year and a cap that
+          limits it in an up one. Funded correctly and kept under IRS MEC limits, the cash
+          value can be accessed through policy loans without a tax bill, and the death
+          benefit passes income-tax-free.
+        </p>
+        <div class="mt-8 grid gap-5 sm:grid-cols-3">
+          <div><p class="tag text-[10px] text-slate-500">Horizon</p><p class="mt-2 font-display text-2xl text-white">5&ndash;7 yr<span class="text-amber-400">+</span></p></div>
+          <div><p class="tag text-[10px] text-slate-500">Down-year floor</p><p class="mt-2 font-display text-2xl text-white">0%</p></div>
+          <div><p class="tag text-[10px] text-slate-500">Funding</p><p class="mt-2 font-display text-2xl text-white">Flexible</p></div>
+        </div>
+        <div class="mt-8">
+          <p class="tag mb-3 text-[10px] text-slate-500">Downside protection</p>
+          <div class="meter" style="--fill:100%"><i></i></div>
+        </div>
+        <p class="mt-6 border-l-2 border-amber-400/40 pl-4 text-sm leading-relaxed text-slate-500">
+          The floor is not free: policy charges continue in a down year, and gains in an up
+          year are limited by the carrier's cap and participation rate. It is a long
+          commitment and a poor fit for money you may need back early.
+        </p>
+      </article>
+
+      <article class="pane" role="tabpanel" id="pane-2" aria-labelledby="tab-2" hidden>
+        <p class="tag">Built-In Living Benefits</p>
+        <h3 class="display mt-4 text-[clamp(1.6rem,2.6vw,2.4rem)] leading-tight">
+          The policy pays while you are still here to use it.
+        </h3>
+        <p class="mt-5 max-w-[58ch] leading-relaxed text-slate-400">
+          Living benefits are riders on qualifying policies that release part of your own
+          death benefit early. Critical illness covers a qualifying diagnosis &mdash; heart
+          attack, stroke, invasive cancer. Chronic illness triggers when you can no longer
+          perform the activities of daily living unaided. Terminal accelerates the payout
+          on a terminal diagnosis.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-2">
+          <span class="rounded-full border border-amber-400/40 bg-amber-400/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-amber-200">Heart attack</span>
+          <span class="rounded-full border border-amber-400/40 bg-amber-400/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-amber-200">Stroke</span>
+          <span class="rounded-full border border-amber-400/40 bg-amber-400/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-amber-200">Invasive cancer</span>
+          <span class="rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500">Bathing</span>
+          <span class="rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500">Dressing</span>
+          <span class="rounded-full border border-white/10 px-3.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-slate-500">Transferring</span>
+        </div>
+        <div class="mt-8">
+          <p class="tag mb-3 text-[10px] text-slate-500">Usable before a death claim</p>
+          <div class="meter" style="--fill:78%"><i></i></div>
+        </div>
+        <p class="mt-6 border-l-2 border-amber-400/40 pl-4 text-sm leading-relaxed text-slate-500">
+          Read this line before anyone sells you one: accelerating a benefit
+          <em class="not-italic text-amber-200/90">reduces the death benefit</em> your family
+          receives. Triggers, waiting periods and payout formulas differ by carrier and by
+          state, and not every policy offers every rider.
+        </p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- =====================================================================
+     CLOSE
+     ===================================================================== -->
+<section class="mx-auto max-w-4xl px-6 py-32 text-center">
+  <div class="rise">
+    <p class="tag justify-center">The next step</p>
+    <h2 class="display mx-auto mt-6 max-w-[18ch] text-[clamp(2.2rem,5vw,4rem)] leading-[1.02]">
+      Fifteen minutes. Real numbers.
+    </h2>
+    <p class="mx-auto mt-6 max-w-[52ch] text-slate-400">
+      No presentation, no pressure. You bring what you are protecting; we bring what
+      twenty-plus carriers will actually offer on it.
+    </p>
+    <div class="mt-10 flex flex-wrap justify-center gap-4">
+      <a href="#intake" class="rounded-xl border border-amber-400/50 bg-gradient-to-b from-amber-300 to-amber-600 px-7 py-4 font-semibold text-obsidian shadow-[inset_0_1px_0_rgba(255,255,255,.65)] transition-all duration-500 ease-out hover:-translate-y-0.5 hover:shadow-[0_20px_44px_-16px_rgba(251,191,36,.85)]">
+        Open my file
+      </a>
+      <a href="index.html" class="rounded-xl border border-white/15 bg-white/[0.04] px-7 py-4 font-semibold text-white backdrop-blur-xl transition-all duration-500 ease-out hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.09]">
+        Back to the main site
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="relative z-10 border-t border-white/10 px-6 py-12">
+  <div class="mx-auto flex max-w-6xl flex-col gap-4 text-xs leading-relaxed text-slate-600">
+    <p class="tag">Herron &amp; Co. Legacy Agency &middot; NPN 21556594</p>
+    <p class="max-w-[110ch]">
+      Nothing on this page is an offer of insurance, a quoted rate, or tax advice.
+      Product availability, rider terms, triggers, caps, participation rates and
+      underwriting outcomes vary by carrier and by state, and are determined solely by
+      the issuing carrier. Guarantees are backed by the financial strength and
+      claims-paying ability of that carrier. Figures shown are illustrative.
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ==========================================================================
+   THE PILLAR MATRIX
+   A real tablist: roving tabindex, arrow-key navigation, and `hidden` toggled
+   around the transition so a pane is never both invisible and focusable.
+   ========================================================================== */
+(function () {
+  const tabs  = Array.from(document.querySelectorAll('#pillarList [role="tab"]'));
+  const panes = tabs.map(t => document.getElementById(t.getAttribute('aria-controls')));
+  if (!tabs.length) return;
+
+  let current = 0;
+
+  function select(next, focus) {
+    if (next === current) return;
+    const prev = current;
+    current = next;
+
+    tabs.forEach((tab, i) => {
+      const on = i === next;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+    });
+
+    // Reveal first, then animate in — a `hidden` element cannot transition.
+    panes[next].hidden = false;
+    requestAnimationFrame(() => {
+      panes[prev].classList.remove('live');
+      panes[next].classList.add('live');
+    });
+    // Re-hide the outgoing pane only once its fade has finished, so it leaves
+    // the accessibility tree without cutting the animation short.
+    setTimeout(() => { if (current !== prev) panes[prev].hidden = true; }, 520);
+
+    if (focus) tabs[next].focus();
+  }
+
+  tabs.forEach((tab, i) => {
+    tab.addEventListener('click', () => select(i, false));
+    tab.addEventListener('keydown', (e) => {
+      const last = tabs.length - 1;
+      let next = null;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = i === last ? 0 : i + 1;
+      if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  next = i === 0 ? last : i - 1;
+      if (e.key === 'Home') next = 0;
+      if (e.key === 'End')  next = last;
+      if (next === null) return;
+      e.preventDefault();
+      select(next, true);
+    });
+  });
+
+  // the first pane is already live in markup; make sure its meter runs
+  panes[0].hidden = false;
+})();
+
+/* ==========================================================================
+   SCROLL REVEAL — one observer, unobserved on first hit.
+   ========================================================================== */
+(function () {
+  const items = document.querySelectorAll('.rise');
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(el => el.classList.add('in'));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  items.forEach(el => io.observe(el));
+})();
+
+/* ==========================================================================
+   INTAKE
+   This is a front-end demo: it validates and acknowledges, and deliberately
+   does NOT transmit. Point the fetch at your handler before shipping.
+   ========================================================================== */
+(function () {
+  const form = document.getElementById('intakeForm');
+  const done = document.getElementById('intakeDone');
+  if (!form) return;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = (data.get('name') || '').toString().trim();
+    const email = (data.get('email') || '').toString().trim();
+    const objective = (data.get('objective') || '').toString();
+
+    if (!name || !email.includes('@') || !objective) {
+      done.textContent = 'Add your name, a valid email, and an objective.';
+      done.classList.remove('hidden');
+      done.className = done.className.replace('text-amber-300', 'text-rose-300');
+      return;
+    }
+
+    // ---- replace with your endpoint ----
+    // await fetch('/.netlify/functions/intake', {method:'POST', body: data});
+
+    done.className = done.className.replace('text-rose-300', 'text-amber-300');
+    done.textContent = 'File opened. A licensed producer will reach out — nothing was quoted.';
+    done.classList.remove('hidden');
+    form.querySelector('button[type="submit"]').disabled = true;
+  });
+})();
+</script>
+</body>
+</html>
