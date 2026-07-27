@@ -18,9 +18,13 @@ let flip = null;
 
 /* ================================================================ boot */
 async function boot() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
+  // Offline packaging. Absent (single-file build) or blocked (sandboxed
+  // frame) service workers are fine — the app never needs the network.
+  try {
+    if ('serviceWorker' in navigator && !window.__LIVING_WORD_SINGLE_FILE) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  } catch (_) { /* no service worker available in this context */ }
   const [translation, curriculum] = await Promise.all([
     db.ensureSeeded(),
     fetch('data/curriculum.json').then((r) => r.json()),

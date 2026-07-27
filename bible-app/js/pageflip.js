@@ -191,6 +191,7 @@ export class PageFlip {
   /* ------------------------------------------------------------ painting */
   _render() {
     const p = clamp(this.p, 0, 1);
+    this.stage.classList.toggle('flipping', p > 0.0005);
     // cylinder-bend approximation: rotation eases slightly ahead of p at the
     // start (paper lifts before the whole leaf pivots)
     const angle = -180 * p;
@@ -208,6 +209,14 @@ export class PageFlip {
     // backface luminance mix(0, .85, sin(pπ)) and crease specular position
     leaf.style.setProperty('--translucency', String(0.85 * glow));
     leaf.style.setProperty('--crease', `${(1 - p) * 100}%`);
+    // Hand off front → back across the edge-on moment (p = 0.5, 90°), where
+    // the leaf is nearly invisible and the swap can't be perceived. Fading
+    // over a short band also kills any grazing-angle text artifact.
+    const band = 0.08;
+    leaf.style.setProperty('--front-vis',
+      String(clamp((0.5 - p) / band, 0, 1)));
+    leaf.style.setProperty('--back-vis',
+      String(clamp((p - 0.5) / band, 0, 1)));
     if (this.shadow) this.shadow.style.setProperty('--under-shadow', String(glow * 0.8));
   }
 }

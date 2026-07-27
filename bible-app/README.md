@@ -34,6 +34,13 @@ an app without a license: <https://www.crossway.org/permissions/>.
   to compile `data/bible.json` (all 31,102 verses). The app and service worker
   pick it up automatically — no code changes.
 
+## Instant preview (no server)
+
+`node tools/build-preview.mjs` compiles the entire app — styles, modules,
+Scripture seed, curriculum — into a single self-contained `preview.html`
+(≈112 KB, zero external requests). Open it anywhere, or share the one file
+phone-to-phone (Bluetooth, WhatsApp, SD card) where nothing else reaches.
+
 ## Run locally
 
 ```bash

@@ -241,38 +241,38 @@ export async function constellation(canvas, focusRef /* [b,c,v] or null */) {
   }
 
   ctx.clearRect(0, 0, W, H);
-  // night ground
+  // luminous vellum ground — an illuminated manuscript, not a night sky
   const bg = ctx.createLinearGradient(0, 0, 0, H);
-  bg.addColorStop(0, '#070b14'); bg.addColorStop(1, '#101a30');
+  bg.addColorStop(0, '#ffffff'); bg.addColorStop(1, '#fff4dd');
   ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
   // OT|NT meridian
   const mx = 30 + (39.5 / 66) * (W - 60);
-  ctx.strokeStyle = 'rgba(246,215,138,.12)';
+  ctx.strokeStyle = 'rgba(154,109,18,.30)';
   ctx.setLineDash([3, 7]); ctx.beginPath();
   ctx.moveTo(mx, 16); ctx.lineTo(mx, H - 16); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(244,239,228,.4)'; ctx.font = '10px sans-serif';
+  ctx.fillStyle = 'rgba(27,35,64,.55)'; ctx.font = '10px sans-serif';
   ctx.fillText('OLD TESTAMENT', 30, 14);
   ctx.fillText('NEW TESTAMENT', mx + 10, 14);
 
   const focusKey = focusRef ? focusRef.join('.') : null;
-  // edges
+  // threads of gold
   for (const r of refs) {
     const a = nodes.get(nodeKey(r.from)), b = nodes.get(nodeKey(r.to));
     const hot = focusKey && (nodeKey(r.from) === focusKey || nodeKey(r.to) === focusKey);
-    ctx.strokeStyle = hot ? 'rgba(255,233,184,.85)' : 'rgba(246,215,138,.28)';
-    ctx.lineWidth = hot ? 1.6 : 0.8;
+    ctx.strokeStyle = hot ? 'rgba(154,109,18,.95)' : 'rgba(199,146,38,.5)';
+    ctx.lineWidth = hot ? 1.8 : 1;
     ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
   }
-  // stars
+  // glowing nodes
   for (const [k, n] of nodes) {
     const hot = k === focusKey;
-    const r = hot ? 5 : 2.6;
+    const r = hot ? 5 : 3;
     const glow = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, r * 4);
-    glow.addColorStop(0, hot ? 'rgba(255,247,230,.95)' : 'rgba(246,215,138,.8)');
-    glow.addColorStop(1, 'transparent');
+    glow.addColorStop(0, hot ? 'rgba(255,190,60,.75)' : 'rgba(255,207,107,.55)');
+    glow.addColorStop(1, 'rgba(255,207,107,0)');
     ctx.fillStyle = glow;
     ctx.beginPath(); ctx.arc(n.x, n.y, r * 4, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = hot ? '#fff7e6' : '#f6d78a';
+    ctx.fillStyle = hot ? '#8a5e08' : '#c79226';
     ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2); ctx.fill();
   }
   return nodes; // caller may hit-test taps against these positions

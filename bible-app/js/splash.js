@@ -32,24 +32,31 @@ float noise(vec2 p){
 
 void main(){
   vec2 uv = gl_FragCoord.xy / uRes;          // 0..1, y up
-  vec3 nightSky = mix(vec3(0.027,0.043,0.078), vec3(0.051,0.082,0.149), uv.y);
-  vec3 col = nightSky;
+  // Daybreak sky: warm horizon below, cool luminous heaven above. Kept
+  // saturated enough that the brilliant shaft still reads AS a shaft.
+  vec3 skyLow  = vec3(1.000, 0.933, 0.769);
+  vec3 skyMid  = vec3(0.835, 0.902, 1.000);
+  vec3 skyHigh = vec3(0.604, 0.769, 0.973);
+  vec3 col = mix(mix(skyLow, skyMid, smoothstep(0.0, 0.55, uv.y)),
+                 skyHigh, smoothstep(0.5, 1.0, uv.y));
 
-  vec3 gold  = vec3(0.965, 0.843, 0.541);
-  vec3 white = vec3(1.0, 0.969, 0.902);
+  vec3 gold  = vec3(1.000, 0.878, 0.560);
+  vec3 white = vec3(1.000, 0.992, 0.957);
 
   // ------- descending volumetric shaft (widens toward the floor)
   float cx = uv.x - 0.5;
-  float halfW = mix(0.085, 0.30, 1.0 - uv.y);          // cone
+  float halfW = mix(0.10, 0.34, 1.0 - uv.y);           // cone
   float core = 1.0 - smoothstep(0.0, halfW, abs(cx));
   // animated volumetric density: two drifting noise octaves
-  float dens = 0.65
-    + 0.35 * noise(vec2(uv.x * 6.0, uv.y * 3.0 - uTime * 0.12))
+  float dens = 0.70
+    + 0.30 * noise(vec2(uv.x * 6.0, uv.y * 3.0 - uTime * 0.12))
     * (0.6 + 0.4 * noise(vec2(uv.x * 14.0 + 7.0, uv.y * 7.0 - uTime * 0.3)));
   float fallY = smoothstep(0.0, 0.35, uv.y);           // fades near floor
-  float shaft = core * core * dens * mix(0.35, 1.0, uv.y) * uShaft;
-  col += shaft * mix(gold, white, uv.y) * 0.85;
-  col += core * fallY * 0.10 * uShaft * gold;          // soft haze
+  float shaft = core * core * dens * mix(0.55, 1.0, uv.y) * uShaft;
+  col += shaft * mix(gold, white, uv.y) * 1.35;
+  col += core * fallY * 0.24 * uShaft * gold;          // soft haze
+  // broad glow spilling out of the beam, warming the whole sky
+  col += (1.0 - smoothstep(0.0, 0.85, abs(cx))) * uShaft * gold * 0.14 * mix(0.4, 1.0, uv.y);
 
   // ------- dust motes drifting through the beam
   for (int i = 0; i < 3; i++) {
@@ -60,27 +67,27 @@ void main(){
     vec2 cell = floor(gp);
     vec2 p = fract(gp) - 0.5;
     float sparkle = smoothstep(0.09, 0.0, length(p + (vec2(hash(cell), hash(cell + 9.0)) - 0.5) * 0.6));
-    col += sparkle * core * uShaft * white * (0.10 - fi * 0.025);
+    col += sparkle * core * uShaft * white * (0.22 - fi * 0.05);
   }
 
   // ------- upward bloom from the opened book (light returns to source)
   vec2 bookP = vec2(0.5, 0.34);
   float d = distance(uv * vec2(uRes.x / uRes.y, 1.0), bookP * vec2(uRes.x / uRes.y, 1.0));
-  float bloom = exp(-d * d * 9.0) * uBloom;
-  float upBeam = (1.0 - smoothstep(0.0, 0.16, abs(cx))) * smoothstep(0.30, 0.95, uv.y) * uBloom;
-  col += (bloom * 1.15 + upBeam * 0.5) * mix(gold, white, 0.6);
+  float bloom = exp(-d * d * 7.0) * uBloom;
+  float upBeam = (1.0 - smoothstep(0.0, 0.20, abs(cx))) * smoothstep(0.30, 0.95, uv.y) * uBloom;
+  col += (bloom * 1.7 + upBeam * 0.85) * mix(gold, white, 0.6);
 
   // ------- exit: concentric luminous gate arcs (Rev 21:25)
   if (uGate > 0.001) {
     float rings = sin((d * 26.0 - uGate * 22.0)) * 0.5 + 0.5;
     float gate = smoothstep(0.0, 1.0, uGate) * rings * exp(-d * 2.2);
-    col = mix(col, white, gate * 0.85 * uGate);
-    col = mix(col, white, smoothstep(0.72, 1.0, uGate)); // final white-out
+    col = mix(col, white, gate * 0.9 * uGate);
+    col = mix(col, white, smoothstep(0.65, 1.0, uGate)); // final white-out
   }
 
-  // gentle vignette keeps focus on the shaft
-  float vig = smoothstep(1.25, 0.45, length(uv - vec2(0.5, 0.45)));
-  col *= mix(0.82, 1.0, vig);
+  // barely-there vignette: keeps focus without dimming the sky
+  float vig = smoothstep(1.35, 0.5, length(uv - vec2(0.5, 0.45)));
+  col *= mix(0.95, 1.0, vig);
 
   gl_FragColor = vec4(col, 1.0);
 }
