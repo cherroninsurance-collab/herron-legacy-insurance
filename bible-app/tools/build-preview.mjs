@@ -9,10 +9,13 @@
  *   2. The field: a single HTML file can be shared phone-to-phone over
  *      Bluetooth, WhatsApp, or an SD card where no app store is reachable.
  *
- * ES modules are inlined as data: URLs and wired together with an inline
- * import map. Relative specifiers can't resolve from a data: URL, so each
- * './x.js' is rewritten to the bare specifier 'x', which the import map
- * resolves regardless of the importing module's base.
+
+ * The ES modules are concatenated into ONE inline <script type="module">
+ * in dependency order, with import/export statements stripped and the
+ * namespace imports (`import * as db`) reconstructed as plain objects.
+ * No data: URLs and no import map: strict Content-Security-Policies
+ * (such as hosted artifact pages) block data:-sourced scripts, and the
+ * inline form runs everywhere plain inline scripts run.
  *
  * Usage: node tools/build-preview.mjs
  */
@@ -25,7 +28,22 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const APP = resolve(HERE, '..');
 const read = (p) => readFileSync(resolve(APP, p), 'utf8');
 
-const MODULES = ['canon.js', 'pageflip.js', 'db.js', 'games.js', 'splash.js', 'app.js'];
+/* Dependency order matters: later entries call into earlier ones. The
+   namespaces list rebuilds `import * as X` objects from each module's
+   exported names once the sources share a single scope. */
+const MODULES = [
+  { file: 'canon.js' },
+  { file: 'pageflip.js' },
+  { file: 'db.js', namespace: 'db', exports: [
+      'ensureSeeded','getActiveTranslation','getChapter','getVerse',
+      'getCrossRefs','getAllCrossRefs','toggleHighlight','getHighlights',
+      'saveJournal','getJournal','setGameProgress','getGameProgress',
+      'addDisciple','getDisciples'] },
+  { file: 'games.js', namespace: 'games', exports: [
+      'verseBuilder','greatTimeline','shepherdPath','constellation','reflection'] },
+  { file: 'splash.js' },
+  { file: 'app.js' },
+];
 const DATA_FILES = ['data/seed-verses.json', 'data/curriculum.json'];
 
 /* Inline data served to the app's own fetch() calls — no network, no SW. */
@@ -65,20 +83,24 @@ function main() {
   // ---- manifest is meaningless in a single file
   html = html.replace('<link rel="manifest" href="manifest.webmanifest">', '');
 
-  // ---- modules → data: URLs + import map
-  const imports = {};
+  // ---- modules → one inline module script, shared scope
+  const parts = [];
   for (const m of MODULES) {
-    const src = read('js/' + m)
-      .replace(/(\bfrom\s+['"])\.\/([\w-]+)\.js(['"])/g, '$1$2$3');
-    const bare = m.replace(/\.js$/, '');
-    imports[bare] = 'data:text/javascript;base64,' +
-      Buffer.from(src, 'utf8').toString('base64');
+    const src = read('js/' + m.file)
+      .replace(/^import\s[^;]*;\s*$/gm, '')     // static imports
+      .replace(/^export\s+/gm, '')              // export prefixes
+      .replace(/^'use strict';\s*$/gm, '');     // module scope is already strict
+    parts.push(`/* ======== ${m.file} ======== */\n${src}`);
+    if (m.namespace) {
+      parts.push(`const ${m.namespace} = { ${m.exports.join(', ')} };`);
+    }
   }
 
   html = html.replace('<script type="module" src="js/app.js"></script>', `
 <script>${fetchShim()}</script>
-<script type="importmap">${JSON.stringify({ imports })}</script>
-<script type="module">import 'app';</script>`);
+<script type="module">
+${parts.join('\n')}
+</script>`);
 
   const out = resolve(APP, 'preview.html');
   writeFileSync(out, html);
