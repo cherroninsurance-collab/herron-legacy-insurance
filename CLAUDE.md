@@ -37,22 +37,22 @@ serves serverless functions from `netlify/functions`.
 
 ## Where the design landed
 
-Both heroes render a real-time WebGL **"threshold gateway"** scene, translated from a
-reference design reel (dark monoliths forming a canyon, a sun burst in the gap, volumetric
-god-rays, backlit cloud banks) into navy/gold. Composited in depth order in one fragment
-shader: sky → sun halo/core → god-rays (held to a vertical cone) → distant spire tiers →
-mid cloud bank → near monoliths (broken tops, striations, low haze, gold rim-light) →
-foreground cloud sea → vignette → **cinematic grade** (ACES-ish tonemap, navy-shadow /
-gold-highlight split tone, S-curve, anamorphic streak, ordered dither).
+The hero renders a real-time WebGL **"open sunrise"** scene in navy/gold, composited in
+depth order in one fragment shader: sky → sun halo/core → god-rays (held to a vertical
+cone) → mid cloud bank → foreground cloud sea → anamorphic streak → vignette →
+**cinematic grade** (ACES-ish tonemap, navy-shadow / gold-highlight split tone, S-curve,
+ordered dither). **The dark monolith/spire tower layers are deleted** — the original
+"threshold gateway" had canyon walls framing the light gap, and the user called them
+corny ("dont want the monolith things in the background"). Don't reintroduce silhouette
+shapes into this scene; the `twr()` tower-band helper is gone with them.
 
 - **`index.html` (homepage):** **no shield** — emblem alone. The light gap is anchored to
   the emblem's **measured** position via the `uSun` uniform (`sun()` re-measures `.crest`
   on resize/load/fonts-ready), so the burst sits behind the logo on desktop and re-centres
-  when the hero stacks. The left monolith shades the copy column, helping headline contrast.
+  when the hero stacks. The copy column sits on the hx-hero-card glass for contrast.
 
-Tunables (same names in both files): `twr(nx, lo, hi, h0, h1, seed)` tower bands, `nx`
-(gateway width, normalised to viewport width), `lit`/`lw`/`gl2` warm falloffs, cloud
-`dens`/`fd` thresholds and their `smoothstep` ceilings.
+Tunables: `lit`/`lw`/`gl2` warm falloffs, cloud `dens`/`fd` thresholds and their
+`smoothstep` ceilings.
 
 ## The logo — read this before touching it
 The brand mark is a fine-line heron: **crest tuft, long beak, small white eye, S-neck,

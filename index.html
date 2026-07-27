@@ -2835,11 +2835,6 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   'float cld(vec2 p,float t){vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));',
   ' vec2 r=vec2(fbm(p+q*1.7+vec2(1.7,9.2)+t*.6),fbm(p+q*1.7+vec2(8.3,2.8)-t*.5));',
   ' return fbm(p+r*1.9);}',
-  'float twr(float x,float lo,float hi,float h0,float h1,float s){if(x<lo)return -9.;if(x>hi)return -9.;',
-  ' float u=(x-lo)/(hi-lo);float h=mix(h0,h1,u);',
-  ' h+=0.115*floor(noise(vec2(u*4.6+s*31.,s*11.))*3.)/3.;',
-  ' h+=0.038*floor(noise(vec2(u*15.+s*7.,s*3.))*3.)/3.;',
-  ' return h;}',
   'vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}',
   'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;',
   ' uv+=ms*.010;float t=uTime*.012;',
@@ -2855,12 +2850,10 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' ry=pow(max(ry/3.,0.),2.8);',
   ' float cone=smoothstep(2.6,.35,abs(dv.x)/max(abs(dv.y),.09));',
   ' col+=vec3(1.,.78,.42)*ry*cone*smoothstep(1.30,.02,rr)*(.20+.80*smoothstep(-.28,.40,uv.y))*.30;',
-  ' float sd=uv.x<sun.x?0.:1.;float lit=exp(-dr*4.0);',
-  ' float hw=max(uRes.x/uRes.y*.5,.28);float nx=abs(uv.x-sun.x)/hw;',
-  ' float t3=twr(nx,0.95,1.34,0.135,0.010,sd+9.);',
-  ' col=mix(col,vec3(.026,.038,.070),smoothstep(t3+.005,t3-.005,uv.y)*.62);',
-  ' float t2=twr(nx,0.66,0.93,0.290,0.140,sd+5.);',
-  ' col=mix(col,vec3(.018,.029,.056),smoothstep(t2+.004,t2-.004,uv.y)*.82);',
+   /* (the dark monolith/spire tower layers that used to frame the gap are gone —
+     user: "dont want the monolith things … they look corny". The scene is now an
+     open sunrise: sky, burst, god-rays, cloud bank, cloud sea, grade.) */
+  ' float lit=exp(-dr*4.0);',
   ' float lw=exp(-dr*3.0);',
   ' vec3 cc=mix(vec3(.038,.052,.090),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
   ' cc=mix(cc,vec3(1.,.88,.68),clamp(pow(lw,2.2)*1.2,0.,1.));',
@@ -2870,14 +2863,6 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' dens+=smoothstep(.51,.78,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.52;',
   ' cc+=vec3(1.,.72,.34)*(smoothstep(.43,.49,cA)-smoothstep(.49,.59,cA))*lit*1.6;',
   ' col=mix(col,cc,clamp(dens*smoothstep(.24,-.38,uv.y),0.,1.));',
-  ' float tt=twr(nx,0.228,0.640,0.500,0.300,sd);',
-  ' vec3 mc=vec3(.006,.011,.024);',
-  ' mc+=vec3(.10,.13,.20)*noise(vec2(uv.x*38.,uv.y*22.))*.22;',
-  ' mc+=vec3(.048,.056,.082)*fbm(vec2(uv.x*9.,uv.y*3.2))*.42;',
-  ' mc+=vec3(1.,.70,.34)*lit*.13*smoothstep(.34,-.30,uv.y);',
-  ' mc+=vec3(1.,.72,.34)*smoothstep(.030,0.,tt-uv.y)*.85;',
-  ' mc+=vec3(1.,.66,.30)*exp(-max(nx-.228,0.)*15.)*.30;',
-  ' col=mix(col,mc,smoothstep(tt+.0035,tt-.0035,uv.y));',
   /* foreground cloud sea — the most expensive layer (10 fbm evaluations).
      uLow is a uniform, so phones skip the whole block coherently. */
   ' if(uLow<.5){',
