@@ -106,13 +106,16 @@ path vs 1.10 on desktop. If a phone surface looks like a black pit, check this b
 
 ## The executive backdrop (dark bands)
 The blue `.hero-grid-lines` overlay and the purple/indigo/cyan `.lg-blob` wash are
-**deleted** from `.iul-band`/`.ann-band`/`.ai-band` (user: "instead of the dark blue grid
-… something more professional but sleek"; approved via before/after boards). The three
+**deleted** from `.iul-band`/`.ann-band` (user: "instead of the dark blue grid …
+something more professional but sleek"; approved via before/after boards). Those two
 bands share one layered background: warm key light `radial(… 22% -6%, rgba(226,180,92,.14))`
 behind the headings, cool counter-light right, deep floor, `linear(180deg,#10213F→#0A1730→
-#080F22)` base, and an inset brass hairline on the top edge. Blobs elsewhere (tools,
-fitcheck, blueprint, quotes) are untouched. Band glows are dimmed to .4 in those three
-bands only.
+#080F22)` base, and an inset brass hairline on the top edge. Band glows are dimmed to .4
+in those two bands only. **`.ai-band` (Legacy Concierge) keeps its ORIGINAL backdrop by
+explicit user request** ("The legacy ai box I want to the background it had before"):
+navy gradient + grid overlay at .7 + the three lg-blobs — the liquid-glass chat pane
+refracts that colored wash, it's part of that band's design. Blobs elsewhere (tools,
+fitcheck, blueprint, quotes) were never touched.
 
 ## Hard-won gotchas
 - **Screenshots lie about advanced CSS/WebGL.** Headless Chromium uses swiftshader, which
