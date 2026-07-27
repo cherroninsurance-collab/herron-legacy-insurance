@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herron &amp; Co. Legacy Agency — Start here</title>
+<meta name="description" content="Life insurance without the sales pitch. Book a free 15-minute call, get an instant estimate, or try the free planning tools. Connor Herron — Lehigh Valley, licensed in 12 states.">
+<meta name="robots" content="index,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Herron &amp; Co. Legacy Agency — Start here">
+<meta property="og:description" content="Life insurance without the sales pitch · $0 to work with me · Book 15 min, get a quote, or try the free tools.">
+<meta property="og:url" content="https://herronlegacyinsurance.com/link">
+<meta property="og:image" content="https://herronlegacyinsurance.com/images/og.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081226'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23E2B45C' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='21' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-deep:#081226;--navy:#0E1F3E;--navy-mid:#16305C;
+  --blue-bright:#5B8DEF;--brass:#C9973B;--brass-bright:#E2B45C;
+  --white:#fff;--ink:#EAF0FB;--ink-70:rgba(234,240,251,.72);--ink-45:rgba(234,240,251,.45);
+  --line:rgba(255,255,255,.12);--line-brass:rgba(226,180,92,.4);
+  --glass:rgba(14,31,62,.5);
+  --font-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font-body);color:var(--ink);background:var(--navy-deep);min-height:100vh;
+  -webkit-font-smoothing:antialiased;line-height:1.55;
+  background-image:
+    radial-gradient(900px 520px at 78% -12%,rgba(43,86,158,.34),transparent 60%),
+    radial-gradient(700px 420px at 12% 6%,rgba(226,180,92,.08),transparent 58%);
+  background-attachment:fixed;
+  display:flex;justify-content:center;
+}
+.grid-lines{position:fixed;inset:0;background-image:linear-gradient(rgba(91,141,239,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.045) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;mask-image:linear-gradient(180deg,#000,transparent 85%);z-index:0}
+.shell{width:100%;max-width:480px;padding:40px 22px 46px;position:relative;z-index:1}
+::selection{background:var(--brass);color:var(--navy-deep)}
+
+/* header */
+.top{text-align:center;margin-bottom:30px}
+.mark{width:78px;height:78px;border-radius:22px;margin:0 auto 18px;background:linear-gradient(155deg,var(--navy-mid),var(--navy-deep));border:1px solid var(--line-brass);display:flex;align-items:center;justify-content:center;box-shadow:0 22px 50px -20px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08);position:relative;overflow:hidden}
+.mark::before{content:"";position:absolute;inset:0;background:radial-gradient(90px 60px at 30% 20%,rgba(226,180,92,.22),transparent 66%)}
+.mark svg{width:50px;height:50px;position:relative}
+h1{font-family:var(--font-display);font-weight:700;font-size:23px;letter-spacing:-.02em;line-height:1.15}
+.sub{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-top:8px}
+.tag{color:var(--ink-70);font-size:14.5px;margin-top:14px;line-height:1.5}
+.tag b{color:var(--ink)}
+.badges{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:16px}
+.badge{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.03em;color:var(--ink-70);border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--glass)}
+.badge em{color:var(--brass-bright);font-style:normal}
+
+/* link buttons */
+.links{display:flex;flex-direction:column;gap:13px;margin-top:26px}
+.lnk{
+  display:flex;align-items:center;gap:15px;text-decoration:none;color:var(--ink);
+  background:var(--glass);border:1px solid var(--line);border-radius:16px;padding:16px 17px;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  transition:transform .16s ease,border-color .16s ease,background .16s ease;position:relative;overflow:hidden;
+}
+.lnk::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:var(--brass);opacity:.0;transition:opacity .16s}
+.lnk:hover,.lnk:focus-visible{transform:translateY(-2px);border-color:var(--line-brass);background:rgba(20,40,78,.62);outline:none}
+.lnk:hover::before,.lnk:focus-visible::before{opacity:1}
+.lnk.primary{background:linear-gradient(120deg,rgba(201,151,59,.16),rgba(20,40,78,.5));border-color:var(--line-brass)}
+.lnk .ic{width:44px;height:44px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:21px;background:rgba(8,18,38,.6);border:1px solid var(--line)}
+.lnk.primary .ic{background:var(--brass);border-color:transparent}
+.lnk .tx{flex:1;min-width:0}
+.lnk .tx b{font-family:var(--font-display);font-weight:600;font-size:15.5px;display:block;letter-spacing:-.01em}
+.lnk .tx span{font-size:12.5px;color:var(--ink-45);font-family:var(--font-mono);letter-spacing:.01em}
+.lnk .arw{color:var(--ink-45);font-size:18px;flex-shrink:0;transition:transform .16s,color .16s}
+.lnk:hover .arw,.lnk:focus-visible .arw{color:var(--brass-bright);transform:translateX(3px)}
+
+/* secondary row */
+.mini{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:13px}
+.mini a{display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;color:var(--ink-70);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px;font-family:var(--font-mono);font-size:12.5px;letter-spacing:.02em;transition:color .16s,border-color .16s,transform .16s}
+.mini a:hover,.mini a:focus-visible{color:var(--ink);border-color:var(--line-brass);transform:translateY(-2px);outline:none}
+.mini a .e{font-size:16px}
+
+/* trust strip */
+.trust{margin-top:24px;text-align:center;background:var(--glass);border:1px solid var(--line);border-left:2px solid var(--brass);border-radius:14px;padding:15px 17px}
+.trust p{font-size:13.5px;color:var(--ink-70);line-height:1.6}
+.trust p b{color:var(--brass-bright);font-weight:600}
+
+/* footer */
+.foot{text-align:center;margin-top:26px;font-size:11px;color:var(--ink-45);line-height:1.7;font-family:var(--font-mono);letter-spacing:.02em}
+.foot a{color:var(--ink-70);text-decoration:none}
+.foot a:hover{color:var(--brass-bright)}
+.foot .legal{margin-top:12px;font-family:var(--font-body);font-size:10.5px;color:rgba(234,240,251,.32);letter-spacing:0;line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="grid-lines" aria-hidden="true"></div>
+<main class="shell">
+
+  <div class="top">
+    <div class="mark">
+      <svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
+        <path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.6" stroke-linecap="round"/>
+        <path d="M144 62 C152 50 150 38 142 32" stroke="#E2B45C" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="136" cy="66" r="3" fill="#fff"/>
+        <path d="M40 280 C80 274 128 286 172 280 C194 277 210 280 214 280" stroke="#3E68B8" stroke-width="2.6" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Herron &amp; Co. Legacy Agency</h1>
+    <div class="sub">Life insurance made simple</div>
+    <p class="tag"><b>Insurance without the sales pitch.</b> Pick a door below — I'll meet you there.</p>
+    <div class="badges">
+      <span class="badge">📍 Lehigh Valley</span>
+      <span class="badge">Licensed in <em>12 states</em></span>
+      <span class="badge"><em>20+</em> carriers</span>
+      <span class="badge"><em>$0</em> to work with me</span>
+    </div>
+  </div>
+
+  <nav class="links" aria-label="Primary links">
+    <a class="lnk primary" href="https://herronlegacyinsurance.com/#booking">
+      <span class="ic">🗓️</span>
+      <span class="tx"><b>Book a free 15-minute call</b><span>real numbers · zero pressure</span></span>
+      <span class="arw" aria-hidden="true">→</span>
+    </a>
+    <a class="lnk" href="https://herronlegacyinsurance.com/#blueprint">
+      <span class="ic">⚡</span>
+      <span class="tx"><b>Build my Legacy Blueprint</b><span>instant estimate · no sign-up</span></span>
+      <span class="arw" aria-hidden="true">→</span>
+    </a>
+    <a class="lnk" href="https://herronlegacyinsurance.com/wealth-shield-matrix.html">
+      <span class="ic">🧮</span>
+      <span class="tx"><b>The Wealth Shield Matrix</b><span>crash-test a plan · watch the floor hold</span></span>
+      <span class="arw" aria-hidden="true">→</span>
+    </a>
+    <a class="lnk" href="https://herronlegacyinsurance.com/#coverage">
+      <span class="ic">🛡️</span>
+      <span class="tx"><b>See what I can protect</b><span>mortgage · IUL · LTC · final expense · more</span></span>
+      <span class="arw" aria-hidden="true">→</span>
+    </a>
+  </nav>
+
+  <div class="mini">
+    <a href="tel:6103608583"><span class="e">📞</span> Call Connor</a>
+    <a href="sms:6103608583"><span class="e">💬</span> Text me</a>
+  </div>
+
+  <div class="trust">
+    <p><b>"I'll tell you if it's NOT right for you."</b> When you call the number, you get me — Connor Herron, NPN&nbsp;21556594 — not a call center.</p>
+  </div>
+
+  <div class="foot">
+    <a href="https://herronlegacyinsurance.com">herronlegacyinsurance.com</a> · 610-360-8583
+    <div class="legal">Herron &amp; Co. Legacy Agency is an independent insurance agency, not affiliated with any government agency. Product availability varies by state and underwriting. Not an offer of coverage or a quoted rate.</div>
+  </div>
+
+</main>
+</body>
+</html>

@@ -1,6 +1,6 @@
 // netlify/functions/legacy-ai.js
 //
-// Legacy AI — Herron & Co. Legacy Agency
+// Legacy Concierge — Herron & Co. Legacy Agency
 // Runs on Netlify Functions. Zero GoHighLevel involvement.
 //
 // SETUP (one time):
@@ -24,13 +24,16 @@ const MAX_TOKENS = 500;
 const MAX_INPUT_CHARS = 600;   // reject essays — they're either abuse or a bad fit for chat
 const MAX_TURNS = 12;          // cap conversation length to cap cost
 
-const SYSTEM_PROMPT = `You are Legacy AI, the insurance concierge for Herron & Co. Legacy Agency.
+const SYSTEM_PROMPT = `You are the Legacy Concierge, the automated insurance assistant for Herron & Co. Legacy Agency.
 
 # WHO YOU WORK FOR
 Connor Herron, an independent licensed insurance producer, NPN 21556594.
 Office: 30 S 15th Street, Suite 1550, Philadelphia, PA 19102. Phone: 610-360-8583.
-Licensed in 13 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana,
-Georgia, Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.
+Licensed in 12 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana,
+Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.
+This list is exhaustive. Never claim or imply a licence in any other state — if
+someone is outside these 12, say so plainly and offer the call anyway so Connor
+can refer them.
 Independent agency — quotes 20+ national carriers. NOT a government agency.
 Costs the client nothing; carriers pay the agent, and the premium is identical
 whether they buy through an agent or direct.

@@ -4,17 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Life Insurance Made Simple | Lehigh Valley, PA — Herron &amp; Co. Legacy Agency</title>
-<meta name="description" content="Life insurance shouldn't be complicated. Connor Herron — Lehigh Valley local, licensed in 13 states — designs mortgage protection with living benefits, IUL, hybrid long-term care, final expense, annuities, and disability coverage across 20+ carriers. Free 15-minute calls. $0 to work with us.">
+<meta name="description" content="Life insurance shouldn't be complicated. Connor Herron — Lehigh Valley local, licensed in 12 states — designs mortgage protection with living benefits, IUL, hybrid long-term care, final expense, annuities, and disability coverage across 20+ carriers. Free 15-minute calls. $0 to work with us.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Herron &amp; Co. Legacy Agency — Life insurance made simple">
-<meta property="og:description" content="Lehigh Valley local · Licensed in 13 states · 20+ carriers · $0 to work with us · Free 15-minute calls.">
+<meta property="og:description" content="Lehigh Valley local · Licensed in 12 states · 20+ carriers · $0 to work with us · Free 15-minute calls.">
 <meta property="og:url" content="https://herron-legacy-insurance.netlify.app/">
 <meta property="og:image" content="https://herron-legacy-insurance.netlify.app/images/og.png">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%23081226'/%3E%3Cpath d='M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80' stroke='%23E2B45C' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='53' cy='21' r='2.5' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="64x64" href="logos/mark/favicon-64.png">
+<link rel="icon" type="image/png" sizes="32x32" href="logos/mark/favicon-32.png">
+<link rel="apple-touch-icon" href="logos/mark/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<noscript><style>
+/* Scroll-reveal starts at opacity:0 and is un-hidden by script. With script off that
+   never happens, which would also hide the state list and the rate/illustration
+   disclaimers. Show everything at once instead — disclosures are never conditional. */
+.reveal,.rise,.cover-grid>.reveal,.ann-grid>.reveal{opacity:1!important;transform:none!important}
+/* and the ignition curtain is dismissed by script, so with script off it would
+   cover the site forever — the page must never be a blank navy screen. */
+#ignite{display:none!important}
+</style></noscript>
 <style>
 :root{
   --navy-deep:#081226;
@@ -33,6 +46,29 @@
   --line-light:rgba(255,255,255,.14);
   --radius:16px;
   --shadow:0 24px 60px -24px rgba(8,18,38,.35);
+  /* brass is 2.43:1 on --cloud, which fails AA for text. This one is 4.95:1 —
+     use it for any small brass-coloured text on a light background. */
+  --brass-deep:#8A6420;
+  /* fluid modular type scale (1.25 ratio) — every size on the page comes from here */
+  --step--1:clamp(.83rem,.80rem + .15vw,.94rem);
+  --step-0:clamp(1rem,.95rem + .25vw,1.13rem);
+  --step-1:clamp(1.25rem,1.15rem + .5vw,1.55rem);
+  --step-2:clamp(1.56rem,1.35rem + 1.05vw,2.15rem);
+  --step-3:clamp(1.95rem,1.55rem + 2vw,3rem);
+  --step-4:clamp(2.44rem,1.7rem + 3.7vw,4.2rem);
+  --step-5:clamp(3.05rem,1.6rem + 7.25vw,5.8rem);
+  /* 8pt spacing scale — replaces the hand-nudged 34/38/46/48px values */
+  --sp-1:.25rem;--sp-2:.5rem;--sp-3:.75rem;--sp-4:1rem;--sp-6:1.5rem;
+  --sp-8:2rem;--sp-12:3rem;--sp-16:4rem;--sp-24:6rem;--sp-32:8rem;
+  /* layered elevation — real objects cast more than one shadow */
+  --e-1:0 1px 2px rgba(8,18,38,.06),0 2px 8px -2px rgba(8,18,38,.08);
+  --e-2:0 2px 4px rgba(8,18,38,.06),0 8px 24px -8px rgba(8,18,38,.14);
+  --e-3:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28);
+  /* one spring, used everywhere */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --dur-fast:.18s;--dur:.42s;--dur-slow:.9s;
+  --w-text:68ch;--w-wide:1160px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -41,6 +77,21 @@ body{
   background:var(--white);line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased;
 }
 h1,h2,h3{font-family:'Sora',sans-serif;font-weight:600;line-height:1.12;letter-spacing:-.02em}
+/* no orphan words in headlines; readable measure in body copy */
+h1,h2,h3,.big{text-wrap:balance;letter-spacing:-.022em}
+p,.lede{text-wrap:pretty}
+/* counting stats must not wobble as the digits change width */
+.hstat b,.stat b,[data-count],.q-out b,.big-num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+/* one vertical rhythm for every band — replaces 96px/78px/70px ad-hoc values */
+#coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
+.bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-32) 0}
+@media(max-width:880px){
+  #coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
+  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-24) 0}
+}
+/* NOTE: content-visibility:auto was tried here and reverted — nearly every band
+   is an in-page anchor target, and estimated intrinsic sizes make hash jumps and
+   scrollIntoView land short while heights resolve. Perf win wasn't worth it. */
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
   color:var(--brass);font-weight:500;display:block;margin-bottom:16px;
@@ -69,25 +120,24 @@ a{color:inherit}
 nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-light)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;max-width:1280px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
-.logo-mark{
-  width:40px;height:40px;border-radius:11px;background:linear-gradient(150deg,var(--navy-mid),var(--navy-deep));
-  border:1px solid rgba(201,151,59,.5);display:flex;align-items:center;justify-content:center;flex-shrink:0;
-}
-.logo-mark svg{width:26px;height:26px}
+.logo-mark{display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* no tile — the mark sits straight on the nav */
+.logo-mark img{height:38px;width:auto;display:block}
 .logo-text{line-height:1.12}
 .logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
-.nav-links{display:flex;gap:24px;list-style:none}
-.nav-links a{text-decoration:none;font-weight:500;font-size:14.5px;color:rgba(255,255,255,.72);transition:color .15s}
+.nav-links{display:flex;gap:11px;list-style:none}
+.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
 .nav-links a:hover{color:var(--white)}
+/* sticky-nav offset for in-page anchors (category tabs) */
+:where(section,article)[id],#tools,#annuities{scroll-margin-top:86px}
 .nav-cta{display:flex;align-items:center;gap:16px}
 .nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--white)}
 .nav-cta .btn{padding:10px 20px;font-size:14px}
-@media(max-width:1080px){.nav-links,.nav-phone{display:none}}
+@media(max-width:1320px){.nav-links,.nav-phone{display:none}}
 
 /* ---------- HERO ---------- */
 .hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
-.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:92px 24px 100px;max-width:1160px;margin:0 auto;position:relative;z-index:1}
 .hero .pill{
   display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,151,59,.45);border-radius:999px;
@@ -152,7 +202,10 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
   background:var(--white);border-radius:12px;padding:10px 18px;display:flex;align-items:center;justify-content:center;
   height:56px;border:1px solid rgba(255,255,255,.08);
 }
-.carrier img{max-height:32px;max-width:126px;object-fit:contain}
+/* explicit height + auto width lets the intrinsic width/height attrs reserve the
+   right box before load (no CLS) without the two max-* caps distorting aspect */
+.carrier img{height:32px;width:auto;max-width:126px;object-fit:contain}
+.carrier picture{display:contents}
 
 /* ---------- LEAD CAPTURE (fit check + estimate studio) ---------- */
 .cap-card{margin-top:18px;background:var(--white);border:1px solid var(--line);border-left:3px solid var(--brass);border-radius:14px;padding:18px 20px}
@@ -273,7 +326,16 @@ section{padding:96px 0}
 @media(max-width:760px){.cover-grid{grid-template-columns:1fr}}
 
 /* ---------- IUL STRATEGY (expandable embed) ---------- */
-.iul-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 82%);color:var(--white);position:relative;overflow:hidden}
+/* Executive backdrop, shared by the three dark bands: warm key light behind the
+   headings, cool counter-light right, deep floor, brass hairline on the top edge.
+   Replaced the blue grid overlay + purple/indigo/cyan blob wash (deleted). */
+.iul-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
+  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
+  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
+  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
+  color:var(--white);position:relative;overflow:hidden}
 .iul-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;position:relative;z-index:1}
 @media(max-width:880px){.iul-grid{grid-template-columns:1fr;gap:34px}}
 .iul-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
@@ -310,7 +372,10 @@ section{padding:96px 0}
 .iul-frame-bar .close:hover{color:#fff;border-color:rgba(255,255,255,.4)}
 
 /* ---------- AI CONCIERGE SECTION ---------- */
+/* the concierge band keeps its ORIGINAL backdrop (user request) — navy gradient,
+   blue grid overlay, blob wash — while IUL + annuities run the executive backdrop */
 .ai-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden}
+.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
 .ai-band .hero-grid-lines{opacity:.7}
 .ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
 .ai-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
@@ -337,6 +402,7 @@ section{padding:96px 0}
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .chat-head .avatar svg{width:22px;height:22px}
+.avatar img{height:20px;width:auto;display:block}
 .chat-head b{font-family:'Sora';font-size:15px;color:var(--white);display:block;line-height:1.2}
 .chat-head span{font-size:11.5px;color:#7ADB8F;display:flex;align-items:center;gap:6px}
 .chat-head span i{width:7px;height:7px;border-radius:50%;background:#7ADB8F;display:inline-block;animation:pulse 2s infinite}
@@ -387,6 +453,7 @@ section{padding:96px 0}
 }
 #fabChat:hover{transform:scale(1.08)}
 #fabChat svg{width:32px;height:32px}
+#fabChat img{height:30px;width:auto;display:block}
 #fabPanel{
   position:fixed;bottom:96px;right:22px;z-index:400;width:min(400px,calc(100vw - 32px));
   display:none;
@@ -397,19 +464,22 @@ section{padding:96px 0}
 
 /* ---------- FIT CHECK ---------- */
 .fitcheck{background:var(--cloud);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.fit-shell{max-width:720px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
+.fit-shell{max-width:860px;margin:0 auto;background:var(--white);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}
 .fit-bar{height:5px;background:var(--mist);position:relative}
 .fit-bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--brass),var(--brass-bright));width:0;transition:width .35s;display:block}
-.fit-body{padding:42px 44px 38px;min-height:340px;display:flex;flex-direction:column}
+.fit-body{padding:46px 48px 40px;min-height:380px;display:flex;flex-direction:column}
 .fit-step-label{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass);margin-bottom:14px}
 .fit-q{font-family:'Sora';font-weight:600;font-size:clamp(21px,2.5vw,27px);color:var(--navy);margin-bottom:26px;line-height:1.22}
 .fit-opts{display:grid;gap:11px}
 .fit-opt{
-  text-align:left;font-family:'Inter';font-size:15.5px;font-weight:500;color:var(--ink);
-  background:var(--cloud);border:1.5px solid var(--line);border-radius:12px;padding:15px 19px;cursor:pointer;
-  transition:border-color .15s,background .15s,transform .12s;
+  position:relative;text-align:left;font-family:'Inter';font-size:15.5px;font-weight:500;color:var(--ink);
+  background:linear-gradient(135deg,rgba(255,255,255,.9),var(--cloud));border:1.5px solid var(--line);border-radius:13px;
+  padding:16px 20px;cursor:pointer;overflow:hidden;
+  transition:border-color .18s,background .18s,transform .14s,box-shadow .18s;
 }
-.fit-opt:hover{border-color:var(--brass);background:var(--white);transform:translateX(3px)}
+.fit-opt::after{content:"→";position:absolute;right:18px;top:50%;transform:translateY(-50%) translateX(6px);opacity:0;color:var(--brass);transition:opacity .18s,transform .18s;font-weight:600}
+.fit-opt:hover{border-color:var(--brass);background:#fff;transform:translateX(4px);box-shadow:0 10px 26px -12px rgba(201,151,59,.5)}
+.fit-opt:hover::after{opacity:1;transform:translateY(-50%) translateX(0)}
 .fit-opt:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .fit-back{margin-top:24px;background:none;border:none;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink-soft);width:fit-content;padding:4px 0}
 .fit-back:hover{color:var(--navy)}
@@ -528,6 +598,14 @@ section{padding:96px 0}
 .final h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
 .final p{color:var(--ink-soft);max-width:56ch;margin:0 auto 36px;font-size:17.5px}
 .final .hero-ctas{justify-content:center}
+/* risk-reversal line under a primary CTA — this is what removes hesitation */
+.cta-sub{display:block;margin-top:var(--sp-3);font-size:var(--step--1);color:var(--ink-soft);letter-spacing:.01em}
+.hero .cta-sub{color:rgba(255,255,255,.66)}
+.final .cta-sub{margin-top:var(--sp-4)}
+/* the single escape hatch, deliberately quieter than the primary */
+.final p.final-alt{margin:var(--sp-8) auto 0;max-width:60ch;font-size:var(--step--1);color:var(--ink-soft);line-height:1.6}
+.final p.final-alt a{color:var(--brass-deep);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.final p.final-alt a:hover{color:var(--navy)}
 
 /* ---------- FOOTER ---------- */
 .foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:#fff!important}
@@ -540,11 +618,208 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 .foot-brand p{max-width:38ch;line-height:1.7}
 .disclaimer{border-top:1px solid var(--line-light);padding-top:26px;font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.8;max-width:105ch}
 @media(max-width:820px){.foot-grid{grid-template-columns:1fr;gap:30px}}
+
+/* ============================================================
+   hx: premium upgrade layer (docs/premium-upgrade-spec.md).
+   Every class is hx-prefixed; nothing here targets functional
+   selectors, so removing this block reverts the visuals cleanly.
+   ============================================================ */
+/* ---- hero glass card ---- */
+.hx-hero-card{
+  position:relative;
+  padding:clamp(22px,3.2vw,40px) clamp(20px,3vw,38px);
+  border-radius:22px;min-width:0;
+  background:
+    linear-gradient(158deg,rgba(255,255,255,.085) 0%,rgba(255,255,255,.028) 38%,rgba(255,255,255,0) 72%),
+    linear-gradient(180deg,rgba(8,18,38,.42),rgba(8,18,38,.20));
+  -webkit-backdrop-filter:blur(16px) saturate(1.45);
+          backdrop-filter:blur(16px) saturate(1.45);
+  box-shadow:
+    0 2px 4px rgba(3,8,20,.18),
+    0 18px 48px -14px rgba(3,8,20,.55),
+    0 48px 96px -40px rgba(3,8,20,.65),
+    inset 0 1px 0 rgba(255,255,255,.22);
+  isolation:isolate;
+}
+.hx-hero-card::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(158deg,rgba(226,180,92,.62),rgba(226,180,92,.10) 34%,rgba(255,255,255,.14) 70%,rgba(255,255,255,.04));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+          mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;z-index:-1;
+}
+.hx-hero-card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
+  background:linear-gradient(122deg,transparent 34%,rgba(255,246,224,.13) 47%,transparent 60%);
+  background-size:280% 100%;background-position:170% 0;
+  animation:hxSheen 9s cubic-bezier(.4,0,.2,1) 2.4s infinite;
+}
+@keyframes hxSheen{0%{background-position:170% 0}42%,100%{background-position:-90% 0}}
+@media (pointer:coarse){
+  .hx-hero-card{
+    -webkit-backdrop-filter:none;backdrop-filter:none;
+    /* lighter + more transparent than the old near-solid navy: phones lose the
+       blur, they should not also lose the light behind the card */
+    background:linear-gradient(180deg,rgba(22,42,80,.46),rgba(13,27,54,.30));
+  }
+  .hx-hero-card::after{animation:none;display:none}
+}
+@media (prefers-reduced-motion:reduce){ .hx-hero-card::after{animation:none} }
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .hx-hero-card{background:linear-gradient(180deg,rgba(8,18,38,.72),rgba(8,18,38,.5))}
+}
+
+/* ---- interactive 3D card carousel (inert until JS adds .hx-on) ----
+   Coverflow geometry: each card is placed from its signed circular offset o —
+   x = o·spread, z = −|o|·depth, rotY = −o·tilt — instead of one rotating ring.
+   A ring needs backface culling, which makes 3- and 4-card sets invisible at
+   the sides; offset placement works for any n and never shows mirrored text. */
+.hx-stage{position:relative;perspective:1200px;perspective-origin:50% 44%}
+/* side cards project wider than the box; clip so they can never add a
+   horizontal scrollbar at any width (clip preserves the 3D depth, unlike auto) */
+.hx-on{overflow-x:clip}
+.hx-on .hx-stage{cursor:grab;touch-action:pan-y}
+html.hx-grabbing,html.hx-grabbing *{cursor:grabbing!important}
+html.hx-grabbing{user-select:none;-webkit-user-select:none}
+.hx-stage .hx-wheel{transform-style:preserve-3d}
+.hx-on .hx-wheel{position:relative;display:block;height:clamp(430px,64vh,600px);margin-inline:auto;max-width:none;pointer-events:none}
+.hx-on .hx-wheel>.hx-3dcard{
+  position:absolute;top:50%;left:50%;width:min(520px,88vw);margin:0;
+  transform-style:preserve-3d;will-change:transform,opacity;
+  pointer-events:auto;cursor:pointer;
+  /* real-GPU fixes: cards moving in 3D must not sample a backdrop (Chrome
+     glitches badly with blur+url() SVG filters on transformed layers). */
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+/* solid surfaces per family — no glass while transformed */
+.hx-on .cover-grid>.hx-3dcard{background:var(--white)}
+.hx-on .ann-grid>.hx-3dcard{background:linear-gradient(150deg,#16294E 0%,#0B1830 100%);border:1px solid rgba(201,151,59,.28)}
+/* reveal-neutraliser + dim/front states. Deliberately NO !important in this trio:
+   the flip-reveal hide is .cover-grid>.reveal / .ann-grid>.reveal (0,2,0), the
+   neutraliser below out-specifies it at (0,3,0), and the front card simply never
+   carries .hx-dim. GSAP owns transform and opacity inline — no CSS opacity
+   transition here, or per-frame drag updates would smear. */
+.hx-on .hx-wheel>.reveal,
+.hx-on .hx-wheel>.reveal.in{opacity:1;animation:none;transition:filter .38s ease}
+.hx-on .hx-wheel>.hx-3dcard.hx-dim{filter:saturate(.6) brightness(.95)}
+.hx-on .hx-wheel>.hx-3dcard.hx-front{pointer-events:auto;cursor:auto;
+  box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28)}
+.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 6px 14px rgba(0,0,0,.3),0 26px 60px -18px rgba(0,0,0,.55),0 0 0 1px rgba(201,151,59,.35)}
+/* arrows */
+.hx-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:50px;height:50px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  border:1px solid rgba(14,31,62,.16);background:rgba(255,255,255,.94);color:var(--navy);
+  box-shadow:0 8px 24px -10px rgba(8,18,38,.32);pointer-events:auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s,box-shadow .25s}
+.hx-arrow:hover{transform:translateY(-50%) scale(1.08);border-color:rgba(201,151,59,.65);
+  box-shadow:0 12px 30px -10px rgba(8,18,38,.4)}
+.hx-arrow:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
+.hx-arrow.prev{left:clamp(4px,2vw,28px)}
+.hx-arrow.next{right:clamp(4px,2vw,28px)}
+.hx-arrow svg{width:20px;height:20px;display:block}
+.ann-band .hx-arrow{background:rgba(14,31,62,.88);border-color:rgba(201,151,59,.4);color:#F6E0AC;
+  box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
+.ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
+@media(max-width:720px){
+  .hx-arrow{width:42px;height:42px;top:42%}
+  .hx-arrow.prev{left:8px}
+  .hx-arrow.next{right:8px}
+  .hx-arrow svg{width:17px;height:17px}
+}
+/* dots — real buttons, clickable, with a generous hit area */
+.hx-progress{display:none;gap:8px;justify-content:center;margin-top:26px}
+.hx-on .hx-progress,#coverage.hx-car .hx-progress{display:flex}
+.hx-progress i,.hx-progress button{width:26px;height:3px;border-radius:2px;border:0;padding:0;display:block;
+  background:rgba(226,180,92,.24);transition:background .3s,transform .3s}
+.hx-progress button{position:relative;cursor:pointer}
+.hx-progress button::after{content:"";position:absolute;inset:-7px}
+.hx-progress button:focus-visible{outline:2px solid var(--brass-bright);outline-offset:4px}
+.hx-progress i.on,.hx-progress button.on{background:var(--brass-bright);transform:scaleY(1.8)}
+/* annuities carousel: shorter cards, slightly tighter stage */
+#annuities.hx-on .hx-wheel{height:clamp(360px,50vh,520px)}
+#annuities.hx-on .hx-wheel>.hx-3dcard{width:min(470px,86vw)}
+
+/* ---- phone/tablet coverage carousel (JS adds .hx-car/.hx-carousel; no GSAP) ---- */
+#coverage.hx-car .hx-progress{display:flex}
+.hx-carousel{display:flex;align-items:flex-start;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;margin-inline:-24px;padding:4px 24px 18px;
+  scroll-padding-inline:24px;scrollbar-width:none}
+.hx-carousel::-webkit-scrollbar{display:none}
+.hx-carousel>.cover-card{flex:0 0 84%;max-width:430px;scroll-snap-align:center;margin:0;scroll-margin:76px 12px}
+@media(min-width:720px){.hx-carousel>.cover-card{flex-basis:46%}}
+
+/* ---- why-us grid ---- */
+.hx-why{background:var(--cloud);padding:var(--sp-32) 0}
+@media(max-width:880px){.hx-why{padding:var(--sp-24) 0}}
+.hx-why-grid{
+  display:grid;gap:clamp(14px,1.5vw,20px);
+  grid-template-columns:repeat(auto-fit,minmax(248px,1fr));
+  margin-top:clamp(28px,3.4vw,46px);
+}
+.hx-why-card{
+  position:relative;padding:clamp(22px,2.2vw,30px);border-radius:16px;
+  background:var(--white);border:1px solid var(--line);
+  box-shadow:0 1px 2px rgba(8,18,38,.05),0 2px 8px -2px rgba(8,18,38,.07);
+  transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s cubic-bezier(.16,1,.3,1),border-color .42s;
+  --mx:50%;--my:0%;
+}
+.hx-why-card.wide{grid-column:1/-1}
+.hx-why-card b{
+  display:block;font-family:'Sora',sans-serif;font-weight:700;
+  font-size:clamp(2rem,3.4vw,2.9rem);line-height:1;letter-spacing:-.03em;
+  color:var(--navy);font-variant-numeric:tabular-nums;margin-bottom:.35em;
+}
+.hx-why-card b em{font-style:normal;font-size:.4em;color:var(--brass-deep);margin-left:.12em}
+.hx-why-card h3{font-size:clamp(1rem,1.15vw,1.14rem);color:var(--navy);margin-bottom:.5em;text-wrap:balance}
+.hx-why-card p{font-size:.95rem;color:var(--ink-soft);line-height:1.62;max-width:42ch}
+.hx-why-card::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(320px circle at var(--mx) var(--my),rgba(226,180,92,.13),transparent 62%);
+  opacity:0;transition:opacity .42s cubic-bezier(.16,1,.3,1);
+}
+@media (hover:hover) and (pointer:fine){
+  .hx-why-card:hover{
+    transform:translateY(-5px);border-color:rgba(201,151,59,.42);
+    box-shadow:0 4px 8px rgba(8,18,38,.06),0 18px 44px -12px rgba(8,18,38,.20),0 40px 80px -34px rgba(8,18,38,.26);
+  }
+  .hx-why-card:hover::after{opacity:1}
+}
+@media (prefers-reduced-motion:reduce){.hx-why-card{transition:none}.hx-why-card:hover{transform:none}}
+
+/* ---- conversion-zone polish (visual only) ---- */
+.hx-cta-note{
+  display:block;margin-top:var(--sp-3);
+  font-size:var(--step--1);line-height:1.55;color:var(--ink-soft);
+  max-width:46ch;letter-spacing:.005em;
+}
+.final .hx-cta-note{margin-inline:auto;text-align:center}
+.hero .hx-cta-note,.ai-band .hx-cta-note,.iul-band .hx-cta-note,.booking .hx-cta-note{color:rgba(255,255,255,.66)}
+.quote-band .hx-cta-note{color:rgba(255,255,255,.6)}
+/* Surface, not band, decides the ink. The IUL deep-dive is a white .wt card inside
+   the dark .iul-band, and the tool panes are dark glass inside a light band — the
+   band rules above get both backwards. Equal specificity, so source order wins. */
+.wt .hx-cta-note{color:var(--ink-soft)}
+/* .78/.8 is what the pane's own body copy and feature chips already use on this
+   glass; the swirl has bright patches where .66 thins out too far. */
+.tool-pane .hx-cta-note{color:rgba(255,255,255,.8)}
+.hx-trust{
+  display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);
+  margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--line);
+  font-size:var(--step--1);color:var(--ink-soft);
+}
+.hx-trust span{display:inline-flex;align-items:center;gap:6px}
+.hx-trust b{color:var(--navy);font-weight:600}
 </style>
 <style id="glass-polish">
 /* ===== liquid glass pass — dark bands only; light sections stay crisp ===== */
 /* ambient glow shapes (pre-blurred radial gradients — zero GPU cost) */
 .glow{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+/* the executive backdrop provides its own light on those bands — the free-floating
+   glows there step back to an accent rather than a wash (.ai-band excluded: it keeps
+   its original full-strength backdrop by user request) */
+.iul-band .glow,.ann-band .glow{opacity:.4}
 .glow-brass{width:540px;height:540px;background:radial-gradient(circle,rgba(226,180,92,.15),transparent 62%)}
 .glow-blue{width:660px;height:660px;background:radial-gradient(circle,rgba(91,141,239,.16),transparent 62%)}
 .glow-soft{width:440px;height:440px;background:radial-gradient(circle,rgba(244,246,250,.06),transparent 60%)}
@@ -590,7 +865,7 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 .nav-sheet a:active{color:var(--brass-bright)}
 .nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--brass-bright);border-bottom:none;margin-top:10px}
 .nav-sheet .btn{margin-top:14px;justify-content:center}
-@media(max-width:1080px){.nav-burger{display:flex}}
+@media(max-width:1320px){.nav-burger{display:flex}}
 
 /* no-blur fallback — keep everything readable */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -603,17 +878,19 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
 
 /* ===== .liquid-glass — animated SVG refraction (#liquid-glass-distortion) + heavy blur ===== */
 .liquid-glass{
-  border:1px solid rgba(255,255,255,.35);
-  -webkit-backdrop-filter:blur(25px) saturate(1.35);
-  backdrop-filter:blur(25px) saturate(1.35);
+  border:1px solid rgba(255,255,255,.48);
+  -webkit-backdrop-filter:blur(34px) saturate(1.6);
+  backdrop-filter:blur(34px) saturate(1.6);
   /* browsers that support url() in backdrop-filter (Chromium) get the liquid refraction; others keep the blur above */
-  backdrop-filter:blur(25px) saturate(1.35) url(#liquid-glass-distortion);
+  backdrop-filter:blur(34px) saturate(1.6) url(#liquid-glass-distortion);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.35),
-    inset 0 -1px 0 rgba(255,255,255,.08),
-    0 2px 6px rgba(8,18,38,.10),
-    0 14px 30px -10px rgba(8,18,38,.22),
-    0 36px 70px -28px rgba(8,18,38,.32);
+    inset 0 1.5px 0 rgba(255,255,255,.55),
+    inset 0 -1px 0 rgba(255,255,255,.12),
+    inset 0 0 28px rgba(255,255,255,.05),
+    0 2px 8px rgba(8,18,38,.14),
+    0 18px 38px -10px rgba(8,18,38,.3),
+    0 48px 90px -30px rgba(8,18,38,.44),
+    0 0 54px -18px rgba(201,151,59,.28);
 }
 /* context tints — glass needs a translucent fill to refract what's behind it */
 nav.liquid-glass{background:rgba(8,18,38,.55)}
@@ -640,11 +917,12 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
    restores this exact look. The layout can never break.
    ============================================================ */
 .lg-container{
-  position:relative;isolation:isolate;border-radius:30px;
-  background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.22);
-  -webkit-backdrop-filter:blur(20px) saturate(1.35);
-  backdrop-filter:blur(20px) saturate(1.35);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 30px 70px -28px rgba(8,18,38,.55);
+  position:relative;isolation:isolate;border-radius:34px;
+  background:rgba(8,18,38,.42);border:1px solid rgba(255,255,255,.34);
+  -webkit-backdrop-filter:blur(30px) saturate(1.6);
+  backdrop-filter:blur(30px) saturate(1.6);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.46),inset 0 0 34px rgba(255,255,255,.045),
+    0 38px 90px -28px rgba(8,18,38,.7),0 0 64px -20px rgba(201,151,59,.26);
 }
 .lg-container[data-lg-theme="light"]{
   background:rgba(255,255,255,.5);border-color:rgba(14,31,62,.14);
@@ -661,7 +939,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   -webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none;
 }
 .lg-canvas{position:absolute;z-index:10;pointer-events:none}   /* middle layer */
-.lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(14px,2vw,22px)}
+.lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(28px,4.2vw,56px)}
 /* let the refracted scene glow through the chat shell when GL is on */
 .lg-webgl-on .lg-content .chat-shell{
   background:rgba(8,18,38,.44);box-shadow:none;
@@ -675,35 +953,233 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 /* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
    glass so the WebGL refraction has high-contrast shapes to bend. */
-.lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(6px);will-change:transform}
-.lg-blob-purple{width:520px;height:520px;background:radial-gradient(circle,rgba(96,32,168,.34),transparent 62%);animation:lgDrift 26s ease-in-out infinite alternate}
-.lg-blob-indigo{width:620px;height:620px;background:radial-gradient(circle,rgba(70,96,220,.30),transparent 62%);animation:lgDrift 32s ease-in-out -8s infinite alternate-reverse}
-.lg-blob-cyan{width:480px;height:480px;background:radial-gradient(circle,rgba(28,190,214,.26),transparent 62%);animation:lgDrift 22s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(120,76,192,.20),transparent 62%)}
-.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(84,107,224,.18),transparent 62%)}
-.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(61,184,204,.17),transparent 62%)}
+.lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px);will-change:transform}
+.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(96,32,168,.50),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
+.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(70,96,220,.44),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
+.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(28,190,214,.40),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(128,80,206,.46),transparent 66%);width:720px;height:720px}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(90,116,236,.42),transparent 66%);width:820px;height:820px}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(66,198,220,.40),transparent 66%);width:660px;height:660px}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
-  50%{transform:translate3d(70px,-50px,0) scale(1.12)}
-  100%{transform:translate3d(-60px,45px,0) scale(.94)}
+  50%{transform:translate3d(110px,-80px,0) scale(1.22)}
+  100%{transform:translate3d(-90px,70px,0) scale(.9)}
 }
 .bp-band,.fitcheck,.quote-band{position:relative;overflow:hidden}
 .bp-band .wrap,.fitcheck .wrap,.quote-band .wrap{position:relative;z-index:1}
 /* fit check pane hugs its narrow quiz card */
-.fitcheck .lg-container{max-width:764px;margin:0 auto}
+.fitcheck .lg-container{max-width:940px;margin:0 auto}
 @media(prefers-reduced-motion:reduce){.lg-blob{animation:none}}
+</style>
+<style id="cov-modal-css">
+/* ===== COVERAGE DETAIL MODAL — liquid-glass ===== */
+.cover-card{cursor:pointer}
+.cover-card h3{transition:color .16s}
+.cover-card:hover h3{color:var(--brass)}
+.cover-card.wide:hover h3{color:var(--brass-bright)}
+.cov-more{margin-top:14px;display:inline-flex;align-items:center;gap:7px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass);background:none;border:none;cursor:pointer;padding:0;transition:gap .16s,color .16s}
+.cover-card.wide .cov-more{color:var(--brass-bright)}
+.cov-more::after{content:"→";transition:transform .16s}
+.cover-card:hover .cov-more{gap:11px}
+.cov-more:hover::after{transform:translateX(3px)}
+
+.cov-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:24px}
+.cov-modal.open{display:flex}
+.cov-scrim{position:absolute;inset:0;background:rgba(3,8,20,.66);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);animation:covFade .3s ease}
+.cov-blobs{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1}
+.cov-blobs .lg-blob-purple{top:2%;left:6%}
+.cov-blobs .lg-blob-indigo{bottom:-6%;right:4%}
+.cov-blobs .lg-blob-cyan{top:38%;left:46%}
+.cov-panel{
+  position:relative;z-index:2;width:min(680px,100%);max-height:88vh;overflow:auto;border-radius:28px;color:#fff;
+  background:linear-gradient(150deg,rgba(15,32,64,.74),rgba(8,18,38,.82));
+  border:1px solid rgba(255,255,255,.4);
+  -webkit-backdrop-filter:blur(32px) saturate(1.55);
+  backdrop-filter:blur(32px) saturate(1.55) url(#liquid-glass-distortion);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.5),inset 0 0 40px rgba(255,255,255,.05),
+    0 50px 100px -30px rgba(0,0,0,.7),0 0 70px -20px rgba(201,151,59,.3);
+  animation:covRise .42s cubic-bezier(.16,1,.3,1);
+}
+.cov-panel::-webkit-scrollbar{width:10px}
+.cov-panel::-webkit-scrollbar-thumb{background:rgba(201,151,59,.4);border-radius:8px;border:3px solid transparent;background-clip:content-box}
+@keyframes covFade{from{opacity:0}to{opacity:1}}
+@keyframes covRise{from{opacity:0;transform:translateY(26px) scale(.975)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.cov-scrim,.cov-panel{animation:none}}
+.cov-x{position:absolute;top:16px;right:16px;z-index:6;width:42px;height:42px;border-radius:50%;background:rgba(8,18,38,.55);border:1px solid var(--line-light);color:#fff;font-size:15px;cursor:pointer;transition:background .16s,transform .25s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.cov-x:hover{background:rgba(201,151,59,.32);transform:rotate(90deg)}
+.cov-inner{position:relative;z-index:3;padding:42px 42px 36px}
+.cov-hero{display:flex;gap:18px;align-items:flex-start}
+.cov-ic{width:66px;height:66px;border-radius:19px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:31px;background:radial-gradient(circle at 30% 24%,rgba(201,151,59,.34),rgba(8,18,38,.5));border:1px solid rgba(201,151,59,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.cov-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
+.cov-title{font-family:'Sora';font-weight:700;font-size:clamp(23px,3.2vw,31px);color:#fff;margin:7px 0 0;line-height:1.08;letter-spacing:-.02em}
+.cov-hook{color:rgba(255,255,255,.84);font-size:16px;line-height:1.56;margin:18px 0 22px}
+.cov-hook em{color:var(--brass-bright);font-style:normal;font-weight:600}
+.cov-rows{display:grid;gap:10px;margin-bottom:22px}
+.cov-row{display:grid;grid-template-columns:30px 1fr;gap:13px;align-items:center;background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:13px 16px;transition:border-color .18s,background .18s,transform .18s}
+.cov-row:hover{border-color:rgba(201,151,59,.55);background:rgba(255,255,255,.09);transform:translateX(4px)}
+.cov-row .ck{width:28px;height:28px;border-radius:9px;background:rgba(201,151,59,.16);border:1px solid rgba(201,151,59,.5);display:flex;align-items:center;justify-content:center;color:var(--brass-bright);font-size:14px;font-weight:700}
+.cov-row span{font-size:14.5px;color:rgba(255,255,255,.92);line-height:1.5}
+.cov-stat{display:flex;gap:26px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(201,151,59,.15),rgba(8,18,38,.28));border:1px solid rgba(201,151,59,.42);border-radius:16px;padding:18px 22px;margin-bottom:24px}
+.cov-stat .s b{font-family:'Sora';font-weight:700;font-size:27px;color:var(--brass-bright);display:block;line-height:1}
+.cov-stat .s span{font-size:12px;color:rgba(255,255,255,.72);font-family:'IBM Plex Mono',monospace;letter-spacing:.02em;margin-top:5px;display:block;max-width:20ch}
+.cov-ctas{display:flex;gap:11px;flex-wrap:wrap}
+.cov-ctas .btn{font-size:14.5px;padding:13px 22px}
+@media(max-width:560px){.cov-inner{padding:32px 22px 26px}.cov-hero{flex-direction:column;gap:14px}.cov-stat{gap:18px}}
+</style>
+<style id="polish-css">
+/* ===== GLOBAL POLISH / INTENSIFY ===== */
+/* premium diagonal shine-sweep across the coverage + annuity cards on hover */
+.cover-card,.ann-card{overflow:hidden}
+.cover-card::after,.ann-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:4;
+  background:linear-gradient(115deg,transparent 34%,rgba(255,255,255,.16) 50%,transparent 64%);
+  transform:translateX(-130%);opacity:0;transition:transform .8s cubic-bezier(.16,1,.3,1),opacity .3s}
+.cover-card:hover::after,.ann-card:hover::after{transform:translateX(130%);opacity:1}
+.cover-card{transition:transform .24s cubic-bezier(.16,1,.3,1),box-shadow .24s,border-color .24s}
+.cover-card:hover{transform:translateY(-6px)}
+/* brass buttons get a light sweep */
+.btn-brass{position:relative;overflow:hidden}
+.btn-brass::after{content:"";position:absolute;top:0;bottom:0;left:-90%;width:55%;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-18deg);transition:left .6s ease}
+.btn-brass:hover::after{left:150%}
+/* animated gold underline under nav links */
+.nav-links a{position:relative}
+.nav-links a::after{content:"";position:absolute;left:11px;right:11px;bottom:3px;height:1.5px;background:var(--brass);
+  transform:scaleX(0);transform-origin:left;transition:transform .22s ease;border-radius:2px}
+.nav-links a:hover::after{transform:scaleX(1)}
+/* state chips + faq lift on hover */
+.state-chip{transition:transform .16s,border-color .16s,background .16s}
+.state-chip:hover{transform:translateY(-2px);border-color:rgba(201,151,59,.5)}
+.faq-item{transition:border-color .18s}
+.faq-item:hover{border-color:rgba(201,151,59,.32)}
+/* carrier logos: subtle lift as the marquee passes under the cursor */
+.carrier{transition:transform .18s,box-shadow .18s}
+.carrier:hover{transform:translateY(-3px);box-shadow:0 12px 26px -12px rgba(0,0,0,.5)}
+/* hero stat cards: gentle glass polish */
+.hstat{transition:transform .2s cubic-bezier(.16,1,.3,1),border-color .2s}
+.hstat:hover{transform:translateY(-3px);border-color:rgba(201,151,59,.4)}
+@media(prefers-reduced-motion:reduce){
+  .cover-card::after,.ann-card::after,.btn-brass::after{display:none}
+  .cover-card:hover,.state-chip:hover,.carrier:hover,.hstat:hover{transform:none}
+}
+
+/* ============ IMMERSIVE HERO — WebGL energy field + morphing chrome heron ============ */
+.hero{min-height:100svh;display:flex;align-items:center}
+.hero-gl{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
+.hero-veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(94deg,rgba(8,18,38,.74) 0%,rgba(8,18,38,.34) 44%,rgba(8,18,38,0) 72%),radial-gradient(120% 120% at 50% 50%,transparent 58%,rgba(8,18,38,.55) 100%)}
+.hero-inner{width:100%}
+.hero-inner>div{min-width:0}
+.hero .pill{max-width:100%}
+html{overflow-x:clip}
+/* film grain over the hero scene — sits above the canvas, under the copy */
+.hero-grain{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
+.hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
+@keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
+/* chrome heron replaces the framed crest */
+/* the emblem is a bare canvas now — kill every remnant of the old framed card.
+   the backdrop-filter especially: it was invisible over the flat nebula, but it
+   blurs a hard-edged rectangle out of the threshold scene's rays and rock. */
+.crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%);
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
+.crest::after{display:none!important}
+.hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
+/* ============================================================
+   MOBILE-LITE — phones pay for two fragment shaders already, and profiling
+   showed the remaining cost is cumulative compositing, not one hot spot:
+   stripping the decorative layers cut frame time ~38%. So on coarse pointers
+   we drop backdrop-filter (the priciest effect on a phone GPU, used on every
+   glass surface at blur(14-34px), one of them with an SVG url() filter),
+   flatten the big blurred decor, and stop the purely ornamental loops.
+   Solid fills below are the same ones the @supports-not fallbacks already use,
+   so contrast and legibility are unchanged.
+   ============================================================ */
+/* the primary CTA label is longer than the old "Book a call", which wrapped the
+   phone nav onto three lines. Keep it on one line, and below 520px drop it entirely —
+   the sticky bottom bar already carries the same action. */
+@media(max-width:880px){
+  .nav-cta .btn,.mobilebar a{white-space:nowrap}
+  .brand-txt,.logo-txt,.brand{white-space:nowrap}
+  .nav-cta .btn{padding:9px 14px;font-size:13px}
+}
+@media(max-width:520px){ .nav-cta .btn{display:none} }
+/* the floating chiplets overlap the emblem once the hero stacks */
+@media(max-width:880px){ .crest .chiplet{display:none} }
+@media (pointer:coarse){
+  nav,.crest,.crest .chiplet,.mobilebar,.nav-sheet,.nav-burger,.chat-shell,
+  .hstat,.book-point,.iul-preview,.cov-scrim,.cov-x,.cover-card,.lg-container,
+  .liquid-glass,.glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  nav{background:rgba(8,18,38,.96)}
+  .nav-sheet{background:rgba(8,18,38,.985)}
+  .mobilebar{background:rgba(8,18,38,.96)}
+  .chat-shell{background:var(--navy-deep)}
+  /* phone fallbacks were reading several stops darker than the desktop glass —
+     lift every dark surface a step and let more light through */
+  .hstat,.book-point{background:rgba(255,255,255,.09)}
+  .crest .chiplet{background:rgba(16,32,62,.82)}
+  .cover-card.liquid-glass{background:var(--cloud)}
+  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
+  .iul-preview.liquid-glass{background:rgba(20,38,74,.55)}
+  .lg-container{background:linear-gradient(160deg,#16294E 0%,#0C1B38 100%)}
+  .lg-container[data-lg-theme="light"]{background:var(--cloud)}
+  .cov-scrim{background:rgba(3,8,20,.86)}
+  /* big blur radii are paint-bound: keep the colour wash, drop the blur —
+     but these ARE the ambient light on phones, so keep them bright */
+  .glow,.lg-blob{filter:none!important;opacity:.5}
+  .lg-blob{animation:none!important}
+  /* ornamental, always-running, and invisible at phone size */
+  .hero-sparks,.sparks{display:none!important}
+  .hero-grain{display:none!important}
+}
+/* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
+.cover-grid,.ann-grid{perspective:1500px;perspective-origin:50% 42%}
+.cover-grid>.reveal,.ann-grid>.reveal{opacity:0;transform:rotateY(-60deg) translateZ(-24px);transform-origin:left center;backface-visibility:hidden;transition:opacity .8s cubic-bezier(.16,1,.3,1),transform 1.05s cubic-bezier(.16,1,.3,1)}
+.cover-grid>.reveal:nth-child(even),.ann-grid>.reveal:nth-child(even){transform:rotateY(60deg) translateZ(-24px);transform-origin:right center}
+.cover-grid>.reveal.in,.ann-grid>.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.cover-grid>.reveal,.ann-grid>.reveal{transform:none}}
+/* state chips cascade flip-up — parent .reveal handles the hide, so chips can never get stuck invisible */
+.states-grid{perspective:900px}
+.states-grid .state-chip{transform-origin:center top}
+.states-grid.in .state-chip{animation:chipIn .55s cubic-bezier(.16,1,.3,1) both}
+.states-grid.in .state-chip:nth-child(1){animation-delay:.03s}.states-grid.in .state-chip:nth-child(2){animation-delay:.07s}.states-grid.in .state-chip:nth-child(3){animation-delay:.11s}.states-grid.in .state-chip:nth-child(4){animation-delay:.15s}.states-grid.in .state-chip:nth-child(5){animation-delay:.19s}.states-grid.in .state-chip:nth-child(6){animation-delay:.23s}.states-grid.in .state-chip:nth-child(7){animation-delay:.27s}.states-grid.in .state-chip:nth-child(8){animation-delay:.31s}.states-grid.in .state-chip:nth-child(9){animation-delay:.35s}.states-grid.in .state-chip:nth-child(10){animation-delay:.39s}.states-grid.in .state-chip:nth-child(11){animation-delay:.43s}.states-grid.in .state-chip:nth-child(12){animation-delay:.47s}
+@keyframes chipIn{0%{opacity:0;transform:rotateX(-58deg) translateY(8px)}100%{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.states-grid.in .state-chip{animation:none}}
+.crest .chiplet{z-index:3}
+.hero-ctas .btn{will-change:transform}
+/* cinematic ignition intro */
+#ignite{position:fixed;inset:0;z-index:9000;background:var(--navy-deep);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease 1.1s}
+#ignite.gone{opacity:0;pointer-events:none}
+/* Failsafe. Script fades this at 1.5s and removes it at 2.7s; every inline block on
+   the page shares one IIFE, so one earlier throw would leave a z-index:9000 curtain
+   over the whole site permanently. Retire on our own well after the scripted path,
+   so when script works this animation never gets to run at all. */
+@keyframes igniteRetire{to{opacity:0;visibility:hidden}}
+#ignite{animation:igniteRetire .7s ease 3.4s forwards}
+#ignite .flare{position:absolute;width:2px;height:2px;border-radius:50%;background:#F3D9A0;box-shadow:0 0 60px 30px rgba(226,180,92,.6);animation:igfl 1.5s cubic-bezier(.2,.8,.2,1) .2s forwards}
+@keyframes igfl{0%{transform:scale(0);opacity:0}30%{opacity:1}100%{transform:scale(260);opacity:0}}
+#ignite .imk{width:80px;height:80px;opacity:0;animation:igmk 1.1s ease .1s forwards}
+#ignite .imk path{stroke:#E2B45C;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
+@keyframes igmk{0%,20%{opacity:0}45%,100%{opacity:1}}
+@keyframes igdr{to{stroke-dashoffset:0}}
+@media(max-width:880px){.hero{min-height:auto;display:block}.hero-veil{background:linear-gradient(180deg,rgba(8,18,38,.55),rgba(8,18,38,.2) 40%,transparent 60%)}.crest{width:min(205px,52%)!important}}
+@media(prefers-reduced-motion:reduce){.hero-spark{display:none}#ignite{display:none}}
 </style>
 </head>
 <body>
+
+<!-- ============ CINEMATIC IGNITION INTRO ============ -->
+<div id="ignite" aria-hidden="true">
+  <span class="flare"></span>
+  <svg class="imk" viewBox="0 0 240 300" fill="none"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke-width="5" stroke-linecap="round"/></svg>
+</div>
 
 <!-- ============ LIQUID GLASS FILTER (hidden defs — referenced by .liquid-glass) ============ -->
 <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
   <defs>
     <filter id="liquid-glass-distortion" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
       <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="7" result="liquidNoise">
-        <animate attributeName="baseFrequency" dur="18s" values="0.008 0.012;0.012 0.017;0.008 0.012" repeatCount="indefinite"/>
+        <animate attributeName="baseFrequency" dur="14s" values="0.008 0.012;0.015 0.021;0.008 0.012" repeatCount="indefinite"/>
       </feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="liquidNoise" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+      <feDisplacementMap in="SourceGraphic" in2="liquidNoise" scale="24" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
 </svg>
@@ -713,73 +1189,84 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="nav-inner">
     <a href="#top" class="logo" aria-label="Herron and Co. Legacy Agency home">
       <span class="logo-mark">
-        <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-          <path d="M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80" stroke="#E2B45C" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="53" cy="21" r="2" fill="#fff"/>
-        </svg>
+        <picture>
+          <source srcset="logos/mark/nav.avif 1x, logos/mark/nav@2x.avif 2x, logos/mark/nav@3x.avif 3x" type="image/avif">
+          <source srcset="logos/mark/nav.webp 1x, logos/mark/nav@2x.webp 2x, logos/mark/nav@3x.webp 3x" type="image/webp">
+          <img src="logos/mark/nav.png" srcset="logos/mark/nav@2x.png 2x, logos/mark/nav@3x.png 3x"
+               width="28" height="38" alt="" aria-hidden="true" decoding="async">
+        </picture>
       </span>
       <span class="logo-text"><b>Herron &amp; Co.</b><span>Legacy Agency</span></span>
     </a>
     <ul class="nav-links">
-      <li><a href="#coverage">Coverage</a></li>
-      <li><a href="#iul-strategy">IUL strategy</a></li>
-      <li><a href="opt-in.html">Free guide</a></li>
-      <li><a href="#ai">Legacy AI</a></li>
-      <li><a href="#blueprint">Blueprint</a></li>
-      <li><a href="#quotes">Quotes</a></li>
+      <li><a href="#mortgage">Mortgage&nbsp;Protection</a></li>
+      <li><a href="#disability">Disability</a></li>
+      <li><a href="#ltc">Long-Term Care</a></li>
+      <li><a href="#final-expense">Final Expense</a></li>
+      <li><a href="#iul-strategy">IUL</a></li>
+      <li><a href="#annuities">Annuities</a></li>
+      <li><a href="#term-whole">Term &amp; Whole</a></li>
+      <li><a href="#tools">Tools</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#booking">Book</a></li>
-      <li><a href="#faq">FAQ</a></li>
     </ul>
     <div class="nav-cta">
       <a class="nav-phone" href="tel:6103608583">610-360-8583</a>
-      <a class="btn btn-brass" href="#booking">Book a call</a>
+      <a class="btn btn-brass" href="#booking">Get my numbers</a>
       <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false" aria-controls="navSheet"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
 <div class="nav-sheet" id="navSheet" aria-label="Menu">
-  <a href="#coverage">Coverage</a>
+  <a href="#mortgage">Mortgage protection</a>
+  <a href="#disability">Disability insurance</a>
+  <a href="#ltc">Hybrid long-term care</a>
+  <a href="#final-expense">Final expense</a>
   <a href="#iul-strategy">IUL strategy</a>
-  <a href="#ai">Legacy AI</a>
+  <a href="#annuities">Annuities — every kind</a>
+  <a href="#term-whole">Term &amp; whole life</a>
+  <a href="#tools">Interactive tools</a>
   <a href="#blueprint">Blueprint</a>
   <a href="#quotes">Instant quotes</a>
   <a href="#about">About Connor</a>
   <a href="#faq">FAQ</a>
   <a href="opt-in.html">Free protection guide</a>
   <a class="sheet-phone" href="tel:6103608583">Call/text 610-360-8583</a>
-  <a class="btn btn-brass" href="#booking">Book a free 15-minute call</a>
+  <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
 </div>
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <div class="hero-grid-lines" aria-hidden="true"></div>
+  <canvas id="heroGl" class="hero-gl" aria-hidden="true"></canvas>
+  <div class="hero-grain" aria-hidden="true"></div>
+  <div class="hero-veil" aria-hidden="true"></div>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
+  <div class="hero-sparks" aria-hidden="true">
+    <span class="hero-spark" style="top:20%;left:16%;width:20px;animation-delay:.2s"></span>
+    <span class="hero-spark" style="top:30%;left:82%;width:26px;animation-delay:1.4s"></span>
+    <span class="hero-spark" style="top:64%;left:60%;width:15px;animation-delay:2.6s"></span>
+    <span class="hero-spark" style="top:16%;left:66%;width:14px;animation-delay:3.4s"></span>
+    <span class="hero-spark" style="top:70%;left:88%;width:20px;animation-delay:.9s"></span>
+    <span class="hero-spark" style="top:48%;left:8%;width:13px;animation-delay:4.2s"></span>
+  </div>
   <div class="hero-inner">
-    <div>
-      <span class="pill rise"><i></i> Lehigh Valley local · Licensed in 13 states · AI-powered, human-delivered</span>
-      <h1 class="rise d1">Protection built for your life. <span class="grad">Delivered at the speed of it.</span></h1>
-      <p class="lede rise d2">Mortgage protection with living benefits, retirement-grade IUL, hybrid long-term care, final expense, fixed annuities, and disability income protection — quoted across 20+ national carriers, explained by an AI concierge that never sleeps, and closed by a real licensed agent who does.</p>
+    <div class="hx-hero-card">
+      <span class="pill rise"><i></i> Independent risk architect · Lehigh Valley · Licensed in 12 states</span>
+      <h1 class="rise d1">Most agents sell you a policy. <span class="grad">We engineer the plan that outlives you.</span></h1>
+      <p class="lede rise d2">Mortgage protection, indexed universal life, hybrid long-term care, final expense, disability income and fixed annuities — architected across 20+ carriers by an independent agent who earns the same regardless of which one you choose. Fifteen minutes, real numbers, and the honest answer even when it costs us the sale.</p>
       <div class="hero-ctas rise d3">
-        <a class="btn btn-brass" href="#ai" id="heroAiBtn">🎙 Talk to Legacy AI</a>
+        <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
       </div>
+      <span class="cta-sub rise d3">No email required to start · $0 to work with us · A real licensed agent, not a call center</span>
       <div class="hero-stats rise d4">
         <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
-        <div class="hstat"><b data-count="13">13</b><span>states licensed</span></div>
-        <div class="hstat"><b>24<em>/7</em></b><span>AI concierge</span></div>
         <div class="hstat"><b>0<em>$</em></b><span>cost to work with us</span></div>
       </div>
     </div>
     <div class="hero-visual rise d2">
       <div class="crest">
-        <svg viewBox="0 0 240 300" fill="none" aria-hidden="true">
-          <path class="heron-stroke" d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/>
-          <path class="heron-stroke" d="M144 62 C152 50 150 38 142 32" stroke="#E2B45C" stroke-width="2.4" stroke-linecap="round"/>
-          <circle cx="136" cy="66" r="2.8" fill="#fff"/>
-          <path class="heron-stroke" d="M28 282 C70 276 120 288 168 282 C192 279 212 282 216 282" stroke="#3E68B8" stroke-width="2.4" stroke-linecap="round"/>
-        </svg>
+        <canvas id="heroHeron" class="hero-heron" role="img" aria-label="Herron & Co. — liquid-chrome heron emblem"></canvas>
         <div class="chiplet chip-1"><b>Living benefits</b>Use it while you're alive</div>
         <div class="chiplet chip-2"><b>NPN 21556594</b>Licensed &amp; verified</div>
       </div>
@@ -792,24 +1279,24 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <p class="cap">Quoting the nation's leading carriers, including</p>
   <div class="marquee" aria-label="Insurance carriers we quote">
     <div class="marquee-track" id="marqueeTrack">
-      <span class="carrier" title="Ethos"><img src="logos/ethos.png" alt="Ethos" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Foresters Financial"><img src="logos/foresters.png" alt="Foresters Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Americo"><img src="logos/americo.png" alt="Americo" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Transamerica"><img src="logos/transamerica.jpg" alt="Transamerica" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Ameritas"><img src="logos/ameritas.svg" alt="Ameritas" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Protective"><img src="logos/protective.png" alt="Protective" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="John Hancock"><img src="logos/john-hancock.png" alt="John Hancock" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="TruStage"><img src="logos/trustage.png" alt="TruStage" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="North American"><img src="logos/north-american.jpg" alt="North American" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="National Life Group"><img src="logos/national-life-group.png" alt="National Life Group" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Lincoln Financial"><img src="logos/lincoln-financial.png" alt="Lincoln Financial" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Prudential"><img src="logos/prudential.png" alt="Prudential" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Nationwide"><img src="logos/nationwide.png" alt="Nationwide" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Legal & General"><img src="logos/legal-and-general.png" alt="Legal & General" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Allianz"><img src="logos/allianz.png" alt="Allianz" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Gerber Life"><img src="logos/gerber-life.png" alt="Gerber Life" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="Symetra"><img src="logos/symetra.png" alt="Symetra" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
-      <span class="carrier" title="American-Amicable"><img src="logos/american-amicable.png" alt="American-Amicable" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
+      <span class="carrier" title="Ethos"><picture><source srcset="logos/opt/ethos.avif" type="image/avif"><source srcset="logos/opt/ethos.webp" type="image/webp"><img src="logos/opt/ethos.png" alt="Ethos" width="163" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Foresters Financial"><picture><source srcset="logos/opt/foresters.avif" type="image/avif"><source srcset="logos/opt/foresters.webp" type="image/webp"><img src="logos/opt/foresters.png" alt="Foresters Financial" width="190" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Americo"><picture><source srcset="logos/opt/americo.avif" type="image/avif"><source srcset="logos/opt/americo.webp" type="image/webp"><img src="logos/opt/americo.png" alt="Americo" width="207" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Transamerica"><picture><source srcset="logos/opt/transamerica.avif" type="image/avif"><source srcset="logos/opt/transamerica.webp" type="image/webp"><img src="logos/opt/transamerica.png" alt="Transamerica" width="72" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Ameritas"><img src="logos/ameritas.svg" alt="Ameritas" width="96" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></span>
+      <span class="carrier" title="Protective"><picture><source srcset="logos/opt/protective.avif" type="image/avif"><source srcset="logos/opt/protective.webp" type="image/webp"><img src="logos/opt/protective.png" alt="Protective" width="129" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="John Hancock"><picture><source srcset="logos/opt/john-hancock.avif" type="image/avif"><source srcset="logos/opt/john-hancock.webp" type="image/webp"><img src="logos/opt/john-hancock.png" alt="John Hancock" width="129" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="TruStage"><picture><source srcset="logos/opt/trustage.avif" type="image/avif"><source srcset="logos/opt/trustage.webp" type="image/webp"><img src="logos/opt/trustage.png" alt="TruStage" width="219" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="North American"><picture><source srcset="logos/opt/north-american.avif" type="image/avif"><source srcset="logos/opt/north-american.webp" type="image/webp"><img src="logos/opt/north-american.png" alt="North American" width="130" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="National Life Group"><picture><source srcset="logos/opt/national-life-group.avif" type="image/avif"><source srcset="logos/opt/national-life-group.webp" type="image/webp"><img src="logos/opt/national-life-group.png" alt="National Life Group" width="164" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Lincoln Financial"><picture><source srcset="logos/opt/lincoln-financial.avif" type="image/avif"><source srcset="logos/opt/lincoln-financial.webp" type="image/webp"><img src="logos/opt/lincoln-financial.png" alt="Lincoln Financial" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Prudential"><picture><source srcset="logos/opt/prudential.avif" type="image/avif"><source srcset="logos/opt/prudential.webp" type="image/webp"><img src="logos/opt/prudential.png" alt="Prudential" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Nationwide"><picture><source srcset="logos/opt/nationwide.avif" type="image/avif"><source srcset="logos/opt/nationwide.webp" type="image/webp"><img src="logos/opt/nationwide.png" alt="Nationwide" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Legal & General"><picture><source srcset="logos/opt/legal-and-general.avif" type="image/avif"><source srcset="logos/opt/legal-and-general.webp" type="image/webp"><img src="logos/opt/legal-and-general.png" alt="Legal & General" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Allianz"><picture><source srcset="logos/opt/allianz.avif" type="image/avif"><source srcset="logos/opt/allianz.webp" type="image/webp"><img src="logos/opt/allianz.png" alt="Allianz" width="128" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Gerber Life"><picture><source srcset="logos/opt/gerber-life.avif" type="image/avif"><source srcset="logos/opt/gerber-life.webp" type="image/webp"><img src="logos/opt/gerber-life.png" alt="Gerber Life" width="114" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="Symetra"><picture><source srcset="logos/opt/symetra.avif" type="image/avif"><source srcset="logos/opt/symetra.webp" type="image/webp"><img src="logos/opt/symetra.png" alt="Symetra" width="108" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
+      <span class="carrier" title="American-Amicable"><picture><source srcset="logos/opt/american-amicable.avif" type="image/avif"><source srcset="logos/opt/american-amicable.webp" type="image/webp"><img src="logos/opt/american-amicable.png" alt="American-Amicable" width="217" height="72" loading="lazy" decoding="async" onerror="this.closest('.carrier').style.display='none'"></picture></span>
     </div>
   </div>
 </div>
@@ -822,15 +1309,16 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <h2>The right coverage for every stage of life.</h2>
       <p>Every policy is shopped across the market and built around your budget — not a carrier's quota. Start with what you're protecting.</p>
     </div>
-    <div class="cover-grid">
-      <article class="cover-card liquid-glass reveal">
+    <div class="hx-stage">
+    <div class="cover-grid hx-wheel">
+      <article class="cover-card liquid-glass reveal" id="mortgage">
         <span class="tag">For homeowners</span>
         <h3>Mortgage Protection with Living Benefits</h3>
         <p>Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.</p>
         <ul><li>No medical exam for most applicants</li><li>Critical, chronic &amp; terminal illness riders</li><li>Coverage matched to your mortgage balance</li></ul>
         <button class="go" data-track="mortgage">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="iul">
         <span class="tag">For builders of wealth</span>
         <h3>Indexed Universal Life (IUL)</h3>
         <p>Index-linked growth potential with protection from down years, tax-advantaged access in retirement — built for high earners and owner-operators with no 401(k) in the cab.</p>
@@ -838,35 +1326,35 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <button class="go" data-track="iul">Check my fit</button>
         <a class="deep" href="#iul-strategy">See the full IUL strategy ↓</a>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="ltc">
         <span class="tag">For ages 50–68</span>
         <h3>Hybrid Long-Term Care</h3>
-        <p>70% of us will need care after 65 — Medicare won't pay. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
+        <p>70% of us will need care after 65 — and Medicare generally won't cover long-term care. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
         <ul><li>Money is never wasted — pays out either way</li><li>One design can cover both spouses</li><li>Protects retirement savings from care costs</li></ul>
         <button class="go" data-track="ltc">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="final-expense">
         <span class="tag">For peace of mind</span>
         <h3>Final Expense</h3>
         <p>Simple whole life that covers funeral and end-of-life costs — so grief never comes with a bill attached.</p>
         <ul><li>No-exam and guaranteed-issue options</li><li>Premiums locked for life</li><li>Approvals often same-day</li></ul>
         <button class="go" data-track="final">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
-        <span class="tag">For safe growth</span>
+      <article class="cover-card liquid-glass reveal" id="annuities-card">
+        <span class="tag">For principal protection</span>
         <h3>Fixed Annuities</h3>
-        <p>Guaranteed rates with zero market risk — turning savings into tax-deferred growth or income that arrives like a paycheck for life.</p>
-        <ul><li>Guaranteed rates from A-rated carriers</li><li>Often outpaces bank CDs</li><li>Income you can't outlive</li></ul>
+        <p>Guaranteed rates with protection from market loss — turning savings into tax-deferred growth or income that arrives like a paycheck for life.</p>
+        <ul><li>Guaranteed rates from established carriers</li><li>A CD alternative for retirement money</li><li>Income you can't outlive</li></ul>
         <button class="go" data-track="annuity">Check my fit</button>
       </article>
-      <article class="cover-card liquid-glass reveal">
+      <article class="cover-card liquid-glass reveal" id="disability">
         <span class="tag">For your paycheck</span>
         <h3>Disability Insurance</h3>
         <p>Your ability to earn is your biggest asset. If illness or injury stops you from working, disability insurance replaces a portion of your income until you're back on your feet.</p>
         <ul><li>Protects your paycheck, not just your life</li><li>Options for self-employed &amp; business owners</li><li>Short and long-term benefit periods</li></ul>
         <button class="go" data-track="disability">Check my fit</button>
       </article>
-      <article class="cover-card wide liquid-glass reveal">
+      <article class="cover-card wide liquid-glass reveal" id="term-whole">
         <span class="tag">The classics, done right</span>
         <h3>Standard Term &amp; Whole Life</h3>
         <p>Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.</p>
@@ -885,6 +1373,31 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <button class="go" data-track="term">Check my fit</button>
       </article>
     </div>
+    </div>
+    <div class="hx-progress" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ============ WHY AN INDEPENDENT ============ -->
+<section class="hx-why" id="why">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Why an independent</span>
+      <h2>The incentive problem, solved.</h2>
+      <p>A captive agent has one company's products to sell you. We have twenty-plus — and earn the same regardless of which one you choose.</p>
+    </div>
+    <div class="hx-why-grid">
+      <article class="hx-why-card reveal"><b>20+</b><h3>Carriers compete</h3>
+        <p>Your file goes to the whole market, not one company's underwriter.</p></article>
+      <article class="hx-why-card reveal"><b>$0</b><h3>Cost to work with us</h3>
+        <p>Your premium is identical to buying direct. The carrier pays us, you don't.</p></article>
+      <article class="hx-why-card reveal"><b>12</b><h3>States licensed</h3>
+        <p>PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, MN — NPN 21556594.</p></article>
+      <article class="hx-why-card reveal"><b>15<em>min</em></b><h3>To real numbers</h3>
+        <p>Not a brochure. Your actual rate, from actual carriers, on one call.</p></article>
+      <article class="hx-why-card reveal wide"><b>&#10003;</b><h3>The honest answer — even when it costs us the sale</h3>
+        <p>If a policy isn't right for you, we say so. If you already have good coverage, we'll tell you to keep it. That's the whole business model.</p></article>
+    </div>
   </div>
 </section>
 
@@ -892,7 +1405,6 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 <section class="iul-band" id="iul-strategy">
   <div class="glow glow-brass" style="top:80px;right:-200px" aria-hidden="true"></div>
   <div class="glow glow-soft" style="bottom:-140px;left:-140px" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="iul-grid">
       <div class="iul-copy reveal">
@@ -937,7 +1449,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
             <div class="wt-step"><span class="n">01</span><h3>What an IUL actually is</h3></div>
             <p>Strip the jargon and it's one thing: <b>a permanent life insurance policy with a savings account bolted to it</b>, where the savings account grows based on a stock index without being invested in the market.</p>
             <p>You pay a premium. Part covers the insurance. The rest goes into cash value. That cash value gets credited interest based on how an index — usually the S&amp;P 500 — performed that year. <b>Your money is never actually in the market.</b> The carrier just uses the index as a measuring stick.</p>
-            <p>That distinction is the whole product. It's why you can't lose money to a crash, and it's why you don't get the full gain in a boom.</p>
+            <p>That distinction is the whole product. It's why a market crash doesn't cut your credited interest below the floor — though policy charges still apply — and it's why you don't get the full gain in a boom.</p>
           </div>
 
           <div class="wt-sec">
@@ -973,7 +1485,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
           <div class="wt-sec">
             <div class="wt-step"><span class="n">04</span><h3>How you get the money out without a tax bill</h3></div>
             <p>You don't withdraw it. <b>You borrow against it.</b></p>
-            <p>The cash value stays in the policy and keeps getting credited. The carrier lends you money using that cash value as collateral. Because a loan isn't income, <b>there's no 1099 and no tax</b>. When you die, the outstanding loan is deducted from the death benefit and the rest goes to your family income-tax-free.</p>
+            <p>The cash value stays in the policy and keeps getting credited. The carrier lends you money using that cash value as collateral. Because a properly structured policy loan generally isn't taxable income, <b>there's typically no 1099 while the policy stays in force</b>. When you die, the outstanding loan is deducted from the death benefit and the rest goes to your family income-tax-free.</p>
             <p>That's the mechanism behind every "tax-free retirement income" pitch you've heard. It's real. It's also the part that goes wrong most often.</p>
             <div class="wt-callout wt-warn">
               <b>Two ways this blows up</b>
@@ -991,7 +1503,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
                   <tr><td>Contribution cap</td><td>IRS annual limit</td><td>IRS limit + income phase-out</td><td>No IRS dollar cap — limited by your death benefit and MEC</td></tr>
                   <tr><td>Income limits</td><td>None to contribute</td><td>Yes — high earners phase out</td><td>None</td></tr>
                   <tr><td>Tax on growth</td><td>Deferred</td><td>Tax-free</td><td>Deferred</td></tr>
-                  <tr><td>Tax on access</td><td>Ordinary income</td><td>Tax-free after 59½</td><td>Tax-free via loans, if structured and managed right</td></tr>
+                  <tr><td>Tax on access</td><td>Ordinary income</td><td>Tax-free after 59½</td><td>Tax-advantaged via loans, if structured and managed right</td></tr>
                   <tr><td>Access before 59½</td><td>10% penalty</td><td>Contributions only</td><td>Any time, no age penalty</td></tr>
                   <tr><td>Market loss</td><td>Full exposure</td><td>Full exposure</td><td>Floor protects the credit — charges still apply</td></tr>
                   <tr><td>Employer match</td><td>Often</td><td>No</td><td>No</td></tr>
@@ -1061,8 +1573,163 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
               <a class="btn btn-ghost-dark" href="tel:6103608583">Call 610-360-8583</a>
             </div>
             <div id="iulCapture"></div>
+            <span class="hx-cta-note">One email, used once, to send this. No list, no drip, no reselling your data.</span>
           </div>
 
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ANNUITIES — EVERY KIND ============ -->
+<section class="ann-band" id="annuities">
+<style>
+.ann-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
+  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
+  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
+  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
+  color:var(--white);position:relative;overflow:hidden;padding:96px 0}
+.ann-band .wrap{position:relative;z-index:1}
+.ann-head{max-width:760px;margin-bottom:44px}
+.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--white)}
+.ann-head h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ann-head p{color:rgba(255,255,255,.75);font-size:17px;margin-top:16px;max-width:62ch}
+.ann-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+@media(max-width:880px){.ann-grid{grid-template-columns:1fr}}
+.ann-card{border-radius:22px;padding:30px 28px;background:linear-gradient(150deg,rgba(14,31,62,.72),rgba(8,18,38,.8));position:relative;overflow:hidden}
+.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-bright);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.ann-card .kind i{width:6px;height:6px;border-radius:50%;background:var(--brass-bright);display:inline-block}
+.ann-card h3{font-family:'Sora';font-size:23px;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.ann-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:rgba(255,255,255,.85);line-height:1.55}
+.ann-card li .em{position:absolute;left:0;top:0;font-size:16px}
+.ann-card li b{color:var(--brass-bright)}
+.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:rgba(255,255,255,.9)}
+.ann-card .key b{color:var(--brass-bright)}
+.ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
+.ann-note{margin-top:26px;font-size:12.5px;color:rgba(255,255,255,.45);max-width:96ch;line-height:1.65}
+</style>
+  <div class="glow glow-brass" style="top:-160px;right:-180px" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="ann-head reveal">
+      <span class="eyebrow">Protected growth &amp; income</span>
+      <h2>Annuities, every kind — <span class="grad">explained like a human.</span></h2>
+      <p>Two anchors hold a retirement steady: a guaranteed-rate vault, and an indexed engine that can become a paycheck for life. Here's each kind, in plain English — and what it's actually for.</p>
+    </div>
+    <div class="ann-grid">
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Fixed annuity · MYGA</span>
+        <h3>The Guaranteed Vault</h3>
+        <ul>
+          <li><span class="em">🏦</span>One interest rate. <b>Guaranteed. In writing.</b></li>
+          <li><span class="em">🔒</span>Locked for the full term you choose.</li>
+          <li><span class="em">🛡</span>Your principal never goes backward.</li>
+          <li><span class="em">🧾</span>Taxes wait until you take money out.</li>
+        </ul>
+        <div class="key"><b>Think CD — built for retirement money.</b> Choose a term. Lock the rate. Sleep well.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Fixed indexed · FIA</span>
+        <h3>The 0% Floor Engine</h3>
+        <ul>
+          <li><span class="em">🪜</span>Your value climbs a ladder — <b>every gain locks in. Permanently.</b></li>
+          <li><span class="em">📉</span>Market falls? Your worst year is 0%.</li>
+          <li><span class="em">🚫</span>You never have to climb back from a loss.</li>
+          <li><span class="em">⚙️</span>Zero is your hero.</li>
+        </ul>
+        <div class="key"><b>Gains ratchet up. Market losses don’t reduce your locked value.</b> Growth potential without market risk to principal.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> FIA · how growth is measured</span>
+        <h3>Caps, Participation &amp; Spreads</h3>
+        <ul>
+          <li><span class="em">🧢</span><b>Cap</b> — a ceiling. Keep everything up to it.</li>
+          <li><span class="em">🍰</span><b>Participation</b> — a share. Keep a slice of any gain.</li>
+          <li><span class="em">🎟</span><b>Spread</b> — a toll. Keep everything past it.</li>
+          <li><span class="em">📅</span>The carrier declares these yearly. The 0% floor never moves.</li>
+        </ul>
+        <div class="key"><b>Caps and shares can move — in both directions. The floor cannot.</b> Ask for the guaranteed minimums before you sign.</div>
+      </article>
+      <article class="ann-card liquid-glass reveal">
+        <span class="kind"><i></i> Lifetime income · SPIA &amp; income riders</span>
+        <h3>The Income Spigot</h3>
+        <ul>
+          <li><span class="em">🛢</span>Your savings fill a tank.</li>
+          <li><span class="em">🚰</span>At retirement, you open the spigot.</li>
+          <li><span class="em">💵</span>Out flows a paycheck. Every year.</li>
+          <li><span class="em">♾️</span><b>The paycheck outlives the tank</b> — guaranteed by contract. For life.</li>
+        </ul>
+        <div class="key"><b>Income you can't outlive.</b> The fix for the retirement question nobody can answer: "how long will I live?"</div>
+      </article>
+    </div>
+    <div class="ann-ctas reveal">
+      <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Open the Matrix ↗</a>
+      <a class="btn btn-ghost-light" href="#booking">Get my numbers — 15 min</a>
+    </div>
+    <p class="ann-note reveal">Annuity guarantees are backed by the claims-paying ability of the issuing insurance carrier. Caps, participation rates, spreads, and declared rates are set by the carrier and can change per the contract. Withdrawals may be subject to surrender charges and, before 59½, IRS penalties. The descriptions above are educational, not an offer of coverage or a quoted rate — get carrier-specific figures on a free call.</p>
+  </div>
+</section>
+
+<!-- ============ INTERACTIVE TOOLS ============ -->
+<section class="tools-band" id="tools">
+<style>
+.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:96px 0}
+.tools-band .wrap{position:relative;z-index:1}
+.tools-head{max-width:720px;margin-bottom:44px}
+.tools-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
+.tools-head p{color:var(--ink-soft);font-size:17px;margin-top:16px}
+.tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:920px){.tools-grid{grid-template-columns:1fr}}
+.tool-pane .lg-content{padding:clamp(24px,3vw,42px)}
+.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
+.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--white);margin:10px 0 8px;letter-spacing:-.01em}
+.tool-pane .t-what{font-size:14.5px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.6}
+.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 50px -20px rgba(3,10,30,.7);margin-bottom:18px}
+.tool-pane .t-bar{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(3,10,30,.8);border-bottom:1px solid rgba(255,255,255,.12)}
+.tool-pane .t-bar i{width:9px;height:9px;border-radius:50%;display:block}
+.tool-pane .t-bar i:nth-child(1){background:#F2645A}.tool-pane .t-bar i:nth-child(2){background:#F5BE4F}.tool-pane .t-bar i:nth-child(3){background:#5BC466}
+.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.55);letter-spacing:.04em}
+.tool-pane .t-shot img{display:block;width:100%;height:auto}
+.tool-pane .t-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 12px}
+</style>
+  <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
+  <div class="lg-blob lg-blob-purple" style="top:-160px;right:-120px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-indigo" style="bottom:-200px;left:-140px" aria-hidden="true"></div>
+  <div class="lg-blob lg-blob-cyan" style="top:30%;left:42%" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="tools-head reveal">
+      <span class="eyebrow">Interactive walkthroughs</span>
+      <h2>Don't take our word for it. Play with it.</h2>
+      <p>Most agents hand you a brochure. We built you software — two interactive walkthroughs that make the most confusing products in insurance something you can actually see, tap, and stress-test yourself. Free, no email, no sign-up.</p>
+    </div>
+    <div class="tools-grid">
+      <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+           by liquid-glass.js; content stays on top (z-20, clickable). -->
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-content">
+          <span class="t-kick">Protect · Grow · Distribute</span>
+          <h3>The Wealth Shield Matrix</h3>
+          <p class="t-what">The bucket-and-shield simulator. Crash the market on purpose and watch the shielded bucket hold while the unshielded one drains — then run your own numbers in the projection studio.</p>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the wealth shield matrix</span></div><picture><source srcset="images/matrix-desktop.avif" type="image/avif"><source srcset="images/matrix-desktop.webp" type="image/webp"><img src="images/matrix-desktop.png" alt="The Wealth Shield Matrix — bucket and shield downturn simulator" loading="lazy" decoding="async" width="1440" height="1024"></picture></div>
+          <div class="t-feats"><span class="t-feat">IUL Shield</span><span class="t-feat">Annuity Anchors</span><span class="t-feat">Live projections</span><span class="t-feat">Objection dashboard</span></div>
+          <a class="btn btn-brass" href="wealth-shield-matrix.html" target="_blank" rel="noopener">Open the Matrix ↗</a>
+        </div>
+      </div>
+      <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
+           by liquid-glass.js; content stays on top (z-20, clickable). -->
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-content">
+          <span class="t-kick">Care · Paycheck · Home · Legacy</span>
+          <h3>The Protection Blueprint</h3>
+          <p class="t-what">Your whole protection plan on one screen — four shields, each explained honestly, starting with the number nobody says out loud: 7 in 10 will need long-term care, and Medicare pays $0.</p>
+          <div class="t-shot"><div class="t-bar"><i></i><i></i><i></i><span>the protection blueprint</span></div><picture><source srcset="images/blueprint-desktop.avif" type="image/avif"><source srcset="images/blueprint-desktop.webp" type="image/webp"><img src="images/blueprint-desktop.png" alt="The Protection Blueprint — the Care Shield walkthrough" loading="lazy" decoding="async" width="1440" height="1024"></picture></div>
+          <div class="t-feats"><span class="t-feat">Care Shield</span><span class="t-feat">Paycheck Shield</span><span class="t-feat">Home Shield</span><span class="t-feat">Legacy Shield</span></div>
+          <a class="btn btn-brass" href="protection-blueprint.html" target="_blank" rel="noopener">Open the Blueprint ↗</a>
+          <span class="hx-cta-note">Nothing is submitted until you say so. Build it, close the tab, no one calls you.</span>
         </div>
       </div>
     </div>
@@ -1081,15 +1748,15 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="wrap">
     <div class="ai-grid">
       <div class="ai-copy reveal">
-        <span class="eyebrow">Meet Legacy AI</span>
+        <span class="eyebrow">Meet the Legacy Concierge</span>
         <h2>Every insurance question. Answered instantly. Out loud, if you want.</h2>
-        <p>Legacy AI is trained on every product we design — term vs. whole, living benefits, IUL mechanics, long-term care, what things cost, and who qualifies. Ask by typing or just talk to it.</p>
+        <p>The Legacy Concierge knows every product we design — term vs. whole, living benefits, IUL mechanics, long-term care, what things cost, and who qualifies. Ask by typing or just talk to it.</p>
         <div class="ai-feats">
           <div class="ai-feat"><span class="ic">🎙</span><div><b>Voice-enabled</b><span>Tap the mic and ask out loud — it listens and speaks its answers back.</span></div></div>
           <div class="ai-feat"><span class="ic">🧠</span><div><b>Knows every product</b><span>Mortgage protection, IUL, hybrid LTC, final expense, annuities — and the fine print.</span></div></div>
           <div class="ai-feat"><span class="ic">📅</span><div><b>Hands off to a human</b><span>When you're ready, it books you straight onto Connor's calendar. No bots pretending to be people.</span></div></div>
         </div>
-        <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask your first question →</button>
+        <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask the Concierge</button>
       </div>
       <div class="reveal">
         <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
@@ -1189,6 +1856,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <div class="q-tabs" id="qTabs" role="tablist"></div>
       <div id="qStage"></div>
       <div id="estCapture"></div>
+      <span class="hx-cta-note">One email, used once, to send this. No list, no drip, no reselling your data.</span>
       <p class="q-note">Estimates are illustrative ranges based on typical non-guaranteed industry pricing for healthy applicants and are <b>not an offer of coverage or a quoted rate</b>. Actual premiums and annuity rates are determined solely by carrier underwriting and current product offerings, and vary by state, health class, and carrier. Annuity and IUL projections use illustrative, non-guaranteed rates you select — IUL figures reflect a typical policy-cost band and are not a carrier illustration. Hybrid LTC and disability figures are broad planning ranges; actual pricing depends on health, occupation class, carrier, and state. Get exact figures on a free call.</p>
     </div>
     </div>
@@ -1201,8 +1869,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
   <div class="wrap">
     <div class="sec-head reveal">
       <span class="eyebrow">Where we're licensed</span>
-      <h2>Serving families across 13 states.</h2>
-      <p>Connor Herron is a licensed insurance producer (NPN 21556594) in the following 13 states:</p>
+      <h2>Serving families across 12 states.</h2>
+      <p>Connor Herron is a licensed insurance producer (NPN 21556594) in the following 12 states:</p>
     </div>
     <div class="states-grid reveal">
       <span class="state-chip"><i></i>Pennsylvania</span>
@@ -1211,7 +1879,6 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <span class="state-chip"><i></i>Wisconsin</span>
       <span class="state-chip"><i></i>Iowa</span>
       <span class="state-chip"><i></i>Indiana</span>
-      <span class="state-chip"><i></i>Georgia</span>
       <span class="state-chip"><i></i>Florida</span>
       <span class="state-chip"><i></i>Texas</span>
       <span class="state-chip"><i></i>Massachusetts</span>
@@ -1249,16 +1916,16 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
     </div>
     <div class="about-grid">
       <div class="about-photo reveal">
-        <img src="images/connor.jpg" alt="Connor Herron, independent life insurance agent" width="640" height="800" loading="lazy">
+        <picture><source srcset="images/connor.avif" type="image/avif"><source srcset="images/connor.webp" type="image/webp"><img src="images/connor.jpg" alt="Connor Herron, independent life insurance agent" width="640" height="800" loading="lazy" decoding="async"></picture>
         <div class="npn"><b>Licensed producer</b><span>NPN 21556594</span></div>
       </div>
       <div class="about-copy reveal">
-        <p><b>I'm Connor Herron — a Lehigh Valley local and independent life insurance agent licensed in 13 states.</b></p>
+        <p><b>I'm Connor Herron — a Lehigh Valley local and independent life insurance agent licensed in 12 states.</b></p>
         <p>My job is simple: secure your family's peace of mind with transparent, affordable coverage. Because I'm independent, I work for you — not a carrier. Every policy gets shopped across 20+ national companies, explained in plain English, and sized to your real budget.</p>
         <p>It costs you nothing to work with me — your premium is identical to buying direct. And if a policy isn't right for you, I'll be the first to tell you. When you call the number on this page, you get me. Not a call center.</p>
         <div class="about-sig">— Connor Herron</div>
         <div class="about-ctas">
-          <a class="btn btn-brass" href="#booking">Book 15 minutes with me</a>
+          <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
           <a class="btn-line" href="https://nipr.com/help/look-up-your-license" target="_blank" rel="noopener">Verify my license ↗</a>
         </div>
       </div>
@@ -1268,7 +1935,6 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 <!-- ============ BOOKING ============ -->
 <section class="booking" id="booking">
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="glow glow-blue" style="top:-200px;right:-200px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-180px;left:-140px" aria-hidden="true"></div>
   <div class="wrap">
@@ -1277,6 +1943,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
         <span class="eyebrow">Book your call</span>
         <h2>Fifteen minutes. Real numbers. Zero pressure.</h2>
         <p>Pick a time that works for you and Connor will call you directly — not a call center, not a script, just straight answers with your actual quotes on screen.</p>
+        <span class="hx-cta-note">No sales script. No obligation. If we're not a fit in the first five minutes, I'll tell you.</span>
         <div class="book-points">
           <div class="book-point"><span class="n">01</span><div><b>Pick your time</b><span>Choose any open slot on the live calendar — it syncs instantly.</span></div></div>
           <div class="book-point"><span class="n">02</span><div><b>Get a reminder</b><span>Email confirmation, so nothing slips through.</span></div></div>
@@ -1326,7 +1993,7 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       <div class="faq-item"><button aria-expanded="false">How much does it cost to work with you?</button><div class="faq-a"><p>Nothing. Agents are compensated by carriers, and your premium is identical whether you buy through an agent or direct. The difference: you get an advocate who shops the whole market and answers the phone in year ten.</p></div></div>
       <div class="faq-item"><button aria-expanded="false">How much coverage do I need?</button><div class="faq-a"><p>A common starting point is 10–12x your annual income, or the DIME method: Debt + Income replacement years + Mortgage balance + Education costs. Build your Blueprint above for a quick estimate, or we'll run your exact number on the call.</p></div></div>
       <div class="faq-item"><button aria-expanded="false">What's the difference between the fit check, the Blueprint, and the estimate studio?</button><div class="faq-a"><p>Three depths of the same question. The fit check is four questions and tells you which type of coverage suits you. The Blueprint is the full planning tool — it maps what you're protecting and how much. The estimate studio just prices a single product with sliders. All three are free, none need your email, and none replace a real quote from underwriting.</p></div></div>
-      <div class="faq-item"><button aria-expanded="false">Is Legacy AI a real AI? Is my info safe?</button><div class="faq-a"><p>Yes — it's a real AI, running on Anthropic's Claude, on our own server. It's given a knowledge base Connor wrote and reviewed, plus hard rules: it can't quote you a rate, can't give tax advice, and can't promise you'll be approved. Only underwriting decides that. Your conversation isn't stored or sold — it disappears when you close the tab. For anything personal, it hands you to Connor, a licensed human.</p></div></div>
+      <div class="faq-item"><button aria-expanded="false">Is the Legacy Concierge a real person? Is my info safe?</button><div class="faq-a"><p>No — and it never pretends to be. It's automated software running on our own server, answering from a knowledge base Connor wrote and reviewed, with hard rules: it can't quote you a rate, can't give tax advice, and can't promise you'll be approved. Only underwriting decides that. Your conversation isn't stored or sold — it disappears when you close the tab. For anything personal, it hands you to Connor, a licensed human.</p></div></div>
     </div>
   </div>
 </section>
@@ -1335,30 +2002,15 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 <section class="final">
   <div class="wrap reveal">
     <span class="eyebrow">One conversation. Decades of certainty.</span>
-    <h2>Your family's plan shouldn't be <span class="grad">"hope nothing happens."</span></h2>
-    <p>Ask Legacy AI anything, build your Blueprint, or go straight to Connor's calendar. Whichever door you pick, you'll leave knowing exactly where your family stands.</p>
+    <h2>Fifteen minutes now, or a phone call your family <span class="grad">can't afford later.</span></h2>
+    <p>You'll leave knowing exactly where your family stands — the number, the carrier, and the monthly cost. Whether you buy is genuinely up to you.</p>
     <div class="hero-ctas">
-      <a class="btn btn-navy" href="#booking">Book your free call</a>
-      <a class="btn btn-ghost-dark" href="#blueprint">Build my Blueprint</a>
-      <a class="btn btn-ghost-dark" href="https://agents.ethoslife.com/invite/baecc" target="_blank" rel="noopener">Buy online with Ethos ↗</a>
+      <a class="btn btn-navy" href="#booking">Get my numbers — 15 min</a>
     </div>
+    <span class="cta-sub">No email required to start · $0 to work with us · Licensed in 12 states</span>
+    <p class="final-alt">Not ready to talk? <a href="#blueprint">Build your Blueprint privately</a> — no email, no salesperson. Or <a href="https://agents.ethoslife.com/invite/baecc" target="_blank" rel="noopener">buy online with Ethos ↗</a>.</p>
   </div>
 </section>
-
-<!-- ============ OPT-IN ============ -->
-<section class="optin" style="background:var(--cloud);border-top:1px solid var(--line);padding:70px 0">
-  <div class="wrap reveal" style="display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center" id="optinGrid">
-    <div>
-      <span class="eyebrow">Not ready to talk yet?</span>
-      <h2 style="font-size:clamp(26px,3vw,36px);color:var(--navy);margin-bottom:14px">Then don't. Build your Blueprint instead.</h2>
-      <p style="color:var(--ink-soft);max-width:52ch">No email, no phone number, no salesperson. Work out what you're protecting and what it's worth on your own time — and when you want real numbers from 20+ carriers, we'll be right here.</p>
-    </div>
-    <div style="display:flex;justify-content:flex-end">
-      <a class="btn btn-navy" href="#blueprint" style="font-size:16.5px;padding:18px 34px">Build my Blueprint →</a>
-    </div>
-  </div>
-</section>
-<style>@media(max-width:820px){#optinGrid{grid-template-columns:1fr!important}#optinGrid>div:last-child{justify-content:flex-start!important}}</style>
 
 <!-- ============ FOOTER ============ -->
 <footer>
@@ -1366,13 +2018,13 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
     <div class="foot-grid">
       <div class="foot-brand">
         <b>Herron &amp; Co. Legacy Agency</b>
-        <p>Life insurance and financial protection for families in 13 states — mortgage protection, IUL, hybrid long-term care, final expense, fixed annuities, and disability insurance.</p>
+        <p>Life insurance and financial protection for families in 12 states — mortgage protection, IUL, hybrid long-term care, final expense, fixed annuities, and disability insurance.</p>
       </div>
       <div>
         <h4>Contact</h4>
         <a href="tel:6103608583" class="foot-phone">610-360-8583</a>
         <a href="mailto:cherron.insurance@gmail.com">cherron.insurance@gmail.com</a>
-        <a href="#booking">Book a call</a>
+        <a href="#booking">Get my numbers</a>
         <p style="margin-top:12px">30 S 15th Street, Suite 1550<br>Philadelphia, PA 19102</p>
       </div>
       <div>
@@ -1386,23 +2038,26 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
       </div>
     </div>
     <div class="disclaimer">
-      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, GA, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. Legacy AI provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
+      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
     </div>
   </div>
 </footer>
 
 <!-- ============ FLOATING CHAT ============ -->
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
-<button id="fabChat" aria-label="Open Legacy AI chat">
-  <svg viewBox="0 0 100 100" fill="none" aria-hidden="true">
-    <path d="M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80" stroke="#081226" stroke-width="5" stroke-linecap="round"/>
-  </svg>
+<button id="fabChat" aria-label="Open Legacy Concierge chat">
+  <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
 </button>
 
 <script>
 /* ================= SCROLL REVEAL ================= */
-const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
-document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+const io = 'IntersectionObserver' in window
+  ? new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12})
+  : null;
+/* No observer (very old browser) means nothing would ever un-hide, disclosures
+   included — so show it all rather than animate it in. */
+if(io) document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+else document.querySelectorAll('.reveal').forEach(el=>el.classList.add('in'));
 
 /* ================= COUNT-UP STATS ================= */
 if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
@@ -1471,7 +2126,7 @@ const KB=[
  {k:['truck','driver','owner operator','owner-operator','otr','cdl','rig','fleet'],
   a:`We build IULs specifically around trucking income: flexible funding (more when freight's good, less when it's slow), growth without direct market losses, and family protection while you're on the road — retirement plan and life insurance in one policy, since there's no 401(k) in the cab.\n\nMost drivers who can pass a DOT physical qualify. One call from the cab is all it takes — ${CALL_LINK} or ${BOOK_LINK}.`},
  {k:['long term care','long-term care','ltc','nursing home','assisted living','home care','hybrid'],
-  a:`About 70% of people over 65 will need long-term care, it can run over $100,000 a year, and Medicare doesn't cover it. Hybrid LTC policies fix the old "use it or lose it" problem: if you need care, they pay a monthly benefit; if you never do, your family receives a death benefit instead. The money is never wasted.\n\nThey work best between ages 50–68 while you're healthy, and one design can often cover both spouses. Want a side-by-side comparison for your age and state? ${BOOK_LINK}.`},
+  a:`About 70% of people over 65 will need long-term care, it can run over $100,000 a year, and Medicare generally doesn't cover long-term custodial care. Hybrid LTC policies fix the old "use it or lose it" problem: if you need care, they pay a monthly benefit; if you never do, your family receives a death benefit instead. The money is never wasted.\n\nThey work best between ages 50–68 while you're healthy, and one design can often cover both spouses. Want a side-by-side comparison for your age and state? ${BOOK_LINK}.`},
  {k:['final expense','funeral','burial','end of life','cremation'],
   a:`Final expense is a simple whole life policy — typically $5,000–$50,000 — that covers funeral and end-of-life costs so your family grieves without a bill in their hands. No medical exam (health questions only, and some options have none at all), and premiums are locked for life.\n\nMany clients get approved the same day. ${CALL_LINK} or ${BOOK_LINK}.`},
  {k:['annuit','fixed annuity','guaranteed rate','cd alternative','retirement income','outlive my money','pension','lump sum','safe money'],
@@ -1484,10 +2139,10 @@ const KB=[
   a:`Two quick rules of thumb:\n• 10–12× your annual income, or\n• DIME: Debt + Income replacement years + Mortgage balance + Education costs for kids.\n\nExample: $75k income × 10 = $750,000 as a starting point. Or build your <a href="#blueprint">Legacy Blueprint</a> right on this page — it maps your whole picture, no email required. Connor runs your exact number in about five minutes — ${BOOK_LINK}.`},
  {k:['exam','medical','blood','needle','health questions','qualify','pre existing','pre-existing','diabetes'],
   a:`Most of our clients qualify with NO medical exam — carriers now use accelerated underwriting with health questions only. Even with conditions like managed diabetes or past health events, we work with 20+ carriers, and different carriers treat the same condition very differently. That's exactly why an independent agent matters.\n\nTell Connor your situation and he'll match you to the friendliest carrier: ${CALL_LINK}.`},
- {k:['state','licensed','where','pennsylvania','new jersey','jersey','virginia','wisconsin','iowa','indiana','georgia','florida','texas','massachusetts','north carolina','ohio','minnesota','my state'],
-  a:`Connor is a licensed producer (NPN 21556594) in 13 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana, Georgia, Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.\n\nIf you're elsewhere, ${CALL_LINK} — we can often refer you to a trusted licensed partner in your state.`},
+ {k:['state','licensed','where','pennsylvania','new jersey','jersey','virginia','wisconsin','iowa','indiana','florida','texas','massachusetts','north carolina','ohio','minnesota','my state'],
+  a:`Connor is a licensed producer (NPN 21556594) in 12 states: Pennsylvania, New Jersey, Virginia, Wisconsin, Iowa, Indiana, Florida, Texas, Massachusetts, North Carolina, Ohio, and Minnesota.\n\nIf you're elsewhere, ${CALL_LINK} — we can often refer you to a trusted licensed partner in your state.`},
  {k:['who is connor','about you','who are you','herron','legit','scam','trust','real'],
-  a:`Herron & Co. Legacy Agency is run by Connor Herron, a licensed insurance producer (NPN 21556594) based at 30 S 15th Street in Philadelphia, licensed in 13 states. You can verify any producer license through your state's insurance department.\n\nAnd I'm Legacy AI — I answer from a knowledge base Connor wrote and reviewed, and for anything personal, a licensed human takes over. ${BOOK_LINK}.`},
+  a:`Herron & Co. Legacy Agency is run by Connor Herron, a licensed insurance producer (NPN 21556594) based at 30 S 15th Street in Philadelphia, licensed in 12 states. You can verify any producer license through your state's insurance department.\n\nAnd I'm the Legacy Concierge — I answer from a knowledge base Connor wrote and reviewed, and for anything personal, a licensed human takes over. ${BOOK_LINK}.`},
  {k:['book','appointment','schedule','call me','talk to','human','agent','speak'],
   a:`Absolutely — the fastest paths:\n• ${BOOK_LINK} (pick any open slot, ~15 minutes)\n• ${CALL_LINK} to reach Connor directly\n\nNo pressure either way — the first call is just real numbers and straight answers.`},
  {k:['free','pay you','commission','fee','charge'],
@@ -1535,7 +2190,7 @@ const KB=[
  {k:['quote','estimate','calculator','ballpark','price check','how much would i pay'],
   a:`Three ways to get numbers, in order of depth:\n• <a href="#fitcheck">60-second fit check</a> — four questions, tells you which coverage fits\n• <a href="#blueprint">Legacy Blueprint</a> — the full planning tool, maps what you're protecting and how much\n• <a href="#quotes">Estimate Studio</a> — live sliders for term, whole life, final expense, annuities, IUL, hybrid LTC, and disability\n\nAll free, none need your email. For a real quote from 20+ carriers on your actual health profile: ${BOOK_LINK}.`},
  {k:['hello','hi','hey','yo','sup','good morning','good afternoon','good evening'],
-  a:`Hey! I'm Legacy AI — Herron & Co.'s insurance concierge. Ask me anything: what things cost, how living benefits work, IULs for retirement, long-term care, or which coverage fits you. You can type or tap the mic and just ask out loud.`},
+  a:`Hey! I'm the Legacy Concierge — Herron & Co.'s digital assistant. Ask me anything: what things cost, how living benefits work, IULs for retirement, long-term care, or which coverage fits you. You can type or tap the mic and just ask out loud.`},
  {k:['thank','thanks','appreciate'],
   a:`Anytime! If you want your actual numbers, ${BOOK_LINK} — it's free, 15 minutes, zero pressure. Anything else I can answer?`}
 ];
@@ -1564,14 +2219,14 @@ const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
 function buildChat(container, compact){
   container.innerHTML = `
     <div class="chat-head">
-      <span class="avatar"><svg viewBox="0 0 100 100" fill="none"><path d="M62 74 C70 58 66 44 54 41 C40 38 32 46 33 56 M54 41 C46 38 43 30 46 22 C48 17 54 15 57 19 M57 19 L78 26 M55 61 L54 80 M46 60 L47 80" stroke="#081226" stroke-width="5" stroke-linecap="round"/></svg></span>
-      <div><b>Legacy AI</b><span><i></i> Online · answers in seconds</span></div>
+      <span class="avatar"><img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async"></span>
+      <div><b>Legacy Concierge</b><span><i></i> Online · answers in seconds</span></div>
       <button class="spk" type="button" title="Toggle spoken replies">🔈 Voice replies</button>
     </div>
     <div class="chat-log" role="log" aria-live="polite"></div>
     <div class="chat-input">
       <button class="icon-btn mic" type="button" title="Ask by voice" aria-label="Ask by voice">🎙</button>
-      <input type="text" placeholder="Ask about coverage, cost, IULs…" aria-label="Ask Legacy AI a question">
+      <input type="text" placeholder="Ask about coverage, cost, IULs…" aria-label="Ask the Legacy Concierge a question">
       <button class="icon-btn send" type="button" aria-label="Send">➤</button>
     </div>`;
   const log=container.querySelector('.chat-log');
@@ -1602,7 +2257,7 @@ function buildChat(container, compact){
     synth.cancel();
     const u=new SpeechSynthesisUtterance(plain); u.rate=1.02; u.pitch=1; synth.speak(u);
   }
-  // Conversation history sent to the function so Legacy AI remembers the thread.
+  // Conversation history sent to the function so the Legacy Concierge remembers the thread.
   // Never persisted anywhere — it dies when the tab closes.
   let history=[];
 
@@ -1633,7 +2288,7 @@ function buildChat(container, compact){
       }
     }catch(e){ /* offline, timeout, or function down — fall through */ }
 
-    // Fallback: the hand-written knowledge base. Legacy AI still answers if the
+    // Fallback: the hand-written knowledge base. the Legacy Concierge still answers if the
     // function is down, the key is missing, or you're testing the file locally.
     if(!ans) ans=matchIntent(text);
 
@@ -1666,7 +2321,7 @@ function buildChat(container, compact){
     micBtn.addEventListener('click',()=>addMsg('Voice input isn\'t supported in this browser — try Chrome or Edge, or just type your question below. 🙂','bot'));
   }
   // greeting
-  addMsg(`Hi, I'm <b>Legacy AI</b> 👋 — Herron & Co.'s insurance concierge. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap 🎙 and just ask out loud.`,'bot');
+  addMsg(`Hi, I'm the <b>Legacy Concierge</b> 👋 — Herron & Co.'s digital assistant. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap 🎙 and just ask out loud.`,'bot');
   addChips();
 }
 
@@ -1680,7 +2335,7 @@ fab.addEventListener('click',()=>{
   const open=fabPanel.classList.toggle('open');
   fab.innerHTML=open?'<span style="font-size:26px;color:#081226;font-weight:700">✕</span>':fabIcon;
 });
-/* hide BOTH the button AND panel whenever the main Legacy AI section is anywhere near the viewport */
+/* hide BOTH the button AND panel whenever the main Legacy Concierge section is anywhere near the viewport */
 const aiSection=document.getElementById('ai');
 const fabIO=new IntersectionObserver(es=>{es.forEach(e=>{
   if(e.isIntersecting){
@@ -1889,9 +2544,9 @@ const tracks={
  annuity:{name:"Fixed Annuities",questions:[
    {q:"What's your age range?",opts:["Under 50","50 – 59","60 – 70","Over 70"]},
    {q:"Roughly how much are you looking to protect or convert to income?",opts:["Under $50k","$50k – $150k","$150k – $500k","Over $500k"]},
-   {q:"What matters most to you?",opts:["A guaranteed rate with zero market risk","Income I can't outlive","Beating what my bank/CD pays","Not sure — show me options"]}],
-  result:"A fixed annuity looks like your fit — a guaranteed rate with zero market risk, tax-deferred growth, and the option to turn it into income that arrives like a paycheck for life.",
-  next:"Connor pulls today's top guaranteed rates from A-rated carriers for your state and amount — many currently beat bank CDs — and shows you exactly what your money would earn and pay out. No cost, no obligation."},
+   {q:"What matters most to you?",opts:["A guaranteed rate with protection from market loss","Income I can't outlive","Beating what my bank/CD pays","Not sure — show me options"]}],
+  result:"A fixed annuity looks like your fit — a guaranteed rate with protection from market loss, tax-deferred growth, and the option to turn it into income that arrives like a paycheck for life.",
+  next:"Connor pulls today's top guaranteed rates from established carriers for your state and amount — often competitive with bank CDs — and shows you exactly what your money would earn and pay out. No cost, no obligation."},
  term:{name:"Term & Whole Life",questions:[
    {q:"How long do you need the coverage to last?",opts:["Through my mortgage / working years","My entire life","Not sure — that's why I'm here"]},
    {q:"Who depends on your income?",opts:["Spouse or partner","Kids","Both","Just me"]},
@@ -2030,7 +2685,7 @@ renderFit();
 </script>
 <div class="mobilebar" id="mobilebar">
   <a class="mb-call" href="tel:6103608583">Call Connor</a>
-  <a class="mb-book" href="#booking">Book 15 min — free</a>
+  <a class="mb-book" href="#booking">Get my numbers</a>
 </div>
 <style>
 .mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(8,18,38,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
@@ -2058,12 +2713,417 @@ renderFit();
   b.addEventListener('click',function(){set(!s.classList.contains('open'))});
   s.addEventListener('click',function(e){if(e.target.closest('a'))set(false)});
   document.addEventListener('keydown',function(e){if(e.key==='Escape')set(false)});
-  matchMedia('(min-width:1081px)').addEventListener('change',function(m){if(m.matches)set(false)});
+  matchMedia('(min-width:1321px)').addEventListener('change',function(m){if(m.matches)set(false)});
 })();
 </script>
 <!-- Liquid Glass WebGL engine (progressive enhancement — if this module or its
      Three.js CDN import fails to load, the CSS backdrop-filter glass already
      styled on .lg-container simply remains active). -->
+<!-- ============ COVERAGE DETAIL MODAL ============ -->
+<div class="cov-modal" id="covModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="covTitle">
+  <div class="cov-scrim" data-cov-close></div>
+  <div class="cov-blobs" aria-hidden="true">
+    <div class="lg-blob lg-blob-purple"></div>
+    <div class="lg-blob lg-blob-indigo"></div>
+    <div class="lg-blob lg-blob-cyan"></div>
+  </div>
+  <div class="cov-panel" role="document">
+    <button class="cov-x" data-cov-close aria-label="Close">&#10005;</button>
+    <div class="cov-inner" id="covInner"></div>
+  </div>
+</div>
+<script>
+/* ===== Coverage detail modal ===== */
+(function(){
+  var COV={
+    mortgage:{ic:'🏠',eyebrow:'For homeowners',title:'Mortgage Protection with Living Benefits',
+      hook:'Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.',
+      rows:['No medical exam for most applicants','Critical, chronic &amp; terminal illness riders','Coverage matched to your mortgage balance','Living benefits you can use while you’re alive'],
+      stat:[['$0','out-of-pocket cost to work with us'],['Living','benefits — use it while alive']],track:'mortgage'},
+    iul:{ic:'📈',eyebrow:'For builders of wealth',title:'Indexed Universal Life (IUL)',
+      hook:'Index-linked growth with a floor in down years and tax-advantaged access in retirement — built for high earners and 1099 owner-operators with no 401(k).',
+      rows:['Flexible funding, up or down with your income','Tax-advantaged retirement income design','Income-tax-free benefit for your family','A 0% floor so a market crash never drains your cash value'],
+      stat:[['0%','floor — your credited rate never goes negative'],['20+','carriers compared for you']],track:'iul',
+      extra:{label:'See the full IUL strategy',href:'#iul-strategy'}},
+    ltc:{ic:'🛡️',eyebrow:'For ages 50–68',title:'Hybrid Long-Term Care',
+      hook:'70% of us will need care after 65 — and Medicare generally <em>won’t cover it.</em> Hybrids fix “use it or lose it”: care benefits if you need them, a death benefit for family if you don’t.',
+      rows:['Money is never wasted — it pays out either way','One design can cover both spouses','Protects retirement savings from care costs','Locks in while you’re healthy enough to qualify'],
+      stat:[['70%','will need long-term care after 65'],['$0','Medicare pays toward long-term care']],track:'ltc'},
+    final:{ic:'🕊️',eyebrow:'For peace of mind',title:'Final Expense',
+      hook:'Simple whole life that covers funeral and end-of-life costs — so <em>grief never comes with a bill attached.</em>',
+      rows:['No-exam and guaranteed-issue options','Premiums locked for life','Approvals often same-day','A small policy that does one big, kind thing'],
+      stat:[['$10–15k','the bill it quietly covers'],['Same-day','approvals available']],track:'final'},
+    annuity:{ic:'🏦',eyebrow:'For principal protection',title:'Fixed Annuities',
+      hook:'Guaranteed rates with protection from market loss — turning savings into tax-deferred growth, or income that arrives like a paycheck for life.',
+      rows:['Guaranteed rates from established carriers','A CD alternative for retirement money','Income you can’t outlive','Your principal never goes backward'],
+      stat:[['0%','market risk to your principal'],['For life','income you can’t outlive']],track:'annuity',
+      extra:{label:'See every kind of annuity',href:'#annuities'}},
+    disability:{ic:'💪',eyebrow:'For your paycheck',title:'Disability Insurance',
+      hook:'Your ability to earn is your biggest asset. If illness or injury stops you from working, disability insurance replaces part of your income until you’re back on your feet.',
+      rows:['Protects your paycheck, not just your life','Options for self-employed &amp; business owners','Short and long-term benefit periods','The one coverage people skip and regret'],
+      stat:[['$2M+','a 30-year-old’s lifetime earnings'],['Your','biggest asset, insured']],track:'disability'},
+    term:{ic:'📋',eyebrow:'The classics, done right',title:'Standard Term &amp; Whole Life',
+      hook:'Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.',
+      rows:['Term — the most coverage per dollar','10, 15, 20, or 30-year terms to match your mortgage','Whole life — coverage that never expires','Guaranteed cash value growth and locked premiums'],
+      stat:[['20+','carriers, shopped honestly'],['$0','to work with us']],track:'term'}
+  };
+  var modal=document.getElementById('covModal'), inner=document.getElementById('covInner');
+  if(!modal||!inner) return;
+  var lastFocus=null;
+  function open(key){
+    var d=COV[key]; if(!d) return;
+    var rows=d.rows.map(function(r){return '<div class="cov-row"><span class="ck">✓</span><span>'+r+'</span></div>';}).join('');
+    var stat=d.stat?('<div class="cov-stat">'+d.stat.map(function(x){return '<div class="s"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>';}).join('')+'</div>'):'';
+    var extra=d.extra?('<a class="btn btn-ghost-light" href="'+d.extra.href+'" data-cov-close>'+d.extra.label+'</a>'):'';
+    inner.innerHTML=
+      '<div class="cov-hero"><div class="cov-ic">'+d.ic+'</div><div><span class="cov-eyebrow">'+d.eyebrow+'</span><h3 class="cov-title" id="covTitle">'+d.title+'</h3></div></div>'+
+      '<p class="cov-hook">'+d.hook+'</p>'+
+      '<div class="cov-rows">'+rows+'</div>'+stat+
+      '<div class="cov-ctas"><button class="btn btn-brass" data-cov-fit="'+d.track+'">Check my fit →</button>'+
+      '<a class="btn btn-navy" href="#booking" data-cov-close>Book 15 minutes</a>'+extra+'</div>';
+    lastFocus=document.activeElement;
+    modal.classList.add('open'); modal.setAttribute('aria-hidden','false');
+    document.body.style.overflow='hidden';
+    var x=modal.querySelector('.cov-x'); if(x) x.focus();
+  }
+  function close(){
+    modal.classList.remove('open'); modal.setAttribute('aria-hidden','true');
+    document.body.style.overflow='';
+    if(lastFocus&&lastFocus.focus){lastFocus.focus();}
+  }
+  modal.addEventListener('click',function(e){
+    if(e.target.classList.contains('cov-scrim')||e.target.closest('[data-cov-close]')){ close(); return; }
+    var fit=e.target.closest('[data-cov-fit]');
+    if(fit){
+      var t=fit.getAttribute('data-cov-fit'); close();
+      try{ if(typeof tracks!=='undefined'&&tracks[t]){ state.track=t; state.step=0; renderFit(); } }catch(err){}
+      setTimeout(function(){ var el=document.getElementById('fitcheck'); if(el) el.scrollIntoView({behavior:'smooth'}); },90);
+    }
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+  // wire every coverage card + add a "Learn more" affordance
+  document.querySelectorAll('.cover-card').forEach(function(card){
+    var btn=card.querySelector('.go[data-track]'); if(!btn) return;
+    var key=btn.getAttribute('data-track'); if(!COV[key]) return;
+    var more=document.createElement('button');
+    more.type='button'; more.className='cov-more'; more.textContent='Learn more';
+    more.setAttribute('aria-label','Learn more about '+(card.querySelector('h3')?card.querySelector('h3').textContent:key));
+    more.addEventListener('click',function(ev){ ev.stopPropagation(); open(key); });
+    (card.querySelector('.deep')||btn).insertAdjacentElement('afterend',more);
+    card.addEventListener('click',function(ev){
+      if(ev.target.closest('.go,.deep,a,button')) return;
+      open(key);
+    });
+  });
+})();
+</script>
+<script>
+/* ============ IMMERSIVE HERO — energy field + morphing liquid-chrome heron ============ */
+(function(){
+var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- hero WebGL energy field (scoped to the hero) ---- */
+(function(){
+  var cv=document.getElementById('heroGl'), hero=document.getElementById('top'); if(!cv||!hero) return;
+  var gl=cv.getContext('webgl',{antialias:false,alpha:false,powerPreference:'high-performance'});
+  if(!gl){cv.style.display='none';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform vec2 uSun;uniform float uLow;',
+  'float hash(vec2 p){p=fract(p*vec2(123.34,456.21));p+=dot(p,p+45.32);return fract(p.x*p.y);}',
+  'float noise(vec2 p){vec2 i=floor(p),f=fract(p);vec2 u=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),u.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),u.x),u.y);}',
+  'float fbm(vec2 p){float v=0.,a=.5;mat2 m=mat2(1.6,1.2,-1.2,1.6);for(int i=0;i<6;i++){v+=a*noise(p);p=m*p;a*=.5;}return v;}',
+  'float cld(vec2 p,float t){vec2 q=vec2(fbm(p+vec2(0.,t)),fbm(p+vec2(5.2,1.3)-t));',
+  ' vec2 r=vec2(fbm(p+q*1.7+vec2(1.7,9.2)+t*.6),fbm(p+q*1.7+vec2(8.3,2.8)-t*.5));',
+  ' return fbm(p+r*1.9);}',
+  'vec3 aces(vec3 x){return clamp((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14),0.,1.);}',
+  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;vec2 ms=(uMouse-.5*uRes)/uRes.y;',
+  ' uv+=ms*.010;float t=uTime*.012;',
+  /* the gateway centres on the heron emblem, wherever the layout puts it */
+  ' vec2 sun=(uSun-.5*uRes)/uRes.y;vec2 dv=uv-sun;float dr=length(dv*vec2(1.,1.15));',
+  ' vec3 col=mix(vec3(.058,.043,.022),vec3(.010,.022,.050),smoothstep(-.55,.55,uv.y));',
+  ' col+=vec3(1.,.70,.30)*exp(-dr*5.4)*.52;',
+  ' col+=vec3(1.,.93,.78)*exp(-dr*27.)*.90;',
+  ' float ang=atan(dv.x,dv.y),rr=length(dv);',
+  ' float ry=noise(vec2(ang*11.,rr*1.1-uTime*.03));',
+  ' ry+=noise(vec2(ang*23.+4.,rr*1.5+uTime*.02));',
+  ' ry+=noise(vec2(ang*41.+9.,rr*2.0-uTime*.015));',
+  ' ry=pow(max(ry/3.,0.),2.8);',
+  ' float cone=smoothstep(2.6,.35,abs(dv.x)/max(abs(dv.y),.09));',
+  ' col+=vec3(1.,.78,.42)*ry*cone*smoothstep(1.30,.02,rr)*(.20+.80*smoothstep(-.28,.40,uv.y))*.30;',
+   /* (the dark monolith/spire tower layers that used to frame the gap are gone —
+     user: "dont want the monolith things … they look corny". The scene is now an
+     open sunrise: sky, burst, god-rays, cloud bank, cloud sea, grade.) */
+  ' float lit=exp(-dr*4.0);',
+  ' float lw=exp(-dr*3.0);',
+  ' vec3 cc=mix(vec3(.038,.052,.090),vec3(.92,.58,.24),clamp(lw*1.35,0.,1.));',
+  ' cc=mix(cc,vec3(1.,.88,.68),clamp(pow(lw,2.2)*1.2,0.,1.));',
+  ' float cA=cld(uv*1.7+vec2(t*1.2,0.),t);',
+  ' cc*=.62+.82*smoothstep(.42,.86,cA);',
+  ' float dens=smoothstep(.43,.67,cA)*.97;',
+  ' dens+=smoothstep(.51,.78,cld(uv*3.3+vec2(-t*.7,.4),t*.8))*.52;',
+  ' cc+=vec3(1.,.72,.34)*(smoothstep(.43,.49,cA)-smoothstep(.49,.59,cA))*lit*1.6;',
+  ' col=mix(col,cc,clamp(dens*smoothstep(.24,-.38,uv.y),0.,1.));',
+  /* foreground cloud sea — the most expensive layer (10 fbm evaluations).
+     uLow is a uniform, so phones skip the whole block coherently. */
+  ' if(uLow<.5){',
+  ' float fA=cld(uv*1.32+vec2(-t*1.5,-.55),t);',
+  ' float fB=cld(uv*2.85+vec2(t*2.2,-1.1),t*1.3);',
+  ' float fd=(smoothstep(.39,.66,fA)*1.0+smoothstep(.47,.74,fB)*.62)*smoothstep(.10,-.44,uv.y);',
+  ' float gl2=exp(-dr*2.8);',
+  ' vec3 fc=mix(vec3(.052,.068,.110),vec3(.98,.66,.30),clamp(gl2*1.45,0.,1.));',
+  ' fc=mix(fc,vec3(1.,.92,.74),clamp(pow(gl2,2.4)*1.35,0.,1.));',
+  ' fc*=.58+.88*smoothstep(.40,.86,fA);',
+  ' fc+=vec3(1.,.74,.36)*(smoothstep(.40,.47,fA)-smoothstep(.47,.58,fA))*gl2*2.0;',
+  ' col=mix(col,fc,clamp(fd,0.,1.));}',
+  /* anamorphic highlight streak through the gap — cheap, and reads as real lens glass */
+  ' float strk=exp(-abs(dv.y)*54.)*exp(-abs(dv.x)*1.9);',
+  ' col+=vec3(1.,.86,.62)*strk*.17;',
+  ' float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.42;col*=clamp(vig,0.,1.);',
+  /* CINEMATIC GRADE — filmic tonemap, then split-tone (navy shadows / gold highlights),
+     a gentle S-curve, and an ordered dither so the big sky gradients never band */
+   /* phones run the reduced path (uLow=1) AND small OLED screens crush shadows —
+     give them a wider exposure so the scene doesn't read as a black page */
+  ' col=aces(col*mix(1.10,1.32,uLow));',
+  ' float lum=dot(col,vec3(.2126,.7152,.0722));',
+  ' col+=vec3(-.016,.002,.052)*(1.-lum);',
+  ' col+=vec3(.050,.025,-.018)*lum;',
+  ' col=mix(col,col*col*(3.-2.*col),.26);',
+  ' col=mix(vec3(lum),col,1.05);',
+  ' col=clamp(col,0.,1.)+(hash(gl_FragCoord.xy*1.7)-.5)*.0055;',
+  ' gl_FragColor=vec4(col,1.);}'].join('\n');
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+  var coarse=matchMedia('(pointer:coarse)').matches;
+  /* phones: halve the fbm octaves (6 -> 3). Clouds read chunkier at phone size but
+     the per-pixel cost roughly halves, and the scene is ~150 noise taps deep. */
+  var fsrc=coarse?fs.replace(/i<6;i\+\+/g,'i<3;i++'):fs;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fsrc));gl.linkProgram(pr);gl.useProgram(pr);
+  if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){cv.style.display='none';return;}
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uS=gl.getUniformLocation(pr,'uSun'),uL=gl.getUniformLocation(pr,'uLow');
+  /* render the full-screen scene BELOW 1:1 on phones and let the compositor upscale —
+     the single biggest win available for a fragment-heavy hero */
+  var DPR=coarse?Math.min(devicePixelRatio||1,.75):Math.min(devicePixelRatio||1,1.6),mx,my,tmx,tmy,run=true;
+  /* anchor the gateway's light gap on the heron emblem, wherever the layout puts it
+     (right column on desktop, centred once the hero stacks) — measured, not guessed */
+  var crest=document.querySelector('.crest'),sx=0,sy=0;
+  function sun(){
+    sx=cv.width*.72;sy=cv.height*.56;
+    if(!crest)return;
+    var r=crest.getBoundingClientRect(),hr=hero.getBoundingClientRect();
+    if(!r.width||!hr.height)return;
+    sx=(r.left+r.width*.5-hr.left)*DPR;
+    sy=(hr.height-(r.top+r.height*.46-hr.top))*DPR;
+  }
+  function rs(){var w=hero.clientWidth||innerWidth,h=hero.clientHeight||innerHeight;cv.width=Math.max(2,Math.round(w*DPR));cv.height=Math.max(2,Math.round(h*DPR));gl.viewport(0,0,cv.width,cv.height);sun();}
+  rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(hero);
+  addEventListener('load',sun);setTimeout(sun,400);setTimeout(sun,1600);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(sun);
+  tmx=mx=cv.width/2;tmy=my=cv.height*0.6;
+  addEventListener('pointermove',function(e){var r=hero.getBoundingClientRect();tmx=(e.clientX-r.left)*DPR;tmy=(r.height-(e.clientY-r.top))*DPR;},{passive:true});
+  var start=performance.now();
+  /* phones: draw at ~30fps instead of every vsync. The scene is ambient drift, so
+     halving the draw count is invisible and halves the GPU work. */
+  var minDt=coarse?1000/30:0,lastDraw=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(minDt&&now-lastDraw<minDt)return; lastDraw=now;
+    mx+=(tmx-mx)*.06;my+=(tmy-my)*.06;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,RM?12:(now-start)/1000);gl.uniform2f(uM,mx,my);gl.uniform2f(uS,sx,sy);gl.uniform1f(uL,coarse?1:0);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(hero);}
+  requestAnimationFrame(loop);
+  if(RM){gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,12);gl.uniform2f(uM,cv.width/2,cv.height*.6);gl.uniform2f(uS,sx,sy);gl.uniform1f(uL,coarse?1:0);gl.drawArrays(gl.TRIANGLES,0,3);}
+})();
+
+/* ---- morphing liquid-chrome heron ---- */
+(function(){
+  var cv=document.getElementById('heroHeron'); if(!cv) return;
+  var gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
+  if(!gl){cv.outerHTML='<svg viewBox="0 0 240 300" fill="none" style="width:72%;height:auto" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/><circle cx="136" cy="66" r="2.8" fill="#fff"/></svg>';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uMorph;',
+  'float smin(float a,float b,float k){float h=clamp(.5+.5*(b-a)/k,0.,1.);return mix(b,a,h)-k*h*(1.-h);}',
+  'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
+  'float sdCap(vec3 p,vec3 a,vec3 b,float r){vec3 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*h)-r;}',
+  'float sdEll(vec3 p,vec3 c,vec3 r){vec3 q=(p-c)/r;return (length(q)-1.0)*min(min(r.x,r.y),r.z);}',
+  'float mapBlob(vec3 p){float t=uTime;',
+  ' vec3 a=vec3(sin(t*0.7)*0.42,cos(t*0.6)*0.40,sin(t*0.5)*0.36);',
+  ' vec3 b=vec3(cos(t*0.53)*0.50,sin(t*0.8)*0.36,cos(t*0.7)*0.42);',
+  ' vec3 c=vec3(sin(t*0.9+1.7)*0.46,cos(t*0.44+2.1)*0.46,sin(t*0.65+0.6)*0.40);',
+  ' float d=length(p)-0.50;d=smin(d,length(p-a)-0.40,0.45);d=smin(d,length(p-b)-0.38,0.45);d=smin(d,length(p-c)-0.40,0.45);',
+  ' d+=0.024*sin(p.x*6.+t)*sin(p.y*6.+t*1.2)*sin(p.z*6.);return d;}',
+  /* --- the real Herron mark, traced from the brand artwork ---
+     The 2D polyline set is swept into a 3D tube: cheaper than dozens of full 3D
+     capsules, and it reproduces the logo rather than approximating it. Chains are
+     merged end-to-end so the strokes are continuous, and a bounding-box early-out
+     keeps empty-space marching cheap. --- */
+  'float sdSeg(vec2 p,vec2 a,vec2 b){vec2 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*h);}',
+  'float dBird(vec3 p){',
+  ' vec2 q=abs(p.xy)-vec2(0.656,0.922);float bnd=length(max(q,vec2(0.)))+min(max(q.x,q.y),0.);',
+  ' if(bnd>0.20) return length(vec2(bnd,p.z))-0.031;',
+  ' float d=1e9;',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.3993,-0.0046),vec2(-0.3993,0.078)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.3993,0.078),vec2(-0.3809,0.1423)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.3809,0.1423),vec2(-0.3534,0.179)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.3442,0.2065),vec2(-0.2983,0.2524)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.2983,0.2524),vec2(-0.3075,0.2341)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.3075,0.2341),vec2(-0.2708,0.2708)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.2708,0.2708),vec2(-0.2708,0.2616)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.2708,0.2616),vec2(-0.2157,0.2983)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.2157,0.2983),vec2(-0.078,0.3075)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.078,0.3075),vec2(-0.0688,0.3167)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0688,0.3167),vec2(-0.0688,0.335)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0688,0.335),vec2(-0.1056,0.3717)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1056,0.3717),vec2(-0.1514,0.4543)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1514,0.4543),vec2(-0.1606,0.5002)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1606,0.5002),vec2(-0.1514,0.7205)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1514,0.7205),vec2(-0.1147,0.7848)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1147,0.7848),vec2(-0.1239,0.7664)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1239,0.7664),vec2(-0.0597,0.8307)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0597,0.8307),vec2(0.0229,0.8399)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.0229,0.8399),vec2(0.0597,0.8123)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.0597,0.8123),vec2(0.078,0.8215)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.078,0.8215),vec2(0.078,0.8031)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.078,0.8031),vec2(0.1056,0.8857)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1514,-0.0688),vec2(-0.1423,-0.3167)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1423,-0.3167),vec2(-0.1331,-0.3258)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1331,-0.3258),vec2(-0.1331,-0.5278)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1331,-0.5278),vec2(-0.1239,-0.537)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1239,-0.537),vec2(-0.1239,-0.7572)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1239,-0.7572),vec2(-0.1331,-0.7664)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1331,-0.7664),vec2(-0.1514,-0.7572)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1239,-0.7572),vec2(-0.078,-0.7664)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.1147,0.3901),vec2(-0.1056,0.3717)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0688,0.3258),vec2(-0.0321,0.2983)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0321,0.2983),vec2(-0.0046,0.2983)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.0046,0.2983),vec2(0.1056,0.2524)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1056,0.2524),vec2(0.1698,0.1882)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1698,0.1882),vec2(0.1606,0.1882)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1606,0.1882),vec2(0.1882,0.1606)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1882,0.1606),vec2(0.2249,0.078)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.2249,0.078),vec2(0.2432,-0.0229)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.2432,-0.0229),vec2(0.2249,-0.1606)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.2249,-0.1606),vec2(0.1882,-0.2616)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1882,-0.2616),vec2(0.1239,-0.3809)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.0046,-0.7297),vec2(0.0413,-0.1147)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.078,0.8215),vec2(0.0872,0.794)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.0872,0.794),vec2(0.1147,0.794)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1147,0.794),vec2(0.1423,0.7756)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1423,0.7756),vec2(0.1698,0.7756)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1698,0.7756),vec2(0.5461,0.6471)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1331,-0.3534),vec2(0.1514,-0.335)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1514,-0.335),vec2(0.1423,-0.3534)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1514,-0.3258),vec2(0.1514,-0.335)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.179,0.1698),vec2(0.1882,0.1514)));',
+  ' return length(vec2(d,p.z))-0.031;}',
+  'float dLine(vec3 p){float d=1e9;',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.6287,-0.9041),vec2(-0.5829,-0.9041)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.5829,-0.9041),vec2(-0.5737,-0.9133)));',
+  ' d=min(d,sdSeg(p.xy,vec2(-0.5737,-0.9133),vec2(0.1698,-0.9133)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.1698,-0.9133),vec2(0.179,-0.9041)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.179,-0.9041),vec2(0.436,-0.9041)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.436,-0.9041),vec2(0.4452,-0.9133)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.4452,-0.9133),vec2(0.6471,-0.9133)));',
+  ' d=min(d,sdSeg(p.xy,vec2(0.6471,-0.9133),vec2(0.6563,-0.9225)));',
+  ' return length(vec2(d,p.z))-0.023;}',
+  'float dEye(vec3 p){return length(p-vec3(0.0079,0.7706,-0.020))-0.031;}',
+  'float mapHeron(vec3 p){return min(min(dBird(p),dLine(p)),dEye(p));}',
+  /* gentler sway: at the old ±23° the swept tube foreshortened into overlap mush */
+  'float map(vec3 p){float sway=sin(uTime*0.26)*0.20;p.xz*=rot(sway+uMouse.x*0.36);p.xy*=rot(-0.04+uMouse.y*0.12);',
+  /* uMorph is a uniform, so these branches are fully coherent across the whole
+     draw — they skip an entire SDF instead of evaluating both every step */
+  ' if(uMorph<0.002) return mapHeron(p);',
+  ' if(uMorph>0.998) return mapBlob(p);',
+  ' return mix(mapHeron(p),mapBlob(p),uMorph);}',
+  'vec3 nrm(vec3 p){vec2 e=vec2(0.0013,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
+  /* studio environment for the chrome: deep navy dome, warm horizon, a tall vertical
+     softbox strip (the classic liquid-metal streak), one hot gold key, cool blue fill */
+  'vec3 env(vec3 rd){vec3 col=mix(vec3(0.008,0.018,0.05),vec3(0.04,0.09,0.19),rd.y*0.5+0.5);',
+  ' col+=vec3(0.85,0.60,0.28)*pow(max(0.,1.-abs(rd.y)),3.5)*0.5;',
+  ' col+=vec3(1.0,0.86,0.55)*pow(max(0.,1.-abs(rd.x)*1.9),7.)*0.8;',
+  ' vec3 key=normalize(vec3(0.45,0.7,0.5));col+=vec3(1.0,0.85,0.55)*pow(max(0.,dot(rd,key)),20.)*2.1;',
+  ' vec3 k2=normalize(vec3(-0.6,-0.1,0.5));col+=vec3(0.28,0.46,0.85)*pow(max(0.,dot(rd,k2)),10.)*0.85;',
+  ' vec3 k3=normalize(vec3(-0.25,0.6,0.7));col+=vec3(1.0,0.96,0.82)*pow(max(0.,dot(rd,k3)),46.)*1.8;return col;}',
+  'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
+  ' vec3 ro=vec3(0.,0.,4.85);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
+  ' float t=0.,md=1e5,hit=0.;',
+  ' for(int i=0;i<110;i++){vec3 p=ro+rd*t;float d=map(p);md=min(md,d);if(d<0.0016){hit=1.;break;}t+=d*0.75;if(t>7.)break;}',
+  ' vec3 col=vec3(0.);float alpha=0.;',
+  ' if(hit>0.5){vec3 p=ro+rd*t;vec3 n=nrm(p);',
+  /* liquid life: reflections crawl slowly along the tube; the silhouette never deforms */
+  '  n=normalize(n+0.05*vec3(sin(p.y*7.0+uTime*0.55),sin(p.x*6.0-uTime*0.45),sin((p.x+p.y)*5.0+uTime*0.5)));',
+  '  vec3 refl=reflect(rd,n);vec3 rc=env(refl);',
+  /* classify in the SAME rotated frame map() marched against, or the blue/eye tint
+     lands on the wrong strokes as the emblem sways */
+  '  vec3 pc=p;pc.xz*=rot(sin(uTime*0.26)*0.20+uMouse.x*0.36);pc.xy*=rot(-0.04+uMouse.y*0.12);',
+  '  float db=dBird(pc);float isL=0.;float isE=0.;',
+  '  if(uMorph<0.5){if(dLine(pc)<db)isL=1.;if(dEye(pc)<db)isE=1.;}',
+  /* dark navy chrome body: the mark reads as a dark line against the burst — the same
+     backlit language as the monoliths — and the gold lives in the rim + speculars.
+     The underline keeps its brand blue; the eye stays pearl-bright. */
+  '  vec3 body=rc*mix(vec3(0.60,0.66,0.82),vec3(0.42,0.58,1.10),isL);',
+  '  float rim=pow(1.-max(0.,dot(-rd,n)),2.5)*(0.55+0.45*clamp(0.5+0.6*n.y,0.,1.));',
+  '  vec3 cc=body+vec3(1.0,0.80,0.42)*rim*2.0;',
+  '  vec3 hv=normalize(normalize(vec3(0.45,0.7,0.5))-rd);cc+=vec3(1.0,0.93,0.72)*pow(max(0.,dot(n,hv)),90.)*2.2;',
+  '  vec3 hv2=normalize(normalize(vec3(-0.55,0.15,0.6))-rd);cc+=vec3(0.75,0.85,1.0)*pow(max(0.,dot(n,hv2)),40.)*0.6;',
+  '  cc=mix(cc,vec3(0.97,0.98,1.0)*0.95+rc*0.3,isE);',
+  '  col=cc;alpha=1.;}',
+  ' else{float aa=smoothstep(0.028,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.55;alpha=aa;}',
+  ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
+  function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
+  var coarseH=matchMedia('(pointer:coarse)').matches;
+  /* 110 march steps x a ~30-primitive SDF is the single most expensive thing on
+     the page; phones get 56, which still resolves the emblem at their size */
+  var hsrc=coarseH?fs.replace('i<110;i++','i<56;i++'):fs;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,hsrc));gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uMo=gl.getUniformLocation(pr,'uMorph');
+  function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
+  /* Liquid metal pours into the mark once, then holds. The old 16s heron→blob cycle
+     parked the brand as a shapeless lump ~30% of the time — the logo must never stop
+     being the logo. The "liquid" life now lives in the material (flowing reflections),
+     not in destroying the silhouette. */
+  function morphAt(ts){return ts<2.3?1-sstep(0.25,2.3,ts):0.0;}
+  var coarse=coarseH;var DPR=Math.min(devicePixelRatio||1,coarse?.85:1.5),tmx=0,tmy=0,mx=0,my=0,run=true;
+  function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
+  rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(cv);
+  addEventListener('pointermove',function(e){tmx=(e.clientX/innerWidth-.5);tmy=-(e.clientY/innerHeight-.5);},{passive:true});
+  gl.clearColor(0,0,0,0);
+  var start=performance.now();
+  /* phones: ~24fps. This is the most expensive shader on the page, and the emblem's
+     motion is a slow sway — the cadence reads fine and the cost drops with it. */
+  var hMinDt=coarse?1000/24:0,hLast=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(hMinDt&&now-hLast<hMinDt)return; hLast=now;
+    var ts=RM?3.0:(now-start)/1000;var mo=morphAt(ts);
+    mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uMo,mo);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
+  requestAnimationFrame(loop);
+})();
+
+/* ---- magnetic hero CTAs ---- */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches) return;
+  document.querySelectorAll('.hero-ctas .btn').forEach(function(btn){
+    btn.addEventListener('pointermove',function(e){var r=btn.getBoundingClientRect();btn.style.transform='translate('+(e.clientX-(r.left+r.width/2))*.2+'px,'+(e.clientY-(r.top+r.height/2))*.28+'px)';});
+    btn.addEventListener('pointerleave',function(){btn.style.transform='';});
+  });
+})();
+
+/* ---- cinematic ignition ---- */
+(function(){
+  var ig=document.getElementById('ignite'); if(!ig) return;
+  if(RM){if(ig.parentNode)ig.parentNode.removeChild(ig);return;}
+  setTimeout(function(){ig.classList.add('gone');},1500);
+  setTimeout(function(){if(ig.parentNode)ig.parentNode.removeChild(ig);},2700);
+})();
+})();
+</script>
 <script type="module" src="liquid-glass.js"></script>
+<!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
+     ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
+<script defer src="vendor/gsap.min.js"></script>
+<script defer src="js/hx-wheel.js"></script>
 </body>
 </html>
