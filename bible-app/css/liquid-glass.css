@@ -1,0 +1,217 @@
+/* LIVING WORD — Liquid Glass design tokens & core surfaces
+   Doctrine of light: one source, above; light descends onto the Word.   */
+
+:root {
+  /* ------------------------------------------------ palette: sanctuary */
+  --sanctuary-deep:   #070b14;   /* night-sky navy, app ground           */
+  --sanctuary-mid:    #0d1526;
+  --sanctuary-haze:   #16223c;
+  --gate-gold:        #f6d78a;   /* primary luminance                    */
+  --gate-gold-bright: #ffe9b8;
+  --ray-white:        #fff7e6;
+  --dawn-rose:        #e8b4a0;
+  --olive:            #a9c39a;
+  --water:            #9ec5d8;
+  --ink:              #f4efe4;   /* scripture ink on dark                */
+  --ink-dim:          rgba(244,239,228,.62);
+
+  /* ------------------------------------------------ liquid glass core  */
+  --glass-blur: 24px;
+  --glass-sat: 140%;
+  --glass-bg: rgba(255,255,255,0.07);
+  --glass-bg-raised: rgba(255,255,255,0.11);
+  --glass-border: rgba(255,235,190,0.22);
+  --glass-highlight: inset 0 1px 0 rgba(255,255,255,0.25);
+  --glass-radius: 22px;
+  --glass-radius-sm: 14px;
+
+  /* neumorphic dual shadow */
+  --depth-far:  0 18px 48px rgba(0,0,0,.55);
+  --depth-near: 0 2px 8px rgba(0,0,0,.35);
+  --depth-pressed: inset 0 3px 10px rgba(0,0,0,.45), inset 0 1px 2px rgba(0,0,0,.35);
+
+  /* heavenly light properties */
+  --halo: radial-gradient(closest-side, rgba(246,215,138,.35), transparent 70%);
+  --beam-gradient: linear-gradient(180deg,
+      rgba(255,247,230,.28) 0%, rgba(246,215,138,.14) 46%, transparent 100%);
+  --dawn-sky: linear-gradient(180deg, #070b14 0%, #101a30 52%, #2a3350 78%, #6b5a4a 100%);
+
+  /* type scale */
+  --font-scripture: 'New York', Georgia, 'Times New Roman', serif;
+  --font-ui: 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --scripture-size: 18px;
+  --scripture-leading: 1.68;
+  --scripture-measure: 34em;
+
+  /* springs (documented; JS reads these via getComputedStyle if needed) */
+  --spring-ui-zeta: 0.92;     /* interaction spring damping ratio  */
+  --spring-ui-omega: 14;      /* rad/s                             */
+  --dur-liturgical: 640ms;    /* slow, weighted default            */
+  --ease-settle: cubic-bezier(.22,.9,.28,1);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overscroll-behavior: none; }
+body {
+  background: var(--sanctuary-deep);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------ surfaces */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--depth-far), var(--depth-near), var(--glass-highlight);
+}
+.glass--raised { background: var(--glass-bg-raised); }
+.glass--pressed { box-shadow: var(--depth-pressed); }
+
+/* chromatic aberration — display headings ONLY, never Scripture text */
+.ca-heading {
+  text-shadow: 1px 0 0 rgba(255,80,80,.08), -1px 0 0 rgba(80,140,255,.08);
+}
+
+.halo { position: relative; }
+.halo::before {
+  content: ''; position: absolute; inset: -34%;
+  background: var(--halo); pointer-events: none; z-index: -1;
+}
+
+/* ----------------------------------------------------------- scripture */
+.scripture {
+  font-family: var(--font-scripture);
+  font-size: var(--scripture-size);
+  line-height: var(--scripture-leading);
+  max-width: var(--scripture-measure);
+  margin-inline: auto;
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+.scripture .vnum {
+  font-family: var(--font-ui); font-size: .62em; vertical-align: super;
+  color: var(--gate-gold); opacity: .8; margin-right: .28em; user-select: none;
+}
+.scripture .hl-gold  { background: rgba(246,215,138,.20); border-radius: 3px; }
+.scripture .hl-dawn  { background: rgba(232,180,160,.20); border-radius: 3px; }
+.scripture .hl-olive { background: rgba(169,195,154,.20); border-radius: 3px; }
+.scripture .hl-water { background: rgba(158,197,216,.20); border-radius: 3px; }
+.copyright-notice {
+  font-size: 11px; color: var(--ink-dim); text-align: center;
+  padding: 10px 18px 22px; max-width: 34em; margin-inline: auto;
+}
+
+/* ------------------------------------------------------------- buttons */
+.btn {
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600;
+  color: var(--ink); letter-spacing: .02em;
+  padding: 13px 22px; border-radius: var(--glass-radius-sm);
+  background: var(--glass-bg-raised);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--depth-near), var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  cursor: pointer;
+  transition: transform 180ms var(--ease-settle), box-shadow 180ms var(--ease-settle);
+}
+.btn:active { transform: scale(.97); box-shadow: var(--depth-pressed); }
+.btn--gold {
+  background: linear-gradient(180deg, rgba(246,215,138,.30), rgba(246,215,138,.12));
+  border-color: rgba(246,215,138,.45);
+  color: var(--gate-gold-bright);
+}
+
+/* ---------------------------------------------------------- app frames */
+#app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+.screen.active { display: flex; }
+.screen-body { flex: 1; overflow-y: auto; padding: 18px 18px 110px; } /* clear the tabbar */
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 14px;
+}
+.topbar h1 {
+  font-size: 19px; font-weight: 700; margin: 0; color: var(--gate-gold-bright);
+  font-family: var(--font-scripture); letter-spacing: .03em;
+}
+
+.tabbar {
+  display: flex; justify-content: space-around;
+  margin: auto 14px calc(env(safe-area-inset-bottom, 0px) + 14px); /* auto top: pin to bottom */
+  padding: 8px;
+  position: relative; z-index: 5;                /* floats above the screen layers */
+}
+.tabbar button {
+  flex: 1; background: none; border: 0; color: var(--ink-dim);
+  font: 600 12px var(--font-ui); padding: 9px 4px; border-radius: 12px;
+  cursor: pointer; transition: color 240ms, background 240ms;
+}
+.tabbar button .glyph { display: block; font-size: 20px; margin-bottom: 3px; }
+.tabbar button.on { color: var(--gate-gold-bright); background: rgba(246,215,138,.10); }
+
+.card { padding: 18px; margin-bottom: 14px; }
+.card h3 { margin: 0 0 6px; font-family: var(--font-scripture); color: var(--gate-gold-bright); }
+.card p { margin: 0; color: var(--ink-dim); font-size: 14px; line-height: 1.55; }
+
+/* volumetric ambient beam behind content (CSS fallback layer) */
+.ambient-beam {
+  position: fixed; top: -12vh; left: 50%; width: 66vw; height: 72vh;
+  transform: translateX(-50%) perspective(600px) rotateX(18deg);
+  background: var(--beam-gradient);
+  clip-path: polygon(38% 0, 62% 0, 100% 100%, 0 100%);
+  filter: blur(18px); opacity: .5; pointer-events: none; z-index: 0;
+}
+
+/* ------------------------------------------------ page-flip book stage */
+.book-stage {
+  perspective: 2200px; perspective-origin: 50% 42%;
+  position: relative; flex: 1; overflow: hidden;
+  margin-bottom: 88px;                           /* clear the tabbar */
+}
+.leaf {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  will-change: transform;
+}
+.leaf .face {
+  position: absolute; inset: 0; padding: 26px 22px 40px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background:
+    linear-gradient(105deg, rgba(255,255,255,.05), rgba(255,255,255,0) 30%),
+    linear-gradient(180deg, #101a30, #0b1322);
+  border: 1px solid rgba(255,235,190,.14);
+  border-radius: 6px 18px 18px 6px;
+  overflow-y: auto;
+}
+.leaf .face.back { transform: rotateY(180deg); border-radius: 18px 6px 6px 18px; }
+/* glow-through: driven per-frame from JS via --translucency and --crease */
+.leaf .glow {
+  position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+  background:
+    radial-gradient(120% 90% at calc(var(--crease, 100%) ) 30%,
+      rgba(255,247,230, calc(var(--translucency, 0) * .85)), transparent 55%);
+  mix-blend-mode: screen;
+}
+.leaf .crease-spec {
+  position: absolute; top: 0; bottom: 0; width: 14%;
+  left: calc(var(--crease, 100%) - 7%);
+  background: linear-gradient(90deg, transparent,
+    rgba(255,247,230, calc(var(--translucency, 0) * .5)), transparent);
+  pointer-events: none; mix-blend-mode: screen;
+}
+.page-shadow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(0,0,0,.55), transparent 42%);
+  opacity: var(--under-shadow, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
