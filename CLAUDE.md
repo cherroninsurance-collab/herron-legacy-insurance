@@ -30,7 +30,7 @@ serves serverless functions from `netlify/functions`.
 | File | What it is |
 | --- | --- |
 | `index.html` | The live homepage (~2600 lines, all CSS/JS inline). |
-| `experience.html` | Standalone cinematic "cover"/concept page, `noindex`. |
+| `images/cover/` | Saved renders of the retired cover page (user's keepsake — `experience.html` itself was deleted at the user's request; recover from git history if ever wanted). |
 | `wealth-shield-matrix.html`, `protection-blueprint.html` | Interactive tool pages. |
 | `liquid-glass.js`, `legacy-ai.js` | Shared glass effect + concierge chat. |
 | `social/` | Standalone social content kit — **not** part of the website. |
@@ -45,8 +45,6 @@ mid cloud bank → near monoliths (broken tops, striations, low haze, gold rim-l
 foreground cloud sea → vignette → **cinematic grade** (ACES-ish tonemap, navy-shadow /
 gold-highlight split tone, S-curve, anamorphic streak, ordered dither).
 
-- **`experience.html` (cover):** gateway centred; the emblem sits in the **gold shield** in
-  the light gap, backlit. Saved as a downloadable image in `images/cover/`.
 - **`index.html` (homepage):** **no shield** — emblem alone. The light gap is anchored to
   the emblem's **measured** position via the `uSun` uniform (`sun()` re-measures `.crest`
   on resize/load/fonts-ready), so the burst sits behind the logo on desktop and re-centres
@@ -69,7 +67,17 @@ The truth is the supplied artwork, now keyed to transparency in `logos/mark/mark
   not a synthetic dot (drawing one produced a huge blob over the head).
 - **The liquid-metal emblem** SDF is generated from the same artwork: skeletonised, chains
   merged end-to-end, simplified to ~53 segments, swept as a 2D polyline set into a 3D tube
-  with a bounding-box early-out. The underline keeps its blue; the eye is pale chrome.
+  (radius 0.031, underline 0.023) with a bounding-box early-out (radius must match the
+  tube). The underline keeps its blue; the eye is pearl-bright.
+- **The emblem never becomes a blob.** The user called the old heron→blob morph cycle
+  trash — rightly; it parked the brand as a shapeless lump ~30% of the time. Liquid metal
+  pours into the mark once during the intro (`morphAt` returns 0 after 2.3s) and the
+  "liquid" life lives in the material: dark navy chrome body (dark line against the burst,
+  same backlit language as the monoliths), flowing normal perturbation so reflections
+  crawl, one-sided gold fresnel rim, two Blinn speculars, analytic studio env with a
+  vertical softbox strip. Material classification (blue line / eye) must happen in the
+  same rotated frame `map()` marched against — rotate `p` by the identical sway before
+  calling `dBird/dLine/dEye`.
 - At nav size the literal 3px strokes fall under one device pixel, so some optical
   thickening is unavoidable. **Verify by rendering at real 1x/2x and magnifying the actual
   pixels — never by screenshotting at high DPR, which hides sub-pixel loss.**

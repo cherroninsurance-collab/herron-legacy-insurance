@@ -683,7 +683,9 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 .hx-on .cover-grid>.reveal,
 .hx-on .cover-grid>.reveal.in{opacity:1;animation:none;
   transition:opacity .38s ease,filter .38s ease}
-.hx-on .hx-wheel .cover-card.reveal.hx-dim{opacity:.22;filter:saturate(.7) blur(1px)}
+/* dim = crisp, darker, further away. Blur here read as smear, not depth — and it cost
+   a filter pass per card per frame while the ring was turning. */
+.hx-on .hx-wheel .cover-card.reveal.hx-dim{opacity:.15;filter:saturate(.55) brightness(.92)}
 .hx-on .hx-wheel .cover-card.hx-front{pointer-events:auto;
   box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28)}
 html.hx-pinned{scroll-behavior:auto!important}
@@ -1978,7 +1980,6 @@ html{overflow-x:clip}
         <a href="#blueprint">Legacy Blueprint</a>
         <a href="#iul-strategy">IUL strategy</a>
         <a href="opt-in.html">Free protection guide</a>
-        <a href="experience.html">The immersive experience &#8599;</a>
         <a href="privacy-policy.html">Privacy policy</a>
         <a href="terms-conditions.html">Terms &amp; conditions</a>
       </div>
@@ -2918,7 +2919,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   'float sdSeg(vec2 p,vec2 a,vec2 b){vec2 pa=p-a,ba=b-a;float h=clamp(dot(pa,ba)/dot(ba,ba),0.,1.);return length(pa-ba*h);}',
   'float dBird(vec3 p){',
   ' vec2 q=abs(p.xy)-vec2(0.656,0.922);float bnd=length(max(q,vec2(0.)))+min(max(q.x,q.y),0.);',
-  ' if(bnd>0.20) return length(vec2(bnd,p.z))-0.026;',
+  ' if(bnd>0.20) return length(vec2(bnd,p.z))-0.031;',
   ' float d=1e9;',
   ' d=min(d,sdSeg(p.xy,vec2(-0.3993,-0.0046),vec2(-0.3993,0.078)));',
   ' d=min(d,sdSeg(p.xy,vec2(-0.3993,0.078),vec2(-0.3809,0.1423)));',
@@ -2973,7 +2974,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' d=min(d,sdSeg(p.xy,vec2(0.1514,-0.335),vec2(0.1423,-0.3534)));',
   ' d=min(d,sdSeg(p.xy,vec2(0.1514,-0.3258),vec2(0.1514,-0.335)));',
   ' d=min(d,sdSeg(p.xy,vec2(0.179,0.1698),vec2(0.1882,0.1514)));',
-  ' return length(vec2(d,p.z))-0.026;}',
+  ' return length(vec2(d,p.z))-0.031;}',
   'float dLine(vec3 p){float d=1e9;',
   ' d=min(d,sdSeg(p.xy,vec2(-0.6287,-0.9041),vec2(-0.5829,-0.9041)));',
   ' d=min(d,sdSeg(p.xy,vec2(-0.5829,-0.9041),vec2(-0.5737,-0.9133)));',
@@ -2983,35 +2984,50 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' d=min(d,sdSeg(p.xy,vec2(0.436,-0.9041),vec2(0.4452,-0.9133)));',
   ' d=min(d,sdSeg(p.xy,vec2(0.4452,-0.9133),vec2(0.6471,-0.9133)));',
   ' d=min(d,sdSeg(p.xy,vec2(0.6471,-0.9133),vec2(0.6563,-0.9225)));',
-  ' return length(vec2(d,p.z))-0.018;}',
-  'float dEye(vec3 p){return length(p-vec3(0.0079,0.7706,-0.028))-0.030;}',
+  ' return length(vec2(d,p.z))-0.023;}',
+  'float dEye(vec3 p){return length(p-vec3(0.0079,0.7706,-0.020))-0.031;}',
   'float mapHeron(vec3 p){return min(min(dBird(p),dLine(p)),dEye(p));}',
-  'float map(vec3 p){float sway=sin(uTime*0.28)*0.40;p.xz*=rot(sway+uMouse.x*0.55);p.xy*=rot(-0.05+uMouse.y*0.16);',
+  /* gentler sway: at the old ±23° the swept tube foreshortened into overlap mush */
+  'float map(vec3 p){float sway=sin(uTime*0.26)*0.20;p.xz*=rot(sway+uMouse.x*0.36);p.xy*=rot(-0.04+uMouse.y*0.12);',
   /* uMorph is a uniform, so these branches are fully coherent across the whole
      draw — they skip an entire SDF instead of evaluating both every step */
   ' if(uMorph<0.002) return mapHeron(p);',
   ' if(uMorph>0.998) return mapBlob(p);',
   ' return mix(mapHeron(p),mapBlob(p),uMorph);}',
   'vec3 nrm(vec3 p){vec2 e=vec2(0.0013,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
-  'vec3 env(vec3 rd){vec3 col=mix(vec3(0.015,0.03,0.07),vec3(0.05,0.10,0.20),rd.y*0.5+0.5);',
-  ' col+=vec3(0.85,0.60,0.28)*pow(max(0.,1.-abs(rd.y)),3.5)*0.6;',
-  ' vec3 key=normalize(vec3(0.45,0.7,0.5));col+=vec3(1.0,0.85,0.55)*pow(max(0.,dot(rd,key)),20.)*1.9;',
-  ' vec3 k2=normalize(vec3(-0.6,-0.1,0.5));col+=vec3(0.28,0.46,0.85)*pow(max(0.,dot(rd,k2)),10.)*0.7;',
-  ' vec3 k3=normalize(vec3(-0.25,0.6,0.7));col+=vec3(1.0,0.96,0.82)*pow(max(0.,dot(rd,k3)),46.)*1.5;return col;}',
+  /* studio environment for the chrome: deep navy dome, warm horizon, a tall vertical
+     softbox strip (the classic liquid-metal streak), one hot gold key, cool blue fill */
+  'vec3 env(vec3 rd){vec3 col=mix(vec3(0.008,0.018,0.05),vec3(0.04,0.09,0.19),rd.y*0.5+0.5);',
+  ' col+=vec3(0.85,0.60,0.28)*pow(max(0.,1.-abs(rd.y)),3.5)*0.5;',
+  ' col+=vec3(1.0,0.86,0.55)*pow(max(0.,1.-abs(rd.x)*1.9),7.)*0.8;',
+  ' vec3 key=normalize(vec3(0.45,0.7,0.5));col+=vec3(1.0,0.85,0.55)*pow(max(0.,dot(rd,key)),20.)*2.1;',
+  ' vec3 k2=normalize(vec3(-0.6,-0.1,0.5));col+=vec3(0.28,0.46,0.85)*pow(max(0.,dot(rd,k2)),10.)*0.85;',
+  ' vec3 k3=normalize(vec3(-0.25,0.6,0.7));col+=vec3(1.0,0.96,0.82)*pow(max(0.,dot(rd,k3)),46.)*1.8;return col;}',
   'void main(){vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
   ' vec3 ro=vec3(0.,0.,4.85);vec3 rd=normalize(vec3(uv,-1.65));rd.xy+=uMouse*0.12;rd=normalize(rd);ro.xy+=uMouse*0.24;',
   ' float t=0.,md=1e5,hit=0.;',
   ' for(int i=0;i<110;i++){vec3 p=ro+rd*t;float d=map(p);md=min(md,d);if(d<0.0016){hit=1.;break;}t+=d*0.75;if(t>7.)break;}',
   ' vec3 col=vec3(0.);float alpha=0.;',
-  ' if(hit>0.5){vec3 p=ro+rd*t;vec3 n=nrm(p);vec3 refl=reflect(rd,n);vec3 rc=env(refl);',
-  '  float fres=pow(1.-max(0.,dot(-rd,n)),3.);vec3 base=vec3(0.98,0.74,0.40);',
-  /* the mark's underline is blue in the brand art — keep it blue in chrome too */
-  '  if(uMorph<0.5){float db=dBird(p);',
-  '    if(dLine(p)<db) base=vec3(0.34,0.56,1.0);',
-  '    if(dEye(p)<db) base=vec3(1.0,0.99,0.96);}',
-  '  vec3 chrome=mix(rc*base,rc,0.42);chrome+=vec3(1.0,0.90,0.62)*fres*1.15;',
-  '  chrome+=base*max(0.,dot(n,normalize(vec3(0.45,0.7,0.5))))*0.12;col=chrome;alpha=1.;}',
-  ' else{float aa=smoothstep(0.045,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.7;alpha=aa;}',
+  ' if(hit>0.5){vec3 p=ro+rd*t;vec3 n=nrm(p);',
+  /* liquid life: reflections crawl slowly along the tube; the silhouette never deforms */
+  '  n=normalize(n+0.05*vec3(sin(p.y*7.0+uTime*0.55),sin(p.x*6.0-uTime*0.45),sin((p.x+p.y)*5.0+uTime*0.5)));',
+  '  vec3 refl=reflect(rd,n);vec3 rc=env(refl);',
+  /* classify in the SAME rotated frame map() marched against, or the blue/eye tint
+     lands on the wrong strokes as the emblem sways */
+  '  vec3 pc=p;pc.xz*=rot(sin(uTime*0.26)*0.20+uMouse.x*0.36);pc.xy*=rot(-0.04+uMouse.y*0.12);',
+  '  float db=dBird(pc);float isL=0.;float isE=0.;',
+  '  if(uMorph<0.5){if(dLine(pc)<db)isL=1.;if(dEye(pc)<db)isE=1.;}',
+  /* dark navy chrome body: the mark reads as a dark line against the burst — the same
+     backlit language as the monoliths — and the gold lives in the rim + speculars.
+     The underline keeps its brand blue; the eye stays pearl-bright. */
+  '  vec3 body=rc*mix(vec3(0.60,0.66,0.82),vec3(0.42,0.58,1.10),isL);',
+  '  float rim=pow(1.-max(0.,dot(-rd,n)),2.5)*(0.55+0.45*clamp(0.5+0.6*n.y,0.,1.));',
+  '  vec3 cc=body+vec3(1.0,0.80,0.42)*rim*2.0;',
+  '  vec3 hv=normalize(normalize(vec3(0.45,0.7,0.5))-rd);cc+=vec3(1.0,0.93,0.72)*pow(max(0.,dot(n,hv)),90.)*2.2;',
+  '  vec3 hv2=normalize(normalize(vec3(-0.55,0.15,0.6))-rd);cc+=vec3(0.75,0.85,1.0)*pow(max(0.,dot(n,hv2)),40.)*0.6;',
+  '  cc=mix(cc,vec3(0.97,0.98,1.0)*0.95+rc*0.3,isE);',
+  '  col=cc;alpha=1.;}',
+  ' else{float aa=smoothstep(0.028,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.55;alpha=aa;}',
   ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var coarseH=matchMedia('(pointer:coarse)').matches;
@@ -3023,7 +3039,11 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
   var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uM=gl.getUniformLocation(pr,'uMouse'),uMo=gl.getUniformLocation(pr,'uMorph');
   function sstep(a,b,x){x=Math.max(0,Math.min(1,(x-a)/(b-a)));return x*x*(3-2*x);}
-  function morphAt(ts){if(ts<2.6)return 1-sstep(0.3,2.6,ts);var c=((ts-2.6)%16)/16;if(c<0.55)return 0;if(c<0.66)return sstep(0.55,0.66,c);if(c<0.74)return 1;if(c<0.9)return 1-sstep(0.74,0.9,c);return 0;}
+  /* Liquid metal pours into the mark once, then holds. The old 16s heron→blob cycle
+     parked the brand as a shapeless lump ~30% of the time — the logo must never stop
+     being the logo. The "liquid" life now lives in the material (flowing reflections),
+     not in destroying the silhouette. */
+  function morphAt(ts){return ts<2.3?1-sstep(0.25,2.3,ts):0.0;}
   var coarse=coarseH;var DPR=Math.min(devicePixelRatio||1,coarse?.85:1.5),tmx=0,tmy=0,mx=0,my=0,run=true;
   function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
   rs();addEventListener('resize',rs);if(window.ResizeObserver)new ResizeObserver(rs).observe(cv);
