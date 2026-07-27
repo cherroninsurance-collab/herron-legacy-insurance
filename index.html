@@ -657,42 +657,70 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
   .hx-hero-card{background:linear-gradient(180deg,rgba(8,18,38,.72),rgba(8,18,38,.5))}
 }
 
-/* ---- 3D product wheel (inert until JS adds .hx-on) ---- */
-.hx-stage{perspective:1000px;perspective-origin:50% 46%}
-/* the rotating ring projects wider than its box; clip so it can never add a
+/* ---- interactive 3D card carousel (inert until JS adds .hx-on) ----
+   Coverflow geometry: each card is placed from its signed circular offset o —
+   x = o·spread, z = −|o|·depth, rotY = −o·tilt — instead of one rotating ring.
+   A ring needs backface culling, which makes 3- and 4-card sets invisible at
+   the sides; offset placement works for any n and never shows mirrored text. */
+.hx-stage{position:relative;perspective:1200px;perspective-origin:50% 44%}
+/* side cards project wider than the box; clip so they can never add a
    horizontal scrollbar at any width (clip preserves the 3D depth, unlike auto) */
 .hx-on{overflow-x:clip}
+.hx-on .hx-stage{cursor:grab;touch-action:pan-y}
+html.hx-grabbing,html.hx-grabbing *{cursor:grabbing!important}
+html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .hx-stage .hx-wheel{transform-style:preserve-3d}
-.hx-on .hx-wheel{position:relative;display:block;height:clamp(430px,66vh,620px);margin-inline:auto;max-width:none;pointer-events:none}
-.hx-on .hx-wheel .cover-card{
+.hx-on .hx-wheel{position:relative;display:block;height:clamp(430px,64vh,600px);margin-inline:auto;max-width:none;pointer-events:none}
+.hx-on .hx-wheel>.hx-3dcard{
   position:absolute;top:50%;left:50%;width:min(520px,88vw);margin:0;
   transform-style:preserve-3d;will-change:transform,opacity;
-  pointer-events:none;
-  /* real-GPU fixes: cards rotating in 3D must not sample a backdrop (Chrome
-     glitches badly with blur+url() SVG filters on transformed layers), and a
-     card facing away must not show mirrored text. Solid surface instead. */
+  pointer-events:auto;cursor:pointer;
+  /* real-GPU fixes: cards moving in 3D must not sample a backdrop (Chrome
+     glitches badly with blur+url() SVG filters on transformed layers). */
   backface-visibility:hidden;-webkit-backface-visibility:hidden;
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
-  background:var(--white);
 }
-/* reveal-neutraliser + dim/front states. Deliberately NO !important anywhere in
-   this trio: the flip-reveal hide is .cover-grid>.reveal (0,2,0), the neutraliser
-   below out-specifies it at (0,3,0), dim out-specifies the neutraliser at (0,5,0),
-   and the front card simply never carries .hx-dim. Plain specificity, no ties —
-   !important tie-breaking proved engine-dependent. GSAP owns transform inline. */
-.hx-on .cover-grid>.reveal,
-.hx-on .cover-grid>.reveal.in{opacity:1;animation:none;
-  transition:opacity .38s ease,filter .38s ease}
-/* dim = crisp, darker, further away. Blur here read as smear, not depth — and it cost
-   a filter pass per card per frame while the ring was turning. */
-.hx-on .hx-wheel .cover-card.reveal.hx-dim{opacity:.15;filter:saturate(.55) brightness(.92)}
-.hx-on .hx-wheel .cover-card.hx-front{pointer-events:auto;
+/* solid surfaces per family — no glass while transformed */
+.hx-on .cover-grid>.hx-3dcard{background:var(--white)}
+.hx-on .ann-grid>.hx-3dcard{background:linear-gradient(150deg,#16294E 0%,#0B1830 100%);border:1px solid rgba(201,151,59,.28)}
+/* reveal-neutraliser + dim/front states. Deliberately NO !important in this trio:
+   the flip-reveal hide is .cover-grid>.reveal / .ann-grid>.reveal (0,2,0), the
+   neutraliser below out-specifies it at (0,3,0), and the front card simply never
+   carries .hx-dim. GSAP owns transform and opacity inline — no CSS opacity
+   transition here, or per-frame drag updates would smear. */
+.hx-on .hx-wheel>.reveal,
+.hx-on .hx-wheel>.reveal.in{opacity:1;animation:none;transition:filter .38s ease}
+.hx-on .hx-wheel>.hx-3dcard.hx-dim{filter:saturate(.6) brightness(.95)}
+.hx-on .hx-wheel>.hx-3dcard.hx-front{pointer-events:auto;cursor:auto;
   box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28)}
-html.hx-pinned{scroll-behavior:auto!important}
-.hx-progress{display:none;gap:6px;justify-content:center;margin-top:26px}
-#coverage.hx-on ~ * .hx-progress,#coverage.hx-on .hx-progress{display:flex}
-.hx-progress i{width:26px;height:3px;border-radius:2px;background:rgba(226,180,92,.24);transition:background .3s,transform .3s}
-.hx-progress i.on{background:var(--brass-bright);transform:scaleY(1.8)}
+.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 6px 14px rgba(0,0,0,.3),0 26px 60px -18px rgba(0,0,0,.55),0 0 0 1px rgba(201,151,59,.35)}
+/* arrows */
+.hx-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:50px;height:50px;
+  border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  border:1px solid rgba(14,31,62,.16);background:rgba(255,255,255,.94);color:var(--navy);
+  box-shadow:0 8px 24px -10px rgba(8,18,38,.32);pointer-events:auto;
+  transition:transform .25s cubic-bezier(.16,1,.3,1),border-color .25s,box-shadow .25s}
+.hx-arrow:hover{transform:translateY(-50%) scale(1.08);border-color:rgba(201,151,59,.65);
+  box-shadow:0 12px 30px -10px rgba(8,18,38,.4)}
+.hx-arrow:focus-visible{outline:2px solid var(--brass-bright);outline-offset:2px}
+.hx-arrow.prev{left:clamp(4px,2vw,28px)}
+.hx-arrow.next{right:clamp(4px,2vw,28px)}
+.hx-arrow svg{width:20px;height:20px;display:block}
+.ann-band .hx-arrow{background:rgba(14,31,62,.88);border-color:rgba(201,151,59,.4);color:#F6E0AC;
+  box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
+.ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
+/* dots — real buttons, clickable, with a generous hit area */
+.hx-progress{display:none;gap:8px;justify-content:center;margin-top:26px}
+.hx-on .hx-progress,#coverage.hx-car .hx-progress{display:flex}
+.hx-progress i,.hx-progress button{width:26px;height:3px;border-radius:2px;border:0;padding:0;display:block;
+  background:rgba(226,180,92,.24);transition:background .3s,transform .3s}
+.hx-progress button{position:relative;cursor:pointer}
+.hx-progress button::after{content:"";position:absolute;inset:-7px}
+.hx-progress button:focus-visible{outline:2px solid var(--brass-bright);outline-offset:4px}
+.hx-progress i.on,.hx-progress button.on{background:var(--brass-bright);transform:scaleY(1.8)}
+/* annuities carousel: shorter cards, slightly tighter stage */
+#annuities.hx-on .hx-wheel{height:clamp(360px,50vh,520px)}
+#annuities.hx-on .hx-wheel>.hx-3dcard{width:min(470px,86vw)}
 
 /* ---- phone/tablet coverage carousel (JS adds .hx-car/.hx-carousel; no GSAP) ---- */
 #coverage.hx-car .hx-progress{display:flex}
@@ -3081,9 +3109,9 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
 })();
 </script>
 <script type="module" src="liquid-glass.js"></script>
-<!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency -->
+<!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
+     ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
 <script defer src="vendor/gsap.min.js"></script>
-<script defer src="vendor/ScrollTrigger.min.js"></script>
 <script defer src="js/hx-wheel.js"></script>
 </body>
 </html>

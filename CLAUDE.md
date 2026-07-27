@@ -158,8 +158,30 @@ shouldn't be complicated."* survives as the `#about` h2 (`index.html`) and in th
 meta description. `docs/premium-audit.md` proposes **"You'll be talking to me. Connor."**
 
 The premium-upgrade layer (docs/premium-upgrade-spec.md) is implemented: hx-hero-card
-glass, the GSAP 3D product wheel (self-hosted vendor/gsap — desktop fine-pointer only,
-guards return the plain grid everywhere else; anchor shim keeps the five card nav links
-working; js/hx-wheel.js), the #why grid, and the hx-cta-note micro-copy. Cascade rule
-learned the hard way: never rely on !important tie-breaking against GSAP inline styles —
-drive states with explicit classes (.hx-dim/.hx-front) and plain specificity.
+glass, the #why grid, the hx-cta-note micro-copy, and — since the user's "interactive 3d
+carousal" request — **two interactive 3D card carousels** (js/hx-wheel.js): coverage
+(7 cards) and annuities (4 cards). Key facts:
+- **No scroll pinning.** ScrollTrigger is no longer loaded at all; the earlier pin/scrub
+  wheel was replaced wholesale. Controls: drag (>6px threshold), arrow buttons, dot
+  buttons, click-a-side-card-to-front, focusin rotates a tabbed card forward.
+- **Coverflow geometry, not a rotating ring**: each card is placed from its signed
+  circular offset (x=o·spread, z=−|o|·depth, rotY=−o·tilt). A true ring + backface
+  culling makes 3–4-card sets invisible at the sides; offsets work for any n.
+- **FLOW PROTECTION invariant:** the front card's links/buttons fire untouched. Clicks
+  are intercepted only when (a) the pointer actually dragged, or (b) the click hit a
+  non-front card (which rotates it forward instead). Nav links into card ids
+  (#mortgage, #ltc, …) are owned by the carousel: scrollIntoView(section) + rotate.
+- **Every control computes from the logical target (`current`), never `Math.round(pos)`
+  mid-tween** — that race lands off-by-one. `hxRings.<name>.target()` is the logical
+  index; `idx()` is what the lagging render currently shows.
+- The ann compliance note + CTAs live OUTSIDE .ann-grid, so they stay static below the
+  carousel — never rotated, never hidden.
+- Phones/tablets/reduced-motion keep the flat snap carousel (coverage) / plain grid
+  (annuities); `window.hxRings` is undefined there.
+- Under swiftshader, GSAP lag-smoothing makes snap tweens crawl (frames >500ms are
+  clamped to 33ms of progress) — tests must assert on `target()` or wait generously;
+  real GPUs never hit this.
+Cascade rule learned the hard way: never rely on !important tie-breaking against GSAP
+inline styles — drive states with explicit classes (.hx-dim/.hx-front) and plain
+specificity, and never put a CSS opacity transition on elements whose opacity GSAP
+sets per-frame (it smears drags).
