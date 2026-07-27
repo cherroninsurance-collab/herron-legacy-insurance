@@ -1129,6 +1129,9 @@ html{overflow-x:clip}
     radial-gradient(120% 110% at 85% 12%, rgba(28,190,214,.30), transparent 55%),
     linear-gradient(160deg,#182B52 0%,#0C1B38 100%)}
   .ai-band .chat-shell{background:rgba(8,18,38,.55)}
+  /* floating concierge panel: desktop gets frosted slate from real backdrop blur —
+     phones get the same look statically instead of a flat navy box */
+  #fabPanel .chat-shell{background:linear-gradient(180deg,#4A5870 0%,#38445A 100%)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
   .cov-scrim{background:rgba(3,8,20,.86)}
   /* big blur radii are paint-bound: keep the colour wash, drop the blur —
