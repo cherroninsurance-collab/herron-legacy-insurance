@@ -130,10 +130,24 @@ Measured 482ms → 84ms per frame on a throttled phone profile.
 ## Where things stand
 Everything is on branch `claude/viral-social-content-creation-af6vpq` / PR #6, reviewed on
 the Deploy Preview. **Nothing is on production** — merging is gated on an explicit
-**"ship it"**. Known outstanding item: `images/og.png` (the social share card) still claims
-**"Licensed in 13 states"** — it should say 12, and it carries the retired tagline.
-Numbered homepage screenshots (01 hero … 15 mobile) are the agreed way the user points at
-sections.
+**"ship it"**. Numbered homepage screenshots (01 hero … 15 mobile) are the agreed way the
+user points at sections.
+
+**The "13 states" claim is now gone everywhere** (it was the last known outstanding item).
+`images/og.png` is rebuilt in the brand system with real Sora/Inter, the canonical heron,
+the current voice, 12 states, and the NPN — regenerate with the script pattern in the
+audit commit; Sora/Inter TTFs are fetchable from Google Fonts through the **tool** proxy
+even though the browser sandbox blocks them. The serious one was
+`netlify/functions/legacy-ai.js`: the concierge's system prompt said 13 states and listed
+**Georgia**, which Connor is not licensed in — so the live concierge was making a false
+licensing representation. Corrected to the canonical 12 with an explicit instruction never
+to imply any other state. `social/link-in-bio.html` and `social/content-kit.html` were
+corrected too. **If the state list ever changes, it lives in four places:** the
+`index.html` chips, the footer legal block, the concierge prompt, and the social kit.
+
+Still open, deliberately not changed without sign-off: the retired tagline *"Life insurance
+shouldn't be complicated."* survives as the `#about` h2 (`index.html`) and in the homepage
+meta description. `docs/premium-audit.md` proposes **"You'll be talking to me. Connor."**
 
 The premium-upgrade layer (docs/premium-upgrade-spec.md) is implemented: hx-hero-card
 glass, the GSAP 3D product wheel (self-hosted vendor/gsap — desktop fine-pointer only,
