@@ -155,10 +155,13 @@ fitcheck, blueprint, quotes) were never touched.
   `java_script_enabled=False` — the page must render nav, headline, CTAs and disclosures.
 
 ## Where things stand
-Everything is on branch `claude/viral-social-content-creation-af6vpq` / PR #6, reviewed on
-the Deploy Preview. **Nothing is on production** — merging is gated on an explicit
-**"ship it"**. Numbered homepage screenshots (01 hero … 15 mobile) are the agreed way the
-user points at sections.
+**SHIPPED 2026-07-27**: the user said "double check everything works on desktop and mobile
+then ship it"; a 26-point suite passed (carousels drag/arrows/dots/side-click/CTA on both
+devices, touch scroll preserved, reveals, compliance strings, forms byte-intact, overflow
+320–1920, no-JS disclosures, zero console errors) and PR #6 was merged to `main` →
+production (herronlegacyinsurance.com). Any future work: new changes still go through a
+branch + preview first; production only moves on an explicit "ship it". Numbered homepage
+screenshots (01 hero … 15 mobile) are the agreed way the user points at sections.
 
 **The "13 states" claim is now gone everywhere** (it was the last known outstanding item).
 `images/og.png` is rebuilt in the brand system with real Sora/Inter, the canonical heron,
