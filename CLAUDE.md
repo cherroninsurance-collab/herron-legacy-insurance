@@ -98,6 +98,22 @@ a third live renderer); and a `@media (pointer:coarse)` block drops `backdrop-fi
 (45 declarations, up to blur(34px)) using the existing `@supports not` fallback colours.
 Measured 482ms → 84ms per frame on a throttled phone profile.
 
+**Phone brightness** (user: "very dark on my phone"): those coarse fallbacks originally
+went near-opaque dark navy, several stops darker than the desktop glass — they've been
+lifted (hero card `rgba(22,42,80,.46)→.30` gradient, tool panes `#16294E→#0C1B38`, stat
+chips 9% white, glows opacity .5) and the hero scene runs `aces(col*1.32)` on its reduced
+path vs 1.10 on desktop. If a phone surface looks like a black pit, check this block first.
+
+## The executive backdrop (dark bands)
+The blue `.hero-grid-lines` overlay and the purple/indigo/cyan `.lg-blob` wash are
+**deleted** from `.iul-band`/`.ann-band`/`.ai-band` (user: "instead of the dark blue grid
+… something more professional but sleek"; approved via before/after boards). The three
+bands share one layered background: warm key light `radial(… 22% -6%, rgba(226,180,92,.14))`
+behind the headings, cool counter-light right, deep floor, `linear(180deg,#10213F→#0A1730→
+#080F22)` base, and an inset brass hairline on the top edge. Blobs elsewhere (tools,
+fitcheck, blueprint, quotes) are untouched. Band glows are dimmed to .4 in those three
+bands only.
+
 ## Hard-won gotchas
 - **Screenshots lie about advanced CSS/WebGL.** Headless Chromium uses swiftshader, which
   differs on `backdrop-filter` and stacked `drop-shadow`s. **Trust the user's real-GPU

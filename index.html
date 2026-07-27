@@ -138,7 +138,6 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 
 /* ---------- HERO ---------- */
 .hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
-.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:92px 24px 100px;max-width:1160px;margin:0 auto;position:relative;z-index:1}
 .hero .pill{
   display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,151,59,.45);border-radius:999px;
@@ -327,7 +326,16 @@ section{padding:96px 0}
 @media(max-width:760px){.cover-grid{grid-template-columns:1fr}}
 
 /* ---------- IUL STRATEGY (expandable embed) ---------- */
-.iul-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 82%);color:var(--white);position:relative;overflow:hidden}
+/* Executive backdrop, shared by the three dark bands: warm key light behind the
+   headings, cool counter-light right, deep floor, brass hairline on the top edge.
+   Replaced the blue grid overlay + purple/indigo/cyan blob wash (deleted). */
+.iul-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
+  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
+  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
+  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
+  color:var(--white);position:relative;overflow:hidden}
 .iul-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;position:relative;z-index:1}
 @media(max-width:880px){.iul-grid{grid-template-columns:1fr;gap:34px}}
 .iul-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
@@ -364,8 +372,13 @@ section{padding:96px 0}
 .iul-frame-bar .close:hover{color:#fff;border-color:rgba(255,255,255,.4)}
 
 /* ---------- AI CONCIERGE SECTION ---------- */
-.ai-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden}
-.ai-band .hero-grid-lines{opacity:.7}
+.ai-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
+  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
+  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
+  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
+  color:var(--white);position:relative;overflow:hidden}
 .ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
 .ai-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
 .ai-copy p{color:rgba(255,255,255,.75);margin-top:16px;font-size:17px}
@@ -712,7 +725,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
   box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
 .ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
 @media(max-width:720px){
-  .hx-arrow{width:42px;height:42px}
+  .hx-arrow{width:42px;height:42px;top:42%}
   .hx-arrow.prev{left:8px}
   .hx-arrow.next{right:8px}
   .hx-arrow svg{width:17px;height:17px}
@@ -805,6 +818,9 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 /* ===== liquid glass pass — dark bands only; light sections stay crisp ===== */
 /* ambient glow shapes (pre-blurred radial gradients — zero GPU cost) */
 .glow{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+/* the executive backdrop provides its own light on the dark bands — the free-floating
+   glows there step back to an accent rather than a wash */
+.iul-band .glow,.ann-band .glow,.ai-band .glow{opacity:.4}
 .glow-brass{width:540px;height:540px;background:radial-gradient(circle,rgba(226,180,92,.15),transparent 62%)}
 .glow-blue{width:660px;height:660px;background:radial-gradient(circle,rgba(91,141,239,.16),transparent 62%)}
 .glow-soft{width:440px;height:440px;background:radial-gradient(circle,rgba(244,246,250,.06),transparent 60%)}
@@ -1224,7 +1240,6 @@ html{overflow-x:clip}
   <canvas id="heroGl" class="hero-gl" aria-hidden="true"></canvas>
   <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-veil" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-sparks" aria-hidden="true">
@@ -1391,7 +1406,6 @@ html{overflow-x:clip}
 <section class="iul-band" id="iul-strategy">
   <div class="glow glow-brass" style="top:80px;right:-200px" aria-hidden="true"></div>
   <div class="glow glow-soft" style="bottom:-140px;left:-140px" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="iul-grid">
       <div class="iul-copy reveal">
@@ -1572,7 +1586,13 @@ html{overflow-x:clip}
 <!-- ============ ANNUITIES — EVERY KIND ============ -->
 <section class="ann-band" id="annuities">
 <style>
-.ann-band{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden;padding:96px 0}
+.ann-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
+  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
+  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
+  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
+  color:var(--white);position:relative;overflow:hidden;padding:96px 0}
 .ann-band .wrap{position:relative;z-index:1}
 .ann-head{max-width:760px;margin-bottom:44px}
 .ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--white)}
@@ -1593,11 +1613,7 @@ html{overflow-x:clip}
 .ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
 .ann-note{margin-top:26px;font-size:12.5px;color:rgba(255,255,255,.45);max-width:96ch;line-height:1.65}
 </style>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="glow glow-brass" style="top:-160px;right:-180px" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-purple" style="top:-140px;left:-140px" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-indigo" style="bottom:-200px;right:-120px" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-cyan" style="top:36%;left:40%" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ann-head reveal">
       <span class="eyebrow">Protected growth &amp; income</span>
@@ -1726,10 +1742,6 @@ html{overflow-x:clip}
   <div class="glow glow-blue" style="top:-180px;left:-220px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-200px;right:-160px" aria-hidden="true"></div>
   <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
-  <div class="lg-blob lg-blob-purple" style="top:-120px;right:6%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-indigo" style="bottom:-160px;left:24%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-cyan" style="top:22%;right:-140px" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ai-grid">
       <div class="ai-copy reveal">
@@ -1920,7 +1932,6 @@ html{overflow-x:clip}
 
 <!-- ============ BOOKING ============ -->
 <section class="booking" id="booking">
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="glow glow-blue" style="top:-200px;right:-200px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-180px;left:-140px" aria-hidden="true"></div>
   <div class="wrap">
