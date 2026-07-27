@@ -648,7 +648,9 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 @media (pointer:coarse){
   .hx-hero-card{
     -webkit-backdrop-filter:none;backdrop-filter:none;
-    background:linear-gradient(180deg,rgba(8,18,38,.62),rgba(8,18,38,.40));
+    /* lighter + more transparent than the old near-solid navy: phones lose the
+       blur, they should not also lose the light behind the card */
+    background:linear-gradient(180deg,rgba(22,42,80,.46),rgba(13,27,54,.30));
   }
   .hx-hero-card::after{animation:none;display:none}
 }
@@ -709,6 +711,12 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .ann-band .hx-arrow{background:rgba(14,31,62,.88);border-color:rgba(201,151,59,.4);color:#F6E0AC;
   box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
 .ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
+@media(max-width:720px){
+  .hx-arrow{width:42px;height:42px}
+  .hx-arrow.prev{left:8px}
+  .hx-arrow.next{right:8px}
+  .hx-arrow svg{width:17px;height:17px}
+}
 /* dots — real buttons, clickable, with a generous hit area */
 .hx-progress{display:none;gap:8px;justify-content:center;margin-top:26px}
 .hx-on .hx-progress,#coverage.hx-car .hx-progress{display:flex}
@@ -1089,16 +1097,19 @@ html{overflow-x:clip}
   .nav-sheet{background:rgba(8,18,38,.985)}
   .mobilebar{background:rgba(8,18,38,.96)}
   .chat-shell{background:var(--navy-deep)}
-  .hstat,.book-point{background:rgba(255,255,255,.05)}
-  .crest .chiplet{background:rgba(8,18,38,.88)}
+  /* phone fallbacks were reading several stops darker than the desktop glass —
+     lift every dark surface a step and let more light through */
+  .hstat,.book-point{background:rgba(255,255,255,.09)}
+  .crest .chiplet{background:rgba(16,32,62,.82)}
   .cover-card.liquid-glass{background:var(--cloud)}
-  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,var(--navy) 0%,var(--navy-deep) 90%)}
-  .iul-preview.liquid-glass{background:rgba(8,18,38,.62)}
-  .lg-container{background:rgba(8,18,38,.9)}
+  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
+  .iul-preview.liquid-glass{background:rgba(20,38,74,.55)}
+  .lg-container{background:linear-gradient(160deg,#16294E 0%,#0C1B38 100%)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
   .cov-scrim{background:rgba(3,8,20,.86)}
-  /* big blur radii are paint-bound: keep the colour wash, drop the blur */
-  .glow,.lg-blob{filter:none!important;opacity:.34}
+  /* big blur radii are paint-bound: keep the colour wash, drop the blur —
+     but these ARE the ambient light on phones, so keep them bright */
+  .glow,.lg-blob{filter:none!important;opacity:.5}
   .lg-blob{animation:none!important}
   /* ornamental, always-running, and invisible at phone size */
   .hero-sparks,.sparks{display:none!important}
@@ -2871,7 +2882,9 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   ' float vig=1.-.62*length(uv*vec2(uRes.x/uRes.y,1.))*.42;col*=clamp(vig,0.,1.);',
   /* CINEMATIC GRADE — filmic tonemap, then split-tone (navy shadows / gold highlights),
      a gentle S-curve, and an ordered dither so the big sky gradients never band */
-  ' col=aces(col*1.10);',
+   /* phones run the reduced path (uLow=1) AND small OLED screens crush shadows —
+     give them a wider exposure so the scene doesn't read as a black page */
+  ' col=aces(col*mix(1.10,1.32,uLow));',
   ' float lum=dot(col,vec3(.2126,.7152,.0722));',
   ' col+=vec3(-.016,.002,.052)*(1.-lum);',
   ' col+=vec3(.050,.025,-.018)*lum;',

@@ -21,10 +21,12 @@
     c.style.setProperty('--my', (e.clientY - r.top) + 'px');
   }, { passive: true });
 
-  /* ---- phone/tablet: coverage cards become a flat snap carousel with dots ---- */
+  /* ---- fallback: coverage cards become a flat snap carousel with dots.
+     Only used when the 3D path can't run (no GSAP, or reduced motion —
+     where a native scroller respects the preference better than tweens). ---- */
   function initFlatCarousel() {
     var coarse = matchMedia('(pointer:coarse)').matches;
-    if (!(coarse || innerWidth < 1180)) return;            // plain grid elsewhere
+    if (!(coarse || innerWidth < 1180)) return;            // plain grid on desktop
     var grid = document.querySelector('.cover-grid');
     var cov = document.getElementById('coverage');
     if (!grid || !cov) return;
@@ -58,10 +60,15 @@
     }, true);
   }
 
+  /* The 3D carousels run on EVERY device — desktop, tablet, phone, any window
+     width, any zoom level. (The old fine-pointer + ≥1180px gate meant a zoomed
+     desktop browser silently got the flat phone version — "works on my machine"
+     in reverse.) Only two things fall back to the flat carousel / plain grid:
+     GSAP failing to load, and prefers-reduced-motion, where a native scroller
+     respects the preference better than tweens do. */
   var OK = window.gsap;
-  var fine = matchMedia('(pointer:fine)').matches;
   var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  if (!OK || !fine || calm || innerWidth < 1180) {         // grid/carousel path
+  if (!OK || calm) {
     initFlatCarousel();
     return;
   }
@@ -70,10 +77,8 @@
      Placement from the signed circular offset o = wrap(i − pos):
      x = o·spread, z = −|o|·DEPTH, rotY = clamp(−o·TILT). Works for any card
      count (a true rotating ring goes invisible at the sides for n=3–4 because
-     of backface culling) and never shows mirrored text. */
-  var SPREAD = 0.55;    // x-shift per offset step, in card widths
-  var TILT = 38;        // degrees per offset step
-  var DEPTH = 190;      // px pushed back per offset step
+     of backface culling) and never shows mirrored text.
+     Values are set responsively in measure(). */
   var VIS = 2.35;       // offsets beyond this are fully hidden
 
   function initRing(sectionId, gridSel, ariaLabel) {
@@ -134,10 +139,20 @@
     }
     mkArrow(-1); mkArrow(1);
 
-    var cardW = 520, pxPerStep = 286;
+    var cardW = 520, pxPerStep = 286, SPREAD = 0.55, TILT = 38, DEPTH = 190;
     function measure() {
+      /* tighter, shallower geometry on small screens; wider sweep on desktop */
+      var small = innerWidth < 720;
+      SPREAD = small ? 0.62 : 0.55;
+      TILT = small ? 30 : 38;
+      DEPTH = small ? 120 : 190;
       cardW = cards[0].offsetWidth || 520;
       pxPerStep = cardW * SPREAD;
+      /* stage height = tallest card + breathing room — measured, not guessed,
+         so phone-height cards never spill out of the stage */
+      var h = 0;
+      cards.forEach(function (c) { h = Math.max(h, c.offsetHeight); });
+      if (h) grid.style.height = (h + 30) + 'px';
     }
 
     /* `pos` is the continuous render position; `current` is the logical snap
@@ -205,27 +220,37 @@
       return r + d;
     }
 
-    /* ---- drag (mouse; this branch is fine-pointer only) ---- */
+    /* ---- drag: mouse AND touch. The stage is touch-action:pan-y, so vertical
+       page scrolling stays native; we claim a gesture only once it is clearly
+       horizontal, and reject it permanently once it is clearly vertical. ---- */
     var down = null, dragged = false;
     stage.addEventListener('pointerdown', function (e) {
-      if (e.button !== 0) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
       if (e.target.closest('.hx-arrow') || e.target.closest('.hx-progress')) return;
-      down = { x: e.clientX, id: e.pointerId, start: pos };
+      down = { x: e.clientX, y: e.clientY, id: e.pointerId, start: pos, claimed: false, rejected: false };
       dragged = false;
       if (snapTween) snapTween.kill();
     });
     addEventListener('pointermove', function (e) {
       if (!down || e.pointerId !== down.id) return;
-      var dx = e.clientX - down.x;
-      if (!dragged && Math.abs(dx) > 6) {
-        dragged = true;
-        document.documentElement.classList.add('hx-grabbing');
-        try { stage.setPointerCapture(down.id); } catch (_) { /* not fatal */ }
+      var dx = e.clientX - down.x, dy = e.clientY - down.y;
+      if (!down.claimed) {
+        if (down.rejected) return;
+        if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+          down.rejected = true;              // vertical intent → the page scroll owns it
+          return;
+        }
+        if (Math.abs(dx) > 7 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+          down.claimed = true;
+          dragged = true;
+          document.documentElement.classList.add('hx-grabbing');
+          try { stage.setPointerCapture(down.id); } catch (_) { /* not fatal */ }
+        }
       }
-      if (dragged) {
+      if (down.claimed) {
         pos = down.start - dx / pxPerStep;
         render();
-        e.preventDefault();
+        if (e.cancelable) e.preventDefault();
       }
     }, { passive: false });
     function endDrag(e) {
