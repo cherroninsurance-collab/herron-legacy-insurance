@@ -1120,6 +1120,15 @@ html{overflow-x:clip}
   .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
   .iul-preview.liquid-glass{background:rgba(20,38,74,.55)}
   .lg-container{background:linear-gradient(160deg,#16294E 0%,#0C1B38 100%)}
+  /* the concierge chat keeps its colourful glass look on phones: a static wash
+     standing in for the WebGL refraction (that renderer is off on touch). Without
+     this the chat box fell back to a flat navy "default" — the user caught it. */
+  .ai-band .lg-container{background:
+    radial-gradient(150% 120% at 12% 6%, rgba(96,32,168,.42), transparent 55%),
+    radial-gradient(140% 130% at 92% 90%, rgba(70,96,220,.40), transparent 58%),
+    radial-gradient(120% 110% at 85% 12%, rgba(28,190,214,.30), transparent 55%),
+    linear-gradient(160deg,#182B52 0%,#0C1B38 100%)}
+  .ai-band .chat-shell{background:rgba(8,18,38,.55)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
   .cov-scrim{background:rgba(3,8,20,.86)}
   /* big blur radii are paint-bound: keep the colour wash, drop the blur —
