@@ -1,0 +1,81 @@
+{
+  "note": "The teachings of Jesus, organized for discipleship. Each item: title, ref, what Jesus taught, and how to live it.",
+  "categories": [
+    {
+      "id": "sermon", "title": "The Sermon on the Mount", "glyph": "⛰️", "ref": "Matthew 5–7",
+      "intro": "Jesus' manifesto of kingdom life: not a ladder to climb but a portrait of hearts His grace transforms.",
+      "items": [
+        { "title": "The Beatitudes", "ref": "Matthew 5:3-12", "teaching": "The kingdom belongs to the poor in spirit, the mourners, the meek, the mercy-givers, the pure in heart, the peacemakers, the persecuted — the people the world overlooks are the people God blesses.", "live": "Stop performing strength. Bring your poverty of spirit to God today and receive the kingdom as a gift." },
+        { "title": "Salt and Light", "ref": "Matthew 5:13-16", "teaching": "Disciples preserve and illuminate the world around them; hidden faith is as useless as flavorless salt.", "live": "Do one good work today visibly enough that someone could glorify your Father because of it." },
+        { "title": "Fulfilling the Law", "ref": "Matthew 5:17-20", "teaching": "Jesus came not to abolish the Law and Prophets but to fulfill them — every promise lands on Him.", "live": "Read the Old Testament expecting to meet Jesus in it." },
+        { "title": "Anger, Lust, and the Heart", "ref": "Matthew 5:21-30", "teaching": "Murder begins with contempt; adultery begins with a look. God judges the heart, not just the hands.", "live": "Deal with sin at the root: name the anger or desire you've been feeding, and bring it into the light." },
+        { "title": "Love Your Enemies", "ref": "Matthew 5:43-48", "teaching": "Anyone can love friends; children of the Father love enemies and pray for persecutors, as He sends sun and rain on all.", "live": "Pray by name, today, for the person who has hurt you most." },
+        { "title": "Giving, Praying, Fasting in Secret", "ref": "Matthew 6:1-18", "teaching": "Practice righteousness for your Father's eyes, not your audience's applause — He sees in secret and rewards.", "live": "Do one act of generosity this week that no one but God will ever know about." },
+        { "title": "The Lord's Prayer", "ref": "Matthew 6:9-13", "teaching": "Pray simply: Father, hallowed name, kingdom come, daily bread, forgiven and forgiving, delivered from evil.", "live": "Pray it slowly every morning this week — one line at a time, in your own words." },
+        { "title": "Treasures and Anxiety", "ref": "Matthew 6:19-34", "teaching": "You cannot serve God and money. Look at the birds, consider the lilies — your Father knows what you need. Seek first the kingdom.", "live": "Name your biggest worry out loud to God, then do today's obedience and leave tomorrow to Him." },
+        { "title": "Judging and Asking", "ref": "Matthew 7:1-12", "teaching": "Take the log out of your own eye first. Ask, seek, knock — your Father gives good gifts. Do to others what you wish done to you.", "live": "Before correcting anyone this week, confess your own version of the same fault." },
+        { "title": "Two Gates, Two Trees, Two Builders", "ref": "Matthew 7:13-27", "teaching": "The narrow gate leads to life; trees are known by fruit; and only the one who HEARS these words and DOES them builds on rock.", "live": "Pick one command from this sermon and build it into your week — hearing without doing is sand." }
+      ]
+    },
+    {
+      "id": "parables", "title": "Parables of the Kingdom", "glyph": "🌱", "ref": "Matthew 13; Luke 10–18",
+      "intro": "Stories with a hook: ordinary seeds, coins, and sons that smuggle the kingdom past the defenses of the heart.",
+      "items": [
+        { "title": "The Sower", "ref": "Matthew 13:1-23", "teaching": "The same seed — the word of the kingdom — lands on path, rocks, thorns, and good soil. The difference is the heart that receives it.", "live": "Which soil are you right now? Ask God to pull the thorns of worry and wealth choking His word." },
+        { "title": "The Weeds Among Wheat", "ref": "Matthew 13:24-30", "teaching": "Good and evil grow together until the harvest; final sorting belongs to the Lord, not to us.", "live": "Release the judgment you've been carrying — be faithful wheat and trust the Harvester." },
+        { "title": "Mustard Seed and Leaven", "ref": "Matthew 13:31-33", "teaching": "The kingdom starts absurdly small and grows unstoppably large.", "live": "Do not despise small beginnings: one verse, one prayer, one person taught." },
+        { "title": "Hidden Treasure and the Pearl", "ref": "Matthew 13:44-46", "teaching": "The kingdom is worth everything — the finder sells all he has WITH JOY.", "live": "What are you holding back from God? Compare its worth to the treasure and choose joyfully." },
+        { "title": "The Good Samaritan", "ref": "Luke 10:25-37", "teaching": "'Who is my neighbor?' is the wrong question. Be the neighbor — cross the road, bear the cost, show mercy.", "live": "The interrupted plan, the inconvenient person: that is your Jericho road this week." },
+        { "title": "The Lost Sheep, Coin, and Son", "ref": "Luke 15", "teaching": "Heaven throws parties over found sinners. The father runs, embraces, and restores the prodigal — and pleads with the resentful older brother too.", "live": "Come home if you're far off. Join the feast if you've been sulking in the field." },
+        { "title": "The Unforgiving Servant", "ref": "Matthew 18:21-35", "teaching": "Forgiven a debt of millions, he choked a man over pennies. Received mercy must become released mercy.", "live": "Name the debt you're still collecting from someone — and cancel it before the sun sets." },
+        { "title": "Workers in the Vineyard", "ref": "Matthew 20:1-16", "teaching": "The master's generosity offends the math of merit: the last hired receive a full day's grace.", "live": "Stop comparing wages. Celebrate grace given to others as loudly as grace given to you." },
+        { "title": "The Rich Fool", "ref": "Luke 12:13-21", "teaching": "Bigger barns cannot store a soul. 'This night your soul is required of you' — be rich toward God.", "live": "Review your actual budget and calendar: are you laying up treasure only for yourself?" },
+        { "title": "The Great Banquet", "ref": "Luke 14:15-24", "teaching": "The invited made excuses — so the master filled his table from the streets and hedges. The feast WILL be full.", "live": "Who are the 'unlikely' people you could invite toward God's table this month?" },
+        { "title": "The Pharisee and the Tax Collector", "ref": "Luke 18:9-14", "teaching": "The religious résumé went home unjustified; the man who prayed 'God, be merciful to me, a sinner' went home righteous.", "live": "Trade your résumé prayer for the tax collector's seven words." },
+        { "title": "The Talents", "ref": "Matthew 25:14-30", "teaching": "The master entrusts his wealth and rewards faithful risk; fear that buries the gift insults the giver.", "live": "Name the gift you've buried — and put it to work for the kingdom this week." },
+        { "title": "The Sheep and the Goats", "ref": "Matthew 25:31-46", "teaching": "The King counts what was done for the hungry, thirsty, stranger, naked, sick, and prisoner as done for HIM.", "live": "Serve one 'least of these' this week, and know whose face you're actually serving." }
+      ]
+    },
+    {
+      "id": "iam", "title": "The Seven 'I AM' Statements", "glyph": "🔥", "ref": "The Gospel of John",
+      "intro": "Seven claims that echo the burning bush: Jesus does not merely bring bread, light, and life — He IS them.",
+      "items": [
+        { "title": "I am the Bread of Life", "ref": "John 6:35", "teaching": "Whoever comes to Me shall not hunger — He satisfies the appetite beneath every appetite.", "live": "Bring your restlessness to Jesus first today, before you feed it anything else." },
+        { "title": "I am the Light of the World", "ref": "John 8:12", "teaching": "Whoever follows Me will not walk in darkness but have the light of life.", "live": "Bring one hidden thing into His light — darkness loses power when it's named to Him." },
+        { "title": "I am the Door", "ref": "John 10:9", "teaching": "If anyone enters by Me, he will be saved — one door, wide open, into safety and pasture.", "live": "Stop trying to climb in some other way; enter through Christ alone." },
+        { "title": "I am the Good Shepherd", "ref": "John 10:11", "teaching": "The good shepherd lays down his life for the sheep — He knows His own by name.", "live": "Listen for the Shepherd's voice in His Word daily; refuse the stranger's voice of shame." },
+        { "title": "I am the Resurrection and the Life", "ref": "John 11:25", "teaching": "Spoken at a tomb: whoever believes in Me, though he die, yet shall he live.", "live": "Speak this verse over your deepest grief — He said it before He wept, and then He called Lazarus out." },
+        { "title": "I am the Way, the Truth, and the Life", "ref": "John 14:6", "teaching": "No one comes to the Father except through Me — the way is not a map but a Person.", "live": "Trade anxiety about the future for trust in the One who IS the way there." },
+        { "title": "I am the True Vine", "ref": "John 15:5", "teaching": "Abide in Me: apart from Me you can do nothing; in Me you bear much fruit.", "live": "Build one daily abiding habit — Word and prayer — and let fruit grow from connection, not straining." }
+      ]
+    },
+    {
+      "id": "signs", "title": "Miracles & Signs", "glyph": "✨", "ref": "The Four Gospels",
+      "intro": "Never magic tricks — each miracle is a signpost revealing who Jesus is and what His kingdom restores.",
+      "items": [
+        { "title": "Water into Wine", "ref": "John 2:1-11", "teaching": "The first sign: six stone jars of ceremony become overflowing joy. He saves the best for His hour.", "live": "Invite Jesus into the ordinary places (like a wedding kitchen) — He transforms from the inside." },
+        { "title": "Calming the Storm", "ref": "Mark 4:35-41", "teaching": "'Peace! Be still.' Wind and sea obey Him — and the disciples fear the Calmer more than the storm.", "live": "Say what the disciples learned: He is IN the boat. Name your storm to Him tonight." },
+        { "title": "Feeding the Five Thousand", "ref": "John 6:1-14", "teaching": "Five loaves, two fish, one boy's lunch — in His hands, enough for everyone with twelve baskets left.", "live": "Offer your 'not enough' to Jesus; He multiplies surrendered lunches, not hoarded feasts." },
+        { "title": "Walking on Water", "ref": "Matthew 14:22-33", "teaching": "In the fourth watch of the night He comes. Peter sinks when he watches the wind instead of the Word.", "live": "Keep your eyes on Jesus, not the weather. When you sink, His hand is already reaching." },
+        { "title": "Healing the Paralytic", "ref": "Mark 2:1-12", "teaching": "'Son, your sins are forgiven' came BEFORE 'rise and walk' — the deeper paralysis is dealt with first.", "live": "Carry a friend to Jesus like the four rooftop-diggers: pray them into His presence." },
+        { "title": "Blind Bartimaeus", "ref": "Mark 10:46-52", "teaching": "The crowd hushed him; he shouted louder: 'Son of David, have mercy on me!' Jesus stopped for one beggar.", "live": "Ignore the voices that say your need embarrasses God. Shout anyway — He stops." },
+        { "title": "Raising Lazarus", "ref": "John 11:1-44", "teaching": "He wept at the tomb He was about to empty. 'Lazarus, come out' — and death obeyed.", "live": "Jesus feels your grief AND holds authority over its cause. Trust both His tears and His power." },
+        { "title": "The Resurrection", "ref": "Luke 24; John 20", "teaching": "The sign of all signs: the tomb is empty, the grave clothes folded, and He ate fish with them. Because He lives, everything He said is true.", "live": "Live this week as if death is defeated — because it is." }
+      ]
+    },
+    {
+      "id": "commands", "title": "The Great Commands & Final Words", "glyph": "❤️",
+      "ref": "The Gospels & Acts 1",
+      "intro": "What Jesus said matters most — the commands He called greatest and the words He chose for last.",
+      "items": [
+        { "title": "You Must Be Born Again", "ref": "John 3:1-21", "teaching": "Religion is not enough — even for Nicodemus. New birth by the Spirit, through believing the lifted-up Son.", "live": "Have you been born again — not improved, but made new? Ask Him tonight." },
+        { "title": "The Greatest Commandment", "ref": "Matthew 22:36-40", "teaching": "Love the Lord your God with all your heart, soul, and mind; love your neighbor as yourself. Everything hangs on these.", "live": "Audit your day against two loves — not a hundred rules." },
+        { "title": "Take Up Your Cross", "ref": "Luke 9:23-25", "teaching": "Deny yourself daily, take up your cross, and follow. Whoever loses his life for My sake will save it.", "live": "Identify today's cross — the costly obedience you've been avoiding — and pick it up." },
+        { "title": "A New Commandment", "ref": "John 13:34-35", "teaching": "Love one another AS I HAVE LOVED YOU — by this all people will know you are My disciples.", "live": "Wash a foot this week: do the low, unglamorous act of love no one wants to do." },
+        { "title": "The Promise of the Helper", "ref": "John 14:15-27; 16:7-15", "teaching": "It is to your advantage that I go: the Spirit of truth will dwell IN you, teach you, and glorify Christ.", "live": "Stop living like an orphan. Ask the Helper for help — that's His name." },
+        { "title": "The High Priestly Prayer", "ref": "John 17", "teaching": "Hours before the cross, Jesus prayed for YOU: for all who would believe through the apostles' word — that they may be one.", "live": "You are inside this prayer. Pursue unity with another believer as Jesus' answered request." },
+        { "title": "The Great Commission", "ref": "Matthew 28:18-20; Acts 1:8", "teaching": "All authority is Mine — therefore GO, make disciples of all nations, baptizing and teaching, and I am with you always.", "live": "Write down the names of your Jerusalem, your Judea, and your ends-of-the-earth. Start with the first name today." }
+      ]
+    }
+  ]
+}

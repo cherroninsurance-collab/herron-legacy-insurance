@@ -405,6 +405,85 @@ body {
   border: 1px solid rgba(46,72,140,.18); border-radius: 10px; padding: 10px;
   font: 14px var(--font-ui); }
 
+/* ------------------------------------------------------- 3D carousels */
+.carousel-stage {
+  height: 240px; margin: 6px 0 4px;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  cursor: grab;
+}
+.carousel-stage:active { cursor: grabbing; }
+.car3d { perspective: 1400px; perspective-origin: 50% 42%; position: relative; overflow: hidden; }
+.car3d-ring {
+  position: absolute; left: 50%; top: 50%; width: 0; height: 0;
+  transform-style: preserve-3d; will-change: transform;
+}
+.car3d-card {
+  position: absolute; top: -105px; margin-left: -74px; height: 210px;
+  transform-style: preserve-3d;
+  transition: filter 320ms var(--ease-settle), opacity 320ms var(--ease-settle);
+  filter: brightness(.82) saturate(.85);
+  opacity: .9;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.car3d-card.front { filter: none; opacity: 1; }
+.car3d-card.front .book-cover {
+  box-shadow: 0 22px 50px rgba(46,72,140,.28), 0 0 46px rgba(255,207,107,.55),
+              inset 0 1px 0 rgba(255,255,255,.85);
+}
+
+/* book cover cards: gradient spine + gilded edge, tinted by testament */
+.book-cover {
+  width: 100%; height: 100%; border-radius: 10px 16px 16px 10px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; padding: 14px 10px; text-align: center;
+  background: linear-gradient(118deg, #35498a 0%, #1e2c5c 58%, #17224a 100%);
+  border: 1px solid rgba(255,217,119,.75);
+  border-left-width: 5px;
+  box-shadow: 0 14px 34px rgba(46,72,140,.22), inset 0 1px 0 rgba(255,255,255,.35);
+  position: relative;
+}
+.book-cover::after {                   /* gilded page edge */
+  content: ''; position: absolute; right: 3px; top: 6%; bottom: 6%; width: 4px;
+  background: linear-gradient(180deg, #fffdf4, var(--gate-gold-bright));
+  border-radius: 2px;
+}
+.book-cover.ot { background: linear-gradient(118deg, #7c5218 0%, #543509 58%, #3f2a06 100%); }
+.book-cover.nt { background: linear-gradient(118deg, #35498a 0%, #1e2c5c 58%, #17224a 100%); }
+.teach-cover { background: linear-gradient(118deg, #7a1f2b 0%, #521018 58%, #3d0a10 100%); }
+.book-glyph { font-size: 34px; filter: drop-shadow(0 0 10px rgba(255,217,119,.7)); }
+.book-name {
+  font: 700 16px/1.2 var(--font-scripture); color: #fffdf4;
+  letter-spacing: .04em; text-shadow: 0 1px 6px rgba(0,0,0,.4);
+  text-wrap: balance;
+}
+.book-testament {
+  font: 600 9.5px var(--font-ui); letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gate-gold-bright);
+}
+.books-focus { text-align: center; margin: 4px 0 12px; }
+.books-focus h3 { margin: 0; font-size: 22px; color: var(--gold-deep); font-family: var(--font-scripture); }
+.books-actions { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+
+/* reader page-turn buttons */
+.turn-btn {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 6;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg-raised);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  box-shadow: var(--depth-near), var(--glass-highlight);
+  color: var(--gold-deep); font: 700 26px/1 var(--font-scripture);
+  cursor: pointer; padding-bottom: 4px;
+  transition: transform 180ms var(--ease-settle), box-shadow 180ms;
+}
+.turn-btn:active { transform: translateY(-50%) scale(.92); box-shadow: var(--depth-pressed); }
+.turn-btn.prev { left: 10px; }
+.turn-btn.next { right: 10px; }
+
+.teach-item.open h3 { color: var(--gold-deep); }
+.teach-item .teach-body { margin-top: 10px; }
+
 .lesson-step { padding: 14px 16px; margin-bottom: 10px; }
 .lesson-step .kind { font: 700 11px var(--font-ui); letter-spacing: .16em;
   text-transform: uppercase; color: var(--gold-deep); display: block; margin-bottom: 5px; }
@@ -451,6 +530,7 @@ body {
   <section class="screen" id="screen-read">
     <header class="topbar"><h1>The Word</h1></header>
     <nav class="reader-nav">
+      <button class="btn" id="btn-books" title="Browse all 66 books">📚</button>
       <select id="sel-book" aria-label="Book"></select>
       <select id="sel-chapter" aria-label="Chapter"></select>
     </nav>
@@ -460,6 +540,34 @@ body {
         <div class="face front"></div>
         <div class="face back"></div>
       </div>
+      <button class="turn-btn prev" id="turn-prev" aria-label="Previous page">‹</button>
+      <button class="turn-btn next" id="turn-next" aria-label="Next page">›</button>
+    </div>
+  </section>
+
+  <!-- ====================== THE 66 BOOKS (3D) ======================= -->
+  <section class="screen" id="screen-books">
+    <header class="topbar">
+      <button class="back-link" data-back="home">‹ Home</button>
+      <h1>The 66 Books</h1>
+    </header>
+    <div class="screen-body">
+      <p class="game-sub" style="text-align:center">Spin the shelf · tap a book for its main lessons</p>
+      <div id="books-carousel" class="carousel-stage"></div>
+      <div id="books-focus" class="books-focus"></div>
+      <div id="books-detail"></div>
+    </div>
+  </section>
+
+  <!-- =================== THE TEACHINGS OF JESUS ===================== -->
+  <section class="screen" id="screen-jesus">
+    <header class="topbar">
+      <button class="back-link" data-back="home">‹ Home</button>
+      <h1>The Teachings of Jesus</h1>
+    </header>
+    <div class="screen-body">
+      <div id="jesus-carousel" class="carousel-stage"></div>
+      <div id="jesus-list"></div>
     </div>
   </section>
 
@@ -479,6 +587,8 @@ body {
   <nav class="tabbar glass">
     <button data-screen="home"><span class="glyph">✦</span>Home</button>
     <button data-screen="read"><span class="glyph">📖</span>Read</button>
+    <button data-screen="books"><span class="glyph">📚</span>Books</button>
+    <button data-screen="jesus"><span class="glyph">✝️</span>Jesus</button>
     <button data-screen="learn"><span class="glyph">🕯️</span>Learn</button>
     <button data-screen="study"><span class="glyph">🌌</span>Study</button>
   </nav>
@@ -488,7 +598,7 @@ body {
 
 <script>
 window.__LIVING_WORD_SINGLE_FILE = true;
-const __DATA = {"data/seed-verses.json":{"translation":{"id":"KJV","name":"King James Version (development seed)","language":"en","copyright":"Public domain in the United States. DEVELOPMENT SEED ONLY — install the licensed ESV bundle via tools/import-esv.mjs for deployment. The ESV® Bible is copyright © 2001 by Crossway and requires a license for app distribution.","licensed":0},"verses":[{"b":1,"c":1,"v":1,"t":"In the beginning God created the heaven and the earth."},{"b":1,"c":1,"v":2,"t":"And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters."},{"b":1,"c":1,"v":3,"t":"And God said, Let there be light: and there was light."},{"b":1,"c":1,"v":4,"t":"And God saw the light, that it was good: and God divided the light from the darkness."},{"b":1,"c":1,"v":5,"t":"And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day."},{"b":19,"c":23,"v":1,"t":"The LORD is my shepherd; I shall not want."},{"b":19,"c":23,"v":2,"t":"He maketh me to lie down in green pastures: he leadeth me beside the still waters."},{"b":19,"c":23,"v":3,"t":"He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake."},{"b":19,"c":23,"v":4,"t":"Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me."},{"b":19,"c":23,"v":5,"t":"Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over."},{"b":19,"c":23,"v":6,"t":"Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever."},{"b":19,"c":119,"v":105,"t":"Thy word is a lamp unto my feet, and a light unto my path."},{"b":23,"c":40,"v":8,"t":"The grass withereth, the flower fadeth: but the word of our God shall stand for ever."},{"b":23,"c":53,"v":5,"t":"But he was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him; and with his stripes we are healed."},{"b":23,"c":53,"v":6,"t":"All we like sheep have gone astray; we have turned every one to his own way; and the LORD hath laid on him the iniquity of us all."},{"b":40,"c":28,"v":18,"t":"And Jesus came and spake unto them, saying, All power is given unto me in heaven and in earth."},{"b":40,"c":28,"v":19,"t":"Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost:"},{"b":40,"c":28,"v":20,"t":"Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen."},{"b":42,"c":15,"v":4,"t":"What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?"},{"b":42,"c":15,"v":5,"t":"And when he hath found it, he layeth it on his shoulders, rejoicing."},{"b":42,"c":15,"v":6,"t":"And when he cometh home, he calleth together his friends and neighbours, saying unto them, Rejoice with me; for I have found my sheep which was lost."},{"b":42,"c":15,"v":7,"t":"I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance."},{"b":42,"c":24,"v":27,"t":"And beginning at Moses and all the prophets, he expounded unto them in all the scriptures the things concerning himself."},{"b":43,"c":1,"v":1,"t":"In the beginning was the Word, and the Word was with God, and the Word was God."},{"b":43,"c":1,"v":2,"t":"The same was in the beginning with God."},{"b":43,"c":1,"v":3,"t":"All things were made by him; and without him was not any thing made that was made."},{"b":43,"c":1,"v":4,"t":"In him was life; and the life was the light of men."},{"b":43,"c":1,"v":5,"t":"And the light shineth in darkness; and the darkness comprehended it not."},{"b":43,"c":1,"v":14,"t":"And the Word was made flesh, and dwelt among us, (and we beheld his glory, the glory as of the only begotten of the Father,) full of grace and truth."},{"b":43,"c":3,"v":16,"t":"For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."},{"b":43,"c":3,"v":17,"t":"For God sent not his Son into the world to condemn the world; but that the world through him might be saved."},{"b":43,"c":14,"v":6,"t":"Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me."},{"b":45,"c":3,"v":23,"t":"For all have sinned, and come short of the glory of God;"},{"b":45,"c":5,"v":8,"t":"But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us."},{"b":45,"c":6,"v":23,"t":"For the wages of sin is death; but the gift of God is eternal life through Jesus Christ our Lord."},{"b":45,"c":10,"v":9,"t":"That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved."},{"b":55,"c":2,"v":2,"t":"And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also."},{"b":62,"c":1,"v":5,"t":"This then is the message which we have heard of him, and declare unto you, that God is light, and in him is no darkness at all."}],"crossReferences":[{"from":[43,1,1],"to":[1,1,1],"theme":"word"},{"from":[43,1,4],"to":[62,1,5],"theme":"light"},{"from":[1,1,3],"to":[43,1,5],"theme":"light"},{"from":[23,53,6],"to":[42,15,4],"theme":"lamb"},{"from":[23,53,5],"to":[45,5,8],"theme":"lamb"},{"from":[19,23,1],"to":[42,15,4],"theme":"shepherd"},{"from":[43,14,6],"to":[45,10,9],"theme":"salvation"},{"from":[45,3,23],"to":[45,6,23],"theme":"salvation"},{"from":[45,6,23],"to":[43,3,16],"theme":"salvation"},{"from":[19,119,105],"to":[23,40,8],"theme":"word"},{"from":[40,28,19],"to":[55,2,2],"theme":"mission"},{"from":[42,24,27],"to":[23,53,5],"theme":"christ-in-ot"}]},"data/curriculum.json":{"trackA":{"name":"Lambs — Early Readers to 12","units":[{"unit":1,"title":"God Makes","lessons":[{"id":"A1-01","title":"God Said: Let There Be Light","passage_ref":"Genesis 1:1-5","ref":{"b":1,"c":1,"vs":1,"ve":5},"big_truth":"God made everything by His word, and everything He made was good.","christ_connection":"The same Word that said 'Let there be light' became a person — Jesus (John 1:1-5). Jesus is the light that darkness can never put out.","obedience_step":"Tonight when you see a light turn on, say thank You to God who made light.","multiply_step":"Tell one person in your family the story of the first day, in your own words.","memory_verse":{"ref":"Genesis 1:1","b":1,"c":1,"vs":1,"ve":1},"steps":[{"kind":"hear","body":"Before anything existed — before the sun, before the sea, before you — God was there. And God spoke. He didn't need tools or helpers. He just said, 'Let there be light,' and light came running."},{"kind":"see","body":"Look at the beam of light on your screen. Real light is faster and brighter than anything — and God made it with only His voice."},{"kind":"play","body":"Build the memory verse, one glowing word at a time.","game_id":"verse-builder"},{"kind":"say","body":"Say the memory verse out loud three times, a little quieter each time, until it is a whisper you can keep."},{"kind":"live","body":"God's word is powerful. When God says something, it happens. You can trust everything He says."}]},{"id":"A1-02","title":"The Shepherd Who Looks for the Lost","passage_ref":"Luke 15:4-7","ref":{"b":42,"c":15,"vs":4,"ve":7},"big_truth":"God is like a shepherd who never gives up looking for His lost sheep.","christ_connection":"Jesus told this story about Himself. He is the Good Shepherd who left heaven to find us and carry us home (John 10:11).","obedience_step":"Pray for one friend who doesn't know Jesus yet — the Shepherd is looking for them.","multiply_step":"Act out the lost-sheep story with a stuffed animal for someone younger than you.","memory_verse":{"ref":"Psalm 23:1","b":19,"c":23,"vs":1,"ve":1},"steps":[{"kind":"hear","body":"A shepherd counted his sheep: ...97, 98, 99 — one was missing! Did he say 'ninety-nine is plenty'? Never. He walked into the dark hills, calling and searching, until the lost one was found and safe on his shoulders."},{"kind":"play","body":"Lead the lamb along the Shepherd's Path.","game_id":"shepherd-path"},{"kind":"say","body":"Memory verse: 'The LORD is my shepherd; I shall not want.'"},{"kind":"live","body":"When you feel lost or afraid, remember: the Shepherd knows your name and He is already looking for you."}]},{"id":"A1-03","title":"One Big Story","passage_ref":"Luke 24:27","ref":{"b":42,"c":24,"vs":27,"ve":27},"big_truth":"The whole Bible — from the very first page — is one story that leads to Jesus.","christ_connection":"Creation, the promise, the kings, the prophets — every part of the story points ahead to Jesus, the Rescuer God promised.","obedience_step":"Ask a grown-up to show you their favorite Bible story and find where it sits on the timeline.","multiply_step":"Teach the order of the big story (Creation → Promise → Jesus → Church) to a friend using your fingers.","memory_verse":{"ref":"Psalm 119:105","b":19,"c":119,"vs":105,"ve":105},"steps":[{"kind":"hear","body":"The Bible is not a box of little stories. It is one river, flowing from the garden all the way to Jesus and then out to the whole world."},{"kind":"play","body":"Place the great events on the river of light, in order.","game_id":"great-timeline"},{"kind":"say","body":"Memory verse: 'Thy word is a lamp unto my feet, and a light unto my path.'"},{"kind":"live","body":"Every time you read the Bible, ask the treasure question: where is Jesus in this story?"}]},{"id":"A1-04","title":"The Greatest Gift","passage_ref":"John 3:16-17","ref":{"b":43,"c":3,"vs":16,"ve":17},"big_truth":"God loved the world so much that He gave His only Son, so that everyone who believes in Him has life forever.","christ_connection":"This IS the gospel: Jesus died for our sins and rose again. Believing in Him is not earning a prize — it is receiving a gift.","obedience_step":"Talk to God in your own words: thank Him for giving Jesus, and tell Him you want to follow Him.","multiply_step":"John 3:16 is good news for every person on earth. Who will you share it with this week? Say their name out loud.","memory_verse":{"ref":"John 3:16","b":43,"c":3,"vs":16,"ve":16},"steps":[{"kind":"hear","body":"A gift is not a gift if you have to pay for it. God gave the most precious gift there ever was — His own Son — so that we could come home to Him."},{"kind":"play","body":"Build John 3:16 — the verse missionaries have carried to every nation.","game_id":"verse-builder"},{"kind":"say","body":"Say John 3:16 and put your own name in it: 'For God so loved ______...'"},{"kind":"live","body":"You never have to make God love you. He already did the loving first (Romans 5:8)."}]}]}]},"trackB":{"name":"Disciples — 13 to Adult","courses":[{"course":1,"title":"The Gospel of the Kingdom","studies":[{"id":"B1-01","title":"The Word Became Flesh","passage_ref":"John 1:1-14","ref":{"b":43,"c":1,"vs":1,"ve":14},"big_truth":"Jesus is not merely a messenger from God; He is God the Son, the eternal Word, who entered His own creation.","christ_connection":"John deliberately opens with Genesis 1 language ('In the beginning') to declare that the Creator has become the Redeemer. The Word who spoke light now shines as the Light.","context":"John writes so that 'you may believe that Jesus is the Christ, the Son of God' (John 20:31). 'Logos' (Word) spoke both to Jewish readers (God's creative word, Gen 1; Ps 33:6) and to Greek readers (the rational principle behind the cosmos). John claims both streams find their fulfillment in a person.","dbs":["What does this passage say about God?","What does it say about people (vv. 5, 10-12)?","What must change in how I live if the Word truly 'dwelt among us'?","Who will I share this passage with before our next meeting?"],"apologetic":"Objection: 'Jesus never claimed to be God.' John 1:1-3,14 — written within living memory of eyewitnesses — asserts full deity and full humanity. See also John 8:58, 20:28. The earliest Christians worshiped Jesus as God at the cost of their lives; that conviction was not a later legend.","vocab":["gk-logos"],"obedience_step":"Memorize John 1:1-5 this week and recite it to your group.","multiply_step":"Lead one person through vv. 1-14 using the four discovery questions above. You do not need to be an expert; the questions do the work."},{"id":"B1-02","title":"The Righteousness We Could Not Earn","passage_ref":"Romans 3:23; 5:8; 6:23; 10:9","ref":{"b":45,"c":3,"vs":23,"ve":23},"big_truth":"All have sinned; God justifies sinners freely through the redemption that is in Christ Jesus, received by faith.","christ_connection":"The 'Romans Road' is the gospel in four stones: universal guilt (3:23), demonstrated love (5:8), wages vs. gift (6:23), and the confession of faith (10:9). Christ's cross is where God's justice and mercy meet.","context":"Paul writes to a mixed Jewish-Gentile church he has not yet visited, laying out the gospel systematically. Chapters 1-3 establish that no one — religious or pagan — is righteous before God by works.","dbs":["What do these verses say about God's character — both His justice and His love?","What do they say about every human being, including me?","What is the difference between a wage and a gift, and why does it matter for salvation?","Who in my life still thinks salvation must be earned? How will I show them these verses?"],"apologetic":"Objection: 'A loving God wouldn't judge sin.' Love without justice is indifference. Romans 5:8 shows God satisfying His own justice at His own cost — the judge stepped down and took the sentence Himself.","vocab":["gk-dikaiosyne","gk-charis"],"obedience_step":"Write out the four Romans Road verses on a card (or in your notes here) and practice sharing them in under five minutes.","multiply_step":"Share the Romans Road with one person this week. Record their name in your multiplication ledger and keep praying for them."},{"id":"B1-03","title":"Sent Ones: The Commission and the Church","passage_ref":"Matthew 28:18-20; 2 Timothy 2:2","ref":{"b":40,"c":28,"vs":18,"ve":20},"big_truth":"The risen King commands His people to make disciples of all nations — and discipleship is designed to multiply through four generations.","christ_connection":"The Commission rests entirely on Christ's authority ('All authority... has been given to me') and His presence ('I am with you always'). Mission is not our project for God; it is Christ's own work through us.","context":"Matthew ends where the church begins. 2 Timothy 2:2 shows the mechanism: Paul → Timothy → faithful ones → others also. Four generations in one verse. A church is planted when disciples gather around the Word, baptize, break bread, and raise their own leaders (Acts 2:42-47; Titus 1:5).","dbs":["What has Jesus been given, and what does that mean for the nations — and for my neighborhood?","What exactly are we commanded to do: make converts, or make disciples who obey? What is the difference?","What would a simple church look like in my home or village — Word, prayer, bread, baptism, leaders?","Name your 'Timothy' — the person you are training who will train others. If you have none, who could be the first?"],"apologetic":"Objection: 'Mission is cultural imperialism.' The gospel is the one message that dignifies every culture equally: every nation, tribe, and tongue is invited as-is to the same table (Rev 7:9). Church-planting done biblically raises LOCAL leaders and puts the Word in LOCAL hands — this app exists to make itself unnecessary.","vocab":["gk-ekklesia","heb-hesed"],"obedience_step":"Begin the 3/3rds pattern with your group this week: Look Back (accountability), Look Up (new passage), Look Forward (goal and prayer).","multiply_step":"Open your multiplication ledger and write the names of your first generation. Pray over each name daily."}]}]},"vocab":[{"id":"gk-logos","lemma":"λόγος","language":"greek","translit":"logos","gloss":"word, message, reason","teaching":"In John 1, the eternal self-expression of God — not merely speech about God, but God the Son Himself. Used ~330x in the NT.","key_refs":["John 1:1","John 1:14","1 John 1:1","Revelation 19:13"]},{"id":"gk-dikaiosyne","lemma":"δικαιοσύνη","language":"greek","translit":"dikaiosynē","gloss":"righteousness, justice","teaching":"The status of being in the right before God. Romans' central theme: a righteousness from God, given to sinners through faith in Christ (Rom 3:21-26).","key_refs":["Romans 1:17","Romans 3:22","2 Corinthians 5:21"]},{"id":"gk-charis","lemma":"χάρις","language":"greek","translit":"charis","gloss":"grace, unmerited favor","teaching":"God's free, undeserved kindness — the opposite of wages. Grace is not God ignoring sin, but God paying for it Himself.","key_refs":["Ephesians 2:8-9","Romans 6:23","Titus 2:11"]},{"id":"gk-ekklesia","lemma":"ἐκκλησία","language":"greek","translit":"ekklēsia","gloss":"assembly, church","teaching":"The called-out gathering of Christ's people — never a building in the NT, always a people. The goal of missions is planting these worshiping communities everywhere.","key_refs":["Matthew 16:18","Acts 2:42-47","Ephesians 1:22-23"]},{"id":"heb-hesed","lemma":"חֶסֶד","language":"hebrew","translit":"hesed","gloss":"steadfast love, covenant loyalty","teaching":"God's loyal, promise-keeping love — the 'goodness and mercy' that pursues David in Psalm 23:6. Fulfilled in Christ, who keeps covenant for us.","key_refs":["Psalm 23:6","Exodus 34:6-7","Lamentations 3:22-23"]}],"timeline_events":[{"id":"creation","order":1,"label":"Creation","ref":"Genesis 1"},{"id":"fall","order":2,"label":"The Fall","ref":"Genesis 3"},{"id":"promise","order":3,"label":"Promise to Abraham","ref":"Genesis 12"},{"id":"exodus","order":4,"label":"The Exodus","ref":"Exodus 14"},{"id":"david","order":5,"label":"King David","ref":"2 Samuel 7"},{"id":"exile","order":6,"label":"Exile & Prophets","ref":"Isaiah 53"},{"id":"bethlehem","order":7,"label":"Jesus Is Born","ref":"Luke 2"},{"id":"cross","order":8,"label":"The Cross","ref":"John 19"},{"id":"tomb","order":9,"label":"The Empty Tomb","ref":"Luke 24"},{"id":"pentecost","order":10,"label":"The Church Is Sent","ref":"Acts 2"}]}};
+const __DATA = {"data/seed-verses.json":{"translation":{"id":"KJV","name":"King James Version (development seed)","language":"en","copyright":"Public domain in the United States. DEVELOPMENT SEED ONLY — install the licensed ESV bundle via tools/import-esv.mjs for deployment. The ESV® Bible is copyright © 2001 by Crossway and requires a license for app distribution.","licensed":0},"verses":[{"b":1,"c":1,"v":1,"t":"In the beginning God created the heaven and the earth."},{"b":1,"c":1,"v":2,"t":"And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters."},{"b":1,"c":1,"v":3,"t":"And God said, Let there be light: and there was light."},{"b":1,"c":1,"v":4,"t":"And God saw the light, that it was good: and God divided the light from the darkness."},{"b":1,"c":1,"v":5,"t":"And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day."},{"b":19,"c":23,"v":1,"t":"The LORD is my shepherd; I shall not want."},{"b":19,"c":23,"v":2,"t":"He maketh me to lie down in green pastures: he leadeth me beside the still waters."},{"b":19,"c":23,"v":3,"t":"He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake."},{"b":19,"c":23,"v":4,"t":"Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me."},{"b":19,"c":23,"v":5,"t":"Thou preparest a table before me in the presence of mine enemies: thou anointest my head with oil; my cup runneth over."},{"b":19,"c":23,"v":6,"t":"Surely goodness and mercy shall follow me all the days of my life: and I will dwell in the house of the LORD for ever."},{"b":19,"c":119,"v":105,"t":"Thy word is a lamp unto my feet, and a light unto my path."},{"b":23,"c":40,"v":8,"t":"The grass withereth, the flower fadeth: but the word of our God shall stand for ever."},{"b":23,"c":53,"v":5,"t":"But he was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him; and with his stripes we are healed."},{"b":23,"c":53,"v":6,"t":"All we like sheep have gone astray; we have turned every one to his own way; and the LORD hath laid on him the iniquity of us all."},{"b":40,"c":28,"v":18,"t":"And Jesus came and spake unto them, saying, All power is given unto me in heaven and in earth."},{"b":40,"c":28,"v":19,"t":"Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost:"},{"b":40,"c":28,"v":20,"t":"Teaching them to observe all things whatsoever I have commanded you: and, lo, I am with you alway, even unto the end of the world. Amen."},{"b":42,"c":15,"v":4,"t":"What man of you, having an hundred sheep, if he lose one of them, doth not leave the ninety and nine in the wilderness, and go after that which is lost, until he find it?"},{"b":42,"c":15,"v":5,"t":"And when he hath found it, he layeth it on his shoulders, rejoicing."},{"b":42,"c":15,"v":6,"t":"And when he cometh home, he calleth together his friends and neighbours, saying unto them, Rejoice with me; for I have found my sheep which was lost."},{"b":42,"c":15,"v":7,"t":"I say unto you, that likewise joy shall be in heaven over one sinner that repenteth, more than over ninety and nine just persons, which need no repentance."},{"b":42,"c":24,"v":27,"t":"And beginning at Moses and all the prophets, he expounded unto them in all the scriptures the things concerning himself."},{"b":43,"c":1,"v":1,"t":"In the beginning was the Word, and the Word was with God, and the Word was God."},{"b":43,"c":1,"v":2,"t":"The same was in the beginning with God."},{"b":43,"c":1,"v":3,"t":"All things were made by him; and without him was not any thing made that was made."},{"b":43,"c":1,"v":4,"t":"In him was life; and the life was the light of men."},{"b":43,"c":1,"v":5,"t":"And the light shineth in darkness; and the darkness comprehended it not."},{"b":43,"c":1,"v":14,"t":"And the Word was made flesh, and dwelt among us, (and we beheld his glory, the glory as of the only begotten of the Father,) full of grace and truth."},{"b":43,"c":3,"v":16,"t":"For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."},{"b":43,"c":3,"v":17,"t":"For God sent not his Son into the world to condemn the world; but that the world through him might be saved."},{"b":43,"c":14,"v":6,"t":"Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me."},{"b":45,"c":3,"v":23,"t":"For all have sinned, and come short of the glory of God;"},{"b":45,"c":5,"v":8,"t":"But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us."},{"b":45,"c":6,"v":23,"t":"For the wages of sin is death; but the gift of God is eternal life through Jesus Christ our Lord."},{"b":45,"c":10,"v":9,"t":"That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved."},{"b":55,"c":2,"v":2,"t":"And the things that thou hast heard of me among many witnesses, the same commit thou to faithful men, who shall be able to teach others also."},{"b":62,"c":1,"v":5,"t":"This then is the message which we have heard of him, and declare unto you, that God is light, and in him is no darkness at all."}],"crossReferences":[{"from":[43,1,1],"to":[1,1,1],"theme":"word"},{"from":[43,1,4],"to":[62,1,5],"theme":"light"},{"from":[1,1,3],"to":[43,1,5],"theme":"light"},{"from":[23,53,6],"to":[42,15,4],"theme":"lamb"},{"from":[23,53,5],"to":[45,5,8],"theme":"lamb"},{"from":[19,23,1],"to":[42,15,4],"theme":"shepherd"},{"from":[43,14,6],"to":[45,10,9],"theme":"salvation"},{"from":[45,3,23],"to":[45,6,23],"theme":"salvation"},{"from":[45,6,23],"to":[43,3,16],"theme":"salvation"},{"from":[19,119,105],"to":[23,40,8],"theme":"word"},{"from":[40,28,19],"to":[55,2,2],"theme":"mission"},{"from":[42,24,27],"to":[23,53,5],"theme":"christ-in-ot"}]},"data/curriculum.json":{"trackA":{"name":"Lambs — Early Readers to 12","units":[{"unit":1,"title":"God Makes","lessons":[{"id":"A1-01","title":"God Said: Let There Be Light","passage_ref":"Genesis 1:1-5","ref":{"b":1,"c":1,"vs":1,"ve":5},"big_truth":"God made everything by His word, and everything He made was good.","christ_connection":"The same Word that said 'Let there be light' became a person — Jesus (John 1:1-5). Jesus is the light that darkness can never put out.","obedience_step":"Tonight when you see a light turn on, say thank You to God who made light.","multiply_step":"Tell one person in your family the story of the first day, in your own words.","memory_verse":{"ref":"Genesis 1:1","b":1,"c":1,"vs":1,"ve":1},"steps":[{"kind":"hear","body":"Before anything existed — before the sun, before the sea, before you — God was there. And God spoke. He didn't need tools or helpers. He just said, 'Let there be light,' and light came running."},{"kind":"see","body":"Look at the beam of light on your screen. Real light is faster and brighter than anything — and God made it with only His voice."},{"kind":"play","body":"Build the memory verse, one glowing word at a time.","game_id":"verse-builder"},{"kind":"say","body":"Say the memory verse out loud three times, a little quieter each time, until it is a whisper you can keep."},{"kind":"live","body":"God's word is powerful. When God says something, it happens. You can trust everything He says."}]},{"id":"A1-02","title":"The Shepherd Who Looks for the Lost","passage_ref":"Luke 15:4-7","ref":{"b":42,"c":15,"vs":4,"ve":7},"big_truth":"God is like a shepherd who never gives up looking for His lost sheep.","christ_connection":"Jesus told this story about Himself. He is the Good Shepherd who left heaven to find us and carry us home (John 10:11).","obedience_step":"Pray for one friend who doesn't know Jesus yet — the Shepherd is looking for them.","multiply_step":"Act out the lost-sheep story with a stuffed animal for someone younger than you.","memory_verse":{"ref":"Psalm 23:1","b":19,"c":23,"vs":1,"ve":1},"steps":[{"kind":"hear","body":"A shepherd counted his sheep: ...97, 98, 99 — one was missing! Did he say 'ninety-nine is plenty'? Never. He walked into the dark hills, calling and searching, until the lost one was found and safe on his shoulders."},{"kind":"play","body":"Lead the lamb along the Shepherd's Path.","game_id":"shepherd-path"},{"kind":"say","body":"Memory verse: 'The LORD is my shepherd; I shall not want.'"},{"kind":"live","body":"When you feel lost or afraid, remember: the Shepherd knows your name and He is already looking for you."}]},{"id":"A1-03","title":"One Big Story","passage_ref":"Luke 24:27","ref":{"b":42,"c":24,"vs":27,"ve":27},"big_truth":"The whole Bible — from the very first page — is one story that leads to Jesus.","christ_connection":"Creation, the promise, the kings, the prophets — every part of the story points ahead to Jesus, the Rescuer God promised.","obedience_step":"Ask a grown-up to show you their favorite Bible story and find where it sits on the timeline.","multiply_step":"Teach the order of the big story (Creation → Promise → Jesus → Church) to a friend using your fingers.","memory_verse":{"ref":"Psalm 119:105","b":19,"c":119,"vs":105,"ve":105},"steps":[{"kind":"hear","body":"The Bible is not a box of little stories. It is one river, flowing from the garden all the way to Jesus and then out to the whole world."},{"kind":"play","body":"Place the great events on the river of light, in order.","game_id":"great-timeline"},{"kind":"say","body":"Memory verse: 'Thy word is a lamp unto my feet, and a light unto my path.'"},{"kind":"live","body":"Every time you read the Bible, ask the treasure question: where is Jesus in this story?"}]},{"id":"A1-04","title":"The Greatest Gift","passage_ref":"John 3:16-17","ref":{"b":43,"c":3,"vs":16,"ve":17},"big_truth":"God loved the world so much that He gave His only Son, so that everyone who believes in Him has life forever.","christ_connection":"This IS the gospel: Jesus died for our sins and rose again. Believing in Him is not earning a prize — it is receiving a gift.","obedience_step":"Talk to God in your own words: thank Him for giving Jesus, and tell Him you want to follow Him.","multiply_step":"John 3:16 is good news for every person on earth. Who will you share it with this week? Say their name out loud.","memory_verse":{"ref":"John 3:16","b":43,"c":3,"vs":16,"ve":16},"steps":[{"kind":"hear","body":"A gift is not a gift if you have to pay for it. God gave the most precious gift there ever was — His own Son — so that we could come home to Him."},{"kind":"play","body":"Build John 3:16 — the verse missionaries have carried to every nation.","game_id":"verse-builder"},{"kind":"say","body":"Say John 3:16 and put your own name in it: 'For God so loved ______...'"},{"kind":"live","body":"You never have to make God love you. He already did the loving first (Romans 5:8)."}]}]}]},"trackB":{"name":"Disciples — 13 to Adult","courses":[{"course":1,"title":"The Gospel of the Kingdom","studies":[{"id":"B1-01","title":"The Word Became Flesh","passage_ref":"John 1:1-14","ref":{"b":43,"c":1,"vs":1,"ve":14},"big_truth":"Jesus is not merely a messenger from God; He is God the Son, the eternal Word, who entered His own creation.","christ_connection":"John deliberately opens with Genesis 1 language ('In the beginning') to declare that the Creator has become the Redeemer. The Word who spoke light now shines as the Light.","context":"John writes so that 'you may believe that Jesus is the Christ, the Son of God' (John 20:31). 'Logos' (Word) spoke both to Jewish readers (God's creative word, Gen 1; Ps 33:6) and to Greek readers (the rational principle behind the cosmos). John claims both streams find their fulfillment in a person.","dbs":["What does this passage say about God?","What does it say about people (vv. 5, 10-12)?","What must change in how I live if the Word truly 'dwelt among us'?","Who will I share this passage with before our next meeting?"],"apologetic":"Objection: 'Jesus never claimed to be God.' John 1:1-3,14 — written within living memory of eyewitnesses — asserts full deity and full humanity. See also John 8:58, 20:28. The earliest Christians worshiped Jesus as God at the cost of their lives; that conviction was not a later legend.","vocab":["gk-logos"],"obedience_step":"Memorize John 1:1-5 this week and recite it to your group.","multiply_step":"Lead one person through vv. 1-14 using the four discovery questions above. You do not need to be an expert; the questions do the work."},{"id":"B1-02","title":"The Righteousness We Could Not Earn","passage_ref":"Romans 3:23; 5:8; 6:23; 10:9","ref":{"b":45,"c":3,"vs":23,"ve":23},"big_truth":"All have sinned; God justifies sinners freely through the redemption that is in Christ Jesus, received by faith.","christ_connection":"The 'Romans Road' is the gospel in four stones: universal guilt (3:23), demonstrated love (5:8), wages vs. gift (6:23), and the confession of faith (10:9). Christ's cross is where God's justice and mercy meet.","context":"Paul writes to a mixed Jewish-Gentile church he has not yet visited, laying out the gospel systematically. Chapters 1-3 establish that no one — religious or pagan — is righteous before God by works.","dbs":["What do these verses say about God's character — both His justice and His love?","What do they say about every human being, including me?","What is the difference between a wage and a gift, and why does it matter for salvation?","Who in my life still thinks salvation must be earned? How will I show them these verses?"],"apologetic":"Objection: 'A loving God wouldn't judge sin.' Love without justice is indifference. Romans 5:8 shows God satisfying His own justice at His own cost — the judge stepped down and took the sentence Himself.","vocab":["gk-dikaiosyne","gk-charis"],"obedience_step":"Write out the four Romans Road verses on a card (or in your notes here) and practice sharing them in under five minutes.","multiply_step":"Share the Romans Road with one person this week. Record their name in your multiplication ledger and keep praying for them."},{"id":"B1-03","title":"Sent Ones: The Commission and the Church","passage_ref":"Matthew 28:18-20; 2 Timothy 2:2","ref":{"b":40,"c":28,"vs":18,"ve":20},"big_truth":"The risen King commands His people to make disciples of all nations — and discipleship is designed to multiply through four generations.","christ_connection":"The Commission rests entirely on Christ's authority ('All authority... has been given to me') and His presence ('I am with you always'). Mission is not our project for God; it is Christ's own work through us.","context":"Matthew ends where the church begins. 2 Timothy 2:2 shows the mechanism: Paul → Timothy → faithful ones → others also. Four generations in one verse. A church is planted when disciples gather around the Word, baptize, break bread, and raise their own leaders (Acts 2:42-47; Titus 1:5).","dbs":["What has Jesus been given, and what does that mean for the nations — and for my neighborhood?","What exactly are we commanded to do: make converts, or make disciples who obey? What is the difference?","What would a simple church look like in my home or village — Word, prayer, bread, baptism, leaders?","Name your 'Timothy' — the person you are training who will train others. If you have none, who could be the first?"],"apologetic":"Objection: 'Mission is cultural imperialism.' The gospel is the one message that dignifies every culture equally: every nation, tribe, and tongue is invited as-is to the same table (Rev 7:9). Church-planting done biblically raises LOCAL leaders and puts the Word in LOCAL hands — this app exists to make itself unnecessary.","vocab":["gk-ekklesia","heb-hesed"],"obedience_step":"Begin the 3/3rds pattern with your group this week: Look Back (accountability), Look Up (new passage), Look Forward (goal and prayer).","multiply_step":"Open your multiplication ledger and write the names of your first generation. Pray over each name daily."}]}]},"vocab":[{"id":"gk-logos","lemma":"λόγος","language":"greek","translit":"logos","gloss":"word, message, reason","teaching":"In John 1, the eternal self-expression of God — not merely speech about God, but God the Son Himself. Used ~330x in the NT.","key_refs":["John 1:1","John 1:14","1 John 1:1","Revelation 19:13"]},{"id":"gk-dikaiosyne","lemma":"δικαιοσύνη","language":"greek","translit":"dikaiosynē","gloss":"righteousness, justice","teaching":"The status of being in the right before God. Romans' central theme: a righteousness from God, given to sinners through faith in Christ (Rom 3:21-26).","key_refs":["Romans 1:17","Romans 3:22","2 Corinthians 5:21"]},{"id":"gk-charis","lemma":"χάρις","language":"greek","translit":"charis","gloss":"grace, unmerited favor","teaching":"God's free, undeserved kindness — the opposite of wages. Grace is not God ignoring sin, but God paying for it Himself.","key_refs":["Ephesians 2:8-9","Romans 6:23","Titus 2:11"]},{"id":"gk-ekklesia","lemma":"ἐκκλησία","language":"greek","translit":"ekklēsia","gloss":"assembly, church","teaching":"The called-out gathering of Christ's people — never a building in the NT, always a people. The goal of missions is planting these worshiping communities everywhere.","key_refs":["Matthew 16:18","Acts 2:42-47","Ephesians 1:22-23"]},{"id":"heb-hesed","lemma":"חֶסֶד","language":"hebrew","translit":"hesed","gloss":"steadfast love, covenant loyalty","teaching":"God's loyal, promise-keeping love — the 'goodness and mercy' that pursues David in Psalm 23:6. Fulfilled in Christ, who keeps covenant for us.","key_refs":["Psalm 23:6","Exodus 34:6-7","Lamentations 3:22-23"]}],"timeline_events":[{"id":"creation","order":1,"label":"Creation","ref":"Genesis 1"},{"id":"fall","order":2,"label":"The Fall","ref":"Genesis 3"},{"id":"promise","order":3,"label":"Promise to Abraham","ref":"Genesis 12"},{"id":"exodus","order":4,"label":"The Exodus","ref":"Exodus 14"},{"id":"david","order":5,"label":"King David","ref":"2 Samuel 7"},{"id":"exile","order":6,"label":"Exile & Prophets","ref":"Isaiah 53"},{"id":"bethlehem","order":7,"label":"Jesus Is Born","ref":"Luke 2"},{"id":"cross","order":8,"label":"The Cross","ref":"John 19"},{"id":"tomb","order":9,"label":"The Empty Tomb","ref":"Luke 24"},{"id":"pentecost","order":10,"label":"The Church Is Sent","ref":"Acts 2"}]},"data/bible-overview.json":{"note":"Main lessons for every book of the Bible, Genesis to Revelation. Fields: b=book id, t=theme, kv=key verse, ls=main lessons, c=where the book points to Christ.","books":[{"b":1,"t":"Beginnings: creation, fall, and the promise","kv":"Genesis 12:2-3","ls":["God created everything good, and humanity in His own image.","Sin entered through one act of distrust and broke everything — but God pursued the sinners, not abandoned them.","God builds His plan through covenant promises to Abraham, Isaac, and Jacob, and preserves His people through Joseph."],"c":"The offspring who will crush the serpent (3:15), the lamb God Himself provides (22:8), and Judah's coming ruler (49:10) all point to Jesus."},{"b":2,"t":"Redemption: God delivers and dwells","kv":"Exodus 6:7","ls":["God hears the cry of the oppressed and acts in mighty power to free them.","Salvation comes through the blood of the Passover lamb, not the merit of the rescued.","God gives His law and His presence — the redeemed are made a worshiping people."],"c":"Jesus is our Passover Lamb (1 Cor 5:7), the true bread from heaven, and the greater Moses who leads the ultimate exodus from sin."},{"b":3,"t":"Holiness: a holy God makes a way to be near","kv":"Leviticus 19:2","ls":["Sin is costly — atonement always requires a substitute's blood.","God is holy, and His people are called to be distinct in every area of life.","The Day of Atonement shows both the seriousness of sin and the mercy of God."],"c":"Every sacrifice, priest, and cleansing ritual is a shadow fulfilled in Jesus, our great High Priest and final sacrifice (Hebrews 9-10)."},{"b":4,"t":"Wilderness: faithfulness meets unbelief","kv":"Numbers 23:19","ls":["Unbelief, not obstacles, keeps people out of God's promises.","God provides daily — manna, water, guidance — even for grumblers.","God keeps His promises across generations despite human failure."],"c":"The bronze serpent lifted up for the dying is Jesus' own picture of His cross (John 3:14-15)."},{"b":5,"t":"Covenant renewed: love the LORD your God","kv":"Deuteronomy 6:5","ls":["Obedience flows from remembering what God has done.","God's commands are for our good — life and blessing are found in loving Him.","Choose this day: covenant faithfulness is a decision every generation must make."],"c":"Moses promises a greater Prophet to come (18:15) — fulfilled in Jesus, who kept the whole covenant we broke."},{"b":6,"t":"Conquest: God keeps every promise","kv":"Joshua 21:45","ls":["Courage comes from God's presence, not favorable odds.","Victory belongs to the LORD — Jericho fell to faith, not siegecraft.","Not one word of God's good promises ever fails."],"c":"Joshua ('The LORD saves') leads Israel into rest — a preview of Jesus (same name in Greek), who leads His people into eternal rest."},{"b":7,"t":"The spiral of sin and the mercy of God","kv":"Judges 21:25","ls":["When everyone does what is right in their own eyes, society collapses.","God repeatedly raises deliverers for an undeserving people.","Flawed judges cannot produce lasting peace — the heart itself must change."],"c":"Every failed deliverer sharpens the longing for the perfect Deliverer-King, Jesus."},{"b":8,"t":"Loyal love in the darkest times","kv":"Ruth 1:16","ls":["God works His grand plan through small, ordinary faithfulness.","Hesed — costly loyal love — is the family likeness of God's people.","The outsider who takes refuge under God's wings is fully welcomed in."],"c":"Boaz the kinsman-redeemer buys back a foreign widow — and their line leads straight to David and to Jesus, our Redeemer (Matt 1:5)."},{"b":9,"t":"The heart God sees: kingship begins","kv":"1 Samuel 16:7","ls":["God exalts the humble (Hannah) and brings down the proud (Eli's house).","Man looks at outward appearance; the LORD looks at the heart.","Obedience is better than sacrifice — partial obedience is disobedience."],"c":"David the anointed shepherd-king from Bethlehem prefigures great David's greater Son."},{"b":10,"t":"David's throne and God's forever promise","kv":"2 Samuel 7:16","ls":["God's covenant with David promises a throne established forever.","Even the man after God's own heart falls terribly — and repentance, not perfection, marks the godly.","Sin is forgiven yet consequences remain; grace is never license."],"c":"The son of David whose kingdom never ends is Jesus (Luke 1:32-33)."},{"b":11,"t":"A kingdom divided by half-hearted worship","kv":"1 Kings 18:21","ls":["Wisdom without wholehearted devotion ends in idolatry (Solomon).","How long will you go limping between two opinions? God demands undivided loyalty.","God is not in the noise but often in the low whisper — He sustains His weary servants."],"c":"Solomon's glory and the temple's splendor fade; one greater than Solomon and the true temple is Jesus (Matt 12:42; John 2:19-21)."},{"b":12,"t":"The long fall: exile comes at last","kv":"2 Kings 17:13-14","ls":["God sends prophet after prophet in patience before judgment falls.","National ruin follows spiritual ruin — idolatry destroys from within.","Even in judgment God preserves a remnant and the lamp of David."],"c":"The preserved line of David, flickering but never extinguished, carries the promise to Bethlehem."},{"b":13,"t":"God's people retold: worship at the center","kv":"1 Chronicles 16:34","ls":["God's covenant faithfulness runs through every generation of the genealogies.","Worship deserves our best order, skill, and joy.","Give thanks to the LORD, for He is good — His steadfast love endures forever."],"c":"The genealogy from Adam through David is the family tree that Matthew 1 completes in Jesus."},{"b":14,"t":"If my people humble themselves","kv":"2 Chronicles 7:14","ls":["Revival begins with humbling, prayer, seeking God, and turning from sin.","The kings who sought the LORD prospered; those who forsook Him fell.","God's eyes run throughout the earth to strengthen wholehearted hearts."],"c":"The temple's filled-with-glory dedication anticipates God dwelling among us in Christ (John 1:14)."},{"b":15,"t":"Return and rebuild: God stirs His people","kv":"Ezra 7:10","ls":["God moves even pagan kings' hearts to accomplish His promises.","Set your heart to study God's Word, do it, and teach it — in that order.","Restoration requires repentance, not just relocation."],"c":"The return from exile is a small resurrection — the greater return from sin's exile comes through Christ."},{"b":16,"t":"Rebuilding walls with sword and trowel","kv":"Nehemiah 8:10","ls":["Prayer and planning belong together; so do work and watchfulness.","The joy of the LORD is your strength.","Reform must be renewed — hearts drift even after revival."],"c":"Nehemiah's grief-driven intercession for a ruined city foreshadows Jesus weeping over Jerusalem."},{"b":17,"t":"Providence: the unseen God saves","kv":"Esther 4:14","ls":["God's name is never mentioned — yet His hand moves in every 'coincidence.'","Courage means risking position and life for God's people: 'If I perish, I perish.'","You were placed where you are for such a time as this."],"c":"A mediator risks death, uninvited before the throne, to save the condemned — a portrait of our Advocate."},{"b":18,"t":"Suffering and the God who is enough","kv":"Job 19:25","ls":["The righteous do suffer — simple formulas about suffering are false comfort.","We may bring our anguish honestly to God; He is big enough for our questions.","Seeing God is better than getting answers: 'now my eye sees you.'"],"c":"Job's cry for a mediator and his confession 'I know that my Redeemer lives' are answered in Jesus."},{"b":19,"t":"The prayer book of every heart","kv":"Psalm 145:18","ls":["Every emotion — praise, grief, fury, fear, joy — can be prayed.","Blessed is the one whose delight is God's Word, whose refuge is God Himself.","Praise is the destination of the whole story: let everything that has breath praise the LORD."],"c":"The Psalms are Jesus' own songbook: His suffering (Ps 22), His resurrection (Ps 16), His reign (Ps 2, 110)."},{"b":20,"t":"Wisdom: skill in the fear of the LORD","kv":"Proverbs 9:10","ls":["The fear of the LORD is the beginning of wisdom.","Words, money, work, friendship, desire — every ordinary thing is a spiritual thing.","Trust in the LORD with all your heart; lean not on your own understanding."],"c":"Wisdom personified, present at creation and calling in the streets, finds its fullness in Christ, the wisdom of God (1 Cor 1:24)."},{"b":21,"t":"Vapor: life under the sun without God","kv":"Ecclesiastes 12:13","ls":["Pleasure, wealth, work, and wisdom cannot bear the weight of being your meaning.","Death levels everything 'under the sun' — so receive each day as God's gift.","The end of the matter: fear God and keep His commandments."],"c":"The Preacher's honest despair is the ache Jesus answers: abundant life that death cannot cancel."},{"b":22,"t":"Love strong as death","kv":"Song of Solomon 8:7","ls":["Married love — desire, delight, faithfulness — is God's good creation.","Love is not to be awakened before its time; covenant guards the flame.","Many waters cannot quench love."],"c":"The Bridegroom's delight in his bride images Christ's love for His church (Eph 5:25-32)."},{"b":23,"t":"The Holy One of Israel: judgment and comfort","kv":"Isaiah 53:5","ls":["God is high and holy, and the nations are dust on His scales — yet He dwells with the contrite.","Comfort my people: sin is judged, but grace speaks tenderly and prepares a highway home.","God's servant suffers in the place of sinners — pierced for our transgressions."],"c":"Isaiah is the Gospel in the Old Testament: virgin-born Immanuel (7:14), Wonderful Counselor (9:6), the Suffering Servant (53), the anointed preacher of good news (61:1)."},{"b":24,"t":"The weeping prophet and the new covenant","kv":"Jeremiah 31:33","ls":["God's word burns like fire — speak it whether or not anyone listens.","The heart is deceitful above all things; only God can give a new one.","Even under judgment, God plans a future and a hope for His people."],"c":"The promised new covenant — law on hearts, sins remembered no more — is sealed by Jesus' blood (Luke 22:20)."},{"b":25,"t":"Grief that still hopes","kv":"Lamentations 3:22-23","ls":["It is right to lament — to bring ruin and grief honestly before God.","His mercies are new every morning even in the ashes; great is His faithfulness.","God does not afflict from His heart; His judgments aim at restoration."],"c":"The man of sorrows who sat weeping over a destroyed city points to the Man of Sorrows who wept over it again."},{"b":26,"t":"The glory departs — and promises to return","kv":"Ezekiel 36:26","ls":["God's glory will not share a temple with idols — sin drives out blessing.","God will give a new heart of flesh and put His own Spirit within His people.","Dry bones live again when God's word and breath come — no one is beyond His reviving."],"c":"The good Shepherd who seeks the scattered flock Himself (34:11-16) is Jesus' self-description in John 10."},{"b":27,"t":"God rules the kingdoms of men","kv":"Daniel 7:14","ls":["Conviction may cost you the furnace or the lions' den — God is able to deliver, but even if not, we will not bow.","Pride brings kings to eat grass; heaven rules, and the humble are lifted.","History is not chaos: every empire falls, and God's kingdom stands forever."],"c":"One like a son of man receives everlasting dominion from the Ancient of Days — Jesus' favorite title for Himself."},{"b":28,"t":"Scandalous love for an unfaithful bride","kv":"Hosea 6:6","ls":["Sin is not rule-breaking only — it is adultery against a loving God.","God buys back the unfaithful at His own cost and calls them 'my people' again.","He desires steadfast love, not empty sacrifice."],"c":"Hosea buying back Gomer from the slave block is the gospel in miniature: Christ redeems His compromised bride."},{"b":29,"t":"The day of the LORD and the outpoured Spirit","kv":"Joel 2:13","ls":["Calamity is a summons: return to the LORD with all your heart.","Rend your hearts and not your garments — He is gracious and merciful.","God promises to pour out His Spirit on all flesh."],"c":"Peter preaches Pentecost from Joel 2 — the promise poured out by the risen Jesus (Acts 2)."},{"b":30,"t":"Let justice roll down like waters","kv":"Amos 5:24","ls":["Religious performance without justice for the poor disgusts God.","Privilege increases accountability: you only have I known — therefore I will punish.","God's plumb line measures every crooked wall — and He promises to rebuild David's fallen booth."],"c":"The rebuilt booth of David that gathers the nations (9:11-12) is fulfilled in the church of Jesus (Acts 15:16-17)."},{"b":31,"t":"Pride goes down: Edom's fall","kv":"Obadiah 15","ls":["Gloating over a brother's calamity invites God's judgment.","The pride of your heart has deceived you — soaring nests are torn down.","As you have done, it shall be done to you; but Zion will be delivered."],"c":"The kingdom shall be the LORD's — the final verdict Jesus' reign makes certain."},{"b":32,"t":"A missionary God and a reluctant prophet","kv":"Jonah 4:2","ls":["You cannot outrun God's call — or His mercy.","God's compassion extends to enemies we would rather see judged.","Salvation belongs to the LORD — even the storm and the fish obey Him."],"c":"Jesus gives 'the sign of Jonah': three days in the deep, then rescue that brings mercy to the nations (Matt 12:40)."},{"b":33,"t":"What does the LORD require?","kv":"Micah 6:8","ls":["Do justice, love kindness, walk humbly with your God.","Leaders who devour the flock face the Shepherd's judgment.","Who is a God like You, pardoning iniquity, casting sins into the depths of the sea?"],"c":"From little Bethlehem comes forth the ruler whose origin is from ancient days (5:2) — quoted at Jesus' birth."},{"b":34,"t":"The LORD avenges: Nineveh's end","kv":"Nahum 1:7","ls":["God's patience with evil is long but not endless.","The LORD is a stronghold in the day of trouble; He knows those who take refuge in Him.","No empire built on blood outlasts His verdict."],"c":"The feet of him who brings good news of peace (1:15) — the herald language Paul applies to gospel preachers (Rom 10:15)."},{"b":35,"t":"Living by faith when God confuses you","kv":"Habakkuk 2:4","ls":["Take your 'how long?' and 'why?' directly to God — then wait at the watchpost.","The righteous shall live by his faith.","Though the fig tree fails and the stalls are empty, yet I will rejoice in the LORD."],"c":"'The righteous shall live by faith' becomes the backbone of the gospel of grace (Rom 1:17; Gal 3:11)."},{"b":36,"t":"Hidden in the day of wrath, quieted by love","kv":"Zephaniah 3:17","ls":["The day of the LORD sweeps away every proud refuge.","Seek the LORD, seek righteousness, seek humility — perhaps you may be hidden.","God rejoices over His restored people with singing."],"c":"The King of Israel in your midst (3:15) who removes judgment is Jesus among His people."},{"b":37,"t":"First things first: build God's house","kv":"Haggai 1:5","ls":["Consider your ways: paneled houses and neglected worship explain empty harvests.","Work, for I am with you — God's presence fuels obedience.","The latter glory of this house shall be greater than the former."],"c":"The greater glory came when the Lord Himself walked into that second temple."},{"b":38,"t":"The King is coming — humble, on a donkey","kv":"Zechariah 9:9","ls":["Not by might, nor by power, but by my Spirit, says the LORD.","God removes His people's filthy garments and clothes them clean.","They will look on Him whom they pierced and mourn — and a fountain for sin will be opened."],"c":"Palm Sunday, thirty pieces of silver, the struck shepherd, the pierced one — Zechariah reads like a Passion narrative written five centuries early."},{"b":39,"t":"Wearied words and a coming sunrise","kv":"Malachi 4:2","ls":["Half-hearted offerings say what we really think of God.","God hates faithlessness in marriage and robbery in worship.","For those who fear His name, the sun of righteousness will rise with healing."],"c":"The messenger who prepares the way (3:1) is John the Baptist; the Lord who suddenly comes to His temple is Jesus. Then — four hundred years of silence, until a cry in Bethlehem."},{"b":40,"t":"The King and His kingdom","kv":"Matthew 28:18-20","ls":["Jesus is the promised Messiah — Matthew shows fulfillment after fulfillment.","Kingdom righteousness exceeds rule-keeping: it transforms the heart (Sermon on the Mount).","The King's final word is a commission: make disciples of all nations."],"c":"Immanuel — God with us — from the genealogy's climax to 'I am with you always.'"},{"b":41,"t":"The Servant who came to give His life","kv":"Mark 10:45","ls":["Jesus acts with immediate, breathtaking authority over disease, demons, storms, and death.","Discipleship means taking up a cross, not climbing a ladder.","The Son of Man came not to be served but to serve, and to give His life as a ransom for many."],"c":"The centurion's confession at the cross — 'Truly this man was the Son of God' — is the book's whole point."},{"b":42,"t":"The Savior who seeks the lost","kv":"Luke 19:10","ls":["The gospel is for outsiders: shepherds, sinners, Samaritans, tax collectors, women, the poor.","Prayer and the Holy Spirit thread through Jesus' whole ministry.","The Son of Man came to seek and to save the lost."],"c":"From the manger to the empty tomb, Luke's careful history shows a Savior whose mercy reaches farther than anyone expected."},{"b":43,"t":"Believe and have life in His name","kv":"John 20:31","ls":["Jesus is God the Son: the Word made flesh, the great I AM.","Eternal life is knowing the Father through the Son — beginning now.","Love one another as I have loved you: the mark of His disciples."],"c":"Seven signs and seven 'I AM' statements build one verdict: these are written so that you may believe that Jesus is the Christ, the Son of God."},{"b":44,"t":"The unstoppable gospel","kv":"Acts 1:8","ls":["The risen Jesus builds His church by His Spirit through ordinary, praying people.","Persecution scatters believers — and spreads the gospel like wind spreads seed.","From Jerusalem to Rome, no prison, storm, or council can chain the word of God."],"c":"Acts is Jesus' continuing work: what He began to do, His body now does among all nations."},{"b":45,"t":"The righteousness of God, by faith","kv":"Romans 1:16","ls":["All have sinned — religious and pagan alike stand guilty before God.","God justifies the ungodly freely, by grace, through faith in Jesus' blood.","Therefore: living sacrifice, transformed mind, love without hypocrisy."],"c":"The gospel is the power of God for salvation to everyone who believes — Christ crucified and risen is its whole content."},{"b":46,"t":"The cross-shaped church","kv":"1 Corinthians 1:18","ls":["The message of the cross upends worldly wisdom, status, and division.","Your body and your gatherings belong to the Lord — purity and order matter.","Love is greater than every gift; the resurrection is the hinge of everything."],"c":"Christ crucified — a stumbling block to some, but to the called, the power and wisdom of God; and Christ risen, the firstfruits of those who sleep."},{"b":47,"t":"Strength in weakness","kv":"2 Corinthians 12:9","ls":["Ministry is treasure in jars of clay — afflicted but not crushed.","Godly grief produces repentance; generous giving flows from grace.","My grace is sufficient for you, for my power is made perfect in weakness."],"c":"He who knew no sin was made sin for us, so that in Him we might become the righteousness of God (5:21)."},{"b":48,"t":"Set free: no other gospel","kv":"Galatians 2:20","ls":["Adding works to grace is not a variation of the gospel — it is its loss.","Justified by faith, adopted as sons, heirs of the promise to Abraham.","Walk by the Spirit: freedom is for love, and the Spirit bears His own fruit."],"c":"I have been crucified with Christ; the life I now live, I live by faith in the Son of God who loved me and gave Himself for me."},{"b":49,"t":"One new people, seated with Christ","kv":"Ephesians 2:8-9","ls":["You were dead in sin — made alive by grace alone, through faith alone.","Christ has made Jew and Gentile one new humanity; the church is God's masterpiece.","Walk worthy: in unity, purity, Spirit-filled households, and the whole armor of God."],"c":"God's eternal plan is to unite all things in Christ — and to display His grace in the church forever."},{"b":50,"t":"Joy that circumstances cannot touch","kv":"Philippians 1:21","ls":["Partnership in the gospel turns even prison into an outpost of joy.","Have this mind among yourselves: Christ emptied Himself to the point of the cross.","Rejoice in the Lord always; the peace of God guards hearts beyond understanding."],"c":"To live is Christ, to die is gain — the whole letter breathes contentment in Him alone."},{"b":51,"t":"Christ is all: complete in Him","kv":"Colossians 1:18","ls":["Jesus is the image of the invisible God — Creator, Sustainer, Head, Firstborn from the dead.","Philosophy, ritual, and asceticism add nothing to a believer already complete in Christ.","Set your minds on things above; let Christ's word dwell richly as you live it out at home and work."],"c":"In Him the whole fullness of deity dwells bodily — and you have been filled in Him."},{"b":52,"t":"Hope that works while it waits","kv":"1 Thessalonians 4:16-17","ls":["The gospel arrives in power and turns people from idols to serve the living God.","Holy living — in purity, love, and honest work — pleases God.","Grieve with hope: the Lord Himself will descend, and we will always be with Him."],"c":"Waiting for God's Son from heaven, whom He raised — Jesus who delivers us from the wrath to come."},{"b":53,"t":"Stand firm until He comes","kv":"2 Thessalonians 3:13","ls":["Present suffering will be repaid with rest when Jesus is revealed.","Do not be shaken by end-times panic; lawlessness will not outlast the Lord's breath.","Idleness is not spirituality — do not grow weary in doing good."],"c":"The day of the Lord belongs to the Lord Jesus, whose coming destroys every counterfeit."},{"b":54,"t":"Order in God's household","kv":"1 Timothy 1:15","ls":["The saying is trustworthy: Christ Jesus came into the world to save sinners.","Godly leaders are proven by character before they are given charge.","Godliness with contentment is great gain; fight the good fight of the faith."],"c":"There is one mediator between God and men, the man Christ Jesus, who gave Himself as a ransom for all."},{"b":55,"t":"Guard the deposit, finish the race","kv":"2 Timothy 3:16-17","ls":["Fan into flame the gift of God; He gave us a spirit not of fear but of power, love, and self-control.","Entrust the gospel to faithful people who will teach others also — four generations in one verse (2:2).","All Scripture is breathed out by God and equips for every good work."],"c":"Remember Jesus Christ, risen from the dead — Paul's dying charge and the church's living hope."},{"b":56,"t":"Grace that trains us for good works","kv":"Titus 2:11-12","ls":["Sound doctrine and sound living are inseparable.","Appoint elders of proven character to set the church in order.","We are saved not by works of righteousness but by the washing of regeneration."],"c":"We wait for our blessed hope: the appearing of our great God and Savior Jesus Christ."},{"b":57,"t":"Receive him as you would receive me","kv":"Philemon 17-18","ls":["The gospel turns a runaway slave into a beloved brother.","Christian appeal works by love, not compulsion.","'Charge it to my account' — imputation in one sentence."],"c":"Paul's offer to pay Onesimus's debt mirrors Christ, who charged our debt to Himself."},{"b":58,"t":"Jesus is better: don't drift","kv":"Hebrews 4:15-16","ls":["Jesus is superior to angels, Moses, and every priest — the exact imprint of God's nature.","His one sacrifice does what a thousand altars never could: it perfects forever.","Therefore hold fast, draw near with confidence, and run the race looking to Jesus."],"c":"A great High Priest who sympathizes with our weakness, a new covenant in His blood, an unshakable kingdom."},{"b":59,"t":"Faith that works","kv":"James 1:22","ls":["Count trials as joy — tested faith produces steadfastness.","Be doers of the word; religion that ignores the needy and unbridles the tongue is worthless.","Faith without works is dead; humble yourselves and He will exalt you."],"c":"The wisdom from above and the royal law of love both come from the Lord of glory, Jesus."},{"b":60,"t":"Exiles: hope under fire","kv":"1 Peter 2:24","ls":["A living hope through the resurrection guards you through grief and trial.","You are a chosen race, a royal priesthood — so live honorably among unbelievers.","Suffering for good is grace; entrust your soul to a faithful Creator."],"c":"He Himself bore our sins in His body on the tree — by His wounds you have been healed."},{"b":61,"t":"Growing in grace while scoffers scoff","kv":"2 Peter 3:9","ls":["His divine power has granted everything needed for life and godliness — so add virtue to faith.","False teachers promise freedom and deliver slavery.","The Lord is not slow but patient, not wishing that any should perish."],"c":"We did not follow myths: eyewitnesses of His majesty await the day the Morning Star rises."},{"b":62,"t":"God is light, God is love: assurance","kv":"1 John 5:13","ls":["Walking in the light means confessing sin, not pretending sinlessness.","Love one another — anyone who hates a brother walks in darkness.","These things are written that you may KNOW you have eternal life."],"c":"The blood of Jesus cleanses from all sin; He is the propitiation, our Advocate with the Father."},{"b":63,"t":"Truth and love walk together","kv":"2 John 6","ls":["Walking in truth is the parent's deepest joy.","Love is defined by obedience, not sentiment.","Do not receive teaching that denies Christ come in the flesh."],"c":"Abiding in the teaching of Christ is having both the Father and the Son."},{"b":64,"t":"Support the workers of the truth","kv":"3 John 4","ls":["No greater joy than to hear that my children walk in the truth.","Hospitality to gospel workers makes you a fellow worker for the truth.","Imitate good, not evil — Diotrephes' love of preeminence is the anti-pattern."],"c":"Workers go out 'for the sake of the Name' — the Name above every name."},{"b":65,"t":"Contend for the faith once delivered","kv":"Jude 24-25","ls":["False teaching creeps in quietly and turns grace into license.","Build yourselves up in faith, pray in the Spirit, keep yourselves in God's love, show mercy to doubters.","God is able to keep you from stumbling and present you blameless with great joy."],"c":"Kept for Jesus Christ — and kept BY Him, the only God our Savior, be glory forever."},{"b":66,"t":"The Lamb wins: behold, I am coming soon","kv":"Revelation 21:5","ls":["Jesus walks among His churches now — He sees, commends, corrects, and promises.","History's storms rage under a throne that never shakes; the Lamb who was slain is worthy to open the scroll.","Every tear wiped away, death no more, the dwelling of God with man — and the gates never shut."],"c":"The Lion is the Lamb: Alpha and Omega, the bright Morning Star. The Bible's last prayer is the church's oldest one — 'Come, Lord Jesus.'"}]},"data/jesus-teachings.json":{"note":"The teachings of Jesus, organized for discipleship. Each item: title, ref, what Jesus taught, and how to live it.","categories":[{"id":"sermon","title":"The Sermon on the Mount","glyph":"⛰️","ref":"Matthew 5–7","intro":"Jesus' manifesto of kingdom life: not a ladder to climb but a portrait of hearts His grace transforms.","items":[{"title":"The Beatitudes","ref":"Matthew 5:3-12","teaching":"The kingdom belongs to the poor in spirit, the mourners, the meek, the mercy-givers, the pure in heart, the peacemakers, the persecuted — the people the world overlooks are the people God blesses.","live":"Stop performing strength. Bring your poverty of spirit to God today and receive the kingdom as a gift."},{"title":"Salt and Light","ref":"Matthew 5:13-16","teaching":"Disciples preserve and illuminate the world around them; hidden faith is as useless as flavorless salt.","live":"Do one good work today visibly enough that someone could glorify your Father because of it."},{"title":"Fulfilling the Law","ref":"Matthew 5:17-20","teaching":"Jesus came not to abolish the Law and Prophets but to fulfill them — every promise lands on Him.","live":"Read the Old Testament expecting to meet Jesus in it."},{"title":"Anger, Lust, and the Heart","ref":"Matthew 5:21-30","teaching":"Murder begins with contempt; adultery begins with a look. God judges the heart, not just the hands.","live":"Deal with sin at the root: name the anger or desire you've been feeding, and bring it into the light."},{"title":"Love Your Enemies","ref":"Matthew 5:43-48","teaching":"Anyone can love friends; children of the Father love enemies and pray for persecutors, as He sends sun and rain on all.","live":"Pray by name, today, for the person who has hurt you most."},{"title":"Giving, Praying, Fasting in Secret","ref":"Matthew 6:1-18","teaching":"Practice righteousness for your Father's eyes, not your audience's applause — He sees in secret and rewards.","live":"Do one act of generosity this week that no one but God will ever know about."},{"title":"The Lord's Prayer","ref":"Matthew 6:9-13","teaching":"Pray simply: Father, hallowed name, kingdom come, daily bread, forgiven and forgiving, delivered from evil.","live":"Pray it slowly every morning this week — one line at a time, in your own words."},{"title":"Treasures and Anxiety","ref":"Matthew 6:19-34","teaching":"You cannot serve God and money. Look at the birds, consider the lilies — your Father knows what you need. Seek first the kingdom.","live":"Name your biggest worry out loud to God, then do today's obedience and leave tomorrow to Him."},{"title":"Judging and Asking","ref":"Matthew 7:1-12","teaching":"Take the log out of your own eye first. Ask, seek, knock — your Father gives good gifts. Do to others what you wish done to you.","live":"Before correcting anyone this week, confess your own version of the same fault."},{"title":"Two Gates, Two Trees, Two Builders","ref":"Matthew 7:13-27","teaching":"The narrow gate leads to life; trees are known by fruit; and only the one who HEARS these words and DOES them builds on rock.","live":"Pick one command from this sermon and build it into your week — hearing without doing is sand."}]},{"id":"parables","title":"Parables of the Kingdom","glyph":"🌱","ref":"Matthew 13; Luke 10–18","intro":"Stories with a hook: ordinary seeds, coins, and sons that smuggle the kingdom past the defenses of the heart.","items":[{"title":"The Sower","ref":"Matthew 13:1-23","teaching":"The same seed — the word of the kingdom — lands on path, rocks, thorns, and good soil. The difference is the heart that receives it.","live":"Which soil are you right now? Ask God to pull the thorns of worry and wealth choking His word."},{"title":"The Weeds Among Wheat","ref":"Matthew 13:24-30","teaching":"Good and evil grow together until the harvest; final sorting belongs to the Lord, not to us.","live":"Release the judgment you've been carrying — be faithful wheat and trust the Harvester."},{"title":"Mustard Seed and Leaven","ref":"Matthew 13:31-33","teaching":"The kingdom starts absurdly small and grows unstoppably large.","live":"Do not despise small beginnings: one verse, one prayer, one person taught."},{"title":"Hidden Treasure and the Pearl","ref":"Matthew 13:44-46","teaching":"The kingdom is worth everything — the finder sells all he has WITH JOY.","live":"What are you holding back from God? Compare its worth to the treasure and choose joyfully."},{"title":"The Good Samaritan","ref":"Luke 10:25-37","teaching":"'Who is my neighbor?' is the wrong question. Be the neighbor — cross the road, bear the cost, show mercy.","live":"The interrupted plan, the inconvenient person: that is your Jericho road this week."},{"title":"The Lost Sheep, Coin, and Son","ref":"Luke 15","teaching":"Heaven throws parties over found sinners. The father runs, embraces, and restores the prodigal — and pleads with the resentful older brother too.","live":"Come home if you're far off. Join the feast if you've been sulking in the field."},{"title":"The Unforgiving Servant","ref":"Matthew 18:21-35","teaching":"Forgiven a debt of millions, he choked a man over pennies. Received mercy must become released mercy.","live":"Name the debt you're still collecting from someone — and cancel it before the sun sets."},{"title":"Workers in the Vineyard","ref":"Matthew 20:1-16","teaching":"The master's generosity offends the math of merit: the last hired receive a full day's grace.","live":"Stop comparing wages. Celebrate grace given to others as loudly as grace given to you."},{"title":"The Rich Fool","ref":"Luke 12:13-21","teaching":"Bigger barns cannot store a soul. 'This night your soul is required of you' — be rich toward God.","live":"Review your actual budget and calendar: are you laying up treasure only for yourself?"},{"title":"The Great Banquet","ref":"Luke 14:15-24","teaching":"The invited made excuses — so the master filled his table from the streets and hedges. The feast WILL be full.","live":"Who are the 'unlikely' people you could invite toward God's table this month?"},{"title":"The Pharisee and the Tax Collector","ref":"Luke 18:9-14","teaching":"The religious résumé went home unjustified; the man who prayed 'God, be merciful to me, a sinner' went home righteous.","live":"Trade your résumé prayer for the tax collector's seven words."},{"title":"The Talents","ref":"Matthew 25:14-30","teaching":"The master entrusts his wealth and rewards faithful risk; fear that buries the gift insults the giver.","live":"Name the gift you've buried — and put it to work for the kingdom this week."},{"title":"The Sheep and the Goats","ref":"Matthew 25:31-46","teaching":"The King counts what was done for the hungry, thirsty, stranger, naked, sick, and prisoner as done for HIM.","live":"Serve one 'least of these' this week, and know whose face you're actually serving."}]},{"id":"iam","title":"The Seven 'I AM' Statements","glyph":"🔥","ref":"The Gospel of John","intro":"Seven claims that echo the burning bush: Jesus does not merely bring bread, light, and life — He IS them.","items":[{"title":"I am the Bread of Life","ref":"John 6:35","teaching":"Whoever comes to Me shall not hunger — He satisfies the appetite beneath every appetite.","live":"Bring your restlessness to Jesus first today, before you feed it anything else."},{"title":"I am the Light of the World","ref":"John 8:12","teaching":"Whoever follows Me will not walk in darkness but have the light of life.","live":"Bring one hidden thing into His light — darkness loses power when it's named to Him."},{"title":"I am the Door","ref":"John 10:9","teaching":"If anyone enters by Me, he will be saved — one door, wide open, into safety and pasture.","live":"Stop trying to climb in some other way; enter through Christ alone."},{"title":"I am the Good Shepherd","ref":"John 10:11","teaching":"The good shepherd lays down his life for the sheep — He knows His own by name.","live":"Listen for the Shepherd's voice in His Word daily; refuse the stranger's voice of shame."},{"title":"I am the Resurrection and the Life","ref":"John 11:25","teaching":"Spoken at a tomb: whoever believes in Me, though he die, yet shall he live.","live":"Speak this verse over your deepest grief — He said it before He wept, and then He called Lazarus out."},{"title":"I am the Way, the Truth, and the Life","ref":"John 14:6","teaching":"No one comes to the Father except through Me — the way is not a map but a Person.","live":"Trade anxiety about the future for trust in the One who IS the way there."},{"title":"I am the True Vine","ref":"John 15:5","teaching":"Abide in Me: apart from Me you can do nothing; in Me you bear much fruit.","live":"Build one daily abiding habit — Word and prayer — and let fruit grow from connection, not straining."}]},{"id":"signs","title":"Miracles & Signs","glyph":"✨","ref":"The Four Gospels","intro":"Never magic tricks — each miracle is a signpost revealing who Jesus is and what His kingdom restores.","items":[{"title":"Water into Wine","ref":"John 2:1-11","teaching":"The first sign: six stone jars of ceremony become overflowing joy. He saves the best for His hour.","live":"Invite Jesus into the ordinary places (like a wedding kitchen) — He transforms from the inside."},{"title":"Calming the Storm","ref":"Mark 4:35-41","teaching":"'Peace! Be still.' Wind and sea obey Him — and the disciples fear the Calmer more than the storm.","live":"Say what the disciples learned: He is IN the boat. Name your storm to Him tonight."},{"title":"Feeding the Five Thousand","ref":"John 6:1-14","teaching":"Five loaves, two fish, one boy's lunch — in His hands, enough for everyone with twelve baskets left.","live":"Offer your 'not enough' to Jesus; He multiplies surrendered lunches, not hoarded feasts."},{"title":"Walking on Water","ref":"Matthew 14:22-33","teaching":"In the fourth watch of the night He comes. Peter sinks when he watches the wind instead of the Word.","live":"Keep your eyes on Jesus, not the weather. When you sink, His hand is already reaching."},{"title":"Healing the Paralytic","ref":"Mark 2:1-12","teaching":"'Son, your sins are forgiven' came BEFORE 'rise and walk' — the deeper paralysis is dealt with first.","live":"Carry a friend to Jesus like the four rooftop-diggers: pray them into His presence."},{"title":"Blind Bartimaeus","ref":"Mark 10:46-52","teaching":"The crowd hushed him; he shouted louder: 'Son of David, have mercy on me!' Jesus stopped for one beggar.","live":"Ignore the voices that say your need embarrasses God. Shout anyway — He stops."},{"title":"Raising Lazarus","ref":"John 11:1-44","teaching":"He wept at the tomb He was about to empty. 'Lazarus, come out' — and death obeyed.","live":"Jesus feels your grief AND holds authority over its cause. Trust both His tears and His power."},{"title":"The Resurrection","ref":"Luke 24; John 20","teaching":"The sign of all signs: the tomb is empty, the grave clothes folded, and He ate fish with them. Because He lives, everything He said is true.","live":"Live this week as if death is defeated — because it is."}]},{"id":"commands","title":"The Great Commands & Final Words","glyph":"❤️","ref":"The Gospels & Acts 1","intro":"What Jesus said matters most — the commands He called greatest and the words He chose for last.","items":[{"title":"You Must Be Born Again","ref":"John 3:1-21","teaching":"Religion is not enough — even for Nicodemus. New birth by the Spirit, through believing the lifted-up Son.","live":"Have you been born again — not improved, but made new? Ask Him tonight."},{"title":"The Greatest Commandment","ref":"Matthew 22:36-40","teaching":"Love the Lord your God with all your heart, soul, and mind; love your neighbor as yourself. Everything hangs on these.","live":"Audit your day against two loves — not a hundred rules."},{"title":"Take Up Your Cross","ref":"Luke 9:23-25","teaching":"Deny yourself daily, take up your cross, and follow. Whoever loses his life for My sake will save it.","live":"Identify today's cross — the costly obedience you've been avoiding — and pick it up."},{"title":"A New Commandment","ref":"John 13:34-35","teaching":"Love one another AS I HAVE LOVED YOU — by this all people will know you are My disciples.","live":"Wash a foot this week: do the low, unglamorous act of love no one wants to do."},{"title":"The Promise of the Helper","ref":"John 14:15-27; 16:7-15","teaching":"It is to your advantage that I go: the Spirit of truth will dwell IN you, teach you, and glorify Christ.","live":"Stop living like an orphan. Ask the Helper for help — that's His name."},{"title":"The High Priestly Prayer","ref":"John 17","teaching":"Hours before the cross, Jesus prayed for YOU: for all who would believe through the apostles' word — that they may be one.","live":"You are inside this prayer. Pursue unity with another believer as Jesus' answered request."},{"title":"The Great Commission","ref":"Matthew 28:18-20; Acts 1:8","teaching":"All authority is Mine — therefore GO, make disciples of all nations, baptizing and teaching, and I am with you always.","live":"Write down the names of your Jerusalem, your Judea, and your ends-of-the-earth. Start with the first name today."}]}]}};
 const __realFetch = window.fetch ? window.fetch.bind(window) : null;
 window.fetch = (input, init) => {
   const url = String(input && input.url ? input.url : input);
@@ -637,8 +747,14 @@ class PageFlip {
 
   /* ------------------------------------------------------------ gestures */
   _down(e) {
-    const w = this.stage.clientWidth;
-    const x = e.offsetX;
+    // The turn buttons live inside the stage; their presses are clicks,
+    // not page grabs.
+    if (e.target.closest('.turn-btn')) return;
+    // Stage-relative X. (offsetX is relative to the event TARGET — a verse
+    // span, a face — which made grab-zone detection reject most touches.)
+    const rect = this.stage.getBoundingClientRect();
+    const w = rect.width;
+    const x = e.clientX - rect.left;
     const fromRight = x > w * (1 - this.grabZone);
     const fromLeft  = x < w * this.grabZone;
     if (!fromRight && !fromLeft && !this.animating) return;
@@ -772,6 +888,177 @@ class PageFlip {
     leaf.style.setProperty('--back-vis',
       String(clamp((p - 0.5) / band, 0, 1)));
     if (this.shadow) this.shadow.style.setProperty('--under-shadow', String(glow * 0.8));
+  }
+}
+
+/* ======== carousel.js ======== */
+/* LIVING WORD — 3D carousel
+   A ring of cards in real perspective: drag to spin with inertia, snap to
+   the nearest card on release, tap the front card to open it. Used for
+   browsing the 66 books of the Bible and the teachings of Jesus.
+   Physics match the house style: momentum + friction, then a settle
+   spring onto the snap angle — weighted and liturgical, never twitchy.  */
+
+
+const FRICTION = 0.94;         // per-frame inertia decay
+const SNAP_K = 130, SNAP_C = 22;   // settle spring (ζ≈0.96)
+const STEP = 1 / 60;
+
+class Carousel3D {
+  /**
+   * @param {Object} o
+   * @param {HTMLElement} o.mount        container (gets .car3d)
+   * @param {Array}    o.items           anything; renderCard maps to DOM
+   * @param {Function} o.renderCard      (item, i) => HTMLElement (.car3d-card content)
+   * @param {Function} o.onSelect        (item, i) called on tap of the front card
+   * @param {Function} [o.onFocus]       (item, i) called whenever the front card changes
+   * @param {number}   [o.cardWidth=150]
+   * @param {number}   [o.spacing=1.22]  ring circumference padding factor
+   */
+  constructor({ mount, items, renderCard, onSelect, onFocus, cardWidth = 150, spacing = 1.22 }) {
+    this.items = items;
+    this.onSelect = onSelect;
+    this.onFocus = onFocus;
+    this.n = items.length;
+    this.theta = 360 / this.n;
+    // ring radius from chord length: r = (w/2) / tan(π/n)
+    this.radius = Math.max(
+      (cardWidth * spacing) / 2 / Math.tan(Math.PI / this.n), cardWidth);
+
+    this.rot = 0;            // current ring rotation (deg)
+    this.vel = 0;            // deg/frame
+    this.focused = 0;
+    this.dragging = false;
+    this.settleTarget = null;
+
+    mount.classList.add('car3d');
+    this.ring = document.createElement('div');
+    this.ring.className = 'car3d-ring';
+    items.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'car3d-card';
+      card.style.width = cardWidth + 'px';
+      card.style.transform =
+        `rotateY(${i * this.theta}deg) translateZ(${this.radius}px)`;
+      card.append(renderCard(item, i));
+      card.dataset.i = i;
+      this.ring.append(card);
+    });
+    mount.append(this.ring);
+    // pull the ring back so the front card sits at the mount's face
+    mount.style.setProperty('--car3d-radius', this.radius + 'px');
+
+    let downX = 0, downRot = 0, moved = 0, lastX = 0, lastT = 0;
+    mount.addEventListener('pointerdown', (e) => {
+      this.dragging = true;
+      this.settleTarget = null;
+      this.vel = 0;
+      downX = lastX = e.clientX;
+      downRot = this.rot;
+      moved = 0;
+      lastT = performance.now();
+      mount.setPointerCapture(e.pointerId);
+    });
+    mount.addEventListener('pointermove', (e) => {
+      if (!this.dragging) return;
+      const now = performance.now();
+      const dxTotal = e.clientX - downX;
+      moved = Math.max(moved, Math.abs(dxTotal));
+      // ~quarter turn per full-width swipe feels weighty, not slippery
+      const degPerPx = 90 / Math.max(mount.clientWidth, 240);
+      this.rot = downRot + dxTotal * degPerPx;
+      const dt = Math.max((now - lastT) / 1000, 1e-4);
+      this.vel = 0.8 * this.vel + 0.2 * ((e.clientX - lastX) * degPerPx * STEP / dt);
+      lastX = e.clientX; lastT = now;
+      this._paint();
+    });
+    const up = (e) => {
+      if (!this.dragging) return;
+      this.dragging = false;
+      if (moved < 6) {                       // a tap, not a drag
+        const card = e.target.closest('.car3d-card');
+        if (card) {
+          const i = +card.dataset.i;
+          if (i === this.focused) this.onSelect(this.items[i], i);
+          else this.goTo(i);                 // side card: bring it to front
+          return;
+        }
+      }
+      this._coast();
+    };
+    mount.addEventListener('pointerup', up);
+    mount.addEventListener('pointercancel', up);
+
+    this._paint();
+    this._notifyFocus();
+  }
+
+  /* front index for the current rotation */
+  _frontIndex() {
+    const i = Math.round(-this.rot / this.theta) % this.n;
+    return (i + this.n) % this.n;
+  }
+
+  /* rotate so item i faces front (shortest way around the ring) */
+  goTo(i) {
+    let target = -i * this.theta;
+    while (target - this.rot > 180) target -= 360;
+    while (target - this.rot < -180) target += 360;
+    this.settleTarget = target;
+    this.vel = 0;
+    this._animate();
+  }
+
+  _coast() {
+    this._animate();
+  }
+
+  _animate() {
+    if (this._raf) return;
+    const step = () => {
+      this._raf = null;
+      if (this.dragging) return;
+      if (this.settleTarget === null) {
+        this.vel *= FRICTION;
+        this.rot += this.vel;
+        if (Math.abs(this.vel) < 0.06) {      // slow enough: snap-settle
+          let t = Math.round(this.rot / this.theta) * this.theta;
+          this.settleTarget = t;
+        }
+      } else {
+        const a = -SNAP_K * ((this.rot - this.settleTarget) * Math.PI / 180) - SNAP_C * (this.vel / STEP) * Math.PI / 180;
+        this.vel += a * STEP * STEP * 180 / Math.PI;
+        this.rot += this.vel;
+        if (Math.abs(this.rot - this.settleTarget) < 0.05 && Math.abs(this.vel) < 0.02) {
+          this.rot = this.settleTarget;
+          this.settleTarget = null;
+          this._paint();
+          this._notifyFocus();
+          return;
+        }
+      }
+      this._paint();
+      this._notifyFocus();
+      this._raf = requestAnimationFrame(step);
+    };
+    this._raf = requestAnimationFrame(step);
+  }
+
+  _notifyFocus() {
+    const f = this._frontIndex();
+    if (f !== this.focused) {
+      this.focused = f;
+      if (this.onFocus) this.onFocus(this.items[f], f);
+    }
+    // depth styling: front card full, others recede
+    [...this.ring.children].forEach((card, i) => {
+      card.classList.toggle('front', i === f);
+    });
+  }
+
+  _paint() {
+    this.ring.style.transform =
+      `translateZ(calc(-1 * var(--car3d-radius))) rotateY(${this.rot}deg)`;
   }
 }
 
@@ -1546,9 +1833,13 @@ function runSplash(onDone) {
 const $ = (sel) => document.querySelector(sel);
 
 let TRANSLATION = null;   // active translation row
-let CURRICULUM = null;    // data/curriculum.json (precached)
+let CURRICULUM = null;    // data/curriculum.json
+let OVERVIEW = null;      // data/bible-overview.json — 66 books, main lessons
+let TEACHINGS = null;     // data/jesus-teachings.json — Jesus' teachings library
 let reader = { book: 43, chapter: 1 };   // open to John 1 — "In the beginning was the Word"
 let flip = null;
+let booksCarousel = null;
+let teachCarousel = null;
 
 /* ================================================================ boot */
 async function boot() {
@@ -1559,12 +1850,17 @@ async function boot() {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
   } catch (_) { /* no service worker available in this context */ }
-  const [translation, curriculum] = await Promise.all([
+
+  const [translation, curriculum, overview, teachings] = await Promise.all([
     db.ensureSeeded(),
     fetch('data/curriculum.json').then((r) => r.json()),
+    fetch('data/bible-overview.json').then((r) => r.json()),
+    fetch('data/jesus-teachings.json').then((r) => r.json()),
   ]);
   TRANSLATION = translation;
   CURRICULUM = curriculum;
+  OVERVIEW = overview;
+  TEACHINGS = teachings;
 
   runSplash(() => {
     show('home');
@@ -1582,11 +1878,15 @@ function show(name) {
   if (name === 'read') renderChapter();
   if (name === 'learn') renderLearnIndex();
   if (name === 'study') renderStudy();
+  if (name === 'books') renderBooks();
+  if (name === 'jesus') renderJesus();
 }
 
 function initTabs() {
   document.querySelectorAll('.tabbar button').forEach((b) =>
     b.addEventListener('click', () => show(b.dataset.screen)));
+  document.querySelectorAll('[data-back]').forEach((b) =>
+    b.addEventListener('click', () => show(b.dataset.back)));
 }
 
 /* ================================================================ home */
@@ -1594,16 +1894,18 @@ function renderHome() {
   const body = $('#screen-home .screen-body');
   body.innerHTML = '';
   const cards = [
-    ['📖', 'Read the Word', `Open the ${TRANSLATION.name.split('(')[0].trim()} — every word, fully offline.`, 'read'],
-    ['✝️', 'Share the Gospel', 'The Bridge: Creation, Fall, Redemption, Restoration — walk a friend through it in ten minutes.', 'gospel'],
-    ['🕯️', 'Learn & Play', 'Lessons for Lambs (kids) and Disciples (youth & adults).', 'learn'],
-    ['🌌', 'Study Deep', 'Cross-reference constellations, word studies, and your multiplication ledger.', 'study'],
+    ['📖', 'Read the Word', 'Open the Bible — swipe or tap the arrows to turn glowing pages.', () => show('read')],
+    ['📚', 'The 66 Books', 'Spin the carousel: main lessons for every book, Genesis to Revelation.', () => show('books')],
+    ['✝️', 'The Teachings of Jesus', 'The Sermon on the Mount, the parables, the I AMs, the miracles, His final words.', () => show('jesus')],
+    ['🕊️', 'Share the Gospel', 'The Bridge: Creation, Fall, Redemption, Restoration — ten minutes with a friend.', () => renderGospel()],
+    ['🕯️', 'Learn & Play', 'Lessons for Lambs (kids) and Disciples (youth & adults).', () => show('learn')],
+    ['🌌', 'Study Deep', 'Cross-reference constellations, word studies, your multiplication ledger.', () => show('study')],
   ];
-  for (const [glyph, title, sub, target] of cards) {
+  for (const [glyph, title, sub, go] of cards) {
     const c = document.createElement('div');
     c.className = 'card glass halo';
     c.innerHTML = `<h3>${glyph}&nbsp; ${title}</h3><p>${sub}</p>`;
-    c.addEventListener('click', () => target === 'gospel' ? renderGospel() : show(target));
+    c.addEventListener('click', go);
     body.append(c);
   }
   const notice = document.createElement('p');
@@ -1612,7 +1914,7 @@ function renderHome() {
   body.append(notice);
 }
 
-/* The Bridge — a guided gospel walkthrough for evangelism (Module 1 §1.1). */
+/* The Bridge — a guided gospel walkthrough for evangelism. */
 const BRIDGE = [
   { title: '1 · Creation', ref: [1, 1], text: 'God made everything good — including us, made to know Him.' },
   { title: '2 · The Fall', ref: [45, 3], text: '“All have sinned.” Our sin separates us from the holy God — a canyon we cannot cross.' },
@@ -1634,6 +1936,121 @@ function renderGospel() {
   });
 }
 
+/* ===================================================== 66-books carousel */
+const GENRE_ART = {
+  law: '⛰️', history: '🏺', wisdom: '🎼', prophets: '🔥',
+  gospel: '✝️', acts: '🌍', epistle: '📜', apocalyptic: '👑',
+};
+
+function renderBooks() {
+  const mount = $('#books-carousel');
+  if (!booksCarousel) {
+    booksCarousel = new Carousel3D({
+      mount,
+      items: OVERVIEW.books,
+      cardWidth: 148,
+      renderCard: (ov) => {
+        const [, name, , testament, genre] = bookById(ov.b);
+        const card = document.createElement('div');
+        card.className = `book-cover ${testament.toLowerCase()} genre-${genre}`;
+        card.innerHTML = `
+          <span class="book-glyph">${GENRE_ART[genre] || '📖'}</span>
+          <span class="book-name">${name}</span>
+          <span class="book-testament">${testament === 'OT' ? 'Old Testament' : 'New Testament'}</span>`;
+        return card;
+      },
+      onFocus: (ov) => renderBookFocus(ov),
+      onSelect: (ov) => renderBookDetail(ov),
+    });
+    renderBookFocus(OVERVIEW.books[0]);
+  }
+}
+
+function renderBookFocus(ov) {
+  const [, name] = bookById(ov.b);
+  $('#books-focus').innerHTML = `
+    <h3 class="ca-heading">${name}</h3>
+    <p class="game-sub">${ov.t}</p>
+    <div class="books-actions">
+      <button class="btn btn--gold" id="bk-open">Main Lessons</button>
+      <button class="btn" id="bk-read">Read ${name}</button>
+    </div>`;
+  $('#bk-open').addEventListener('click', () => renderBookDetail(ov));
+  $('#bk-read').addEventListener('click', () => {
+    reader = { book: ov.b, chapter: 1 };
+    show('read');
+  });
+}
+
+function renderBookDetail(ov) {
+  const [, name, , testament] = bookById(ov.b);
+  const body = $('#books-detail');
+  body.innerHTML = `
+    <div class="card glass halo">
+      <h3 class="ca-heading">${name} — ${ov.t}</h3>
+      <p class="game-sub">${testament === 'OT' ? 'Old Testament' : 'New Testament'} · Key verse: ${ov.kv}</p>
+      ${ov.ls.map((l, i) => `
+        <div class="lesson-step glass" style="margin-top:10px">
+          <span class="kind">Lesson ${i + 1}</span><p>${l}</p>
+        </div>`).join('')}
+      <div class="lesson-step glass christ-box" style="margin-top:10px">
+        <span class="kind">Where is Jesus here?</span><p>${ov.c}</p>
+      </div>
+      <button class="btn btn--gold" style="margin-top:12px" id="bkd-read">Open ${name} in the Reader</button>
+    </div>`;
+  $('#bkd-read').addEventListener('click', () => {
+    reader = { book: ov.b, chapter: 1 };
+    show('read');
+  });
+  body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ================================================ Jesus' teachings hall */
+function renderJesus() {
+  const mount = $('#jesus-carousel');
+  if (!teachCarousel) {
+    teachCarousel = new Carousel3D({
+      mount,
+      items: TEACHINGS.categories,
+      cardWidth: 168,
+      renderCard: (cat) => {
+        const card = document.createElement('div');
+        card.className = 'book-cover teach-cover';
+        card.innerHTML = `
+          <span class="book-glyph">${cat.glyph}</span>
+          <span class="book-name">${cat.title}</span>
+          <span class="book-testament">${cat.ref}</span>`;
+        return card;
+      },
+      onFocus: (cat) => renderTeachList(cat),
+      onSelect: (cat) => renderTeachList(cat),
+    });
+    renderTeachList(TEACHINGS.categories[0]);
+  }
+}
+
+function renderTeachList(cat) {
+  const body = $('#jesus-list');
+  body.innerHTML = `
+    <h3 class="ca-heading">${cat.glyph} ${cat.title}</h3>
+    <p class="game-sub">${cat.intro}</p>`;
+  cat.items.forEach((it) => {
+    const c = document.createElement('div');
+    c.className = 'card glass teach-item';
+    c.innerHTML = `<h3>${it.title}</h3><p class="game-sub">${it.ref}</p>
+      <div class="teach-body" hidden>
+        <div class="lesson-step glass"><span class="kind">What Jesus taught</span><p>${it.teaching}</p></div>
+        <div class="lesson-step glass christ-box"><span class="kind">Live it</span><p>${it.live}</p></div>
+      </div>`;
+    c.addEventListener('click', () => {
+      const bodyEl = c.querySelector('.teach-body');
+      bodyEl.hidden = !bodyEl.hidden;
+      c.classList.toggle('open', !bodyEl.hidden);
+    });
+    body.append(c);
+  });
+}
+
 /* ============================================================== reader */
 function initReader() {
   const bookSel = $('#sel-book');
@@ -1649,15 +2066,19 @@ function initReader() {
   chapSel.addEventListener('change', () => {
     reader.chapter = +chapSel.value; renderChapter();
   });
+  $('#btn-books').addEventListener('click', () => show('books'));
 
   flip = new PageFlip({
     stage: $('#book-stage'),
+    grabZone: 0.44,
     canGo: (dir) => nextRef(dir) !== null,
     onCommit: (dir) => {
       const n = nextRef(dir);
       if (n) { reader = n; renderChapter(); }
     },
   });
+  $('#turn-prev').addEventListener('click', () => flip.turn(-1));
+  $('#turn-next').addEventListener('click', () => flip.turn(+1));
 }
 
 function nextRef(dir) {
@@ -1693,10 +2114,16 @@ async function renderChapter() {
 
   let html = `<div class="chapter-title">${bookName(reader.book).toUpperCase()} ${reader.chapter}</div>`;
   if (!verses.length) {
-    html += `<div class="no-text-notice">This chapter's text is not in the development seed.<br><br>
-      Install the licensed ESV bundle (see <em>tools/import-esv.mjs</em>) to load the complete
-      Bible — all 66 books, 31,102 verses — for offline use.<br><br>
-      <em>"${'The grass withereth, the flower fadeth: but the word of our God shall stand for ever.'}" — Isaiah 40:8</em></div>`;
+    const ov = OVERVIEW.books.find((o) => o.b === reader.book);
+    html += `<div class="no-text-notice">
+      <p class="scripture" style="font-style:italic">“${ov ? ov.t : ''}”</p><br>
+      This chapter's full text is not in the development seed — the licensed ESV
+      bundle (all 31,102 verses) loads it offline. Meanwhile, the main lessons of
+      ${bookName(reader.book)} are one tap away.<br><br></div>`;
+    if (ov) {
+      html += `<div style="text-align:center"><button class="btn btn--gold" id="nt-lessons">
+        Main Lessons of ${bookName(reader.book)}</button></div>`;
+    }
   } else {
     html += '<div class="scripture">' + verses.map((v) => {
       const hl = hlMap.has(v.v) ? ` class="hl-${hlMap.get(v.v)}"` : '';
@@ -1706,7 +2133,15 @@ async function renderChapter() {
   }
   face.innerHTML = html;
 
-  // tap a verse to toggle a gold highlight (long-form annotation lives in Study)
+  const lessonsBtn = face.querySelector('#nt-lessons');
+  if (lessonsBtn) lessonsBtn.addEventListener('click', () => {
+    const ov = OVERVIEW.books.find((o) => o.b === reader.book);
+    show('books');
+    booksCarousel.goTo(OVERVIEW.books.indexOf(ov));
+    renderBookDetail(ov);
+  });
+
+  // tap a verse to toggle a gold highlight
   face.querySelectorAll('[data-v]').forEach((span) => {
     span.addEventListener('click', async () => {
       const row = await db.toggleHighlight(TRANSLATION.id, reader.book, reader.chapter, +span.dataset.v);
@@ -1723,9 +2158,22 @@ function renderLearnIndex() {
   const body = $('#screen-learn .screen-body');
   body.innerHTML = '<h2 class="ca-heading">Learn</h2>';
 
+  // gateways to the deep libraries
+  const gates = [
+    ['📚', 'The 66 Books', 'Main lessons for every book, Genesis to Revelation — spin the carousel.', () => show('books')],
+    ['✝️', 'The Teachings of Jesus', 'Sermon on the Mount · Parables · I AM · Miracles · Final words.', () => show('jesus')],
+  ];
+  for (const [glyph, title, sub, go] of gates) {
+    const c = document.createElement('div');
+    c.className = 'card glass halo';
+    c.innerHTML = `<h3>${glyph}&nbsp; ${title}</h3><p>${sub}</p>`;
+    c.addEventListener('click', go);
+    body.append(c);
+  }
+
   const a = CURRICULUM.trackA;
   body.insertAdjacentHTML('beforeend',
-    `<p class="game-sub">TRACK A · ${a.name}</p>`);
+    `<p class="game-sub" style="margin-top:18px">TRACK A · ${a.name}</p>`);
   for (const unit of a.units) {
     for (const lesson of unit.lessons) {
       body.append(lessonCard(lesson, () => renderLessonA(lesson)));

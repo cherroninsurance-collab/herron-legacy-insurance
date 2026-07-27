@@ -5,7 +5,7 @@
 
 'use strict';
 
-const CACHE = 'living-word-v1';
+const CACHE = 'living-word-v2';
 
 const PRECACHE = [
   './',
@@ -17,10 +17,13 @@ const PRECACHE = [
   'js/splash.js',
   'js/pageflip.js',
   'js/canon.js',
+  'js/carousel.js',
   'js/db.js',
   'js/games.js',
   'data/curriculum.json',
   'data/seed-verses.json',
+  'data/bible-overview.json',
+  'data/jesus-teachings.json',
   // 'data/bible.json' is added by tools/import-esv.mjs for licensed builds
 ];
 

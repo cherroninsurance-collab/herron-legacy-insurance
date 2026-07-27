@@ -34,6 +34,7 @@ const read = (p) => readFileSync(resolve(APP, p), 'utf8');
 const MODULES = [
   { file: 'canon.js' },
   { file: 'pageflip.js' },
+  { file: 'carousel.js' },
   { file: 'db.js', namespace: 'db', exports: [
       'ensureSeeded','getActiveTranslation','getChapter','getVerse',
       'getCrossRefs','getAllCrossRefs','toggleHighlight','getHighlights',
@@ -44,7 +45,8 @@ const MODULES = [
   { file: 'splash.js' },
   { file: 'app.js' },
 ];
-const DATA_FILES = ['data/seed-verses.json', 'data/curriculum.json'];
+const DATA_FILES = ['data/seed-verses.json', 'data/curriculum.json',
+                    'data/bible-overview.json', 'data/jesus-teachings.json'];
 
 /* Inline data served to the app's own fetch() calls — no network, no SW. */
 function fetchShim() {

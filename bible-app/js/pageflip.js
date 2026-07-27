@@ -83,8 +83,14 @@ export class PageFlip {
 
   /* ------------------------------------------------------------ gestures */
   _down(e) {
-    const w = this.stage.clientWidth;
-    const x = e.offsetX;
+    // The turn buttons live inside the stage; their presses are clicks,
+    // not page grabs.
+    if (e.target.closest('.turn-btn')) return;
+    // Stage-relative X. (offsetX is relative to the event TARGET — a verse
+    // span, a face — which made grab-zone detection reject most touches.)
+    const rect = this.stage.getBoundingClientRect();
+    const w = rect.width;
+    const x = e.clientX - rect.left;
     const fromRight = x > w * (1 - this.grabZone);
     const fromLeft  = x < w * this.grabZone;
     if (!fromRight && !fromLeft && !this.animating) return;

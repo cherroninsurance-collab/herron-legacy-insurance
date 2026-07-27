@@ -5,16 +5,21 @@
 
 import { runSplash } from './splash.js';
 import { PageFlip } from './pageflip.js';
-import { BOOKS, bookName, chapterCount } from './canon.js';
+import { Carousel3D } from './carousel.js';
+import { BOOKS, bookName, chapterCount, bookById } from './canon.js';
 import * as db from './db.js';
 import * as games from './games.js';
 
 const $ = (sel) => document.querySelector(sel);
 
 let TRANSLATION = null;   // active translation row
-let CURRICULUM = null;    // data/curriculum.json (precached)
+let CURRICULUM = null;    // data/curriculum.json
+let OVERVIEW = null;      // data/bible-overview.json — 66 books, main lessons
+let TEACHINGS = null;     // data/jesus-teachings.json — Jesus' teachings library
 let reader = { book: 43, chapter: 1 };   // open to John 1 — "In the beginning was the Word"
 let flip = null;
+let booksCarousel = null;
+let teachCarousel = null;
 
 /* ================================================================ boot */
 async function boot() {
@@ -25,12 +30,17 @@ async function boot() {
       navigator.serviceWorker.register('sw.js').catch(() => {});
     }
   } catch (_) { /* no service worker available in this context */ }
-  const [translation, curriculum] = await Promise.all([
+
+  const [translation, curriculum, overview, teachings] = await Promise.all([
     db.ensureSeeded(),
     fetch('data/curriculum.json').then((r) => r.json()),
+    fetch('data/bible-overview.json').then((r) => r.json()),
+    fetch('data/jesus-teachings.json').then((r) => r.json()),
   ]);
   TRANSLATION = translation;
   CURRICULUM = curriculum;
+  OVERVIEW = overview;
+  TEACHINGS = teachings;
 
   runSplash(() => {
     show('home');
@@ -48,11 +58,15 @@ function show(name) {
   if (name === 'read') renderChapter();
   if (name === 'learn') renderLearnIndex();
   if (name === 'study') renderStudy();
+  if (name === 'books') renderBooks();
+  if (name === 'jesus') renderJesus();
 }
 
 function initTabs() {
   document.querySelectorAll('.tabbar button').forEach((b) =>
     b.addEventListener('click', () => show(b.dataset.screen)));
+  document.querySelectorAll('[data-back]').forEach((b) =>
+    b.addEventListener('click', () => show(b.dataset.back)));
 }
 
 /* ================================================================ home */
@@ -60,16 +74,18 @@ function renderHome() {
   const body = $('#screen-home .screen-body');
   body.innerHTML = '';
   const cards = [
-    ['📖', 'Read the Word', `Open the ${TRANSLATION.name.split('(')[0].trim()} — every word, fully offline.`, 'read'],
-    ['✝️', 'Share the Gospel', 'The Bridge: Creation, Fall, Redemption, Restoration — walk a friend through it in ten minutes.', 'gospel'],
-    ['🕯️', 'Learn & Play', 'Lessons for Lambs (kids) and Disciples (youth & adults).', 'learn'],
-    ['🌌', 'Study Deep', 'Cross-reference constellations, word studies, and your multiplication ledger.', 'study'],
+    ['📖', 'Read the Word', 'Open the Bible — swipe or tap the arrows to turn glowing pages.', () => show('read')],
+    ['📚', 'The 66 Books', 'Spin the carousel: main lessons for every book, Genesis to Revelation.', () => show('books')],
+    ['✝️', 'The Teachings of Jesus', 'The Sermon on the Mount, the parables, the I AMs, the miracles, His final words.', () => show('jesus')],
+    ['🕊️', 'Share the Gospel', 'The Bridge: Creation, Fall, Redemption, Restoration — ten minutes with a friend.', () => renderGospel()],
+    ['🕯️', 'Learn & Play', 'Lessons for Lambs (kids) and Disciples (youth & adults).', () => show('learn')],
+    ['🌌', 'Study Deep', 'Cross-reference constellations, word studies, your multiplication ledger.', () => show('study')],
   ];
-  for (const [glyph, title, sub, target] of cards) {
+  for (const [glyph, title, sub, go] of cards) {
     const c = document.createElement('div');
     c.className = 'card glass halo';
     c.innerHTML = `<h3>${glyph}&nbsp; ${title}</h3><p>${sub}</p>`;
-    c.addEventListener('click', () => target === 'gospel' ? renderGospel() : show(target));
+    c.addEventListener('click', go);
     body.append(c);
   }
   const notice = document.createElement('p');
@@ -78,7 +94,7 @@ function renderHome() {
   body.append(notice);
 }
 
-/* The Bridge — a guided gospel walkthrough for evangelism (Module 1 §1.1). */
+/* The Bridge — a guided gospel walkthrough for evangelism. */
 const BRIDGE = [
   { title: '1 · Creation', ref: [1, 1], text: 'God made everything good — including us, made to know Him.' },
   { title: '2 · The Fall', ref: [45, 3], text: '“All have sinned.” Our sin separates us from the holy God — a canyon we cannot cross.' },
@@ -100,6 +116,121 @@ function renderGospel() {
   });
 }
 
+/* ===================================================== 66-books carousel */
+const GENRE_ART = {
+  law: '⛰️', history: '🏺', wisdom: '🎼', prophets: '🔥',
+  gospel: '✝️', acts: '🌍', epistle: '📜', apocalyptic: '👑',
+};
+
+function renderBooks() {
+  const mount = $('#books-carousel');
+  if (!booksCarousel) {
+    booksCarousel = new Carousel3D({
+      mount,
+      items: OVERVIEW.books,
+      cardWidth: 148,
+      renderCard: (ov) => {
+        const [, name, , testament, genre] = bookById(ov.b);
+        const card = document.createElement('div');
+        card.className = `book-cover ${testament.toLowerCase()} genre-${genre}`;
+        card.innerHTML = `
+          <span class="book-glyph">${GENRE_ART[genre] || '📖'}</span>
+          <span class="book-name">${name}</span>
+          <span class="book-testament">${testament === 'OT' ? 'Old Testament' : 'New Testament'}</span>`;
+        return card;
+      },
+      onFocus: (ov) => renderBookFocus(ov),
+      onSelect: (ov) => renderBookDetail(ov),
+    });
+    renderBookFocus(OVERVIEW.books[0]);
+  }
+}
+
+function renderBookFocus(ov) {
+  const [, name] = bookById(ov.b);
+  $('#books-focus').innerHTML = `
+    <h3 class="ca-heading">${name}</h3>
+    <p class="game-sub">${ov.t}</p>
+    <div class="books-actions">
+      <button class="btn btn--gold" id="bk-open">Main Lessons</button>
+      <button class="btn" id="bk-read">Read ${name}</button>
+    </div>`;
+  $('#bk-open').addEventListener('click', () => renderBookDetail(ov));
+  $('#bk-read').addEventListener('click', () => {
+    reader = { book: ov.b, chapter: 1 };
+    show('read');
+  });
+}
+
+function renderBookDetail(ov) {
+  const [, name, , testament] = bookById(ov.b);
+  const body = $('#books-detail');
+  body.innerHTML = `
+    <div class="card glass halo">
+      <h3 class="ca-heading">${name} — ${ov.t}</h3>
+      <p class="game-sub">${testament === 'OT' ? 'Old Testament' : 'New Testament'} · Key verse: ${ov.kv}</p>
+      ${ov.ls.map((l, i) => `
+        <div class="lesson-step glass" style="margin-top:10px">
+          <span class="kind">Lesson ${i + 1}</span><p>${l}</p>
+        </div>`).join('')}
+      <div class="lesson-step glass christ-box" style="margin-top:10px">
+        <span class="kind">Where is Jesus here?</span><p>${ov.c}</p>
+      </div>
+      <button class="btn btn--gold" style="margin-top:12px" id="bkd-read">Open ${name} in the Reader</button>
+    </div>`;
+  $('#bkd-read').addEventListener('click', () => {
+    reader = { book: ov.b, chapter: 1 };
+    show('read');
+  });
+  body.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ================================================ Jesus' teachings hall */
+function renderJesus() {
+  const mount = $('#jesus-carousel');
+  if (!teachCarousel) {
+    teachCarousel = new Carousel3D({
+      mount,
+      items: TEACHINGS.categories,
+      cardWidth: 168,
+      renderCard: (cat) => {
+        const card = document.createElement('div');
+        card.className = 'book-cover teach-cover';
+        card.innerHTML = `
+          <span class="book-glyph">${cat.glyph}</span>
+          <span class="book-name">${cat.title}</span>
+          <span class="book-testament">${cat.ref}</span>`;
+        return card;
+      },
+      onFocus: (cat) => renderTeachList(cat),
+      onSelect: (cat) => renderTeachList(cat),
+    });
+    renderTeachList(TEACHINGS.categories[0]);
+  }
+}
+
+function renderTeachList(cat) {
+  const body = $('#jesus-list');
+  body.innerHTML = `
+    <h3 class="ca-heading">${cat.glyph} ${cat.title}</h3>
+    <p class="game-sub">${cat.intro}</p>`;
+  cat.items.forEach((it) => {
+    const c = document.createElement('div');
+    c.className = 'card glass teach-item';
+    c.innerHTML = `<h3>${it.title}</h3><p class="game-sub">${it.ref}</p>
+      <div class="teach-body" hidden>
+        <div class="lesson-step glass"><span class="kind">What Jesus taught</span><p>${it.teaching}</p></div>
+        <div class="lesson-step glass christ-box"><span class="kind">Live it</span><p>${it.live}</p></div>
+      </div>`;
+    c.addEventListener('click', () => {
+      const bodyEl = c.querySelector('.teach-body');
+      bodyEl.hidden = !bodyEl.hidden;
+      c.classList.toggle('open', !bodyEl.hidden);
+    });
+    body.append(c);
+  });
+}
+
 /* ============================================================== reader */
 function initReader() {
   const bookSel = $('#sel-book');
@@ -115,15 +246,19 @@ function initReader() {
   chapSel.addEventListener('change', () => {
     reader.chapter = +chapSel.value; renderChapter();
   });
+  $('#btn-books').addEventListener('click', () => show('books'));
 
   flip = new PageFlip({
     stage: $('#book-stage'),
+    grabZone: 0.44,
     canGo: (dir) => nextRef(dir) !== null,
     onCommit: (dir) => {
       const n = nextRef(dir);
       if (n) { reader = n; renderChapter(); }
     },
   });
+  $('#turn-prev').addEventListener('click', () => flip.turn(-1));
+  $('#turn-next').addEventListener('click', () => flip.turn(+1));
 }
 
 function nextRef(dir) {
@@ -159,10 +294,16 @@ async function renderChapter() {
 
   let html = `<div class="chapter-title">${bookName(reader.book).toUpperCase()} ${reader.chapter}</div>`;
   if (!verses.length) {
-    html += `<div class="no-text-notice">This chapter's text is not in the development seed.<br><br>
-      Install the licensed ESV bundle (see <em>tools/import-esv.mjs</em>) to load the complete
-      Bible — all 66 books, 31,102 verses — for offline use.<br><br>
-      <em>"${'The grass withereth, the flower fadeth: but the word of our God shall stand for ever.'}" — Isaiah 40:8</em></div>`;
+    const ov = OVERVIEW.books.find((o) => o.b === reader.book);
+    html += `<div class="no-text-notice">
+      <p class="scripture" style="font-style:italic">“${ov ? ov.t : ''}”</p><br>
+      This chapter's full text is not in the development seed — the licensed ESV
+      bundle (all 31,102 verses) loads it offline. Meanwhile, the main lessons of
+      ${bookName(reader.book)} are one tap away.<br><br></div>`;
+    if (ov) {
+      html += `<div style="text-align:center"><button class="btn btn--gold" id="nt-lessons">
+        Main Lessons of ${bookName(reader.book)}</button></div>`;
+    }
   } else {
     html += '<div class="scripture">' + verses.map((v) => {
       const hl = hlMap.has(v.v) ? ` class="hl-${hlMap.get(v.v)}"` : '';
@@ -172,7 +313,15 @@ async function renderChapter() {
   }
   face.innerHTML = html;
 
-  // tap a verse to toggle a gold highlight (long-form annotation lives in Study)
+  const lessonsBtn = face.querySelector('#nt-lessons');
+  if (lessonsBtn) lessonsBtn.addEventListener('click', () => {
+    const ov = OVERVIEW.books.find((o) => o.b === reader.book);
+    show('books');
+    booksCarousel.goTo(OVERVIEW.books.indexOf(ov));
+    renderBookDetail(ov);
+  });
+
+  // tap a verse to toggle a gold highlight
   face.querySelectorAll('[data-v]').forEach((span) => {
     span.addEventListener('click', async () => {
       const row = await db.toggleHighlight(TRANSLATION.id, reader.book, reader.chapter, +span.dataset.v);
@@ -189,9 +338,22 @@ function renderLearnIndex() {
   const body = $('#screen-learn .screen-body');
   body.innerHTML = '<h2 class="ca-heading">Learn</h2>';
 
+  // gateways to the deep libraries
+  const gates = [
+    ['📚', 'The 66 Books', 'Main lessons for every book, Genesis to Revelation — spin the carousel.', () => show('books')],
+    ['✝️', 'The Teachings of Jesus', 'Sermon on the Mount · Parables · I AM · Miracles · Final words.', () => show('jesus')],
+  ];
+  for (const [glyph, title, sub, go] of gates) {
+    const c = document.createElement('div');
+    c.className = 'card glass halo';
+    c.innerHTML = `<h3>${glyph}&nbsp; ${title}</h3><p>${sub}</p>`;
+    c.addEventListener('click', go);
+    body.append(c);
+  }
+
   const a = CURRICULUM.trackA;
   body.insertAdjacentHTML('beforeend',
-    `<p class="game-sub">TRACK A · ${a.name}</p>`);
+    `<p class="game-sub" style="margin-top:18px">TRACK A · ${a.name}</p>`);
   for (const unit of a.units) {
     for (const lesson of unit.lessons) {
       body.append(lessonCard(lesson, () => renderLessonA(lesson)));
