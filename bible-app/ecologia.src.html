@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<title>ECOLOGIA — The Sacred Word</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   ECOLOGIA — design tokens
+   Zero external requests: no CDN, no webfonts, no analytics. The
+   OFFLINE ACTIVE badge is literally true.
+   Cinzel is unavailable offline, so display type uses a high-quality
+   serif stack with the wide tracking that gives Cinzel its liturgical
+   feel.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --void: #020617;
+  --accent: #eab308;          /* rethemed live by the age toggle */
+  --accent-soft: rgba(234,179,8,.30);
+  --accent-text: #fde68a;
+  --indigo: #6366f1;
+  --ink: #e2e8f0;
+  --ink-dim: #94a3b8;
+  --font-sacred: 'Cinzel', 'Optima', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-ui: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --ease-lux: cubic-bezier(.16,1,.3,1);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--font-ui);
+  background: var(--void);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 22px;
+  position: relative;
+  user-select: none;
+}
+.serif-sacred { font-family: var(--font-sacred); letter-spacing: .04em; }
+::-webkit-scrollbar { width: 0; display: none; }
+
+/* ── glassmorphism ────────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(255,255,255,.015);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-top: 1px solid rgba(255,255,255,.14);
+  border-left: 1px solid rgba(255,255,255,.08);
+  border-right: 1px solid rgba(255,255,255,.03);
+  border-bottom: 1px solid rgba(255,255,255,.02);
+  box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: background .5s var(--ease-lux), border-color .5s var(--ease-lux),
+              box-shadow .5s var(--ease-lux), transform .5s var(--ease-lux);
+}
+.glass-panel:hover {
+  background: rgba(255,255,255,.03);
+  border-top-color: var(--accent-soft);
+  box-shadow: 0 40px 90px rgba(0,0,0,.7), 0 0 30px rgba(234,179,8,.06);
+}
+
+/* ── ambient layers ──────────────────────────────────────────────── */
+@keyframes pulseGlow {
+  0%,100% { opacity: .25; transform: scale(1); }
+  50%     { opacity: .40; transform: scale(1.1); }
+}
+#celestial {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 0%,
+    rgba(234,179,8,.18) 0%, rgba(99,102,241,.08) 40%, transparent 70%);
+  animation: pulseGlow 10s ease-in-out infinite;
+}
+#canvas-container { position: fixed; inset: 0; z-index: 1; }
+#gl { width: 100%; height: 100%; display: block; }
+
+/* ── header ───────────────────────────────────────────────────────── */
+header, main, footer { position: relative; z-index: 20; width: 100%;
+  max-width: 1280px; margin-inline: auto; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-dot {
+  width: 11px; height: 11px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 12px var(--accent); animation: pulseGlow 2.4s ease-in-out infinite;
+}
+.brand h1 { font-size: 20px; letter-spacing: .2em; font-weight: 600;
+  color: #fef3c7; margin: 0; }
+.header-tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.age-toggle { display: flex; padding: 4px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+.age-toggle button {
+  padding: 7px 17px; border-radius: 999px; border: 0; background: none; cursor: pointer;
+  color: var(--ink-dim); font: 500 12px/1 var(--font-ui); letter-spacing: .06em;
+  transition: all .3s var(--ease-lux);
+}
+.age-toggle button.on { background: rgba(255,255,255,.10); color: #fff; }
+.age-toggle button.on.youth { background: rgba(239,68,68,.20); color: #fca5a5; }
+.badge {
+  padding: 9px 15px; border-radius: 999px; display: flex; align-items: center; gap: 7px;
+  font-size: 11px; letter-spacing: .1em; color: #34d399; font-weight: 500;
+}
+.badge svg { width: 12px; height: 12px; }
+
+/* ── main grid ────────────────────────────────────────────────────── */
+main {
+  display: grid; grid-template-columns: 1fr; gap: 26px;
+  margin: 34px auto; align-items: center;
+}
+@media (min-width: 1040px) {
+  main { grid-template-columns: repeat(12, 1fr); }
+  .col-left  { grid-column: span 4; }
+  .col-mid   { grid-column: span 4; min-height: 380px; }
+  .col-right { grid-column: span 4; }
+}
+.col-mid { min-height: 220px; }        /* the holographic book shows through */
+.col-left, .col-right { display: flex; flex-direction: column; gap: 20px; }
+
+.scripture-card { padding: 30px; border-radius: 26px; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .25em;
+  color: var(--accent); font-weight: 600; display: block; margin-bottom: 12px; }
+#scripture-title { font-size: 26px; color: #fef3c7; margin: 0 0 14px; line-height: 1.25; }
+#scripture-text { color: #cbd5e1; font-size: 14.5px; line-height: 1.75; font-weight: 300;
+  font-style: italic; letter-spacing: .01em; margin: 0; transition: opacity .45s var(--ease-lux); }
+.rule { height: 1px; margin: 24px 0;
+  background: linear-gradient(90deg, transparent, #334155, transparent); }
+.card-foot { display: flex; justify-content: space-between; align-items: center;
+  font-size: 11.5px; color: var(--ink-dim); letter-spacing: .08em; gap: 10px; }
+.link-btn { background: none; border: 0; cursor: pointer; color: var(--accent-text);
+  font: 500 11.5px var(--font-ui); letter-spacing: .08em; display: flex; align-items: center; gap: 5px;
+  transition: color .3s; }
+.link-btn:hover { color: #fff; }
+.link-btn svg { width: 14px; height: 14px; }
+
+.module-card {
+  padding: 22px; border-radius: 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 14px; cursor: pointer;
+}
+.module-card:hover { transform: translateY(-2px); }
+.module-card .tag { font-size: 10px; text-transform: uppercase; letter-spacing: .16em;
+  font-weight: 700; color: var(--indigo); }
+.module-card.gold .tag { color: var(--accent); }
+.module-card h3 { font-size: 16.5px; color: #e2e8f0; margin: 5px 0 0;
+  transition: color .3s; font-family: var(--font-sacred); }
+.module-card:hover h3 { color: #fde68a; }
+.module-card p { font-size: 12.5px; color: var(--ink-dim); font-weight: 300; margin: 6px 0 0; line-height: 1.5; }
+.chev {
+  width: 34px; height: 34px; flex: none; border-radius: 50%;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10);
+  display: grid; place-items: center; color: var(--ink-dim);
+  transition: all .3s var(--ease-lux);
+}
+.module-card:hover .chev { background: rgba(234,179,8,.10);
+  border-color: var(--accent-soft); color: var(--accent-text); }
+.chev svg { width: 16px; height: 16px; }
+
+/* ── footer ───────────────────────────────────────────────────────── */
+footer { display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  flex-wrap: wrap; font-size: 11px; letter-spacing: .14em; color: #64748b;
+  border-top: 1px solid rgba(255,255,255,.05); padding-top: 22px; }
+footer nav { display: flex; gap: 24px; flex-wrap: wrap; }
+footer button { background: none; border: 0; cursor: pointer; color: #64748b;
+  font: 400 11px var(--font-ui); letter-spacing: .14em; transition: color .3s; }
+footer button:hover { color: var(--accent-text); }
+
+/* ── overlay / module shell ───────────────────────────────────────── */
+#overlay {
+  position: fixed; inset: 0; z-index: 60; display: none;
+  background: rgba(2,6,23,.72); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px; overflow-y: auto; overscroll-behavior: contain;
+}
+#overlay.open { display: block; animation: fadeIn .4s var(--ease-lux); }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+.sheet {
+  max-width: 940px; margin: 24px auto; border-radius: 26px; padding: 28px;
+  animation: riseIn .5s var(--ease-lux);
+}
+@keyframes riseIn { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: none } }
+.sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
+.sheet-head h2 { font-family: var(--font-sacred); font-size: 25px; color: #fef3c7; margin: 0; line-height: 1.25; }
+.sheet-sub { color: var(--ink-dim); font-size: 13px; font-weight: 300; margin: 8px 0 22px; line-height: 1.6; }
+.close-x {
+  flex: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font-size: 19px; line-height: 1; transition: all .3s;
+}
+.close-x:hover { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #fca5a5; }
+
+.btn {
+  padding: 12px 20px; border-radius: 13px; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font: 600 13.5px var(--font-ui); letter-spacing: .02em;
+  transition: all .3s var(--ease-lux);
+}
+.btn:hover { background: rgba(255,255,255,.10); border-color: var(--accent-soft); }
+.btn--gold { background: linear-gradient(180deg, rgba(234,179,8,.26), rgba(234,179,8,.10));
+  border-color: var(--accent-soft); color: #fef3c7; }
+.btn:disabled { opacity: .4; cursor: default; }
+
+/* ── games & modules ──────────────────────────────────────────────── */
+.tile-pool { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.tile {
+  padding: 11px 15px; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font: 500 14px var(--font-sacred); transition: all .3s var(--ease-lux);
+}
+.tile:hover { border-color: var(--accent-soft); background: rgba(255,255,255,.08); }
+.tile.used { opacity: .2; pointer-events: none; }
+.tile.wrong { animation: shakeIt .5s var(--ease-lux); border-color: rgba(239,68,68,.5); }
+@keyframes shakeIt { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 60%{transform:translateX(5px)} }
+.answer-line {
+  min-height: 62px; padding: 16px; border-radius: 14px; margin-bottom: 16px;
+  border: 1px dashed var(--accent-soft); font-family: var(--font-sacred);
+  font-size: 16px; line-height: 1.7; color: #fef3c7;
+}
+.answer-line.done { border-style: solid; box-shadow: 0 0 34px rgba(234,179,8,.20); }
+.answer-line span { opacity: 0; transition: opacity .5s var(--ease-lux); }
+.answer-line span.lit { opacity: 1; text-shadow: 0 0 14px rgba(234,179,8,.55); }
+
+.progress-rail { display: flex; gap: 5px; height: 7px; margin: 14px 0 20px; }
+.progress-rail i { flex: 1; border-radius: 4px; background: rgba(255,255,255,.07);
+  transition: background .6s var(--ease-lux), box-shadow .6s var(--ease-lux); }
+.progress-rail i.lit { background: linear-gradient(90deg, var(--accent), #fef3c7);
+  box-shadow: 0 0 14px var(--accent-soft); }
+
+.seq-slots { display: flex; flex-wrap: wrap; gap: 9px; min-height: 46px; margin-bottom: 16px; }
+.seq-card {
+  padding: 12px 15px; border-radius: 13px; cursor: pointer; text-align: left;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+  transition: all .3s var(--ease-lux); display: flex; flex-direction: column; gap: 3px;
+  color: var(--ink); font-family: var(--font-ui);
+}
+.seq-card strong { font: 600 13.5px var(--font-sacred); color: #e2e8f0; }
+.seq-card small { font-size: 11px; color: var(--ink-dim); }
+.seq-card:hover { border-color: var(--accent-soft); }
+.seq-card.placed { border-color: var(--accent-soft); background: rgba(234,179,8,.09); cursor: default; }
+
+.quiz-q { font: 600 15.5px var(--font-ui); color: #fef3c7; margin: 20px 0 12px; line-height: 1.55; }
+.quiz-opt { display: block; width: 100%; text-align: left; margin-bottom: 9px; }
+.quiz-opt.correct { border-color: rgba(52,211,153,.55); background: rgba(52,211,153,.12); color: #a7f3d0; }
+.quiz-opt.miss { border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.10); }
+.explain { padding: 15px 17px; border-radius: 14px; margin: 12px 0 4px;
+  border: 1px solid var(--accent-soft); background: rgba(234,179,8,.07);
+  font-size: 13.5px; line-height: 1.65; color: #fde68a; }
+.explain b { color: #fff8e1; }
+
+.result {
+  margin-top: 20px; padding: 22px; border-radius: 18px; text-align: center;
+  border: 1px solid var(--accent-soft); background: rgba(234,179,8,.08);
+}
+.result .big { font-size: 34px; }
+.result p { color: #fde68a; font-size: 14px; line-height: 1.65; margin: 10px 0 0; }
+
+/* book / teaching grids */
+.grid-cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.mini-book {
+  padding: 15px 13px; border-radius: 13px; cursor: pointer; text-align: center;
+  background: linear-gradient(150deg, rgba(99,102,241,.15), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10); border-left: 3px solid var(--accent-soft);
+  transition: all .35s var(--ease-lux); color: var(--ink);
+}
+.mini-book.ot { background: linear-gradient(150deg, rgba(234,179,8,.14), rgba(255,255,255,.02)); }
+.mini-book:hover { transform: translateY(-3px); border-color: var(--accent-soft);
+  box-shadow: 0 14px 34px rgba(0,0,0,.5), 0 0 22px rgba(234,179,8,.10); }
+.mini-book b { display: block; font: 600 13.5px var(--font-sacred); color: #fef3c7; }
+.mini-book span { font-size: 10.5px; color: var(--ink-dim); letter-spacing: .1em; text-transform: uppercase; }
+
+.detail-block { padding: 17px; border-radius: 15px; margin-top: 12px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+.detail-block .kind { display: block; font: 700 10.5px var(--font-ui); letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+.detail-block p { margin: 0; font-size: 14px; line-height: 1.7; color: #cbd5e1; }
+.detail-block.christ { border-color: var(--accent-soft); background: rgba(234,179,8,.07); }
+.detail-block.christ p { color: #fde68a; }
+
+.accordion { margin-bottom: 10px; border-radius: 15px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); }
+.accordion > button { width: 100%; text-align: left; padding: 15px 17px; cursor: pointer;
+  background: none; border: 0; color: var(--ink); font-family: var(--font-ui); }
+.accordion > button b { display: block; font: 600 14.5px var(--font-sacred); color: #fef3c7; }
+.accordion > button small { color: var(--ink-dim); font-size: 11.5px; letter-spacing: .06em; }
+.accordion .inner { padding: 0 17px 15px; }
+
+#map-canvas { width: 100%; height: 340px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10); display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="celestial"></div>
+<div id="canvas-container"><canvas id="gl"></canvas></div>
+
+<!-- ══════════════════════════ HEADER ══════════════════════════ -->
+<header>
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <h1 class="serif-sacred">ECOLOGIA</h1>
+  </div>
+  <div class="header-tools">
+    <div class="age-toggle glass-panel">
+      <button id="btn-kids" data-age="kids">YOUTH</button>
+      <button id="btn-adults" data-age="adults" class="on">ADULT</button>
+    </div>
+    <div class="badge glass-panel">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+      OFFLINE ACTIVE
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main>
+  <section class="col-left">
+    <div class="glass-panel scripture-card">
+      <span class="eyebrow">Verse of the Day</span>
+      <h2 id="scripture-title" class="serif-sacred">John 1:1</h2>
+      <p id="scripture-text">"In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning."</p>
+      <div class="rule"></div>
+      <div class="card-foot">
+        <span id="translation-label">TRANSLATION: KJV</span>
+        <button class="link-btn" id="btn-listen">
+          LISTEN TIMBRE
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="glass-panel module-card" data-module="books">
+      <div>
+        <span class="tag">Canonical Atlas</span>
+        <h3>The Sixty-Six</h3>
+        <p>Every book, its theme, and where it points to Christ.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+  </section>
+
+  <div class="col-mid"></div>
+
+  <section class="col-right">
+    <div class="glass-panel module-card" id="card1" data-module="">
+      <div>
+        <span class="tag" id="card1-tag">Interactive Chronology</span>
+        <h3 id="card1-title">Testament Illuminations</h3>
+        <p id="card1-desc">Journey through historical design alignments.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+    <div class="glass-panel module-card gold" id="card2" data-module="">
+      <div>
+        <span class="tag" id="card2-tag">Scripture Quest Engine</span>
+        <h3 id="card2-title">Exegesis Training</h3>
+        <p id="card2-desc">Deep, structured modular memory maps.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+    <div class="glass-panel module-card" id="card3" data-module="">
+      <div>
+        <span class="tag" id="card3-tag">Word Made Flesh</span>
+        <h3 id="card3-title">The Teachings of Jesus</h3>
+        <p id="card3-desc">Sermon, parables, the I AMs, and His final words.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════════════════ FOOTER ══════════════════════════ -->
+<footer>
+  <p style="margin:0;font-weight:300">CRAFTED FOR UNIVERSAL MISSIONARY DISPATCH</p>
+  <nav>
+    <button data-module="books">HISTORICAL TEXTS</button>
+    <button data-module="concordance">CONCORDANCE</button>
+    <button data-module="maps">GLOBAL MAPS</button>
+  </nav>
+</footer>
+
+<div id="overlay"><div class="glass-panel sheet" id="sheet"></div></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ECOLOGIA ENGINE
+   Rewritten from the source draft. Notable departures:
+   · Three.js is replaced by hand-written raymarched WebGL. The book is
+     an SDF solid shaded with true single-bounce refraction and
+     per-channel dispersion — physically closer than MeshPhysicalMaterial
+     transmission, and it costs one fullscreen triangle instead of a
+     600 KB dependency the offline badge could never honor.
+   · No CDN, webfont, or network call of any kind exists in this file.
+   ══════════════════════════════════════════════════════════════════ */
+'use strict';
+
+const BIBLE = __BIBLE_DATA__;
+const TEACH = __TEACH_DATA__;
+
+/* ════════════════════════ 1 · WEBGL ENGINE ════════════════════════ */
+const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
+
+const FRAG = `
+precision highp float;
+uniform vec2  uRes;
+uniform float uTime;
+uniform vec2  uMouse;      // smoothed parallax, -1..1
+uniform vec3  uAccent;     // theme accent (age toggle rethemes this)
+uniform float uOpen;       // 0..1 book opening amount
+
+const float PI = 3.14159265;
+
+mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c,-s,s,c); }
+
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+float noise(vec2 p){
+  vec2 i = floor(p), f = fract(p);
+  f = f*f*(3.0-2.0*f);
+  return mix(mix(hash(i), hash(i+vec2(1,0)), f.x),
+             mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+}
+
+float sdRoundBox(vec3 p, vec3 b, float r){
+  vec3 q = abs(p) - b + r;
+  return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
+}
+
+/* The codex: a structural cover plus two page slabs hinged at the spine.
+   uOpen drives the hinge so the volume breathes open on load.           */
+float mapBook(vec3 p){
+  vec3 pc = p; pc.z += 0.20;
+  float cover = sdRoundBox(pc, vec3(1.16, 1.52, 0.055), 0.05);
+
+  float hinge = mix(0.55, 0.15, uOpen);       // radians off the page plane
+  vec3 pl = p; pl.x += 0.56; pl.xz *= rot(-hinge);
+  float left = sdRoundBox(pl, vec3(0.52, 1.42, 0.028), 0.02);
+
+  vec3 pr = p; pr.x -= 0.56; pr.xz *= rot(hinge);
+  float right = sdRoundBox(pr, vec3(0.52, 1.42, 0.028), 0.02);
+
+  return min(cover, min(left, right));
+}
+
+vec3 calcNormal(vec3 p){
+  vec2 e = vec2(1.0,-1.0) * 0.0012;
+  return normalize(
+    e.xyy * mapBook(p + e.xyy) + e.yyx * mapBook(p + e.yyx) +
+    e.yxy * mapBook(p + e.yxy) + e.xxx * mapBook(p + e.xxx));
+}
+
+/* Heaven above: the single light source of the whole composition. */
+vec3 env(vec3 d){
+  float y = d.y * 0.5 + 0.5;
+  vec3 c = mix(vec3(0.008,0.014,0.033), vec3(0.045,0.062,0.128), y);
+  vec3 L = normalize(vec3(0.0, 1.0, 0.42));
+  float core = pow(max(dot(d, L), 0.0), 42.0);
+  float halo = pow(max(dot(d, L), 0.0), 4.0);
+  c += uAccent * (core * 2.6 + halo * 0.10);
+  c += vec3(0.38,0.40,0.98) * pow(max(dot(d, normalize(vec3(-0.7,-0.3,0.6))),0.0), 6.0) * 0.09;
+  // distant stars — placed WITHIN each cell, else hashing floored coords
+  // paints whole cells and the sky turns into a checkerboard of squares.
+  vec2 sv = d.xy / max(abs(d.z), 0.35) * 9.0;
+  vec2 cell = floor(sv);
+  vec2 f = fract(sv) - 0.5;
+  vec2 jitter = (vec2(hash(cell), hash(cell + 41.7)) - 0.5) * 0.7;
+  float star = smoothstep(0.055, 0.0, length(f - jitter))
+             * step(0.82, hash(cell + 7.1));      // only ~18% of cells hold one
+  c += vec3(0.85, 0.88, 1.0) * star * 0.5 * smoothstep(0.05, 0.5, y);
+  return c;
+}
+
+/* March inside the glass to the far wall, so thickness reads honestly. */
+float marchInside(vec3 ro, vec3 rd){
+  float t = 0.004;
+  for (int i = 0; i < 28; i++){
+    float d = -mapBook(ro + rd * t);
+    if (d < 0.0008) break;
+    t += max(d, 0.006);
+    if (t > 5.0) break;
+  }
+  return t;
+}
+
+/* One spectral channel through the glass: in, through, and out again.
+   Written as a function returning a vec3 so each channel is picked with a
+   static .r/.g/.b swizzle — dynamic vector indexing inside a loop is legal
+   ES 1.0 but is mis-compiled by several mobile drivers.                  */
+vec3 glassChannel(vec3 pos, vec3 N, vec3 rd, float ior){
+  vec3 rr = refract(rd, N, 1.0 / ior);
+  if (dot(rr, rr) < 0.001) rr = reflect(rd, N);
+  float inner = marchInside(pos + rr * 0.006, rr);
+  vec3 outR = refract(rr, -calcNormal(pos + rr * inner), ior);
+  if (dot(outR, outR) < 0.001) outR = rr;
+  float absorb = exp(-inner * 0.55);          // Beer–Lambert through the leaf
+  return env(outR) * absorb + uAccent * (1.0 - absorb) * 0.62;
+}
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
+
+  // Framed so the codex reads as a discrete object with clear silhouette;
+  // closer than this it fills the frame and glass loses all definition.
+  // Portrait viewports pull further back so the panels stay legible.
+  float pull = clamp((1.10 - uRes.x / uRes.y) / 0.60, 0.0, 1.0);
+  vec3 ro = vec3(0.0, 0.0, mix(7.5, 12.0, pull));
+  vec3 rd = normalize(vec3(uv * 1.35, -2.6));
+
+  // parallax + zero-gravity drift, applied to the ray rather than the mesh
+  float ax = uMouse.x * 0.55 + sin(uTime * 0.30) * 0.05;
+  float ay = uMouse.y * 0.36 + cos(uTime * 0.21) * 0.03;
+  float bob = sin(uTime * 0.8) * 0.075;
+  ro.y -= bob;
+  ro.xz *= rot(ax);  rd.xz *= rot(ax);
+  ro.yz *= rot(ay);  rd.yz *= rot(ay);
+
+  // ── primary march + volumetric shaft integrated along the way.
+  //    Density must be weighted by the STEP LENGTH: sphere-tracing steps
+  //    shrink near surfaces, so a per-iteration sum piles up halos around
+  //    every silhouette instead of measuring the light actually traversed.
+  float t = 0.0, hit = 0.0;
+  vec3 shaft = vec3(0.0);
+  for (int i = 0; i < 80; i++){
+    vec3 pos = ro + rd * t;
+    float d = mapBook(pos);
+    if (d < 0.0016){ hit = 1.0; break; }
+    float step = max(d * 0.86, 0.012);
+    // god-rays: a cone of light descending on the codex
+    float cone = 1.0 - smoothstep(0.0, mix(0.34, 1.30, clamp(0.5 - pos.y * 0.35, 0.0, 1.0)), abs(pos.x));
+    float dens = cone * smoothstep(-2.2, 1.9, pos.y)
+               * (0.55 + 0.45 * noise(vec2(pos.x * 2.4, pos.y * 1.5 - uTime * 0.16)));
+    shaft += uAccent * dens * step * 0.011;
+    t += step;
+    if (t > 12.0) break;
+  }
+
+  vec3 col;
+  if (hit > 0.5){
+    vec3 pos = ro + rd * t;
+    vec3 N = calcNormal(pos);
+    float fres = pow(1.0 - max(dot(-rd, N), 0.0), 4.0);
+
+    // ── chromatic dispersion: three IORs split the spectrum, red bending
+    //    least and blue most, exactly as a real prism separates light.
+    vec3 disp = vec3(
+      glassChannel(pos, N, rd, 1.440).r,
+      glassChannel(pos, N, rd, 1.495).g,
+      glassChannel(pos, N, rd, 1.550).b);
+
+    vec3 refl = env(reflect(rd, N));
+    col = mix(disp, refl, clamp(fres, 0.0, 0.85));
+
+    // gilded rim + clearcoat specular from the heavenly source
+    vec3 L = normalize(vec3(0.0, 1.0, 0.42));
+    float spec = pow(max(dot(reflect(-L, N), -rd), 0.0), 88.0);
+    col += vec3(1.0, 0.97, 0.88) * spec * 2.6;
+    col += uAccent * fres * 0.95;                       // gilded edge
+    col += uAccent * pow(max(dot(N, L), 0.0), 2.0) * 0.22;
+    col += vec3(0.55, 0.62, 1.0) * pow(1.0 - max(dot(-rd, N), 0.0), 2.0) * 0.10;
+
+    // Illuminated script: ruled lines of glowing text across the open
+    // leaves. Masked off the spine and the outer margins, so it reads as
+    // a page of Scripture rather than a striped slab.
+    float freq = 74.0;
+    float line = floor(pos.y * freq);
+    float rule = smoothstep(0.74, 0.97, sin(pos.y * freq) * 0.5 + 0.5);
+    // break each ruling into word-length segments with ragged right edges
+    float words = smoothstep(0.34, 0.46, noise(vec2(pos.x * 22.0, line * 3.7)));
+    float margin = smoothstep(1.24, 1.12, abs(pos.y))
+                 * smoothstep(0.08, 0.22, abs(pos.x))
+                 * smoothstep(1.02, 0.90, abs(pos.x))
+                 * step(0.0, pos.z);            // front leaves only
+    col += uAccent * rule * words * margin * 0.30;
+  } else {
+    col = env(rd);
+  }
+
+  col += shaft;
+
+  // drifting motes inside the shaft
+  for (int i = 0; i < 2; i++){
+    float fi = float(i);
+    vec2 gp = uv * (13.0 + fi * 9.0) + vec2(sin(uTime * 0.3 + fi) * 0.4, uTime * (0.13 + fi * 0.07));
+    vec2 cell = floor(gp);
+    vec2 f = fract(gp) - 0.5;
+    float sp = smoothstep(0.085, 0.0,
+      length(f + (vec2(hash(cell), hash(cell + 7.3)) - 0.5) * 0.7));
+    col += uAccent * sp * 0.20 * (1.0 - smoothstep(0.25, 1.1, abs(uv.x)));
+  }
+
+  // ACES-ish filmic tonemap + vignette
+  col *= 1.05;
+  col = (col * (2.51 * col + 0.03)) / (col * (2.43 * col + 0.59) + 0.14);
+  col *= mix(0.72, 1.0, smoothstep(1.35, 0.25, length(uv * vec2(0.85, 1.0))));
+  gl_FragColor = vec4(pow(max(col, 0.0), vec3(0.4545)), 1.0);
+}
+`;
+
+const Engine = (() => {
+  const canvas = document.getElementById('gl');
+  let gl = null, uni = {}, raf = 0;
+  let mouse = { x: 0, y: 0 }, target = { x: 0, y: 0 };
+  let accent = [0.918, 0.702, 0.031];      // #eab308
+  let accentTarget = accent.slice();
+  let open = 0;
+  const t0 = performance.now();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+      throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  function resize() {
+    // Raymarching is fill-rate bound; 1.5x DPR keeps 60fps on phones.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.floor(innerWidth * dpr);
+    canvas.height = Math.floor(innerHeight * dpr);
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+
+  function init() {
+    try {
+      gl = canvas.getContext('webgl', { antialias: false, alpha: false,
+                                        powerPreference: 'high-performance' });
+      if (!gl) throw new Error('no webgl');
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+        throw new Error(gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      ['uRes','uTime','uMouse','uAccent','uOpen'].forEach(n =>
+        uni[n] = gl.getUniformLocation(prog, n));
+    } catch (e) {
+      // Graceful degradation: the celestial CSS layer carries the mood.
+      canvas.style.display = 'none';
+      document.getElementById('celestial').style.opacity = '.75';
+      return;
+    }
+    resize();
+    addEventListener('resize', resize);
+    addEventListener('pointermove', (e) => {
+      mouse.x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+      mouse.y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+    }, { passive: true });
+    loop();
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    const time = reduced ? 0 : (performance.now() - t0) / 1000;
+    // critically-damped-ish inertia, matching the original spring feel
+    target.x += (mouse.x - target.x) * 0.05;
+    target.y += (mouse.y - target.y) * 0.05;
+    for (let i = 0; i < 3; i++) accent[i] += (accentTarget[i] - accent[i]) * 0.06;
+    open += (1 - open) * 0.018;
+
+    gl.uniform2f(uni.uRes, canvas.width, canvas.height);
+    gl.uniform1f(uni.uTime, time);
+    gl.uniform2f(uni.uMouse, target.x, target.y);
+    gl.uniform3f(uni.uAccent, accent[0], accent[1], accent[2]);
+    gl.uniform1f(uni.uOpen, open);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+
+  return {
+    init,
+    setAccent(hex) {
+      accentTarget = [((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255];
+      document.documentElement.style.setProperty('--accent',
+        '#' + hex.toString(16).padStart(6, '0'));
+      document.documentElement.style.setProperty('--accent-soft',
+        `rgba(${(hex>>16)&255},${(hex>>8)&255},${hex&255},.32)`);
+    },
+  };
+})();
+
+/* ════════════════════ 2 · AGE-CLASS INTERFACE MATRIX ════════════════════ */
+const interfaceData = {
+  kids: {
+    scriptureTitle: 'Genesis 1:1',
+    scriptureText: '"In the beginning, God created the heavens and the earth." Everything you can see — stars, oceans, elephants, you — began because God spoke!',
+    card1: { tag: 'Fun Bible Journey', title: 'The Creation Adventure',
+             desc: 'Play through the 7 beautiful days of creation.', module: 'creation' },
+    card2: { tag: 'Hero Memory Match', title: 'Heroes of Faith',
+             desc: 'Match each hero to the brave thing God helped them do.', module: 'heroes' },
+    card3: { tag: 'Golden Verse Builder', title: 'Build the Verse',
+             desc: 'Put the shining words in order and light up the whole verse.', module: 'verse' },
+    accent: 0xef4444,
+  },
+  adults: {
+    scriptureTitle: 'John 1:1',
+    scriptureText: '"In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning."',
+    card1: { tag: 'Interactive Chronology', title: 'Testament Illuminations',
+             desc: 'Place redemptive history in order along the river of light.', module: 'chronology' },
+    card2: { tag: 'Scripture Quest Engine', title: 'Exegesis Training',
+             desc: 'Observation, interpretation, application — drilled passage by passage.', module: 'exegesis' },
+    card3: { tag: 'Word Made Flesh', title: 'The Teachings of Jesus',
+             desc: 'Sermon, parables, the I AMs, and His final words.', module: 'teachings' },
+    accent: 0xeab308,
+  },
+};
+let AGE = 'adults';
+
+function switchAge(mode) {
+  AGE = mode;
+  const d = interfaceData[mode];
+  document.querySelectorAll('.age-toggle button').forEach(b => {
+    const on = b.dataset.age === mode;
+    b.classList.toggle('on', on);
+    b.classList.toggle('youth', on && mode === 'kids');
+  });
+  Engine.setAccent(d.accent);
+
+  const st = document.getElementById('scripture-text');
+  st.style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('scripture-title').textContent = d.scriptureTitle;
+    st.textContent = d.scriptureText;
+    st.style.opacity = '1';
+  }, 260);
+
+  [1, 2, 3].forEach(i => {
+    const c = d['card' + i];
+    document.getElementById(`card${i}-tag`).textContent = c.tag;
+    document.getElementById(`card${i}-title`).textContent = c.title;
+    document.getElementById(`card${i}-desc`).textContent = c.desc;
+    document.getElementById('card' + i).dataset.module = c.module;
+  });
+}
+
+/* ════════════════════════ 3 · OVERLAY SHELL ════════════════════════ */
+const overlay = document.getElementById('overlay');
+const sheet = document.getElementById('sheet');
+
+function openSheet(title, sub, build) {
+  sheet.innerHTML = `
+    <div class="sheet-head">
+      <h2 class="serif-sacred">${title}</h2>
+      <button class="close-x" id="sheet-close" aria-label="Close">&times;</button>
+    </div>
+    <p class="sheet-sub">${sub}</p>
+    <div id="sheet-body"></div>`;
+  document.getElementById('sheet-close').onclick = closeSheet;
+  build(document.getElementById('sheet-body'));
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSheet(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
+
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+const shuffle = (a) => {
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [r[i], r[j]] = [r[j], r[i]];
+  }
+  return r;
+};
+function speak(text) {
+  try {
+    if (!('speechSynthesis' in window) || !text) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.92;
+    speechSynthesis.speak(u);   // device-local voices; no network
+  } catch (_) {}
+}
+function celebrate(host, msg) {
+  const r = el('div', 'result');
+  r.append(el('div', 'big', '✦'), el('p', null, msg));
+  host.append(r);
+  r.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ═══════════════════ 4 · YOUTH LEARNING GAMES ═══════════════════ */
+
+const CREATION_DAYS = [
+  { n: 1, label: 'Light and Darkness', ref: 'Genesis 1:3-5', art: '☀️' },
+  { n: 2, label: 'Sky and Waters',     ref: 'Genesis 1:6-8', art: '🌊' },
+  { n: 3, label: 'Land and Plants',    ref: 'Genesis 1:9-13', art: '🌿' },
+  { n: 4, label: 'Sun, Moon, Stars',   ref: 'Genesis 1:14-19', art: '🌙' },
+  { n: 5, label: 'Fish and Birds',     ref: 'Genesis 1:20-23', art: '🐟' },
+  { n: 6, label: 'Animals and People', ref: 'Genesis 1:24-31', art: '🦁' },
+  { n: 7, label: 'God Rested',         ref: 'Genesis 2:1-3', art: '🕊️' },
+];
+
+/* GAME 1 — The Creation Adventure: sequence the seven days. Wrong taps
+   never punish; they re-read the verse and nudge the card.            */
+function gameCreation(host) {
+  let next = 0;
+  const rail = el('div', 'progress-rail');
+  CREATION_DAYS.forEach(() => rail.append(document.createElement('i')));
+  const slots = el('div', 'seq-slots');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, slots, pool);
+
+  shuffle(CREATION_DAYS).forEach(day => {
+    const card = el('button', 'seq-card');
+    card.append(el('strong', null, `${day.art}  ${day.label}`), el('small', null, day.ref));
+    card.onclick = () => {
+      if (day.n === CREATION_DAYS[next].n) {
+        card.disabled = true;
+        card.classList.add('placed');
+        card.querySelector('strong').textContent = `Day ${day.n} · ${day.label}`;
+        slots.append(card);
+        rail.children[next].classList.add('lit');
+        next++;
+        if (next === CREATION_DAYS.length) {
+          celebrate(host, 'You built the whole first week! God spoke, and it was so — and everything He made was very good.');
+        }
+      } else {
+        card.classList.remove('wrong'); void card.offsetWidth; card.classList.add('wrong');
+        speak(`Not yet. What came on day ${next + 1}?`);
+      }
+    };
+    pool.append(card);
+  });
+}
+
+/* GAME 2 — Heroes of Faith: match the hero to the brave act. */
+const HEROES = [
+  { hero: 'Noah',    deed: 'Built the ark when no rain had ever fallen', ref: 'Genesis 6' },
+  { hero: 'David',   deed: 'Faced the giant with a sling and God’s name', ref: '1 Samuel 17' },
+  { hero: 'Daniel',  deed: 'Kept praying, even facing the lions’ den', ref: 'Daniel 6' },
+  { hero: 'Esther',  deed: 'Went to the king to save her people', ref: 'Esther 4' },
+  { hero: 'Ruth',    deed: 'Stayed loyal and followed the true God', ref: 'Ruth 1' },
+  { hero: 'Mary',    deed: 'Said yes to God and became Jesus’ mother', ref: 'Luke 1' },
+];
+function gameHeroes(host) {
+  let picked = null, done = 0;
+  const info = el('p', 'sheet-sub', 'Tap a hero, then tap the brave thing God helped them do.');
+  const wrap = el('div', 'grid-cards');
+  const heroCol = el('div'), deedCol = el('div');
+  heroCol.style.display = deedCol.style.display = 'flex';
+  heroCol.style.flexDirection = deedCol.style.flexDirection = 'column';
+  heroCol.style.gap = deedCol.style.gap = '9px';
+  host.append(info, wrap);
+  wrap.style.gridTemplateColumns = 'repeat(auto-fit,minmax(230px,1fr))';
+  wrap.append(heroCol, deedCol);
+
+  HEROES.forEach(h => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, h.hero));
+    b.dataset.hero = h.hero;
+    b.onclick = () => {
+      if (b.disabled) return;
+      heroCol.querySelectorAll('.seq-card').forEach(x => x.classList.remove('placed'));
+      b.classList.add('placed');
+      picked = h;
+    };
+    heroCol.append(b);
+  });
+
+  shuffle(HEROES).forEach(h => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, h.deed), el('small', null, h.ref));
+    b.onclick = () => {
+      if (b.disabled || !picked) { speak('Pick a hero first.'); return; }
+      if (picked.hero === h.hero) {
+        b.disabled = true; b.classList.add('placed');
+        const hb = heroCol.querySelector(`[data-hero="${h.hero}"]`);
+        hb.disabled = true; hb.classList.add('placed'); hb.style.opacity = '.45';
+        picked = null; done++;
+        if (done === HEROES.length) {
+          celebrate(host, 'Every hero was an ordinary person with an extraordinary God. He is the same God today — and He knows your name.');
+        }
+      } else {
+        b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+      }
+    };
+    deedCol.append(b);
+  });
+}
+
+/* GAME 3 — Build the Verse: assemble Scripture from glowing word tiles. */
+const MEMORY_VERSES = [
+  { ref: 'John 3:16', text: 'For God so loved the world, that he gave his only begotten Son.' },
+  { ref: 'Psalm 119:105', text: 'Thy word is a lamp unto my feet, and a light unto my path.' },
+  { ref: 'Genesis 1:1', text: 'In the beginning God created the heaven and the earth.' },
+];
+function gameVerse(host) {
+  const verse = MEMORY_VERSES[Math.floor(Math.random() * MEMORY_VERSES.length)];
+  const words = verse.text.split(/\s+/);
+  let next = 0;
+  host.append(el('p', 'sheet-sub', `Tap the words in order — ${verse.ref}`));
+  const line = el('div', 'answer-line');
+  const pool = el('div', 'tile-pool');
+  host.append(line, pool);
+
+  shuffle(words.map((w, i) => ({ w, i }))).forEach(({ w, i }) => {
+    const tile = el('button', 'tile', w);
+    tile.onclick = () => {
+      // exact position OR an identical duplicate word both count
+      if (i === next || w === words[next]) {
+        tile.classList.add('used');
+        const span = el('span', null, (next ? ' ' : '') + w);
+        line.append(span);
+        requestAnimationFrame(() => span.classList.add('lit'));
+        next++;
+        if (next === words.length) {
+          line.classList.add('done');
+          speak(verse.text);
+          celebrate(host, `You built ${verse.ref}! Say it out loud three times — the Word hidden in your heart goes with you everywhere.`);
+        }
+      } else {
+        tile.classList.remove('wrong'); void tile.offsetWidth; tile.classList.add('wrong');
+        speak(words.slice(0, next).join(' '));
+      }
+    };
+    pool.append(tile);
+  });
+}
+
+/* ═══════════════════ 5 · ADULT DEEP MODULES ═══════════════════ */
+
+const EPOCHS = [
+  { n: 1,  label: 'Creation',            ref: 'Genesis 1–2' },
+  { n: 2,  label: 'The Fall',            ref: 'Genesis 3' },
+  { n: 3,  label: 'Covenant with Abraham', ref: 'Genesis 12' },
+  { n: 4,  label: 'The Exodus',          ref: 'Exodus 12–14' },
+  { n: 5,  label: 'Law at Sinai',        ref: 'Exodus 20' },
+  { n: 6,  label: 'Davidic Kingdom',     ref: '2 Samuel 7' },
+  { n: 7,  label: 'Exile & Prophets',    ref: 'Isaiah 53' },
+  { n: 8,  label: 'The Incarnation',     ref: 'Luke 2' },
+  { n: 9,  label: 'Cross & Resurrection', ref: 'Luke 23–24' },
+  { n: 10, label: 'Pentecost & the Church', ref: 'Acts 2' },
+  { n: 11, label: 'New Creation',        ref: 'Revelation 21' },
+];
+
+/* MODULE 1 — Testament Illuminations: order the epochs of redemption. */
+function moduleChronology(host) {
+  let next = 0;
+  const rail = el('div', 'progress-rail');
+  EPOCHS.forEach(() => rail.append(document.createElement('i')));
+  const slots = el('div', 'seq-slots');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, slots, pool);
+
+  shuffle(EPOCHS).forEach(e => {
+    const c = el('button', 'seq-card');
+    c.append(el('strong', null, e.label), el('small', null, e.ref));
+    c.onclick = () => {
+      if (e.n === EPOCHS[next].n) {
+        c.disabled = true; c.classList.add('placed');
+        slots.append(c); rail.children[next].classList.add('lit'); next++;
+        if (next === EPOCHS.length) {
+          celebrate(host, 'One story, one Author, one Redeemer. From the garden to the city, every epoch bends toward Christ — "beginning with Moses and all the Prophets, he interpreted to them in all the Scriptures the things concerning himself." (Luke 24:27)');
+        }
+      } else {
+        c.classList.remove('wrong'); void c.offsetWidth; c.classList.add('wrong');
+      }
+    };
+    pool.append(c);
+  });
+}
+
+/* MODULE 2 — Exegesis Training: observation → interpretation → application,
+   the actual inductive method, drilled with reasoned feedback.        */
+const EXEGESIS = [
+  {
+    passage: 'Philippians 2:5-8',
+    text: '"Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped, but emptied himself, by taking the form of a servant..."',
+    steps: [
+      { stage: 'OBSERVATION', q: 'What does the text actually SAY about Christ’s status before the incarnation?',
+        opts: ['He was created first among all beings',
+               'He was in the form of God and equal with God',
+               'He became divine after His resurrection'],
+        a: 1, why: 'The text states He "was in the form of God" and held "equality with God" prior to emptying Himself. Observation asks what is on the page — not yet what it means.' },
+      { stage: 'INTERPRETATION', q: 'What does "emptied himself" mean in context?',
+        opts: ['He ceased to be God',
+               'He gave up His divine attributes permanently',
+               'He did not cling to His privileges but took the form of a servant'],
+        a: 2, why: 'The grammar defines the emptying by the participle that follows: "by taking the form of a servant." He added humanity and veiled glory; He did not subtract deity. Context — not English connotation — governs meaning.' },
+      { stage: 'APPLICATION', q: 'What does Paul command the church to DO with this?',
+        opts: ['Adopt Christ’s self-lowering mindset toward one another',
+               'Debate the two natures of Christ precisely',
+               'Wait passively for exaltation'],
+        a: 0, why: 'The hymn is framed by an imperative: "Have this mind among yourselves." The deepest Christology in Scripture is deployed to settle a church squabble. Doctrine always lands in obedience.' },
+    ],
+  },
+  {
+    passage: 'Romans 3:23-24',
+    text: '"For all have sinned and fall short of the glory of God, and are justified by his grace as a gift, through the redemption that is in Christ Jesus."',
+    steps: [
+      { stage: 'OBSERVATION', q: 'What is the scope of the word "all"?',
+        opts: ['Only the notably wicked', 'Every human being without exception', 'Only those outside the covenant'],
+        a: 1, why: 'Paul has spent chapters 1–3 closing every escape route — moralist, pagan, and religious alike. "All" is universal, which is why the remedy must be universal too.' },
+      { stage: 'INTERPRETATION', q: 'What does "justified" mean here?',
+        opts: ['Made gradually more moral over time',
+               'Declared righteous in God’s courtroom',
+               'Forgiven but still legally guilty'],
+        a: 1, why: 'Justification is forensic — a legal declaration, not an infusion of improvement. God pronounces the ungodly righteous on the basis of Christ’s redemption, not their progress.' },
+      { stage: 'APPLICATION', q: 'What follows for someone still trying to earn God’s favor?',
+        opts: ['Try harder with better methods',
+               'Receive as a gift what can never be earned',
+               'Balance grace with sufficient merit'],
+        a: 1, why: '"As a gift" (dorean) forecloses the transaction. Adding merit to grace does not improve the gospel — it abolishes it (Galatians 2:21).' },
+    ],
+  },
+];
+function moduleExegesis(host) {
+  const study = EXEGESIS[Math.floor(Math.random() * EXEGESIS.length)];
+  let idx = 0, score = 0;
+  const passageBlock = el('div', 'detail-block');
+  passageBlock.innerHTML =
+    `<span class="kind">${study.passage}</span><p style="font-style:italic">${study.text}</p>`;
+  host.append(passageBlock);
+  const rail = el('div', 'progress-rail');
+  study.steps.forEach(() => rail.append(document.createElement('i')));
+  const stage = el('div');
+  host.append(rail, stage);
+
+  function render() {
+    const s = study.steps[idx];
+    stage.innerHTML = '';
+    stage.append(el('span', 'eyebrow', `Step ${idx + 1} of ${study.steps.length} · ${s.stage}`));
+    stage.append(el('p', 'quiz-q', s.q));
+    let answered = false;
+    s.opts.forEach((opt, i) => {
+      const b = el('button', 'btn quiz-opt', opt);
+      b.onclick = () => {
+        if (answered) return;
+        answered = true;
+        const right = i === s.a;
+        if (right) score++;
+        b.classList.add(right ? 'correct' : 'miss');
+        if (!right) stage.querySelectorAll('.quiz-opt')[s.a].classList.add('correct');
+        const ex = el('div', 'explain');
+        ex.innerHTML = `<b>${right ? 'Correct.' : 'Not quite.'}</b> ${s.why}`;
+        stage.append(ex);
+        rail.children[idx].classList.add('lit');
+        const nextBtn = el('button', 'btn btn--gold',
+          idx < study.steps.length - 1 ? 'Next step ›' : 'Finish the drill');
+        nextBtn.style.marginTop = '14px';
+        nextBtn.onclick = () => {
+          idx++;
+          if (idx < study.steps.length) render();
+          else {
+            stage.innerHTML = '';
+            celebrate(stage, `${score} of ${study.steps.length} on ${study.passage}. Observation before interpretation, interpretation before application — the discipline that keeps a teacher from preaching their own imagination.`);
+          }
+        };
+        stage.append(nextBtn);
+      };
+      stage.append(b);
+    });
+  }
+  render();
+}
+
+/* MODULE 3 — Concordance: trace a redemptive thread across both testaments. */
+const THREADS = [
+  { theme: 'The Lamb', chain: [
+      { ref: 'Genesis 22:8',  note: '"God will provide for himself the lamb" — Abraham on the mountain.' },
+      { ref: 'Exodus 12:13',  note: 'The Passover blood on the doorposts: judgment passes over.' },
+      { ref: 'Isaiah 53:7',   note: '"Like a lamb that is led to the slaughter" — the silent Servant.' },
+      { ref: 'John 1:29',     note: '"Behold, the Lamb of God, who takes away the sin of the world!"' },
+      { ref: 'Revelation 5:6', note: 'The Lamb standing, as though slain — worthy to open the scroll.' },
+  ]},
+  { theme: 'The Temple', chain: [
+      { ref: 'Exodus 40:34',   note: 'The glory fills the tabernacle — God dwells among His people.' },
+      { ref: '1 Kings 8:11',   note: 'The cloud fills Solomon’s temple at its dedication.' },
+      { ref: 'Ezekiel 10:18',  note: 'The glory departs; sin drives out the presence.' },
+      { ref: 'John 2:19-21',   note: '"Destroy this temple" — He was speaking of His body.' },
+      { ref: '1 Corinthians 3:16', note: 'You yourselves are God’s temple, indwelt by His Spirit.' },
+  ]},
+  { theme: 'The Kingdom', chain: [
+      { ref: 'Genesis 1:28',   note: 'Humanity commissioned to rule creation under God.' },
+      { ref: '2 Samuel 7:16',  note: 'David’s throne established forever.' },
+      { ref: 'Daniel 7:14',    note: 'One like a son of man receives everlasting dominion.' },
+      { ref: 'Mark 1:15',      note: '"The kingdom of God is at hand; repent and believe."' },
+      { ref: 'Revelation 11:15', note: 'The kingdom of the world becomes the kingdom of our Lord.' },
+  ]},
+];
+function moduleConcordance(host) {
+  const thread = THREADS[Math.floor(Math.random() * THREADS.length)];
+  let next = 0;
+  host.append(el('p', 'sheet-sub',
+    `Thread: ${thread.theme}. Tap the references in canonical order to trace how the promise unfolds.`));
+  const rail = el('div', 'progress-rail');
+  thread.chain.forEach(() => rail.append(document.createElement('i')));
+  const trace = el('div');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, trace, pool);
+
+  shuffle(thread.chain).forEach(link => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, link.ref));
+    b.onclick = () => {
+      if (link.ref === thread.chain[next].ref) {
+        b.disabled = true; b.style.display = 'none';
+        const step = el('div', 'detail-block');
+        step.innerHTML = `<span class="kind">${next + 1} · ${link.ref}</span><p>${link.note}</p>`;
+        trace.append(step);
+        rail.children[next].classList.add('lit');
+        next++;
+        if (next === thread.chain.length) {
+          celebrate(host, `The thread of ${thread.theme} runs unbroken from Genesis to Revelation. Sixty-six books, forty authors, sixteen centuries — one Mind behind it, and one Christ at its center.`);
+        }
+      } else {
+        b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+      }
+    };
+    pool.append(b);
+  });
+}
+
+/* ═══════════════════ 6 · REFERENCE MODULES ═══════════════════ */
+const GENRE_GLYPH = { law:'⛰️', history:'🏺', wisdom:'🎼', prophets:'🔥',
+                      gospel:'✝️', acts:'🌍', epistle:'📜', apocalyptic:'👑' };
+const CANON_META = __CANON_META__;
+
+function moduleBooks(host) {
+  const grid = el('div', 'grid-cards');
+  const detail = el('div');
+  host.append(grid, detail);
+  BIBLE.books.forEach(ov => {
+    const meta = CANON_META[ov.b] || {};
+    const c = el('button', 'mini-book' + (meta.testament === 'OT' ? ' ot' : ''));
+    c.innerHTML = `<b>${meta.name || ('Book ' + ov.b)}</b>
+      <span>${GENRE_GLYPH[meta.genre] || '📖'} ${meta.testament === 'OT' ? 'Old' : 'New'}</span>`;
+    c.onclick = () => {
+      detail.innerHTML = `
+        <div class="detail-block" style="border-color:var(--accent-soft)">
+          <span class="kind">${meta.name} — ${ov.t}</span>
+          <p style="color:var(--ink-dim);font-size:12.5px">Key verse: ${ov.kv}</p>
+        </div>
+        ${ov.ls.map((l, i) => `<div class="detail-block"><span class="kind">Lesson ${i+1}</span><p>${l}</p></div>`).join('')}
+        <div class="detail-block christ"><span class="kind">Where is Jesus here?</span><p>${ov.c}</p></div>`;
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+    grid.append(c);
+  });
+}
+
+function moduleTeachings(host) {
+  TEACH.categories.forEach(cat => {
+    const head = el('div', 'detail-block');
+    head.innerHTML = `<span class="kind">${cat.glyph} ${cat.title} · ${cat.ref}</span><p>${cat.intro}</p>`;
+    host.append(head);
+    cat.items.forEach(it => {
+      const acc = el('div', 'accordion');
+      const btn = el('button');
+      btn.innerHTML = `<b>${it.title}</b><small>${it.ref}</small>`;
+      const inner = el('div', 'inner');
+      inner.hidden = true;
+      inner.innerHTML = `
+        <div class="detail-block"><span class="kind">What Jesus taught</span><p>${it.teaching}</p></div>
+        <div class="detail-block christ"><span class="kind">Live it</span><p>${it.live}</p></div>`;
+      btn.onclick = () => { inner.hidden = !inner.hidden; };
+      acc.append(btn, inner);
+      host.append(acc);
+    });
+  });
+}
+
+/* GLOBAL MAPS — Acts 1:8 dispatch rings, drawn on canvas. */
+const MISSION_RINGS = [
+  { r: 0.13, label: 'JERUSALEM', note: 'Where you already are' },
+  { r: 0.30, label: 'JUDEA', note: 'Your own people and region' },
+  { r: 0.48, label: 'SAMARIA', note: 'The neighbors you would rather avoid' },
+  { r: 0.72, label: 'ENDS OF THE EARTH', note: 'Every nation, tribe, and tongue' },
+];
+function moduleMaps(host) {
+  host.append(el('p', 'sheet-sub',
+    '"But you will receive power when the Holy Spirit has come upon you, and you will be my witnesses in Jerusalem and in all Judea and Samaria, and to the end of the earth." — Acts 1:8'));
+  const cv = el('canvas'); cv.id = 'map-canvas';
+  host.append(cv);
+  const legend = el('div'); host.append(legend);
+  legend.innerHTML = MISSION_RINGS.map((r, i) =>
+    `<div class="detail-block"><span class="kind">${i + 1} · ${r.label}</span><p>${r.note}</p></div>`).join('');
+
+  requestAnimationFrame(() => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#020617'); g.addColorStop(1, '#0b1226');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2, cy = H / 2, base = Math.min(W, H) * 0.62;
+    const accent = getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent').trim() || '#eab308';
+    MISSION_RINGS.slice().reverse().forEach((ring) => {
+      const rr = base * ring.r;
+      const grd = ctx.createRadialGradient(cx, cy, rr * 0.55, cx, cy, rr);
+      grd.addColorStop(0, 'rgba(234,179,8,0)');
+      grd.addColorStop(1, 'rgba(234,179,8,.09)');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = accent + '66';
+      ctx.setLineDash([4, 8]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(226,232,240,.72)';
+      ctx.font = '600 9.5px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(ring.label, cx, cy - rr + 14);
+    });
+    // radiating dispatch lines
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      const grad = ctx.createLinearGradient(cx, cy,
+        cx + Math.cos(a) * base * 0.72, cy + Math.sin(a) * base * 0.72);
+      grad.addColorStop(0, accent + 'cc');
+      grad.addColorStop(1, accent + '00');
+      ctx.strokeStyle = grad; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * base * 0.72, cy + Math.sin(a) * base * 0.72);
+      ctx.stroke();
+    }
+    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, 22);
+    core.addColorStop(0, '#fff8e1'); core.addColorStop(1, accent + '00');
+    ctx.fillStyle = core;
+    ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI * 2); ctx.fill();
+  });
+}
+
+/* ══════════════════════ 7 · MODULE ROUTER ══════════════════════ */
+const MODULES = {
+  creation:    ['The Creation Adventure', 'Seven days, in the order God spoke them. Tap each day as it comes.', gameCreation],
+  heroes:      ['Heroes of Faith', 'Ordinary people, extraordinary God. Match each hero to their brave act.', gameHeroes],
+  verse:       ['Build the Verse', 'Every word in its place — then watch the whole verse light up.', gameVerse],
+  chronology:  ['Testament Illuminations', 'Eleven epochs of redemptive history. Place them along the river of light.', moduleChronology],
+  exegesis:    ['Exegesis Training', 'The inductive method drilled: observation, then interpretation, then application.', moduleExegesis],
+  concordance: ['Concordance — Redemptive Threads', 'Trace one theme across both testaments in canonical order.', moduleConcordance],
+  books:       ['The Sixty-Six', 'Every book of the canon: its theme, key verse, main lessons, and where it points to Christ.', moduleBooks],
+  teachings:   ['The Teachings of Jesus', 'The Sermon, the parables, the seven I AMs, the miracles, and His final words.', moduleTeachings],
+  maps:        ['Global Maps — The Acts 1:8 Dispatch', 'Concentric commission: the gospel moves outward from wherever you stand.', moduleMaps],
+};
+
+document.addEventListener('click', (e) => {
+  const ageBtn = e.target.closest('.age-toggle button');
+  if (ageBtn) return switchAge(ageBtn.dataset.age);
+
+  const holder = e.target.closest('[data-module]');
+  if (holder && holder.dataset.module) {
+    const m = MODULES[holder.dataset.module];
+    if (m) openSheet(m[0], m[1], m[2]);
+  }
+});
+
+document.getElementById('btn-listen').onclick = () =>
+  speak(document.getElementById('scripture-title').textContent + '. ' +
+        document.getElementById('scripture-text').textContent.replace(/["“”]/g, ''));
+
+/* ══════════════════════════ 8 · IGNITION ══════════════════════════ */
+Engine.init();
+switchAge('adults');
+</script>
+</body>
+</html>
