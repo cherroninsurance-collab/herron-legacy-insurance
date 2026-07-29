@@ -15,9 +15,10 @@ serves serverless functions from `netlify/functions`.
 ## Ground rules (important)
 1. **Work on branch `claude/viral-social-content-creation-af6vpq`.** Never push to `main`.
 2. **Do not touch production** (`herronlegacyinsurance.com`) until the user explicitly says
-   **"ship it"**. Everything is reviewed on the PR #6 Deploy Preview first:
-   `https://deploy-preview-6--herron-legacy-insurance.netlify.app/`
-3. **Don't open new PRs** unless asked — PR #6 already tracks this branch.
+   **"ship it"**. Everything is reviewed on the Deploy Preview first — currently PR #11:
+   `https://deploy-preview-11--herron-legacy-insurance.netlify.app/`
+   (Previews only build for an *open* PR, so after a merge the next change needs a fresh one.)
+3. **Don't open new PRs** unless asked — PR #11 already tracks this branch.
 4. **Compliance text must stay intact and visible** wherever it appears: the 12-state list,
    the NPN, IUL/annuity disclaimers ("not guarantees of future performance", caps/participation
    rates, living-benefit riders may reduce the death benefit), "illustrative, not offers of
