@@ -2904,7 +2904,7 @@ renderFit();
   background:linear-gradient(96deg,#8A5F10 0%,#C09338 42%,#A9781C 68%,#7E5510 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent}
 /* gold on the deliberately dark surfaces: champagne, not lemon */
-.cover-card.wide .tag,.cover-card.wide .go,.cov-sheet .cov-eyebrow,.ann-card .kind i{color:var(--gold-hi)}
+.cover-card.wide .tag,.cover-card.wide .go,.ann-card .kind i{color:var(--gold-hi)}
 .ann-card .kind i{background:linear-gradient(150deg,#F0DCA6,#BE9235)}
 
 /* ============================================================================
@@ -3213,14 +3213,35 @@ renderFit();
 .bp-bar .expand{color:#96660F!important}
 .t-bar i,.wt-bar i,.bp-bar i{background:var(--slate-200)!important}
 
-.cov-sheet{background:linear-gradient(160deg,var(--white),var(--silk))!important;color:#3A4A6B!important;
-  border:1px solid var(--slate-200)}
-.cov-title,.cov-sheet h3,.cov-sheet h4{color:var(--obsidian)!important}
-.cov-hook,.cov-row span,.cov-stat .s span{color:#3A4A6B!important}
+/* The deep-dive modal's panel is .cov-panel — an earlier pass lightened the text
+   against .cov-sheet, which only ever existed as a legacy button selector, so the
+   copy went dark on a still-navy panel and became unreadable. The whole panel and
+   every child now move to the light system together. */
+.cov-panel{background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(247,246,243,.97))!important;
+  color:#3A4A6B!important;border:1px solid var(--slate-200)!important;
+  box-shadow:0 50px 100px -34px rgba(10,17,40,.35),0 0 0 1px rgba(255,255,255,.7) inset!important}
+.cov-scrim{background:rgba(10,17,40,.42)!important}
+.cov-panel::-webkit-scrollbar-thumb{background:rgba(190,146,53,.45)}
+.cov-ic{background:linear-gradient(140deg,#FBF3E4,#F1E6D0)!important;
+  border:1px solid rgba(190,146,53,.42)!important;box-shadow:0 1px 0 rgba(255,255,255,.9) inset!important}
+.cov-eyebrow{color:#96660F!important}
+.cov-title,.cov-panel h3,.cov-panel h4{color:var(--obsidian)!important}
+.cov-hook{color:#3A4A6B!important}
+.cov-hook em{color:#8A5F10!important}
+.cov-row{background:var(--white)!important;border:1px solid var(--slate-200)!important}
+.cov-row:hover{background:var(--silk)!important;border-color:rgba(190,146,53,.5)!important}
+.cov-row span{color:#3A4A6B!important}
+.cov-row .ck{background:linear-gradient(150deg,#FBF3E4,#F0E3C8)!important;
+  border:1px solid rgba(190,146,53,.5)!important;color:#8A5F10!important}
+.cov-stat{background:linear-gradient(120deg,#FBF3E4,#F7F2E6)!important;
+  border:1px solid rgba(190,146,53,.42)!important}
+.cov-stat .s b{color:#8A5F10!important}
+.cov-stat .s span{color:#5A6A8C!important}
 .cov-x{background:var(--white)!important;color:var(--obsidian)!important;border:1px solid var(--slate-200)!important}
 .cov-x:hover{background:var(--silk)!important}
-.cov-sheet .btn-ghost-light{border-color:rgba(14,31,62,.28)!important;color:var(--obsidian)!important}
-.cov-sheet .btn-ghost-light:hover{background:rgba(14,31,62,.05)!important}
+.cov-panel .btn-ghost-light,.cov-sheet .btn-ghost-light{
+  border-color:rgba(14,31,62,.28)!important;color:var(--obsidian)!important}
+.cov-panel .btn-ghost-light:hover,.cov-sheet .btn-ghost-light:hover{background:rgba(14,31,62,.05)!important}
 .about-photo .npn{background:var(--white)!important;color:var(--obsidian)!important;
   border:1px solid var(--slate-200)!important}
 .about-photo .npn b,.about-photo .npn span{color:inherit!important}

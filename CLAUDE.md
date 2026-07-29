@@ -162,6 +162,18 @@ frost like the rest, with the chat as white glass.)
   does **not** opt out: `auto` means "use the CSS value", so it still smooth-scrolls. A probe
   that skipped this reported the annuity disclaimer and the states fallback line as stuck at
   `opacity:0` — it had simply never reached the bottom of the page. Both are fine.
+- **The deep-dive modal's panel is `.cov-panel`, not `.cov-sheet`.** `.cov-sheet` only ever
+  existed as a legacy button selector, so a theme pass written against it darkens the copy
+  while leaving the panel navy — which is exactly how the modal ended up unreadable. Convert
+  `.cov-panel` and its children (`.cov-ic/.cov-eyebrow/.cov-title/.cov-hook/.cov-row/.ck/
+  .cov-stat/.cov-x`) together, and let shipcheck's modal test hold the line.
+- **A tiny glyph in a large box always measures as low contrast.** The pixel harness takes
+  the 4th/96th percentile, so a ✓ inside a 28px tile or a ✕ inside a 42px circle reads ~1.8:1
+  even at 5.6:1 real contrast. Re-measure min-vs-max on the same element before "fixing" it.
+- **A `<script>` with a `src` ignores its inline content.** Appending a block before the file's
+  last `</script>` can silently land it inside `<script defer src="js/hx-wheel.js">`, where it
+  never runs — three separate features were dead this way. Always insert a NEW `<script>`
+  element, and confirm the feature actually executes rather than assuming.
 - **A "light" text colour flagged by the pixel harness may just be carousel dimming.**
   `.hx-dim` runs the side cards at opacity .42 with a saturate/brightness filter, so white
   text on the deliberately-navy classics card measured 2.4:1 while it was parked at the
