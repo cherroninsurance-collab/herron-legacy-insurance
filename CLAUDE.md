@@ -35,24 +35,28 @@ serves serverless functions from `netlify/functions`.
 | `liquid-glass.js`, `legacy-ai.js` | Shared glass effect + concierge chat. |
 | `social/` | Standalone social content kit — **not** part of the website. |
 
-## Where the design landed
+## Where the design landed — BRIGHT THEME (2026-07-27)
 
-The hero renders a real-time WebGL **"open sunrise"** scene in navy/gold, composited in
-depth order in one fragment shader: sky → sun halo/core → god-rays (held to a vertical
-cone) → mid cloud bank → foreground cloud sea → anamorphic streak → vignette →
-**cinematic grade** (ACES-ish tonemap, navy-shadow / gold-highlight split tone, S-curve,
-ordered dither). **The dark monolith/spire tower layers are deleted** — the original
-"threshold gateway" had canyon walls framing the light gap, and the user called them
-corny ("dont want the monolith things in the background"). Don't reintroduce silhouette
-shapes into this scene; the `twr()` tower-band helper is gone with them.
+**The whole site is now the bright frosted-white luxury theme** (user: "make the whole
+home page super bright frosted white … instead of the dark blue kinda theme"; approved
+via concept boards, then built for real). Ivory/porcelain surfaces, navy ink, dark-gold
+accents, white-frost glass. Palette: paper `#FDFCF9`/`#F4F6FA`, headline `var(--navy)`,
+body ink `#3A4A6B`, soft ink `#5A6A8C`, small gold text `#96660F` (5:1 on white), large
+gold `#B07E22`, grads `#B07E22→#8A5F10`.
 
-- **`index.html` (homepage):** **no shield** — emblem alone. The light gap is anchored to
-  the emblem's **measured** position via the `uSun` uniform (`sun()` re-measures `.crest`
-  on resize/load/fonts-ready), so the burst sits behind the logo on desktop and re-centres
-  when the hero stacks. The copy column sits on the hx-hero-card glass for contrast.
-
-Tunables: `lit`/`lw`/`gl2` warm falloffs, cloud `dens`/`fd` thresholds and their
-`smoothstep` ceilings.
+- **The hero WebGL scene is GONE** (canvas + veil + grain divs deleted; its init block
+  self-skips). The hero is a CSS light-field: gold bloom upper-right, cool bloom left,
+  warm floor, ivory→porcelain vertical — with the **liquid-chrome heron emblem kept**
+  (dark chrome reads beautifully on light; its canvas is `#heroHeron`).
+- All five `.lg-container` panes run `data-lg-theme="light"`.
+- **Deliberate dark accents kept** (do not "fix"): the wide "classics" coverage card,
+  faux browser bars (`.wt-bar/.t-bar/.iul-frame-bar/.bp-bar`), `.wt-table thead`,
+  the coverage deep-dive modal (`.cov-sheet`, incl. scoped white ghost buttons),
+  `.about-photo .npn` chip.
+- The lg-blobs on fitcheck/blueprint/quotes/tools stay: soft pastel aurora on white.
+- Coarse-pointer fallbacks are all white-frost now (nav/sheet/mobilebar/chat/panes).
+- The floating concierge panel fallback is white frost — it matches desktop's blur over
+  the now-light page (the old slate matched the dark page).
 
 ## The logo — read this before touching it
 The brand mark is a fine-line heron: **crest tuft, long beak, small white eye, S-neck,
@@ -111,11 +115,9 @@ something more professional but sleek"; approved via before/after boards). Those
 bands share one layered background: warm key light `radial(… 22% -6%, rgba(226,180,92,.14))`
 behind the headings, cool counter-light right, deep floor, `linear(180deg,#10213F→#0A1730→
 #080F22)` base, and an inset brass hairline on the top edge. Band glows are dimmed to .4
-in those two bands only. **`.ai-band` (Legacy Concierge) keeps its ORIGINAL backdrop by
-explicit user request** ("The legacy ai box I want to the background it had before"):
-navy gradient + grid overlay at .7 + the three lg-blobs — the liquid-glass chat pane
-refracts that colored wash, it's part of that band's design. Blobs elsewhere (tools,
-fitcheck, blueprint, quotes) were never touched.
+in those two bands only. (Historical: the concierge band kept its original dark backdrop for a while at the
+user's request; the sitewide bright theme now supersedes that — the ai band is bright
+frost like the rest, with the chat as white glass.)
 
 ## Hard-won gotchas
 - **Screenshots lie about advanced CSS/WebGL.** Headless Chromium uses swiftshader, which

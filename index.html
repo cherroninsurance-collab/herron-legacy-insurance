@@ -94,7 +94,7 @@ p,.lede{text-wrap:pretty}
    scrollIntoView land short while heights resolve. Perf win wasn't worth it. */
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--brass);font-weight:500;display:block;margin-bottom:16px;
+  color:#96660F;font-weight:500;display:block;margin-bottom:16px;
 }
 .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
 a{color:inherit}
@@ -109,50 +109,50 @@ a{color:inherit}
 .btn:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
 .btn-brass{background:var(--brass);color:var(--navy-deep)}
 .btn-brass:hover{background:var(--brass-bright);transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(201,151,59,.55)}
-.btn-ghost-light{border-color:var(--line-light);color:var(--white)}
-.btn-ghost-light:hover{background:rgba(255,255,255,.08)}
+.btn-ghost-light{border-color:rgba(20,38,76,.3);color:var(--navy)}
+.btn-ghost-light:hover{background:rgba(20,38,76,.05)}
 .btn-navy{background:var(--navy);color:var(--white)}
 .btn-navy:hover{background:var(--navy-mid);transform:translateY(-2px);box-shadow:var(--shadow)}
 .btn-ghost-dark{border-color:var(--line);color:var(--navy)}
 .btn-ghost-dark:hover{background:var(--mist)}
 
 /* ---------- NAV ---------- */
-nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-light)}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(14,31,62,.10)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;max-width:1280px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
 .logo-mark{display:flex;align-items:center;justify-content:center;flex-shrink:0}
 /* no tile — the mark sits straight on the nav */
 .logo-mark img{height:38px;width:auto;display:block}
 .logo-text{line-height:1.12}
-.logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
+.logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--navy);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
 .nav-links{display:flex;gap:11px;list-style:none}
-.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
-.nav-links a:hover{color:var(--white)}
+.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:#31415F;transition:color .15s;white-space:nowrap}
+.nav-links a:hover{color:var(--navy)}
 /* sticky-nav offset for in-page anchors (category tabs) */
 :where(section,article)[id],#tools,#annuities{scroll-margin-top:86px}
 .nav-cta{display:flex;align-items:center;gap:16px}
-.nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--white)}
+.nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--navy)}
 .nav-cta .btn{padding:10px 20px;font-size:14px}
 @media(max-width:1320px){.nav-links,.nav-phone{display:none}}
 
 /* ---------- HERO ---------- */
-.hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
+.hero{background:radial-gradient(1150px 640px at 72% 24%, rgba(232,190,105,.42), transparent 62%),radial-gradient(900px 520px at 14% -12%, rgba(140,166,220,.20), transparent 60%),radial-gradient(1500px 900px at 50% 118%, rgba(226,214,190,.35), transparent 70%),linear-gradient(180deg,#FDFCF8 0%,#F4F6FA 58%,#EBEFF6 100%);color:#26365A;position:relative;overflow:hidden}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:92px 24px 100px;max-width:1160px;margin:0 auto;position:relative;z-index:1}
 .hero .pill{
   display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,151,59,.45);border-radius:999px;
-  padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:24px;
+  padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#96660Fight);margin-bottom:24px;
 }
 .hero .pill i{width:7px;height:7px;border-radius:50%;background:var(--brass-bright);display:inline-block;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hero h1{font-size:clamp(38px,5vw,60px);color:var(--white)}
-.hero h1 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p.lede{font-size:18.5px;color:rgba(255,255,255,.78);margin:24px 0 34px;max-width:52ch}
+.hero h1{font-size:clamp(38px,5vw,60px);color:var(--navy)}
+.hero h1 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lede{font-size:18.5px;color:#3A4A6B;margin:24px 0 34px;max-width:52ch}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
 .hero-stats{display:flex;gap:40px;margin-top:46px;flex-wrap:wrap}
-.hstat b{font-family:'Sora';font-size:30px;font-weight:700;color:var(--white);display:block}
-.hstat b em{font-style:normal;color:var(--brass-bright)}
-.hstat span{font-size:13px;color:rgba(255,255,255,.6)}
+.hstat b{font-family:'Sora';font-size:30px;font-weight:700;color:var(--navy);display:block}
+.hstat b em{font-style:normal;color:#B07E22}
+.hstat span{font-size:13px;color:#5A6A8C}
 .hstat b span{font-size:inherit;color:inherit}
 .hero-visual{position:relative;display:flex;justify-content:center}
 .crest{
@@ -164,11 +164,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 .crest::before{content:"";position:absolute;inset:0;background:radial-gradient(340px 200px at 30% 20%,rgba(201,151,59,.14),transparent 65%)}
 .crest svg{width:72%;height:auto;position:relative}
 .crest .chiplet{
-  position:absolute;background:rgba(8,18,38,.85);border:1px solid var(--line-light);backdrop-filter:blur(8px);
-  border-radius:12px;padding:10px 16px;font-size:12.5px;color:rgba(255,255,255,.85);
+  position:absolute;background:rgba(255,255,255,.85);border:1px solid rgba(14,31,62,.12);backdrop-filter:blur(8px);
+  border-radius:12px;padding:10px 16px;font-size:12.5px;color:#3A4A6B;
   font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;
 }
-.chiplet b{color:var(--brass-bright);font-weight:500;display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+.chiplet b{color:#96660F;font-weight:500;display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
 .chip-1{top:26px;left:-14px;animation:float 5s ease-in-out infinite}
 .chip-2{bottom:34px;right:-14px;animation:float 6s ease-in-out .8s infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
@@ -192,7 +192,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 }
 
 /* ---------- CARRIER MARQUEE ---------- */
-.carriers{background:var(--navy-deep);border-top:1px solid var(--line-light);padding:34px 0 40px;overflow:hidden}
+.carriers{background:#FFFFFF;border-top:1px solid rgba(14,31,62,.08);border-bottom:1px solid rgba(14,31,62,.08);padding:34px 0 40px;overflow:hidden}
 .carriers p.cap{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:24px}
 .marquee{position:relative;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .marquee-track{display:flex;gap:18px;width:max-content;animation:scroll 34s linear infinite}
@@ -330,36 +330,35 @@ section{padding:96px 0}
    headings, cool counter-light right, deep floor, brass hairline on the top edge.
    Replaced the blue grid overlay + purple/indigo/cyan blob wash (deleted). */
 .iul-band{background:
-  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
-  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
-  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
-  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
-  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
-  color:var(--white);position:relative;overflow:hidden}
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden}
 .iul-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;position:relative;z-index:1}
 @media(max-width:880px){.iul-grid{grid-template-columns:1fr;gap:34px}}
-.iul-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
-.iul-copy h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.iul-copy p{color:rgba(255,255,255,.75);margin-top:16px;font-size:17px}
+.iul-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,42px)}
+.iul-copy h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.iul-copy p{color:#3A4A6B;margin-top:16px;font-size:17px}
 .iul-points{margin-top:26px;display:grid;gap:14px}
 .iul-point{display:flex;gap:14px;align-items:flex-start}
 .iul-point .ic{width:38px;height:38px;border-radius:10px;background:rgba(201,151,59,.14);border:1px solid rgba(201,151,59,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
 .iul-point b{display:block;font-family:'Sora';font-size:15.5px;color:var(--white)}
-.iul-point span{font-size:14px;color:rgba(255,255,255,.65)}
+.iul-point span{font-size:14px;color:#3A4A6B}
 .iul-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .iul-preview{
-  background:rgba(8,18,38,.55);border:1px solid rgba(201,151,59,.3);border-radius:18px;padding:30px;
+  background:rgba(255,255,255,.9);border:1px solid rgba(176,126,34,.32);border-radius:18px;padding:30px;
   box-shadow:var(--shadow);
 }
-.iul-preview .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:18px}
+.iul-preview .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5A6A8C;margin-bottom:18px}
 .iul-bars{display:grid;gap:14px;margin-bottom:22px}
 .iul-bar{display:grid;grid-template-columns:66px 1fr;gap:12px;align-items:center}
-.iul-bar .yr{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:rgba(255,255,255,.6)}
-.iul-bar .track{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.iul-bar .yr{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#5A6A8C}
+.iul-bar .track{height:10px;border-radius:999px;background:rgba(20,38,76,.08);overflow:hidden}
 .iul-bar .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brass),var(--brass-bright));width:0;transition:width 1.1s cubic-bezier(.2,.7,.3,1)}
 .iul-bar.down .fill{background:linear-gradient(90deg,#3A4A5E,#5A6B78)}
-.iul-preview .floor{font-size:13.5px;color:rgba(255,255,255,.62);border-top:1px solid var(--line-light);padding-top:16px}
-.iul-preview .floor b{color:var(--brass-bright);font-weight:500}
+.iul-preview .floor{font-size:13.5px;color:#3A4A6B;border-top:1px solid var(--line);padding-top:16px}
+.iul-preview .floor b{color:#96660F;font-weight:500}
 .iul-embed{margin-top:44px;position:relative;z-index:1}
 .iul-embed[hidden]{display:none}
 .iul-frame-card{background:var(--white);border:1px solid rgba(201,151,59,.35);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
@@ -374,72 +373,75 @@ section{padding:96px 0}
 /* ---------- AI CONCIERGE SECTION ---------- */
 /* the concierge band keeps its ORIGINAL backdrop (user request) — navy gradient,
    blue grid overlay, blob wash — while IUL + annuities run the executive backdrop */
-.ai-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden}
-.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
-.ai-band .hero-grid-lines{opacity:.7}
+.ai-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden}
 .ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
-.ai-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
-.ai-copy p{color:rgba(255,255,255,.75);margin-top:16px;font-size:17px}
+.ai-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,42px)}
+.ai-copy p{color:#3A4A6B;margin-top:16px;font-size:17px}
 .ai-feats{margin-top:28px;display:grid;gap:14px}
 .ai-feat{display:flex;gap:14px;align-items:flex-start}
 .ai-feat .ic{
   width:38px;height:38px;border-radius:10px;background:rgba(201,151,59,.14);border:1px solid rgba(201,151,59,.4);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;
 }
-.ai-feat b{display:block;font-family:'Sora';font-size:15.5px;color:var(--white)}
-.ai-feat span{font-size:14px;color:rgba(255,255,255,.65)}
+.ai-feat b{display:block;font-family:'Sora';font-size:15.5px;color:var(--navy)}
+.ai-feat span{font-size:14px;color:#3A4A6B}
 .ai-copy .btn{margin-top:30px}
 @media(max-width:880px){.ai-grid{grid-template-columns:1fr}}
 
 /* ---------- CHAT (shared: embedded panel + floating widget) ---------- */
 .chat-shell{
-  background:var(--navy-deep);border:1px solid var(--line-light);border-radius:20px;overflow:hidden;
+  background:#FFFFFF;border:1px solid rgba(14,31,62,.12);border-radius:20px;overflow:hidden;
   box-shadow:var(--shadow);display:flex;flex-direction:column;height:520px;max-width:460px;margin-left:auto;width:100%;
 }
-.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line-light);background:rgba(255,255,255,.03)}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(14,31,62,.10);background:rgba(20,38,76,.03)}
 .chat-head .avatar{
   width:38px;height:38px;border-radius:50%;background:linear-gradient(150deg,var(--brass),#8f6a24);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .chat-head .avatar svg{width:22px;height:22px}
 .avatar img{height:20px;width:auto;display:block}
-.chat-head b{font-family:'Sora';font-size:15px;color:var(--white);display:block;line-height:1.2}
-.chat-head span{font-size:11.5px;color:#7ADB8F;display:flex;align-items:center;gap:6px}
-.chat-head span i{width:7px;height:7px;border-radius:50%;background:#7ADB8F;display:inline-block;animation:pulse 2s infinite}
+.chat-head b{font-family:'Sora';font-size:15px;color:var(--navy);display:block;line-height:1.2}
+.chat-head span{font-size:11.5px;color:#1F8A3D;display:flex;align-items:center;gap:6px}
+.chat-head span i{width:7px;height:7px;border-radius:50%;background:#1F8A3D;display:inline-block;animation:pulse 2s infinite}
 .chat-head .spk{
-  margin-left:auto;background:none;border:1px solid var(--line-light);border-radius:9px;color:rgba(255,255,255,.7);
+  margin-left:auto;background:none;border:1px solid rgba(14,31,62,.18);border-radius:9px;color:#31415F;
   padding:7px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
 }
-.chat-head .spk.on{border-color:var(--brass);color:var(--brass-bright)}
+.chat-head .spk.on{border-color:var(--brass);color:#96660F}
 .chat-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
 .msg{max-width:86%;padding:12px 15px;border-radius:14px;font-size:14.5px;line-height:1.55;white-space:pre-line}
-.msg.bot{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92);border:1px solid var(--line-light);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.bot{background:rgba(20,38,76,.05);color:#26365A;border:1px solid rgba(14,31,62,.10);border-bottom-left-radius:4px;align-self:flex-start}
 .msg.user{background:var(--brass);color:var(--navy-deep);border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
-.msg a{color:var(--brass-bright);font-weight:600}
+.msg a{color:#96660F;font-weight:600}
 .msg.user a{color:var(--navy-deep)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start}
 .chip{
-  background:none;border:1px solid rgba(201,151,59,.5);color:var(--brass-bright);border-radius:999px;
+  background:none;border:1px solid rgba(150,102,15,.5);color:#96660F;border-radius:999px;
   padding:7px 14px;font-size:12.5px;font-family:'Inter';font-weight:500;cursor:pointer;transition:background .15s;
 }
 .chip:hover{background:rgba(201,151,59,.14)}
 .typing{display:inline-flex;gap:5px;padding:14px 16px}
-.typing i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);animation:blink 1.2s infinite}
+.typing i{width:7px;height:7px;border-radius:50%;background:rgba(20,38,76,.4);animation:blink 1.2s infinite}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
-.chat-input{display:flex;gap:10px;padding:14px;border-top:1px solid var(--line-light);background:rgba(255,255,255,.03)}
+.chat-input{display:flex;gap:10px;padding:14px;border-top:1px solid rgba(14,31,62,.10);background:rgba(20,38,76,.02)}
 .chat-input input{
-  flex:1;background:rgba(255,255,255,.06);border:1px solid var(--line-light);border-radius:11px;
-  padding:12px 15px;color:var(--white);font-family:'Inter';font-size:14.5px;outline:none;
+  flex:1;background:rgba(20,38,76,.04);border:1px solid rgba(14,31,62,.14);border-radius:11px;
+  padding:12px 15px;color:#26365A;font-family:'Inter';font-size:14.5px;outline:none;
 }
 .chat-input input:focus{border-color:var(--brass)}
-.chat-input input::placeholder{color:rgba(255,255,255,.4)}
+.chat-input input::placeholder{color:rgba(38,54,90,.45)}
 .icon-btn{
-  width:46px;height:46px;border-radius:11px;border:1px solid var(--line-light);background:rgba(255,255,255,.06);
-  color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+  width:46px;height:46px;border-radius:11px;border:1px solid rgba(14,31,62,.14);background:rgba(20,38,76,.04);
+  color:#26365A;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
   transition:background .15s,border-color .15s;
 }
-.icon-btn:hover{background:rgba(255,255,255,.12)}
+.icon-btn:hover{background:rgba(20,38,76,.08)}
 .icon-btn.send{background:var(--brass);border-color:var(--brass);color:var(--navy-deep)}
 .icon-btn.send:hover{background:var(--brass-bright)}
 .icon-btn.mic.listening{background:#B03030;border-color:#B03030;animation:pulse 1.2s infinite}
@@ -492,28 +494,28 @@ section{padding:96px 0}
 
 /* ---------- QUOTE TOOL ---------- */
 .quote-band{background:var(--white);border-top:1px solid var(--line)}
-.q-shell{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 88%);border-radius:22px;box-shadow:var(--shadow);border:1px solid rgba(201,151,59,.3);overflow:hidden}
-.q-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:18px 22px;border-bottom:1px solid var(--line-light)}
-.q-tab{background:none;border:1px solid var(--line-light);color:rgba(255,255,255,.7);border-radius:999px;padding:9px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;cursor:pointer;transition:all .15s}
-.q-tab:hover{color:var(--white);border-color:rgba(255,255,255,.4)}
+.q-shell{background:#FFFFFF;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);border:1px solid rgba(201,151,59,.3);overflow:hidden}
+.q-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.q-tab{background:none;border:1px solid rgba(14,31,62,.18);color:#31415F;border-radius:999px;padding:9px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;cursor:pointer;transition:all .15s}
+.q-tab:hover{color:var(--navy);border-color:rgba(14,31,62,.4)}
 .q-tab.on{background:var(--brass);border-color:var(--brass);color:var(--navy-deep)}
 .q-tab:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:0}
-.q-controls{padding:30px 34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line-light)}
+.q-controls{padding:30px 34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line)}
 .q-field label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
-.q-field label b{color:var(--brass-bright);letter-spacing:.04em;font-weight:500}
+.q-field label b{color:#96660F;letter-spacing:.04em;font-weight:500}
 .q-field input[type=range]{width:100%;accent-color:var(--brass);height:5px;cursor:pointer}
 .q-seg{display:flex;flex-wrap:wrap;gap:8px}
-.q-seg button{background:rgba(255,255,255,.05);border:1px solid var(--line-light);color:rgba(255,255,255,.75);border-radius:10px;padding:9px 15px;font-size:13px;font-family:'Inter';font-weight:500;cursor:pointer;transition:all .15s}
-.q-seg button.on{background:rgba(201,151,59,.18);border-color:var(--brass);color:var(--brass-bright)}
+.q-seg button{background:rgba(20,38,76,.04);border:1px solid rgba(14,31,62,.16);color:#31415F;border-radius:10px;padding:9px 15px;font-size:13px;font-family:'Inter';font-weight:500;cursor:pointer;transition:all .15s}
+.q-seg button.on{background:rgba(201,151,59,.16);border-color:var(--brass);color:#96660F}
 .q-seg button:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-out{padding:34px;display:flex;flex-direction:column;justify-content:center;text-align:center}
 .q-out .cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
-.q-price{font-family:'Sora';font-weight:700;font-size:clamp(38px,4.6vw,56px);color:var(--white);line-height:1;letter-spacing:-.02em}
-.q-price em{font-style:normal;background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.q-sub{font-size:14px;color:rgba(255,255,255,.62);margin-top:12px;max-width:34ch;margin-left:auto;margin-right:auto}
+.q-price{font-family:'Sora';font-weight:700;font-size:clamp(38px,4.6vw,56px);color:var(--navy);line-height:1;letter-spacing:-.02em}
+.q-price em{font-style:normal;background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.q-sub{font-size:14px;color:#5A6A8C;margin-top:12px;max-width:34ch;margin-left:auto;margin-right:auto}
 .q-out .btn{margin:24px auto 0}
-.q-note{padding:16px 22px;border-top:1px solid var(--line-light);font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.7}
+.q-note{padding:16px 22px;border-top:1px solid var(--line);font-size:11.5px;color:#5A6A8C;line-height:1.7}
 .q-custom{padding:38px 34px;text-align:center}
 .q-custom h3{color:var(--white);font-size:23px;margin-bottom:12px}
 .q-custom p{color:rgba(255,255,255,.7);max-width:56ch;margin:0 auto 22px;font-size:15px}
@@ -559,20 +561,20 @@ section{padding:96px 0}
 .states-note{margin-top:22px;font-size:14px;color:var(--ink-soft)}
 
 /* ---------- BOOKING ---------- */
-.booking{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 85%);color:var(--white);position:relative;overflow:hidden}
+.booking{background:linear-gradient(180deg,#F4F6FA 0%,#ECEFF6 100%);color:#26365A;position:relative;overflow:hidden}
 .book-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:52px;align-items:start;position:relative;z-index:1}
-.book-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,40px)}
-.book-copy p{color:rgba(255,255,255,.75);margin-top:16px}
+.book-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,40px)}
+.book-copy p{color:#3A4A6B;margin-top:16px}
 .book-points{margin-top:28px;display:grid;gap:16px}
 .book-point{display:flex;gap:14px;align-items:flex-start}
 .book-point .n{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--brass-bright);border:1px solid rgba(201,151,59,.45);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:#96660F;border:1px solid rgba(150,102,15,.4);
   border-radius:8px;padding:6px 10px;flex-shrink:0;letter-spacing:.1em;
 }
-.book-point div b{display:block;font-family:'Sora';font-size:15px;color:var(--white)}
-.book-point div span{font-size:13.5px;color:rgba(255,255,255,.62)}
+.book-point div b{display:block;font-family:'Sora';font-size:15px;color:var(--navy)}
+.book-point div span{font-size:13.5px;color:#5A6A8C}
 .book-frame{
-  background:var(--white);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line-light);
+  background:var(--white);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);
   display:flex;flex-direction:column;
 }
 #my-cal-inline-15min{width:100%;min-height:680px;padding:6px}
@@ -595,7 +597,7 @@ section{padding:96px 0}
 /* ---------- FINAL CTA ---------- */
 .final{background:var(--white);text-align:center;border-top:1px solid var(--line)}
 .final h2{font-size:clamp(30px,4.2vw,50px);color:var(--navy);max-width:22ch;margin:0 auto 18px}
-.final h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
+.final h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
 .final p{color:var(--ink-soft);max-width:56ch;margin:0 auto 36px;font-size:17.5px}
 .final .hero-ctas{justify-content:center}
 /* risk-reversal line under a primary CTA — this is what removes hesitation */
@@ -609,14 +611,14 @@ section{padding:96px 0}
 
 /* ---------- FOOTER ---------- */
 .foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:#fff!important}
-footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38px;font-size:14px}
+footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);padding:66px 0 38px;font-size:14px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
-.foot-grid h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:16px;font-weight:500}
-.foot-grid a{color:rgba(255,255,255,.68);text-decoration:none;display:block;padding:4px 0;transition:color .15s}
-.foot-grid a:hover{color:var(--white)}
-.foot-brand b{font-family:'Sora';font-size:18px;color:var(--white);display:block;margin-bottom:10px}
+.foot-grid h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#96660F;margin-bottom:16px;font-weight:500}
+.foot-grid a{color:#4A5A7C;text-decoration:none;display:block;padding:4px 0;transition:color .15s}
+.foot-grid a:hover{color:var(--navy)}
+.foot-brand b{font-family:'Sora';font-size:18px;color:var(--navy);display:block;margin-bottom:10px}
 .foot-brand p{max-width:38ch;line-height:1.7}
-.disclaimer{border-top:1px solid var(--line-light);padding-top:26px;font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.8;max-width:105ch}
+.disclaimer{border-top:1px solid rgba(14,31,62,.14);padding-top:26px;font-size:11.5px;color:#5A6A8C;line-height:1.8;max-width:105ch}
 @media(max-width:820px){.foot-grid{grid-template-columns:1fr;gap:30px}}
 
 /* ============================================================
@@ -630,8 +632,8 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
   padding:clamp(22px,3.2vw,40px) clamp(20px,3vw,38px);
   border-radius:22px;min-width:0;
   background:
-    linear-gradient(158deg,rgba(255,255,255,.085) 0%,rgba(255,255,255,.028) 38%,rgba(255,255,255,0) 72%),
-    linear-gradient(180deg,rgba(8,18,38,.42),rgba(8,18,38,.20));
+    linear-gradient(158deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.62) 38%,rgba(255,255,255,.5) 72%),
+    linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.35));
   -webkit-backdrop-filter:blur(16px) saturate(1.45);
           backdrop-filter:blur(16px) saturate(1.45);
   box-shadow:
@@ -659,15 +661,13 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 @media (pointer:coarse){
   .hx-hero-card{
     -webkit-backdrop-filter:none;backdrop-filter:none;
-    /* lighter + more transparent than the old near-solid navy: phones lose the
-       blur, they should not also lose the light behind the card */
-    background:linear-gradient(180deg,rgba(22,42,80,.46),rgba(13,27,54,.30));
+    background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.6));
   }
   .hx-hero-card::after{animation:none;display:none}
 }
 @media (prefers-reduced-motion:reduce){ .hx-hero-card::after{animation:none} }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .hx-hero-card{background:linear-gradient(180deg,rgba(8,18,38,.72),rgba(8,18,38,.5))}
+  .hx-hero-card{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.7))}
 }
 
 /* ---- interactive 3D card carousel (inert until JS adds .hx-on) ----
@@ -695,7 +695,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 }
 /* solid surfaces per family — no glass while transformed */
 .hx-on .cover-grid>.hx-3dcard{background:var(--white)}
-.hx-on .ann-grid>.hx-3dcard{background:linear-gradient(150deg,#16294E 0%,#0B1830 100%);border:1px solid rgba(201,151,59,.28)}
+.hx-on .ann-grid>.hx-3dcard{background:rgba(255,255,255,.97);border:1px solid rgba(176,126,34,.3)}
 /* reveal-neutraliser + dim/front states. Deliberately NO !important in this trio:
    the flip-reveal hide is .cover-grid>.reveal / .ann-grid>.reveal (0,2,0), the
    neutraliser below out-specifies it at (0,3,0), and the front card simply never
@@ -706,7 +706,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .hx-on .hx-wheel>.hx-3dcard.hx-dim{filter:saturate(.6) brightness(.95)}
 .hx-on .hx-wheel>.hx-3dcard.hx-front{pointer-events:auto;cursor:auto;
   box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28)}
-.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 6px 14px rgba(0,0,0,.3),0 26px 60px -18px rgba(0,0,0,.55),0 0 0 1px rgba(201,151,59,.35)}
+.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 0 0 1px rgba(201,151,59,.35)}
 /* arrows */
 .hx-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:50px;height:50px;
   border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
@@ -719,9 +719,6 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .hx-arrow.prev{left:clamp(4px,2vw,28px)}
 .hx-arrow.next{right:clamp(4px,2vw,28px)}
 .hx-arrow svg{width:20px;height:20px;display:block}
-.ann-band .hx-arrow{background:rgba(14,31,62,.88);border-color:rgba(201,151,59,.4);color:#F6E0AC;
-  box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
-.ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
 @media(max-width:720px){
   .hx-arrow{width:42px;height:42px;top:42%}
   .hx-arrow.prev{left:8px}
@@ -795,15 +792,15 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
   max-width:46ch;letter-spacing:.005em;
 }
 .final .hx-cta-note{margin-inline:auto;text-align:center}
-.hero .hx-cta-note,.ai-band .hx-cta-note,.iul-band .hx-cta-note,.booking .hx-cta-note{color:rgba(255,255,255,.66)}
-.quote-band .hx-cta-note{color:rgba(255,255,255,.6)}
+.hero .hx-cta-note,.ai-band .hx-cta-note,.iul-band .hx-cta-note,.booking .hx-cta-note{color:#5A6A8C}
+.quote-band .hx-cta-note{color:#5A6A8C}
 /* Surface, not band, decides the ink. The IUL deep-dive is a white .wt card inside
    the dark .iul-band, and the tool panes are dark glass inside a light band — the
    band rules above get both backwards. Equal specificity, so source order wins. */
 .wt .hx-cta-note{color:var(--ink-soft)}
 /* .78/.8 is what the pane's own body copy and feature chips already use on this
    glass; the swirl has bright patches where .66 thins out too far. */
-.tool-pane .hx-cta-note{color:rgba(255,255,255,.8)}
+.tool-pane .hx-cta-note{color:#5A6A8C}
 .hx-trust{
   display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);
   margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--line);
@@ -826,54 +823,54 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .iul-band .wrap,.ai-band .wrap,.booking .wrap{position:relative;z-index:1}
 
 /* nav — true glass */
-nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 10px 40px -18px rgba(0,0,0,.55)}
+nav{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 10px 34px -20px rgba(20,38,76,.25)}
 
 /* hero stat chips */
 .hero-stats{gap:14px}
-.hstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:14px 18px;position:relative;overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.hstat::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent)}
+.hstat{background:rgba(255,255,255,.7);border:1px solid rgba(14,31,62,.12);border-radius:14px;padding:14px 18px;position:relative;overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hstat::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,151,59,.4),transparent)}
 
 /* crest + floating chiplets */
 .crest{background:rgba(255,255,255,.055);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-color:rgba(226,180,92,.4)}
 .crest::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);z-index:1}
-.crest .chiplet{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(8,18,38,.62);border-color:rgba(255,255,255,.22)}
+.crest .chiplet{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(255,255,255,.78);border-color:rgba(14,31,62,.14)}
 
 /* chat shells (inline + floating) */
-.chat-shell{background:rgba(8,18,38,.7);-webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);border:1px solid rgba(255,255,255,.18);position:relative}
+.chat-shell{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);border:1px solid rgba(14,31,62,.12);position:relative}
 .chat-shell::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);z-index:2;pointer-events:none}
 
 /* booking checklist rows */
-.book-point{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:14px 16px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.book-point{background:rgba(255,255,255,.8);border:1px solid rgba(14,31,62,.10);border-radius:14px;padding:14px 16px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 
 /* IUL / AI band panels that sit on the dark gradients */
-.iul-preview{position:relative;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.iul-preview{position:relative;background:rgba(255,255,255,.72);border-color:rgba(14,31,62,.12);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .iul-preview::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;border-radius:18px 18px 0 0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}
 
 /* sticky mobile bar */
-.mobilebar{-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);background:rgba(8,18,38,.82);box-shadow:0 -12px 34px -18px rgba(0,0,0,.6)}
+.mobilebar{-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);background:rgba(255,255,255,.86);box-shadow:0 -12px 34px -18px rgba(20,38,76,.25)}
 .mobilebar::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,180,92,.55),transparent)}
 
 /* mobile glass menu */
-.nav-burger{display:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.22);border-radius:11px;background:rgba(255,255,255,.06);cursor:pointer;padding:0;align-items:center;justify-content:center;flex-direction:column;gap:5px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.nav-burger span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:transform .22s,opacity .22s}
+.nav-burger{display:none;width:44px;height:44px;border:1px solid rgba(14,31,62,.18);border-radius:11px;background:rgba(20,38,76,.04);cursor:pointer;padding:0;align-items:center;justify-content:center;flex-direction:column;gap:5px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nav-burger span{display:block;width:18px;height:2px;background:var(--navy);border-radius:2px;transition:transform .22s,opacity .22s}
 .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-burger.open span:nth-child(2){opacity:0}
 .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-sheet{position:fixed;inset:0;z-index:195;background:rgba(8,18,38,.9);-webkit-backdrop-filter:blur(20px) saturate(1.35);backdrop-filter:blur(20px) saturate(1.35);padding:104px 28px 42px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s ease;overflow-y:auto}
+.nav-sheet{position:fixed;inset:0;z-index:195;background:rgba(252,252,250,.94);-webkit-backdrop-filter:blur(20px) saturate(1.35);backdrop-filter:blur(20px) saturate(1.35);padding:104px 28px 42px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s ease;overflow-y:auto}
 .nav-sheet.open{opacity:1;pointer-events:auto}
-.nav-sheet a{font-family:'Sora';font-weight:600;font-size:20px;color:#fff;text-decoration:none;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.1)}
-.nav-sheet a:active{color:var(--brass-bright)}
-.nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--brass-bright);border-bottom:none;margin-top:10px}
+.nav-sheet a{font-family:'Sora';font-weight:600;font-size:20px;color:var(--navy);text-decoration:none;padding:15px 4px;border-bottom:1px solid rgba(14,31,62,.10)}
+.nav-sheet a:active{color:#96660F}
+.nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:#96660F;border-bottom:none;margin-top:10px}
 .nav-sheet .btn{margin-top:14px;justify-content:center}
 @media(max-width:1320px){.nav-burger{display:flex}}
 
 /* no-blur fallback — keep everything readable */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  nav{background:rgba(8,18,38,.96)}
-  .chat-shell{background:var(--navy-deep)}
-  .nav-sheet{background:rgba(8,18,38,.985)}
-  .mobilebar{background:rgba(8,18,38,.96)}
-  .hstat,.book-point,.crest{background:rgba(255,255,255,.05)}
+  nav{background:rgba(255,255,255,.97)}
+  .chat-shell{background:#FFFFFF}
+  .nav-sheet{background:rgba(252,252,250,.99)}
+  .mobilebar{background:rgba(255,255,255,.97)}
+  .hstat,.book-point{background:rgba(255,255,255,.92)}
 }
 
 /* ===== .liquid-glass — animated SVG refraction (#liquid-glass-distortion) + heavy blur ===== */
@@ -893,16 +890,16 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
     0 0 54px -18px rgba(201,151,59,.28);
 }
 /* context tints — glass needs a translucent fill to refract what's behind it */
-nav.liquid-glass{background:rgba(8,18,38,.55)}
+nav.liquid-glass{background:rgba(255,255,255,.6)}
 .cover-card.liquid-glass{background:rgba(255,255,255,.55)}
 /* the wide "classics" card is dark with white text — it needs dark glass,
    not the white fill above, or its copy vanishes into the background */
 .cover-card.wide.liquid-glass{background:linear-gradient(140deg,rgba(14,31,62,.85) 0%,rgba(8,18,38,.88) 90%)}
-.iul-preview.liquid-glass{background:rgba(8,18,38,.42);border-color:rgba(255,255,255,.28)}
+.iul-preview.liquid-glass{background:rgba(255,255,255,.72);border-color:rgba(14,31,62,.14)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .cover-card.liquid-glass{background:var(--cloud)}
   .cover-card.wide.liquid-glass{background:linear-gradient(140deg,var(--navy) 0%,var(--navy-deep) 90%)}
-  .iul-preview.liquid-glass{background:rgba(8,18,38,.55)}
+  .iul-preview.liquid-glass{background:rgba(255,255,255,.85)}
 }
 
 /* ============================================================
@@ -1005,6 +1002,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 @keyframes covFade{from{opacity:0}to{opacity:1}}
 @keyframes covRise{from{opacity:0;transform:translateY(26px) scale(.975)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.cov-scrim,.cov-panel{animation:none}}
+.cov-sheet .btn-ghost-light{border-color:rgba(255,255,255,.35);color:#fff}
+.cov-sheet .btn-ghost-light:hover{background:rgba(255,255,255,.08)}
 .cov-x{position:absolute;top:16px;right:16px;z-index:6;width:42px;height:42px;border-radius:50%;background:rgba(8,18,38,.55);border:1px solid var(--line-light);color:#fff;font-size:15px;cursor:pointer;transition:background .16s,transform .25s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .cov-x:hover{background:rgba(201,151,59,.32);transform:rotate(90deg)}
 .cov-inner{position:relative;z-index:3;padding:42px 42px 36px}
@@ -1064,14 +1063,11 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 /* ============ IMMERSIVE HERO — WebGL energy field + morphing chrome heron ============ */
 .hero{min-height:100svh;display:flex;align-items:center}
-.hero-gl{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
-.hero-veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(94deg,rgba(8,18,38,.74) 0%,rgba(8,18,38,.34) 44%,rgba(8,18,38,0) 72%),radial-gradient(120% 120% at 50% 50%,transparent 58%,rgba(8,18,38,.55) 100%)}
 .hero-inner{width:100%}
 .hero-inner>div{min-width:0}
 .hero .pill{max-width:100%}
 html{overflow-x:clip}
 /* film grain over the hero scene — sits above the canvas, under the copy */
-.hero-grain{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
 .hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
@@ -1108,30 +1104,22 @@ html{overflow-x:clip}
   nav,.crest,.crest .chiplet,.mobilebar,.nav-sheet,.nav-burger,.chat-shell,
   .hstat,.book-point,.iul-preview,.cov-scrim,.cov-x,.cover-card,.lg-container,
   .liquid-glass,.glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-  nav{background:rgba(8,18,38,.96)}
-  .nav-sheet{background:rgba(8,18,38,.985)}
-  .mobilebar{background:rgba(8,18,38,.96)}
-  .chat-shell{background:var(--navy-deep)}
+  nav{background:rgba(255,255,255,.97)}
+  .nav-sheet{background:rgba(252,252,250,.99)}
+  .mobilebar{background:rgba(255,255,255,.97)}
+  .chat-shell{background:#FFFFFF}
   /* phone fallbacks were reading several stops darker than the desktop glass —
      lift every dark surface a step and let more light through */
-  .hstat,.book-point{background:rgba(255,255,255,.09)}
-  .crest .chiplet{background:rgba(16,32,62,.82)}
+  .hstat,.book-point{background:rgba(255,255,255,.92)}
+  .crest .chiplet{background:rgba(255,255,255,.92)}
   .cover-card.liquid-glass{background:var(--cloud)}
   .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
-  .iul-preview.liquid-glass{background:rgba(20,38,74,.55)}
-  .lg-container{background:linear-gradient(160deg,#16294E 0%,#0C1B38 100%)}
-  /* the concierge chat keeps its colourful glass look on phones: a static wash
-     standing in for the WebGL refraction (that renderer is off on touch). Without
-     this the chat box fell back to a flat navy "default" — the user caught it. */
-  .ai-band .lg-container{background:
-    radial-gradient(150% 120% at 12% 6%, rgba(96,32,168,.42), transparent 55%),
-    radial-gradient(140% 130% at 92% 90%, rgba(70,96,220,.40), transparent 58%),
-    radial-gradient(120% 110% at 85% 12%, rgba(28,190,214,.30), transparent 55%),
-    linear-gradient(160deg,#182B52 0%,#0C1B38 100%)}
-  .ai-band .chat-shell{background:rgba(8,18,38,.55)}
-  /* floating concierge panel: desktop gets frosted slate from real backdrop blur —
-     phones get the same look statically instead of a flat navy box */
-  #fabPanel .chat-shell{background:linear-gradient(180deg,#4A5870 0%,#38445A 100%)}
+  .iul-preview.liquid-glass{background:rgba(255,255,255,.85)}
+  .lg-container{background:#FFFFFF;border:1px solid rgba(14,31,62,.10)}
+  /* bright theme: chat surfaces are white frost on every device */
+  .ai-band .lg-container{background:rgba(255,255,255,.94);border:1px solid rgba(14,31,62,.10)}
+  .ai-band .chat-shell{background:rgba(255,255,255,.9)}
+  #fabPanel .chat-shell{background:linear-gradient(180deg,#FFFFFF 0%,#F2F4F9 100%)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
   .cov-scrim{background:rgba(3,8,20,.86)}
   /* big blur radii are paint-bound: keep the colour wash, drop the blur —
@@ -1140,7 +1128,6 @@ html{overflow-x:clip}
   .lg-blob{animation:none!important}
   /* ornamental, always-running, and invisible at phone size */
   .hero-sparks,.sparks{display:none!important}
-  .hero-grain{display:none!important}
 }
 /* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
 .cover-grid,.ann-grid{perspective:1500px;perspective-origin:50% 42%}
@@ -1158,7 +1145,7 @@ html{overflow-x:clip}
 .crest .chiplet{z-index:3}
 .hero-ctas .btn{will-change:transform}
 /* cinematic ignition intro */
-#ignite{position:fixed;inset:0;z-index:9000;background:var(--navy-deep);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease 1.1s}
+#ignite{position:fixed;inset:0;z-index:9000;background:#FBFAF6;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease 1.1s}
 #ignite.gone{opacity:0;pointer-events:none}
 /* Failsafe. Script fades this at 1.5s and removes it at 2.7s; every inline block on
    the page shares one IIFE, so one earlier throw would leave a z-index:9000 curtain
@@ -1169,10 +1156,10 @@ html{overflow-x:clip}
 #ignite .flare{position:absolute;width:2px;height:2px;border-radius:50%;background:#F3D9A0;box-shadow:0 0 60px 30px rgba(226,180,92,.6);animation:igfl 1.5s cubic-bezier(.2,.8,.2,1) .2s forwards}
 @keyframes igfl{0%{transform:scale(0);opacity:0}30%{opacity:1}100%{transform:scale(260);opacity:0}}
 #ignite .imk{width:80px;height:80px;opacity:0;animation:igmk 1.1s ease .1s forwards}
-#ignite .imk path{stroke:#E2B45C;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
+#ignite .imk path{stroke:#B07E22;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
 @keyframes igmk{0%,20%{opacity:0}45%,100%{opacity:1}}
 @keyframes igdr{to{stroke-dashoffset:0}}
-@media(max-width:880px){.hero{min-height:auto;display:block}.hero-veil{background:linear-gradient(180deg,rgba(8,18,38,.55),rgba(8,18,38,.2) 40%,transparent 60%)}.crest{width:min(205px,52%)!important}}
+@media(max-width:880px){.hero{min-height:auto;display:block}.crest{width:min(205px,52%)!important}}
 @media(prefers-reduced-motion:reduce){.hero-spark{display:none}#ignite{display:none}}
 </style>
 </head>
@@ -1248,9 +1235,6 @@ html{overflow-x:clip}
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <canvas id="heroGl" class="hero-gl" aria-hidden="true"></canvas>
-  <div class="hero-grain" aria-hidden="true"></div>
-  <div class="hero-veil" aria-hidden="true"></div>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-sparks" aria-hidden="true">
@@ -1598,31 +1582,30 @@ html{overflow-x:clip}
 <section class="ann-band" id="annuities">
 <style>
 .ann-band{background:
-  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
-  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
-  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
-  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
-  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
-  color:var(--white);position:relative;overflow:hidden;padding:96px 0}
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden;padding:96px 0}
 .ann-band .wrap{position:relative;z-index:1}
 .ann-head{max-width:760px;margin-bottom:44px}
-.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--white)}
-.ann-head h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ann-head p{color:rgba(255,255,255,.75);font-size:17px;margin-top:16px;max-width:62ch}
+.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
+.ann-head h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ann-head p{color:#3A4A6B;font-size:17px;margin-top:16px;max-width:62ch}
 .ann-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 @media(max-width:880px){.ann-grid{grid-template-columns:1fr}}
-.ann-card{border-radius:22px;padding:30px 28px;background:linear-gradient(150deg,rgba(14,31,62,.72),rgba(8,18,38,.8));position:relative;overflow:hidden}
-.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-bright);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.ann-card{border-radius:22px;padding:30px 28px;background:rgba(255,255,255,.92);position:relative;overflow:hidden}
+.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#96660F;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
 .ann-card .kind i{width:6px;height:6px;border-radius:50%;background:var(--brass-bright);display:inline-block}
-.ann-card h3{font-family:'Sora';font-size:23px;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.ann-card h3{font-family:'Sora';font-size:23px;color:var(--navy);margin-bottom:12px;letter-spacing:-.01em}
 .ann-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:rgba(255,255,255,.85);line-height:1.55}
+.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:#3A4A6B;line-height:1.55}
 .ann-card li .em{position:absolute;left:0;top:0;font-size:16px}
-.ann-card li b{color:var(--brass-bright)}
+.ann-card li b{color:#96660F}
 .ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:rgba(255,255,255,.9)}
 .ann-card .key b{color:var(--brass-bright)}
 .ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
-.ann-note{margin-top:26px;font-size:12.5px;color:rgba(255,255,255,.45);max-width:96ch;line-height:1.65}
+.ann-note{margin-top:26px;font-size:12.5px;color:#5A6A8C;max-width:96ch;line-height:1.65}
 </style>
   <div class="glow glow-brass" style="top:-160px;right:-180px" aria-hidden="true"></div>
   <div class="wrap">
@@ -1696,17 +1679,17 @@ html{overflow-x:clip}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:920px){.tools-grid{grid-template-columns:1fr}}
 .tool-pane .lg-content{padding:clamp(24px,3vw,42px)}
-.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
-.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--white);margin:10px 0 8px;letter-spacing:-.01em}
-.tool-pane .t-what{font-size:14.5px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.6}
-.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 50px -20px rgba(3,10,30,.7);margin-bottom:18px}
+.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#96660F}
+.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--navy);margin:10px 0 8px;letter-spacing:-.01em}
+.tool-pane .t-what{font-size:14.5px;color:#3A4A6B;margin-bottom:16px;line-height:1.6}
+.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(14,31,62,.14);box-shadow:0 22px 50px -24px rgba(20,38,76,.35);margin-bottom:18px}
 .tool-pane .t-bar{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(3,10,30,.8);border-bottom:1px solid rgba(255,255,255,.12)}
 .tool-pane .t-bar i{width:9px;height:9px;border-radius:50%;display:block}
 .tool-pane .t-bar i:nth-child(1){background:#F2645A}.tool-pane .t-bar i:nth-child(2){background:#F5BE4F}.tool-pane .t-bar i:nth-child(3){background:#5BC466}
 .tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.55);letter-spacing:.04em}
 .tool-pane .t-shot img{display:block;width:100%;height:auto}
 .tool-pane .t-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 12px}
+.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#31415F;border:1px solid rgba(14,31,62,.18);border-radius:999px;padding:6px 12px}
 </style>
   <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
   <div class="lg-blob lg-blob-purple" style="top:-160px;right:-120px" aria-hidden="true"></div>
@@ -1721,7 +1704,7 @@ html{overflow-x:clip}
     <div class="tools-grid">
       <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
            by liquid-glass.js; content stays on top (z-20, clickable). -->
-      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="light">
         <div class="lg-content">
           <span class="t-kick">Protect · Grow · Distribute</span>
           <h3>The Wealth Shield Matrix</h3>
@@ -1733,7 +1716,7 @@ html{overflow-x:clip}
       </div>
       <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
            by liquid-glass.js; content stays on top (z-20, clickable). -->
-      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="light">
         <div class="lg-content">
           <span class="t-kick">Care · Paycheck · Home · Legacy</span>
           <h3>The Protection Blueprint</h3>
@@ -1753,10 +1736,6 @@ html{overflow-x:clip}
   <div class="glow glow-blue" style="top:-180px;left:-220px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-200px;right:-160px" aria-hidden="true"></div>
   <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
-  <div class="lg-blob lg-blob-purple" style="top:-120px;right:6%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-indigo" style="bottom:-160px;left:24%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-cyan" style="top:22%;right:-140px" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ai-grid">
       <div class="ai-copy reveal">
@@ -1773,7 +1752,7 @@ html{overflow-x:clip}
       <div class="reveal">
         <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
              by liquid-glass.js; content stays on top (z-20, clickable). -->
-        <div class="lg-container" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-container" data-liquid-glass data-lg-theme="light">
           <div class="lg-content">
             <div class="chat-shell" id="mainChat"></div>
           </div>
@@ -1828,7 +1807,7 @@ html{overflow-x:clip}
     </div>
     <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
          by liquid-glass.js; content stays on top (z-20, clickable). -->
-    <div class="lg-container reveal" data-liquid-glass data-lg-theme="dark">
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
     <div class="lg-content">
     <div class="bp-card">
       <div class="bp-bar">
@@ -1862,7 +1841,7 @@ html{overflow-x:clip}
     </div>
     <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
          by liquid-glass.js; content stays on top (z-20, clickable). -->
-    <div class="lg-container reveal" data-liquid-glass data-lg-theme="dark">
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
     <div class="lg-content">
     <div class="q-shell">
       <div class="q-tabs" id="qTabs" role="tablist"></div>
@@ -2702,7 +2681,7 @@ renderFit();
 <style>
 .mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(8,18,38,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
 .mobilebar a{flex:1;text-align:center;font-family:'Sora';font-weight:600;font-size:15px;padding:14px 10px;border-radius:12px;text-decoration:none}
-.mb-call{border:1.5px solid rgba(255,255,255,.25);color:#fff}
+.mb-call{border:1.5px solid rgba(20,38,76,.28);color:var(--navy)}
 .mb-book{background:var(--brass);color:var(--navy-deep)}
 @media(max-width:899px){
   .mobilebar.show{display:flex}
