@@ -15,9 +15,10 @@ serves serverless functions from `netlify/functions`.
 ## Ground rules (important)
 1. **Work on branch `claude/viral-social-content-creation-af6vpq`.** Never push to `main`.
 2. **Do not touch production** (`herronlegacyinsurance.com`) until the user explicitly says
-   **"ship it"**. Everything is reviewed on the PR #6 Deploy Preview first:
-   `https://deploy-preview-6--herron-legacy-insurance.netlify.app/`
-3. **Don't open new PRs** unless asked — PR #6 already tracks this branch.
+   **"ship it"**. Everything is reviewed on the Deploy Preview first — currently PR #11:
+   `https://deploy-preview-11--herron-legacy-insurance.netlify.app/`
+   (Previews only build for an *open* PR, so after a merge the next change needs a fresh one.)
+3. **Don't open new PRs** unless asked — PR #11 already tracks this branch.
 4. **Compliance text must stay intact and visible** wherever it appears: the 12-state list,
    the NPN, IUL/annuity disclaimers ("not guarantees of future performance", caps/participation
    rates, living-benefit riders may reduce the death benefit), "illustrative, not offers of
@@ -35,24 +36,54 @@ serves serverless functions from `netlify/functions`.
 | `liquid-glass.js`, `legacy-ai.js` | Shared glass effect + concierge chat. |
 | `social/` | Standalone social content kit — **not** part of the website. |
 
-## Where the design landed
+## Where the design landed — BRIGHT THEME (2026-07-27)
 
-The hero renders a real-time WebGL **"open sunrise"** scene in navy/gold, composited in
-depth order in one fragment shader: sky → sun halo/core → god-rays (held to a vertical
-cone) → mid cloud bank → foreground cloud sea → anamorphic streak → vignette →
-**cinematic grade** (ACES-ish tonemap, navy-shadow / gold-highlight split tone, S-curve,
-ordered dither). **The dark monolith/spire tower layers are deleted** — the original
-"threshold gateway" had canyon walls framing the light gap, and the user called them
-corny ("dont want the monolith things in the background"). Don't reintroduce silhouette
-shapes into this scene; the `twr()` tower-band helper is gone with them.
+**The whole site is now the bright frosted-white luxury theme** (user: "make the whole
+home page super bright frosted white … instead of the dark blue kinda theme"; approved
+via concept boards, then built for real). Ivory/porcelain surfaces, navy ink, dark-gold
+accents, white-frost glass. Palette: paper `#FDFCF9`/`#F4F6FA`, headline `var(--navy)`,
+body ink `#3A4A6B`, soft ink `#5A6A8C`, small gold text `#96660F` (5:1 on white), large
+gold `#B07E22`, grads `#B07E22→#8A5F10`.
 
-- **`index.html` (homepage):** **no shield** — emblem alone. The light gap is anchored to
-  the emblem's **measured** position via the `uSun` uniform (`sun()` re-measures `.crest`
-  on resize/load/fonts-ready), so the burst sits behind the logo on desktop and re-centres
-  when the hero stacks. The copy column sits on the hx-hero-card glass for contrast.
-
-Tunables: `lit`/`lw`/`gl2` warm falloffs, cloud `dens`/`fd` thresholds and their
-`smoothstep` ceilings.
+- **The hero WebGL scene is GONE** (canvas + veil + grain divs deleted; its init block
+  self-skips). The hero is a CSS light-field: gold bloom upper-right, cool bloom left,
+  warm floor, ivory→porcelain vertical — with the **liquid-chrome heron emblem kept**
+  (dark chrome reads beautifully on light; its canvas is `#heroHeron`).
+- All five `.lg-container` panes run `data-lg-theme="light"`.
+- **Deliberate dark accents kept** (do not "fix"): the wide "classics" coverage card,
+  faux browser bars (`.wt-bar/.t-bar/.iul-frame-bar/.bp-bar`), `.wt-table thead`,
+  the coverage deep-dive modal (`.cov-sheet`, incl. scoped white ghost buttons),
+  `.about-photo .npn` chip.
+- The lg-blobs on fitcheck/blueprint/quotes/tools stay: soft pastel aurora on white.
+- Coarse-pointer fallbacks are all white-frost now (nav/sheet/mobilebar/chat/panes).
+- The floating concierge panel fallback is white frost — it matches desktop's blur over
+  the now-light page (the old slate matched the dark page).
+- **Diamond layer** (user: "more 3d animations frosted glass … diamond aesthetic"):
+  `#heroCrystals` is a 2D **diamond-light field** — twinkling 4-ray star cores with
+  gold/ice fringes and one faint prismatic streak. The first two attempts were floating
+  3D octahedra; the user called them crap, correctly — low-poly meshes read as game
+  props, so "diamond" is done as LIGHT, the way jewelry photography does it. Bokeh
+  rings came next and were also cut ("black circles look stupid").
+  **Both the position and the size of a glint must scale with the frame.** uv is
+  y-normalised, so the visible x half-range is only `res.x/res.y*.5` — 0.63 on a 1440
+  desktop hero, 0.18 on a portrait phone. `AX` maps the design's ±0.8 x coordinates
+  into that range with an inset so nothing is clipped, and `RS=mix(1,AX,.72)` shrinks
+  the radii; without RS a spark that looks right on desktop swallows a third of a phone
+  screen. (An early pass placed glints off-screen entirely by reusing the retired 3D
+  camera's coordinates.) Wrapped in try/catch so a throw can never kill the shared
+  IIFE; phones skip 3 glints at 24fps/0.8 DPR.
+  A crystal-facet SVG overlay (`::before` at 5% on hero/iul/ann/ai/booking) adds the
+  cut-glass geometry — at that opacity it reads as frost, never as a grid.
+- **The phone "box" around the emblem was `.crest::before`** — an ambient gold radial
+  from the dark theme that painted a lighter rectangle on the bright page. Both crest
+  pseudos are `display:none`. Belt-and-braces on the heron canvas: `antialias:false` on
+  coarse pointers (some mobile drivers resolve MSAA into a faint full-buffer alpha wash)
+  and the shader zeroes pixels under `alpha 0.006`. Isolate this class of bug by
+  toggling layers off one at a time in a screenshot harness — not by reading CSS.
+  Why-cards carry pointer-tracked 3D tilt (`data-hx-tilt`, fine-pointer only — NEVER
+  tilt backdrop-filter glass, Chrome glitches). Prismatic hairline gradient borders on
+  why-cards, ann carousel cards and the hero card. Hero sparks are white diamond dust
+  with gold/blue glow.
 
 ## The logo — read this before touching it
 The brand mark is a fine-line heron: **crest tuft, long beak, small white eye, S-neck,
@@ -111,11 +142,9 @@ something more professional but sleek"; approved via before/after boards). Those
 bands share one layered background: warm key light `radial(… 22% -6%, rgba(226,180,92,.14))`
 behind the headings, cool counter-light right, deep floor, `linear(180deg,#10213F→#0A1730→
 #080F22)` base, and an inset brass hairline on the top edge. Band glows are dimmed to .4
-in those two bands only. **`.ai-band` (Legacy Concierge) keeps its ORIGINAL backdrop by
-explicit user request** ("The legacy ai box I want to the background it had before"):
-navy gradient + grid overlay at .7 + the three lg-blobs — the liquid-glass chat pane
-refracts that colored wash, it's part of that band's design. Blobs elsewhere (tools,
-fitcheck, blueprint, quotes) were never touched.
+in those two bands only. (Historical: the concierge band kept its original dark backdrop for a while at the
+user's request; the sitewide bright theme now supersedes that — the ai band is bright
+frost like the rest, with the chat as white glass.)
 
 ## Hard-won gotchas
 - **Screenshots lie about advanced CSS/WebGL.** Headless Chromium uses swiftshader, which
@@ -133,11 +162,33 @@ fitcheck, blueprint, quotes) were never touched.
   does **not** opt out: `auto` means "use the CSS value", so it still smooth-scrolls. A probe
   that skipped this reported the annuity disclaimer and the states fallback line as stuck at
   `opacity:0` — it had simply never reached the bottom of the page. Both are fine.
+- **The deep-dive modal's panel is `.cov-panel`, not `.cov-sheet`.** `.cov-sheet` only ever
+  existed as a legacy button selector, so a theme pass written against it darkens the copy
+  while leaving the panel navy — which is exactly how the modal ended up unreadable. Convert
+  `.cov-panel` and its children (`.cov-ic/.cov-eyebrow/.cov-title/.cov-hook/.cov-row/.ck/
+  .cov-stat/.cov-x`) together, and let shipcheck's modal test hold the line.
+- **A tiny glyph in a large box always measures as low contrast.** The pixel harness takes
+  the 4th/96th percentile, so a ✓ inside a 28px tile or a ✕ inside a 42px circle reads ~1.8:1
+  even at 5.6:1 real contrast. Re-measure min-vs-max on the same element before "fixing" it.
+- **A `<script>` with a `src` ignores its inline content.** Appending a block before the file's
+  last `</script>` can silently land it inside `<script defer src="js/hx-wheel.js">`, where it
+  never runs — three separate features were dead this way. Always insert a NEW `<script>`
+  element, and confirm the feature actually executes rather than assuming.
+- **A "light" text colour flagged by the pixel harness may just be carousel dimming.**
+  `.hx-dim` runs the side cards at opacity .42 with a saturate/brightness filter, so white
+  text on the deliberately-navy classics card measured 2.4:1 while it was parked at the
+  side and 11.4:1 once undimmed. Re-measure with the card at the front (or force
+  `opacity:1;filter:none` on it) before "fixing" a colour that was never broken.
 - **Contrast cannot be computed from CSS on this site.** The hero sits on a WebGL canvas and
   the tool panes are liquid-glass, so walking up `backgroundColor` finds nothing opaque and
   falls back to the wrong answer — it read the why-cards as 1.28:1 (really 16.35:1) and the
   quote-band note as white-on-white (really 7.18:1). Screenshot the element's box and measure
   the actual pixels instead.
+- **`scrollWidth` does not prove there is no overflow** — `.hx-on{overflow-x:clip}` swallows
+  it. The concierge grid's `1fr` track floored at the chat column's 410px min-content and
+  pushed the body copy off a 366px phone wrap for weeks, with the overflow test green the
+  whole time. Sweep element rects against `innerWidth` instead (`clipsweep.py`), and use
+  `minmax(0,1fr)` on any grid whose column holds something wide.
 - ScrollTrigger's `onUpdate` fires the moment the scrollbar moves, **before** a `scrub`
   tween has caught up, and no further `onUpdate` arrives once scrolling stops. Anything that
   must agree with what is on screen has to hang off the *tween's* own `onUpdate`.
@@ -153,6 +204,23 @@ fitcheck, blueprint, quotes) were never touched.
   at 3.4s (after the scripted 1.5s fade / 2.7s DOM removal, so the normal path is untouched),
   and a `<noscript>` block hides it outright. Verify with Playwright's
   `java_script_enabled=False` — the page must render nav, headline, CTAs and disclosures.
+
+## The estimate studio is a ballpark model, not a quoting engine
+`index.html` (~2370–2485) prices seven products from hand-fit curves: an anchor-age table
+per product, linearly interpolated, times flat multipliers (sex .85, tobacco 2.4, health
+.85/1/1.35), scaled linearly off a per-$100k base, then shown as ±18%. **It is not
+WinFlex/iPipeline accuracy and cannot be** — those pull licensed, carrier-permissioned,
+state-and-product-specific rate cards. The structural gaps, in order of size: no face-amount
+band breaks (real per-$1,000 rates fall at $100k/$250k/$500k/$1M, so linear scaling is wrong
+at both ends), no annual policy fee, three health tiers standing in for the real ladder
+(Preferred Plus → Standard, plus table ratings and flat extras — a spread far wider than
+1.35x), no state/product/carrier/effective-date, and no rider pricing. WL, IUL, hybrid LTC
+and DI are rougher still (IUL is a monthly-annuity FV with a flat 8–28% cost haircut and a
+flat 5% distribution). **Do not describe these as quotes, and never add a WinFlex or
+iPipeline claim.** The `.q-note` disclosure is deliberately precise; keep it that way.
+To make it real: export rate grids from WinFlex for the products Connor actually writes and
+drive the calculator from that JSON (age × band × class × term), or put a licensed
+comparative rater behind a Netlify function.
 
 ## Where things stand
 **SHIPPED 2026-07-27**: the user said "double check everything works on desktop and mobile

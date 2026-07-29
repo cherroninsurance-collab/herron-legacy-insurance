@@ -12,13 +12,37 @@
 (function () {
   'use strict';
 
-  /* ---- why-card cursor glow: one delegated, passive listener ---- */
+  /* ---- why-card cursor glow + 3D diamond tilt: one delegated, passive listener.
+     Tilt only touches solid-surface cards (never backdrop-filter glass — Chrome
+     glitches when a blurred element is 3D-transformed) and only on fine pointers. */
+  var TILT_MAX = 6;
+  var fineTilt = matchMedia('(pointer:fine)').matches &&
+                 !matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (fineTilt) {
+    document.querySelectorAll('.hx-why-card').forEach(function (el) {
+      el.setAttribute('data-hx-tilt', '');
+    });
+  }
   document.addEventListener('pointermove', function (e) {
     var c = e.target.closest && e.target.closest('.hx-why-card');
     if (!c) return;
     var r = c.getBoundingClientRect();
-    c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    var x = e.clientX - r.left, y = e.clientY - r.top;
+    c.style.setProperty('--mx', x + 'px');
+    c.style.setProperty('--my', y + 'px');
+    if (fineTilt && c.hasAttribute('data-hx-tilt')) {
+      c.classList.remove('hx-tilt-off');
+      var rx = (0.5 - y / r.height) * TILT_MAX;
+      var ry = (x / r.width - 0.5) * (TILT_MAX + 2);
+      c.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(6px)';
+    }
+  }, { passive: true });
+  document.addEventListener('pointerout', function (e) {
+    var c = e.target.closest && e.target.closest('[data-hx-tilt]');
+    if (!c) return;
+    if (e.relatedTarget && c.contains(e.relatedTarget)) return;
+    c.classList.add('hx-tilt-off');
+    c.style.transform = '';
   }, { passive: true });
 
   /* ---- fallback: coverage cards become a flat snap carousel with dots.
@@ -68,8 +92,10 @@
      respects the preference better than tweens do. */
   var OK = window.gsap;
   var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  /* the bento grid is the coverage layout now — no flat carousel fallback either */
+  var isBento = !!document.querySelector('[data-hx-bento]');
   if (!OK || calm) {
-    initFlatCarousel();
+    if (!isBento) initFlatCarousel();
     return;
   }
 
@@ -143,9 +169,11 @@
     function measure() {
       /* tighter, shallower geometry on small screens; wider sweep on desktop */
       var small = innerWidth < 720;
-      SPREAD = small ? 0.62 : 0.55;
-      TILT = small ? 30 : 38;
-      DEPTH = small ? 120 : 190;
+      /* deeper stage: more z-separation and a stronger turn on the side cards,
+         so the coverflow reads as real space instead of a fanned deck */
+      SPREAD = small ? 0.62 : 0.56;
+      TILT = small ? 34 : 46;
+      DEPTH = small ? 150 : 250;
       cardW = cards[0].offsetWidth || 520;
       pxPerStep = cardW * SPREAD;
       /* stage height = tallest card + breathing room — measured, not guessed,
@@ -347,8 +375,13 @@
     };
   }
 
+  /* The coverage section is now an asymmetric bento grid, so it no longer takes
+     the coverflow treatment — the annuities carousel is unchanged. Nav links into
+     card ids still resolve, because the cards keep their ids and the browser can
+     jump to them directly once the ring isn't there to intercept. */
+  var bento = !!document.querySelector('[data-hx-bento]');
   var rings = {
-    coverage: initRing('coverage', '.cover-grid', 'Coverage options'),
+    coverage: bento ? null : initRing('coverage', '.cover-grid', 'Coverage options'),
     annuities: initRing('annuities', '.ann-grid', 'Annuity types')
   };
   window.hxRings = rings;   // used by the audit harness; harmless in production

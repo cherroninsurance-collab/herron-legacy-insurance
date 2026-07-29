@@ -16,9 +16,9 @@
 <link rel="apple-touch-icon" href="logos/mark/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <noscript><style>
 /* Scroll-reveal starts at opacity:0 and is un-hidden by script. With script off that
    never happens, which would also hide the state list and the rate/illustration
@@ -35,9 +35,18 @@
   --navy-mid:#16305C;
   --blue:#3E68B8;
   --blue-bright:#5B8DEF;
-  --brass:#C9973B;
-  --brass-bright:#E2B45C;
+  /* gold, not yellow: the body tone is deeper and the bright stop is champagne
+     rather than lemon. Flat fills read as mustard; metal needs a ramp, so the
+     surfaces below use --gold-face / --gold-face-hi. */
+  --brass:#BE9235;
+  --brass-bright:#DFC078;
+  --gold-hi:#F2E3BC;--gold-deep:#8A6518;
+  --gold-face:linear-gradient(180deg,#F0DCA6 0%,#D9B45F 14%,#BE9235 46%,#9E7420 80%,#B5892C 100%);
+  --gold-face-hi:linear-gradient(180deg,#F7E8C4 0%,#E4C476 14%,#CBA043 46%,#AC8128 80%,#C39735 100%);
   --white:#FFFFFF;
+  /* premium light-mode base: alabaster paper, obsidian ink, slate hairlines */
+  --alabaster:#FBFBFA;--silk:#F7F6F3;--obsidian:#0A1128;
+  --slate-100:#F1F5F9;--slate-200:#E2E8F0;
   --cloud:#F4F6FA;
   --mist:#E4EAF4;
   --ink:#101828;
@@ -74,9 +83,11 @@
 html{scroll-behavior:smooth}
 body{
   font-family:'Inter',system-ui,sans-serif;color:var(--ink);
-  background:var(--white);line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased;
+  background:var(--alabaster);line-height:1.68;font-size:16px;-webkit-font-smoothing:antialiased;
 }
-h1,h2,h3{font-family:'Sora',sans-serif;font-weight:600;line-height:1.12;letter-spacing:-.02em}
+/* institutional serif for headings — legacy and trust; Sora stays for UI chrome */
+h1,h2,h3{font-family:'Playfair Display','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  font-weight:600;line-height:1.14;letter-spacing:-.015em;color:var(--obsidian)}
 /* no orphan words in headlines; readable measure in body copy */
 h1,h2,h3,.big{text-wrap:balance;letter-spacing:-.022em}
 p,.lede{text-wrap:pretty}
@@ -87,14 +98,14 @@ p,.lede{text-wrap:pretty}
 .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-32) 0}
 @media(max-width:880px){
   #coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
-  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-24) 0}
+  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:clamp(88px,9vw,152px) 0}
 }
 /* NOTE: content-visibility:auto was tried here and reverted — nearly every band
    is an in-page anchor target, and estimated intrinsic sizes make hash jumps and
    scrollIntoView land short while heights resolve. Perf win wasn't worth it. */
 .eyebrow{
   font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.18em;text-transform:uppercase;
-  color:var(--brass);font-weight:500;display:block;margin-bottom:16px;
+  color:#96660F;font-weight:500;display:block;margin-bottom:16px;
 }
 .wrap{max-width:1160px;margin:0 auto;padding:0 24px}
 a{color:inherit}
@@ -109,50 +120,50 @@ a{color:inherit}
 .btn:focus-visible{outline:3px solid var(--brass);outline-offset:3px}
 .btn-brass{background:var(--brass);color:var(--navy-deep)}
 .btn-brass:hover{background:var(--brass-bright);transform:translateY(-2px);box-shadow:0 14px 30px -10px rgba(201,151,59,.55)}
-.btn-ghost-light{border-color:var(--line-light);color:var(--white)}
-.btn-ghost-light:hover{background:rgba(255,255,255,.08)}
+.btn-ghost-light{border-color:rgba(20,38,76,.3);color:var(--navy)}
+.btn-ghost-light:hover{background:rgba(20,38,76,.05)}
 .btn-navy{background:var(--navy);color:var(--white)}
 .btn-navy:hover{background:var(--navy-mid);transform:translateY(-2px);box-shadow:var(--shadow)}
 .btn-ghost-dark{border-color:var(--line);color:var(--navy)}
 .btn-ghost-dark:hover{background:var(--mist)}
 
 /* ---------- NAV ---------- */
-nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line-light)}
+nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(14,31,62,.10)}
 .nav-inner{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;max-width:1280px;margin:0 auto}
 .logo{display:flex;align-items:center;gap:12px;text-decoration:none}
 .logo-mark{display:flex;align-items:center;justify-content:center;flex-shrink:0}
 /* no tile — the mark sits straight on the nav */
 .logo-mark img{height:38px;width:auto;display:block}
 .logo-text{line-height:1.12}
-.logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--white);letter-spacing:-.01em}
+.logo-text b{font-family:'Sora';font-weight:700;font-size:16.5px;display:block;color:var(--navy);letter-spacing:-.01em}
 .logo-text span{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--brass)}
 .nav-links{display:flex;gap:11px;list-style:none}
-.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:rgba(255,255,255,.72);transition:color .15s;white-space:nowrap}
-.nav-links a:hover{color:var(--white)}
+.nav-links a{text-decoration:none;font-weight:500;font-size:13px;color:#31415F;transition:color .15s;white-space:nowrap}
+.nav-links a:hover{color:var(--navy)}
 /* sticky-nav offset for in-page anchors (category tabs) */
 :where(section,article)[id],#tools,#annuities{scroll-margin-top:86px}
 .nav-cta{display:flex;align-items:center;gap:16px}
-.nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--white)}
+.nav-phone{font-family:'IBM Plex Mono',monospace;font-size:13.5px;text-decoration:none;color:var(--navy)}
 .nav-cta .btn{padding:10px 20px;font-size:14px}
 @media(max-width:1320px){.nav-links,.nav-phone{display:none}}
 
 /* ---------- HERO ---------- */
-.hero{background:radial-gradient(1400px 700px at 75% -20%,#1B3868 0%,var(--navy) 45%,var(--navy-deep) 100%);color:var(--white);position:relative;overflow:hidden}
+.hero{background:radial-gradient(1150px 640px at 72% 24%, rgba(232,190,105,.42), transparent 62%),radial-gradient(900px 520px at 14% -12%, rgba(140,166,220,.20), transparent 60%),radial-gradient(1500px 900px at 50% 118%, rgba(226,214,190,.35), transparent 70%),linear-gradient(180deg,#FDFCF8 0%,#F4F6FA 58%,#EBEFF6 100%);color:#26365A;position:relative;overflow:hidden}
 .hero-inner{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:92px 24px 100px;max-width:1160px;margin:0 auto;position:relative;z-index:1}
 .hero .pill{
   display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(201,151,59,.45);border-radius:999px;
-  padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--brass-bright);margin-bottom:24px;
+  padding:7px 16px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:#96660Fight);margin-bottom:24px;
 }
 .hero .pill i{width:7px;height:7px;border-radius:50%;background:var(--brass-bright);display:inline-block;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
-.hero h1{font-size:clamp(38px,5vw,60px);color:var(--white)}
-.hero h1 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hero p.lede{font-size:18.5px;color:rgba(255,255,255,.78);margin:24px 0 34px;max-width:52ch}
+.hero h1{font-size:clamp(38px,5vw,60px);color:var(--navy)}
+.hero h1 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lede{font-size:18.5px;color:#3A4A6B;margin:24px 0 34px;max-width:52ch}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
 .hero-stats{display:flex;gap:40px;margin-top:46px;flex-wrap:wrap}
-.hstat b{font-family:'Sora';font-size:30px;font-weight:700;color:var(--white);display:block}
-.hstat b em{font-style:normal;color:var(--brass-bright)}
-.hstat span{font-size:13px;color:rgba(255,255,255,.6)}
+.hstat b{font-family:'Sora';font-size:30px;font-weight:700;color:var(--navy);display:block}
+.hstat b em{font-style:normal;color:#B07E22}
+.hstat span{font-size:13px;color:#5A6A8C}
 .hstat b span{font-size:inherit;color:inherit}
 .hero-visual{position:relative;display:flex;justify-content:center}
 .crest{
@@ -164,11 +175,11 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 .crest::before{content:"";position:absolute;inset:0;background:radial-gradient(340px 200px at 30% 20%,rgba(201,151,59,.14),transparent 65%)}
 .crest svg{width:72%;height:auto;position:relative}
 .crest .chiplet{
-  position:absolute;background:rgba(8,18,38,.85);border:1px solid var(--line-light);backdrop-filter:blur(8px);
-  border-radius:12px;padding:10px 16px;font-size:12.5px;color:rgba(255,255,255,.85);
+  position:absolute;background:rgba(255,255,255,.85);border:1px solid rgba(14,31,62,.12);backdrop-filter:blur(8px);
+  border-radius:12px;padding:10px 16px;font-size:12.5px;color:#3A4A6B;
   font-family:'IBM Plex Mono',monospace;letter-spacing:.04em;
 }
-.chiplet b{color:var(--brass-bright);font-weight:500;display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
+.chiplet b{color:#96660F;font-weight:500;display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:2px}
 .chip-1{top:26px;left:-14px;animation:float 5s ease-in-out infinite}
 .chip-2{bottom:34px;right:-14px;animation:float 6s ease-in-out .8s infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
@@ -192,8 +203,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 }
 
 /* ---------- CARRIER MARQUEE ---------- */
-.carriers{background:var(--navy-deep);border-top:1px solid var(--line-light);padding:34px 0 40px;overflow:hidden}
-.carriers p.cap{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:24px}
+.carriers{background:#FFFFFF;border-top:1px solid rgba(14,31,62,.08);border-bottom:1px solid rgba(14,31,62,.08);padding:34px 0 40px;overflow:hidden}
+.carriers p.cap{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#5A6A8C;margin-bottom:24px}
 .marquee{position:relative;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .marquee-track{display:flex;gap:18px;width:max-content;animation:scroll 34s linear infinite}
 .marquee:hover .marquee-track{animation-play-state:paused}
@@ -279,7 +290,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(8,18,38,.9);backdrop-filte
 .fitbox.no li::before{content:"✕";color:#B4232A}
 
 /* ---------- SECTIONS ---------- */
-section{padding:96px 0}
+/* fintech white-space — every band roughly doubles its vertical air */
+section{padding:clamp(88px,9vw,152px) 0}
 .sec-head{max-width:660px;margin-bottom:54px}
 .sec-head h2{font-size:clamp(29px,3.4vw,42px);color:var(--navy)}
 .sec-head p{color:var(--ink-soft);margin-top:16px;font-size:17px}
@@ -330,36 +342,35 @@ section{padding:96px 0}
    headings, cool counter-light right, deep floor, brass hairline on the top edge.
    Replaced the blue grid overlay + purple/indigo/cyan blob wash (deleted). */
 .iul-band{background:
-  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
-  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
-  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
-  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
-  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
-  color:var(--white);position:relative;overflow:hidden}
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden}
 .iul-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;position:relative;z-index:1}
 @media(max-width:880px){.iul-grid{grid-template-columns:1fr;gap:34px}}
-.iul-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
-.iul-copy h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.iul-copy p{color:rgba(255,255,255,.75);margin-top:16px;font-size:17px}
+.iul-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,42px)}
+.iul-copy h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.iul-copy p{color:#3A4A6B;margin-top:16px;font-size:17px}
 .iul-points{margin-top:26px;display:grid;gap:14px}
 .iul-point{display:flex;gap:14px;align-items:flex-start}
 .iul-point .ic{width:38px;height:38px;border-radius:10px;background:rgba(201,151,59,.14);border:1px solid rgba(201,151,59,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
-.iul-point b{display:block;font-family:'Sora';font-size:15.5px;color:var(--white)}
-.iul-point span{font-size:14px;color:rgba(255,255,255,.65)}
+.iul-point b{display:block;font-family:'Sora';font-size:15.5px;color:var(--navy)}
+.iul-point span{font-size:14px;color:#3A4A6B}
 .iul-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .iul-preview{
-  background:rgba(8,18,38,.55);border:1px solid rgba(201,151,59,.3);border-radius:18px;padding:30px;
+  background:rgba(255,255,255,.9);border:1px solid rgba(176,126,34,.32);border-radius:18px;padding:30px;
   box-shadow:var(--shadow);
 }
-.iul-preview .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:18px}
+.iul-preview .cap{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#5A6A8C;margin-bottom:18px}
 .iul-bars{display:grid;gap:14px;margin-bottom:22px}
 .iul-bar{display:grid;grid-template-columns:66px 1fr;gap:12px;align-items:center}
-.iul-bar .yr{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:rgba(255,255,255,.6)}
-.iul-bar .track{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.iul-bar .yr{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#5A6A8C}
+.iul-bar .track{height:10px;border-radius:999px;background:rgba(20,38,76,.08);overflow:hidden}
 .iul-bar .fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--brass),var(--brass-bright));width:0;transition:width 1.1s cubic-bezier(.2,.7,.3,1)}
 .iul-bar.down .fill{background:linear-gradient(90deg,#3A4A5E,#5A6B78)}
-.iul-preview .floor{font-size:13.5px;color:rgba(255,255,255,.62);border-top:1px solid var(--line-light);padding-top:16px}
-.iul-preview .floor b{color:var(--brass-bright);font-weight:500}
+.iul-preview .floor{font-size:13.5px;color:#3A4A6B;border-top:1px solid var(--line);padding-top:16px}
+.iul-preview .floor b{color:#96660F;font-weight:500}
 .iul-embed{margin-top:44px;position:relative;z-index:1}
 .iul-embed[hidden]{display:none}
 .iul-frame-card{background:var(--white);border:1px solid rgba(201,151,59,.35);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
@@ -374,72 +385,78 @@ section{padding:96px 0}
 /* ---------- AI CONCIERGE SECTION ---------- */
 /* the concierge band keeps its ORIGINAL backdrop (user request) — navy gradient,
    blue grid overlay, blob wash — while IUL + annuities run the executive backdrop */
-.ai-band{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 80%);color:var(--white);position:relative;overflow:hidden}
-.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(91,141,239,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(91,141,239,.05) 1px,transparent 1px);background-size:56px 56px;pointer-events:none}
-.ai-band .hero-grid-lines{opacity:.7}
-.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
-.ai-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,42px)}
-.ai-copy p{color:rgba(255,255,255,.75);margin-top:16px;font-size:17px}
+.ai-band{background:
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden}
+.ai-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;position:relative;z-index:1}
+.ai-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,42px)}
+.ai-copy p{color:#3A4A6B;margin-top:16px;font-size:17px}
 .ai-feats{margin-top:28px;display:grid;gap:14px}
 .ai-feat{display:flex;gap:14px;align-items:flex-start}
 .ai-feat .ic{
   width:38px;height:38px;border-radius:10px;background:rgba(201,151,59,.14);border:1px solid rgba(201,151,59,.4);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;
 }
-.ai-feat b{display:block;font-family:'Sora';font-size:15.5px;color:var(--white)}
-.ai-feat span{font-size:14px;color:rgba(255,255,255,.65)}
+.ai-feat b{display:block;font-family:'Sora';font-size:15.5px;color:var(--navy)}
+.ai-feat span{font-size:14px;color:#3A4A6B}
 .ai-copy .btn{margin-top:30px}
-@media(max-width:880px){.ai-grid{grid-template-columns:1fr}}
+/* minmax(0,…): a plain 1fr floors at min-content, and the chat column's min-content
+   (410px) pushed the whole track past the 366px phone wrap — the copy ran off-screen,
+   invisibly, because .hx-on clips overflow-x. */
+@media(max-width:880px){.ai-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- CHAT (shared: embedded panel + floating widget) ---------- */
 .chat-shell{
-  background:var(--navy-deep);border:1px solid var(--line-light);border-radius:20px;overflow:hidden;
+  background:#FFFFFF;border:1px solid rgba(14,31,62,.12);border-radius:20px;overflow:hidden;
   box-shadow:var(--shadow);display:flex;flex-direction:column;height:520px;max-width:460px;margin-left:auto;width:100%;
 }
-.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line-light);background:rgba(255,255,255,.03)}
+.chat-head{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(14,31,62,.10);background:rgba(20,38,76,.03)}
 .chat-head .avatar{
   width:38px;height:38px;border-radius:50%;background:linear-gradient(150deg,var(--brass),#8f6a24);
   display:flex;align-items:center;justify-content:center;flex-shrink:0;
 }
 .chat-head .avatar svg{width:22px;height:22px}
 .avatar img{height:20px;width:auto;display:block}
-.chat-head b{font-family:'Sora';font-size:15px;color:var(--white);display:block;line-height:1.2}
-.chat-head span{font-size:11.5px;color:#7ADB8F;display:flex;align-items:center;gap:6px}
-.chat-head span i{width:7px;height:7px;border-radius:50%;background:#7ADB8F;display:inline-block;animation:pulse 2s infinite}
+.chat-head b{font-family:'Sora';font-size:15px;color:var(--navy);display:block;line-height:1.2}
+.chat-head span{font-size:11.5px;color:#1F8A3D;display:flex;align-items:center;gap:6px}
+.chat-head span i{width:7px;height:7px;border-radius:50%;background:#1F8A3D;display:inline-block;animation:pulse 2s infinite}
 .chat-head .spk{
-  margin-left:auto;background:none;border:1px solid var(--line-light);border-radius:9px;color:rgba(255,255,255,.7);
+  margin-left:auto;background:none;border:1px solid rgba(14,31,62,.18);border-radius:9px;color:#31415F;
   padding:7px 12px;cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.06em;
 }
-.chat-head .spk.on{border-color:var(--brass);color:var(--brass-bright)}
+.chat-head .spk.on{border-color:var(--brass);color:#96660F}
 .chat-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;scroll-behavior:smooth}
 .msg{max-width:86%;padding:12px 15px;border-radius:14px;font-size:14.5px;line-height:1.55;white-space:pre-line}
-.msg.bot{background:rgba(255,255,255,.07);color:rgba(255,255,255,.92);border:1px solid var(--line-light);border-bottom-left-radius:4px;align-self:flex-start}
+.msg.bot{background:rgba(20,38,76,.05);color:#26365A;border:1px solid rgba(14,31,62,.10);border-bottom-left-radius:4px;align-self:flex-start}
 .msg.user{background:var(--brass);color:var(--navy-deep);border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
-.msg a{color:var(--brass-bright);font-weight:600}
+.msg a{color:#96660F;font-weight:600}
 .msg.user a{color:var(--navy-deep)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;align-self:flex-start}
 .chip{
-  background:none;border:1px solid rgba(201,151,59,.5);color:var(--brass-bright);border-radius:999px;
+  background:none;border:1px solid rgba(150,102,15,.5);color:#96660F;border-radius:999px;
   padding:7px 14px;font-size:12.5px;font-family:'Inter';font-weight:500;cursor:pointer;transition:background .15s;
 }
 .chip:hover{background:rgba(201,151,59,.14)}
 .typing{display:inline-flex;gap:5px;padding:14px 16px}
-.typing i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.5);animation:blink 1.2s infinite}
+.typing i{width:7px;height:7px;border-radius:50%;background:rgba(20,38,76,.4);animation:blink 1.2s infinite}
 .typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
 @keyframes blink{0%,80%,100%{opacity:.25}40%{opacity:1}}
-.chat-input{display:flex;gap:10px;padding:14px;border-top:1px solid var(--line-light);background:rgba(255,255,255,.03)}
+.chat-input{display:flex;gap:10px;padding:14px;border-top:1px solid rgba(14,31,62,.10);background:rgba(20,38,76,.02)}
 .chat-input input{
-  flex:1;background:rgba(255,255,255,.06);border:1px solid var(--line-light);border-radius:11px;
-  padding:12px 15px;color:var(--white);font-family:'Inter';font-size:14.5px;outline:none;
+  flex:1;background:rgba(20,38,76,.04);border:1px solid rgba(14,31,62,.14);border-radius:11px;
+  padding:12px 15px;color:#26365A;font-family:'Inter';font-size:14.5px;outline:none;
 }
 .chat-input input:focus{border-color:var(--brass)}
-.chat-input input::placeholder{color:rgba(255,255,255,.4)}
+.chat-input input::placeholder{color:rgba(38,54,90,.45)}
 .icon-btn{
-  width:46px;height:46px;border-radius:11px;border:1px solid var(--line-light);background:rgba(255,255,255,.06);
-  color:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+  width:46px;height:46px;border-radius:11px;border:1px solid rgba(14,31,62,.14);background:rgba(20,38,76,.04);
+  color:#26365A;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
   transition:background .15s,border-color .15s;
 }
-.icon-btn:hover{background:rgba(255,255,255,.12)}
+.icon-btn:hover{background:rgba(20,38,76,.08)}
 .icon-btn.send{background:var(--brass);border-color:var(--brass);color:var(--navy-deep)}
 .icon-btn.send:hover{background:var(--brass-bright)}
 .icon-btn.mic.listening{background:#B03030;border-color:#B03030;animation:pulse 1.2s infinite}
@@ -492,31 +509,31 @@ section{padding:96px 0}
 
 /* ---------- QUOTE TOOL ---------- */
 .quote-band{background:var(--white);border-top:1px solid var(--line)}
-.q-shell{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 88%);border-radius:22px;box-shadow:var(--shadow);border:1px solid rgba(201,151,59,.3);overflow:hidden}
-.q-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:18px 22px;border-bottom:1px solid var(--line-light)}
-.q-tab{background:none;border:1px solid var(--line-light);color:rgba(255,255,255,.7);border-radius:999px;padding:9px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;cursor:pointer;transition:all .15s}
-.q-tab:hover{color:var(--white);border-color:rgba(255,255,255,.4)}
+.q-shell{background:#FFFFFF;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);border:1px solid rgba(201,151,59,.3);overflow:hidden}
+.q-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.q-tab{background:none;border:1px solid rgba(14,31,62,.18);color:#31415F;border-radius:999px;padding:9px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;cursor:pointer;transition:all .15s}
+.q-tab:hover{color:var(--navy);border-color:rgba(14,31,62,.4)}
 .q-tab.on{background:var(--brass);border-color:var(--brass);color:var(--navy-deep)}
 .q-tab:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:0}
-.q-controls{padding:30px 34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line-light)}
-.q-field label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
-.q-field label b{color:var(--brass-bright);letter-spacing:.04em;font-weight:500}
+.q-controls{padding:30px 34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line)}
+.q-field label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#5A6A8C;margin-bottom:10px}
+.q-field label b{color:#96660F;letter-spacing:.04em;font-weight:500}
 .q-field input[type=range]{width:100%;accent-color:var(--brass);height:5px;cursor:pointer}
 .q-seg{display:flex;flex-wrap:wrap;gap:8px}
-.q-seg button{background:rgba(255,255,255,.05);border:1px solid var(--line-light);color:rgba(255,255,255,.75);border-radius:10px;padding:9px 15px;font-size:13px;font-family:'Inter';font-weight:500;cursor:pointer;transition:all .15s}
-.q-seg button.on{background:rgba(201,151,59,.18);border-color:var(--brass);color:var(--brass-bright)}
+.q-seg button{background:rgba(20,38,76,.04);border:1px solid rgba(14,31,62,.16);color:#31415F;border-radius:10px;padding:9px 15px;font-size:13px;font-family:'Inter';font-weight:500;cursor:pointer;transition:all .15s}
+.q-seg button.on{background:rgba(201,151,59,.16);border-color:var(--brass);color:#96660F}
 .q-seg button:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-out{padding:34px;display:flex;flex-direction:column;justify-content:center;text-align:center}
-.q-out .cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
-.q-price{font-family:'Sora';font-weight:700;font-size:clamp(38px,4.6vw,56px);color:var(--white);line-height:1;letter-spacing:-.02em}
-.q-price em{font-style:normal;background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.q-sub{font-size:14px;color:rgba(255,255,255,.62);margin-top:12px;max-width:34ch;margin-left:auto;margin-right:auto}
+.q-out .cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:#5A6A8C;margin-bottom:12px}
+.q-price{font-family:'Sora';font-weight:700;font-size:clamp(38px,4.6vw,56px);color:var(--navy);line-height:1;letter-spacing:-.02em}
+.q-price em{font-style:normal;background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.q-sub{font-size:14px;color:#5A6A8C;margin-top:12px;max-width:34ch;margin-left:auto;margin-right:auto}
 .q-out .btn{margin:24px auto 0}
-.q-note{padding:16px 22px;border-top:1px solid var(--line-light);font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.7}
+.q-note{padding:16px 22px;border-top:1px solid var(--line);font-size:11.5px;color:#5A6A8C;line-height:1.7}
 .q-custom{padding:38px 34px;text-align:center}
-.q-custom h3{color:var(--white);font-size:23px;margin-bottom:12px}
-.q-custom p{color:rgba(255,255,255,.7);max-width:56ch;margin:0 auto 22px;font-size:15px}
+.q-custom h3{color:var(--navy);font-size:23px;margin-bottom:12px}
+.q-custom p{color:#3A4A6B;max-width:56ch;margin:0 auto 22px;font-size:15px}
 @media(max-width:820px){.q-grid{grid-template-columns:1fr}.q-controls{border-right:none;border-bottom:1px solid var(--line-light)}}
 
 /* ---------- LEGACY BLUEPRINT APP ---------- */
@@ -524,7 +541,7 @@ section{padding:96px 0}
 .bp-head{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:end;margin-bottom:34px}
 @media(max-width:880px){.bp-head{grid-template-columns:1fr;gap:24px}}
 .bp-head h2{font-size:clamp(29px,3.4vw,42px);color:var(--navy);max-width:17ch}
-.bp-head h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bp-head h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bp-head p{color:var(--ink-soft);margin-top:16px;font-size:17px;max-width:52ch}
 .bp-steps{display:grid;gap:12px}
 .bp-step{display:flex;gap:12px;align-items:flex-start;border-left:2px solid rgba(201,151,59,.5);padding-left:14px}
@@ -559,20 +576,20 @@ section{padding:96px 0}
 .states-note{margin-top:22px;font-size:14px;color:var(--ink-soft)}
 
 /* ---------- BOOKING ---------- */
-.booking{background:linear-gradient(160deg,var(--navy) 0%,var(--navy-deep) 85%);color:var(--white);position:relative;overflow:hidden}
+.booking{background:linear-gradient(180deg,#F4F6FA 0%,#ECEFF6 100%);color:#26365A;position:relative;overflow:hidden}
 .book-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:52px;align-items:start;position:relative;z-index:1}
-.book-copy h2{color:var(--white);font-size:clamp(28px,3.4vw,40px)}
-.book-copy p{color:rgba(255,255,255,.75);margin-top:16px}
+.book-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,40px)}
+.book-copy p{color:#3A4A6B;margin-top:16px}
 .book-points{margin-top:28px;display:grid;gap:16px}
 .book-point{display:flex;gap:14px;align-items:flex-start}
 .book-point .n{
-  font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--brass-bright);border:1px solid rgba(201,151,59,.45);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;color:#96660F;border:1px solid rgba(150,102,15,.4);
   border-radius:8px;padding:6px 10px;flex-shrink:0;letter-spacing:.1em;
 }
-.book-point div b{display:block;font-family:'Sora';font-size:15px;color:var(--white)}
-.book-point div span{font-size:13.5px;color:rgba(255,255,255,.62)}
+.book-point div b{display:block;font-family:'Sora';font-size:15px;color:var(--navy)}
+.book-point div span{font-size:13.5px;color:#5A6A8C}
 .book-frame{
-  background:var(--white);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line-light);
+  background:var(--white);border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);
   display:flex;flex-direction:column;
 }
 #my-cal-inline-15min{width:100%;min-height:680px;padding:6px}
@@ -595,12 +612,12 @@ section{padding:96px 0}
 /* ---------- FINAL CTA ---------- */
 .final{background:var(--white);text-align:center;border-top:1px solid var(--line)}
 .final h2{font-size:clamp(30px,4.2vw,50px);color:var(--navy);max-width:22ch;margin:0 auto 18px}
-.final h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
+.final h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
 .final p{color:var(--ink-soft);max-width:56ch;margin:0 auto 36px;font-size:17.5px}
 .final .hero-ctas{justify-content:center}
 /* risk-reversal line under a primary CTA — this is what removes hesitation */
 .cta-sub{display:block;margin-top:var(--sp-3);font-size:var(--step--1);color:var(--ink-soft);letter-spacing:.01em}
-.hero .cta-sub{color:rgba(255,255,255,.66)}
+.hero .cta-sub{color:#5A6A8C}
 .final .cta-sub{margin-top:var(--sp-4)}
 /* the single escape hatch, deliberately quieter than the primary */
 .final p.final-alt{margin:var(--sp-8) auto 0;max-width:60ch;font-size:var(--step--1);color:var(--ink-soft);line-height:1.6}
@@ -608,15 +625,15 @@ section{padding:96px 0}
 .final p.final-alt a:hover{color:var(--navy)}
 
 /* ---------- FOOTER ---------- */
-.foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:#fff!important}
-footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38px;font-size:14px}
+.foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:var(--navy)!important}
+footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);padding:66px 0 38px;font-size:14px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
-.foot-grid h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--brass);margin-bottom:16px;font-weight:500}
-.foot-grid a{color:rgba(255,255,255,.68);text-decoration:none;display:block;padding:4px 0;transition:color .15s}
-.foot-grid a:hover{color:var(--white)}
-.foot-brand b{font-family:'Sora';font-size:18px;color:var(--white);display:block;margin-bottom:10px}
+.foot-grid h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#96660F;margin-bottom:16px;font-weight:500}
+.foot-grid a{color:#4A5A7C;text-decoration:none;display:block;padding:4px 0;transition:color .15s}
+.foot-grid a:hover{color:var(--navy)}
+.foot-brand b{font-family:'Sora';font-size:18px;color:var(--navy);display:block;margin-bottom:10px}
 .foot-brand p{max-width:38ch;line-height:1.7}
-.disclaimer{border-top:1px solid var(--line-light);padding-top:26px;font-size:11.5px;color:rgba(255,255,255,.42);line-height:1.8;max-width:105ch}
+.disclaimer{border-top:1px solid rgba(14,31,62,.14);padding-top:26px;font-size:11.5px;color:#5A6A8C;line-height:1.8;max-width:105ch}
 @media(max-width:820px){.foot-grid{grid-template-columns:1fr;gap:30px}}
 
 /* ============================================================
@@ -630,8 +647,8 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
   padding:clamp(22px,3.2vw,40px) clamp(20px,3vw,38px);
   border-radius:22px;min-width:0;
   background:
-    linear-gradient(158deg,rgba(255,255,255,.085) 0%,rgba(255,255,255,.028) 38%,rgba(255,255,255,0) 72%),
-    linear-gradient(180deg,rgba(8,18,38,.42),rgba(8,18,38,.20));
+    linear-gradient(158deg,rgba(255,255,255,.9) 0%,rgba(255,255,255,.62) 38%,rgba(255,255,255,.5) 72%),
+    linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,.35));
   -webkit-backdrop-filter:blur(16px) saturate(1.45);
           backdrop-filter:blur(16px) saturate(1.45);
   box-shadow:
@@ -643,7 +660,7 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 }
 .hx-hero-card::before{
   content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
-  background:linear-gradient(158deg,rgba(226,180,92,.62),rgba(226,180,92,.10) 34%,rgba(255,255,255,.14) 70%,rgba(255,255,255,.04));
+  background:linear-gradient(158deg,rgba(226,180,92,.65),rgba(150,180,240,.35) 40%,rgba(190,150,230,.30) 62%,rgba(255,255,255,.18));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
           mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;mask-composite:exclude;
@@ -659,15 +676,13 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 @media (pointer:coarse){
   .hx-hero-card{
     -webkit-backdrop-filter:none;backdrop-filter:none;
-    /* lighter + more transparent than the old near-solid navy: phones lose the
-       blur, they should not also lose the light behind the card */
-    background:linear-gradient(180deg,rgba(22,42,80,.46),rgba(13,27,54,.30));
+    background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.6));
   }
   .hx-hero-card::after{animation:none;display:none}
 }
 @media (prefers-reduced-motion:reduce){ .hx-hero-card::after{animation:none} }
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  .hx-hero-card{background:linear-gradient(180deg,rgba(8,18,38,.72),rgba(8,18,38,.5))}
+  .hx-hero-card{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.7))}
 }
 
 /* ---- interactive 3D card carousel (inert until JS adds .hx-on) ----
@@ -682,6 +697,8 @@ footer{background:var(--navy-deep);color:rgba(255,255,255,.68);padding:66px 0 38
 .hx-on .hx-stage{cursor:grab;touch-action:pan-y}
 html.hx-grabbing,html.hx-grabbing *{cursor:grabbing!important}
 html.hx-grabbing{user-select:none;-webkit-user-select:none}
+[data-hx-tilt]{transform-style:preserve-3d;will-change:transform}
+[data-hx-tilt].hx-tilt-off{transition:transform .5s cubic-bezier(.16,1,.3,1)}
 .hx-stage .hx-wheel{transform-style:preserve-3d}
 .hx-on .hx-wheel{position:relative;display:block;height:clamp(430px,64vh,600px);margin-inline:auto;max-width:none;pointer-events:none}
 .hx-on .hx-wheel>.hx-3dcard{
@@ -695,7 +712,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 }
 /* solid surfaces per family — no glass while transformed */
 .hx-on .cover-grid>.hx-3dcard{background:var(--white)}
-.hx-on .ann-grid>.hx-3dcard{background:linear-gradient(150deg,#16294E 0%,#0B1830 100%);border:1px solid rgba(201,151,59,.28)}
+.hx-on .ann-grid>.hx-3dcard{border:1px solid transparent;background:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)) padding-box,linear-gradient(135deg,rgba(201,151,59,.55),rgba(140,166,220,.4) 45%,rgba(180,140,220,.34) 70%,rgba(201,151,59,.3)) border-box}
 /* reveal-neutraliser + dim/front states. Deliberately NO !important in this trio:
    the flip-reveal hide is .cover-grid>.reveal / .ann-grid>.reveal (0,2,0), the
    neutraliser below out-specifies it at (0,3,0), and the front card simply never
@@ -706,7 +723,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .hx-on .hx-wheel>.hx-3dcard.hx-dim{filter:saturate(.6) brightness(.95)}
 .hx-on .hx-wheel>.hx-3dcard.hx-front{pointer-events:auto;cursor:auto;
   box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 40px 80px -32px rgba(8,18,38,.28)}
-.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 6px 14px rgba(0,0,0,.3),0 26px 60px -18px rgba(0,0,0,.55),0 0 0 1px rgba(201,151,59,.35)}
+.hx-on .ann-grid>.hx-3dcard.hx-front{box-shadow:0 4px 8px rgba(8,18,38,.07),0 18px 48px -12px rgba(8,18,38,.22),0 0 0 1px rgba(201,151,59,.35)}
 /* arrows */
 .hx-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:6;width:50px;height:50px;
   border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
@@ -719,9 +736,6 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .hx-arrow.prev{left:clamp(4px,2vw,28px)}
 .hx-arrow.next{right:clamp(4px,2vw,28px)}
 .hx-arrow svg{width:20px;height:20px;display:block}
-.ann-band .hx-arrow{background:rgba(14,31,62,.88);border-color:rgba(201,151,59,.4);color:#F6E0AC;
-  box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
-.ann-band .hx-arrow:hover{border-color:var(--brass-bright)}
 @media(max-width:720px){
   .hx-arrow{width:42px;height:42px;top:42%}
   .hx-arrow.prev{left:8px}
@@ -760,7 +774,10 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 }
 .hx-why-card{
   position:relative;padding:clamp(22px,2.2vw,30px);border-radius:16px;
-  background:var(--white);border:1px solid var(--line);
+  /* prismatic hairline: white fill clipped to padding-box, faceted gradient on the border */
+  border:1px solid transparent;
+  background:linear-gradient(var(--white),var(--white)) padding-box,
+    linear-gradient(135deg,rgba(201,151,59,.5),rgba(140,166,220,.38) 42%,rgba(180,140,220,.32) 68%,rgba(201,151,59,.28)) border-box;
   box-shadow:0 1px 2px rgba(8,18,38,.05),0 2px 8px -2px rgba(8,18,38,.07);
   transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s cubic-bezier(.16,1,.3,1),border-color .42s;
   --mx:50%;--my:0%;
@@ -795,15 +812,15 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
   max-width:46ch;letter-spacing:.005em;
 }
 .final .hx-cta-note{margin-inline:auto;text-align:center}
-.hero .hx-cta-note,.ai-band .hx-cta-note,.iul-band .hx-cta-note,.booking .hx-cta-note{color:rgba(255,255,255,.66)}
-.quote-band .hx-cta-note{color:rgba(255,255,255,.6)}
+.hero .hx-cta-note,.ai-band .hx-cta-note,.iul-band .hx-cta-note,.booking .hx-cta-note{color:#5A6A8C}
+.quote-band .hx-cta-note{color:#5A6A8C}
 /* Surface, not band, decides the ink. The IUL deep-dive is a white .wt card inside
    the dark .iul-band, and the tool panes are dark glass inside a light band — the
    band rules above get both backwards. Equal specificity, so source order wins. */
 .wt .hx-cta-note{color:var(--ink-soft)}
 /* .78/.8 is what the pane's own body copy and feature chips already use on this
    glass; the swirl has bright patches where .66 thins out too far. */
-.tool-pane .hx-cta-note{color:rgba(255,255,255,.8)}
+.tool-pane .hx-cta-note{color:#5A6A8C}
 .hx-trust{
   display:flex;flex-wrap:wrap;gap:var(--sp-2) var(--sp-4);
   margin-top:var(--sp-4);padding-top:var(--sp-4);border-top:1px solid var(--line);
@@ -826,54 +843,54 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 .iul-band .wrap,.ai-band .wrap,.booking .wrap{position:relative;z-index:1}
 
 /* nav — true glass */
-nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 10px 40px -18px rgba(0,0,0,.55)}
+nav{background:rgba(255,255,255,.72);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);box-shadow:0 10px 34px -20px rgba(20,38,76,.25)}
 
 /* hero stat chips */
 .hero-stats{gap:14px}
-.hstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);border-radius:14px;padding:14px 18px;position:relative;overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
-.hstat::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.38),transparent)}
+.hstat{background:rgba(255,255,255,.7);border:1px solid rgba(14,31,62,.12);border-radius:14px;padding:14px 18px;position:relative;overflow:hidden;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.hstat::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(201,151,59,.4),transparent)}
 
 /* crest + floating chiplets */
 .crest{background:rgba(255,255,255,.055);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);border-color:rgba(226,180,92,.4)}
 .crest::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);z-index:1}
-.crest .chiplet{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(8,18,38,.62);border-color:rgba(255,255,255,.22)}
+.crest .chiplet{-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);background:rgba(255,255,255,.78);border-color:rgba(14,31,62,.14)}
 
 /* chat shells (inline + floating) */
-.chat-shell{background:rgba(8,18,38,.7);-webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);border:1px solid rgba(255,255,255,.18);position:relative}
+.chat-shell{background:rgba(255,255,255,.66);-webkit-backdrop-filter:blur(18px) saturate(1.35);backdrop-filter:blur(18px) saturate(1.35);border:1px solid rgba(14,31,62,.12);position:relative}
 .chat-shell::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);z-index:2;pointer-events:none}
 
 /* booking checklist rows */
-.book-point{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.13);border-radius:14px;padding:14px 16px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.book-point{background:rgba(255,255,255,.8);border:1px solid rgba(14,31,62,.10);border-radius:14px;padding:14px 16px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 
 /* IUL / AI band panels that sit on the dark gradients */
-.iul-preview{position:relative;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
+.iul-preview{position:relative;background:rgba(255,255,255,.72);border-color:rgba(14,31,62,.12);-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3)}
 .iul-preview::after{content:"";position:absolute;inset:0 0 auto 0;height:1px;border-radius:18px 18px 0 0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent)}
 
 /* sticky mobile bar */
-.mobilebar{-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);background:rgba(8,18,38,.82);box-shadow:0 -12px 34px -18px rgba(0,0,0,.6)}
+.mobilebar{-webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);background:rgba(255,255,255,.86);box-shadow:0 -12px 34px -18px rgba(20,38,76,.25)}
 .mobilebar::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,180,92,.55),transparent)}
 
 /* mobile glass menu */
-.nav-burger{display:none;width:44px;height:44px;border:1px solid rgba(255,255,255,.22);border-radius:11px;background:rgba(255,255,255,.06);cursor:pointer;padding:0;align-items:center;justify-content:center;flex-direction:column;gap:5px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.nav-burger span{display:block;width:18px;height:2px;background:#fff;border-radius:2px;transition:transform .22s,opacity .22s}
+.nav-burger{display:none;width:44px;height:44px;border:1px solid rgba(14,31,62,.18);border-radius:11px;background:rgba(20,38,76,.04);cursor:pointer;padding:0;align-items:center;justify-content:center;flex-direction:column;gap:5px;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.nav-burger span{display:block;width:18px;height:2px;background:var(--navy);border-radius:2px;transition:transform .22s,opacity .22s}
 .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-burger.open span:nth-child(2){opacity:0}
 .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.nav-sheet{position:fixed;inset:0;z-index:195;background:rgba(8,18,38,.9);-webkit-backdrop-filter:blur(20px) saturate(1.35);backdrop-filter:blur(20px) saturate(1.35);padding:104px 28px 42px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s ease;overflow-y:auto}
+.nav-sheet{position:fixed;inset:0;z-index:195;background:rgba(252,252,250,.94);-webkit-backdrop-filter:blur(20px) saturate(1.35);backdrop-filter:blur(20px) saturate(1.35);padding:104px 28px 42px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .22s ease;overflow-y:auto}
 .nav-sheet.open{opacity:1;pointer-events:auto}
-.nav-sheet a{font-family:'Sora';font-weight:600;font-size:20px;color:#fff;text-decoration:none;padding:15px 4px;border-bottom:1px solid rgba(255,255,255,.1)}
-.nav-sheet a:active{color:var(--brass-bright)}
-.nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:var(--brass-bright);border-bottom:none;margin-top:10px}
+.nav-sheet a{font-family:'Sora';font-weight:600;font-size:20px;color:var(--navy);text-decoration:none;padding:15px 4px;border-bottom:1px solid rgba(14,31,62,.10)}
+.nav-sheet a:active{color:#96660F}
+.nav-sheet .sheet-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;color:#96660F;border-bottom:none;margin-top:10px}
 .nav-sheet .btn{margin-top:14px;justify-content:center}
 @media(max-width:1320px){.nav-burger{display:flex}}
 
 /* no-blur fallback — keep everything readable */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
-  nav{background:rgba(8,18,38,.96)}
-  .chat-shell{background:var(--navy-deep)}
-  .nav-sheet{background:rgba(8,18,38,.985)}
-  .mobilebar{background:rgba(8,18,38,.96)}
-  .hstat,.book-point,.crest{background:rgba(255,255,255,.05)}
+  nav{background:rgba(255,255,255,.97)}
+  .chat-shell{background:#FFFFFF}
+  .nav-sheet{background:rgba(252,252,250,.99)}
+  .mobilebar{background:rgba(255,255,255,.97)}
+  .hstat,.book-point{background:rgba(255,255,255,.92)}
 }
 
 /* ===== .liquid-glass — animated SVG refraction (#liquid-glass-distortion) + heavy blur ===== */
@@ -893,16 +910,16 @@ nav{background:rgba(8,18,38,.68);-webkit-backdrop-filter:blur(16px) saturate(1.4
     0 0 54px -18px rgba(201,151,59,.28);
 }
 /* context tints — glass needs a translucent fill to refract what's behind it */
-nav.liquid-glass{background:rgba(8,18,38,.55)}
+nav.liquid-glass{background:rgba(255,255,255,.6)}
 .cover-card.liquid-glass{background:rgba(255,255,255,.55)}
 /* the wide "classics" card is dark with white text — it needs dark glass,
    not the white fill above, or its copy vanishes into the background */
 .cover-card.wide.liquid-glass{background:linear-gradient(140deg,rgba(14,31,62,.85) 0%,rgba(8,18,38,.88) 90%)}
-.iul-preview.liquid-glass{background:rgba(8,18,38,.42);border-color:rgba(255,255,255,.28)}
+.iul-preview.liquid-glass{background:rgba(255,255,255,.72);border-color:rgba(14,31,62,.14)}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
   .cover-card.liquid-glass{background:var(--cloud)}
   .cover-card.wide.liquid-glass{background:linear-gradient(140deg,var(--navy) 0%,var(--navy-deep) 90%)}
-  .iul-preview.liquid-glass{background:rgba(8,18,38,.55)}
+  .iul-preview.liquid-glass{background:rgba(255,255,255,.85)}
 }
 
 /* ============================================================
@@ -942,8 +959,10 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 .lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(28px,4.2vw,56px)}
 /* let the refracted scene glow through the chat shell when GL is on */
 .lg-webgl-on .lg-content .chat-shell{
-  background:rgba(8,18,38,.44);box-shadow:none;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  /* was rgba(8,18,38,.44) — a dark-theme leftover that painted the concierge
+     panel navy wherever the glass layer was live. White frost on the bright page. */
+  background:rgba(255,255,255,.82);box-shadow:none;
+  -webkit-backdrop-filter:blur(8px) saturate(1.3);backdrop-filter:blur(8px) saturate(1.3);
 }
 /* no-backdrop-filter browsers: solid fills keep text legible */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -954,12 +973,12 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 /* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
    glass so the WebGL refraction has high-contrast shapes to bend. */
 .lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px);will-change:transform}
-.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(96,32,168,.50),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
-.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(70,96,220,.44),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
-.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(28,190,214,.40),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(128,80,206,.46),transparent 66%);width:720px;height:720px}
-.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(90,116,236,.42),transparent 66%);width:820px;height:820px}
-.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(66,198,220,.40),transparent 66%);width:660px;height:660px}
+.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(226,180,92,.46),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
+.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(120,152,224,.36),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
+.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(246,224,172,.42),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(226,180,92,.40),transparent 66%);width:720px;height:720px}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(132,162,228,.30),transparent 66%);width:820px;height:820px}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(246,228,186,.38),transparent 66%);width:660px;height:660px}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
   50%{transform:translate3d(110px,-80px,0) scale(1.22)}
@@ -1005,6 +1024,8 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 @keyframes covFade{from{opacity:0}to{opacity:1}}
 @keyframes covRise{from{opacity:0;transform:translateY(26px) scale(.975)}to{opacity:1;transform:none}}
 @media(prefers-reduced-motion:reduce){.cov-scrim,.cov-panel{animation:none}}
+.cov-sheet .btn-ghost-light{border-color:rgba(255,255,255,.35);color:#fff}
+.cov-sheet .btn-ghost-light:hover{background:rgba(255,255,255,.08)}
 .cov-x{position:absolute;top:16px;right:16px;z-index:6;width:42px;height:42px;border-radius:50%;background:rgba(8,18,38,.55);border:1px solid var(--line-light);color:#fff;font-size:15px;cursor:pointer;transition:background .16s,transform .25s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .cov-x:hover{background:rgba(201,151,59,.32);transform:rotate(90deg)}
 .cov-inner{position:relative;z-index:3;padding:42px 42px 36px}
@@ -1064,16 +1085,17 @@ nav.liquid-glass{background:rgba(8,18,38,.55)}
 
 /* ============ IMMERSIVE HERO — WebGL energy field + morphing chrome heron ============ */
 .hero{min-height:100svh;display:flex;align-items:center}
-.hero-gl{position:absolute;inset:0;width:100%;height:100%;z-index:0;display:block}
-.hero-veil{position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(94deg,rgba(8,18,38,.74) 0%,rgba(8,18,38,.34) 44%,rgba(8,18,38,0) 72%),radial-gradient(120% 120% at 50% 50%,transparent 58%,rgba(8,18,38,.55) 100%)}
 .hero-inner{width:100%}
 .hero-inner>div{min-width:0}
 .hero .pill{max-width:100%}
 html{overflow-x:clip}
 /* film grain over the hero scene — sits above the canvas, under the copy */
-.hero-grain{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
-.hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
+.hero-gl3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+/* The crystal-facet overlay was removed at the user's request — at any opacity
+   it still read as grid lines. The frost now comes from the glass surfaces
+   and the diamond-light field alone. */
+.hero-spark{position:absolute;width:22px;height:22px;filter:drop-shadow(0 0 7px rgba(226,190,120,.85)) drop-shadow(0 0 2px rgba(140,166,220,.7));background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FFFFFF'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
 /* the emblem is a bare canvas now — kill every remnant of the old framed card.
@@ -1081,7 +1103,10 @@ html{overflow-x:clip}
    blurs a hard-edged rectangle out of the threshold scene's rays and rock. */
 .crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%);
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
-.crest::after{display:none!important}
+/* ::before was the old dark-theme ambient gold radial — on the bright page it
+   rendered as a visible lighter BOX around the emblem (the user's "box with the
+   liquid metal"). Both pseudos stay dead. */
+.crest::before,.crest::after{display:none!important}
 .hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
 /* ============================================================
    MOBILE-LITE — phones pay for two fragment shaders already, and profiling
@@ -1108,30 +1133,22 @@ html{overflow-x:clip}
   nav,.crest,.crest .chiplet,.mobilebar,.nav-sheet,.nav-burger,.chat-shell,
   .hstat,.book-point,.iul-preview,.cov-scrim,.cov-x,.cover-card,.lg-container,
   .liquid-glass,.glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-  nav{background:rgba(8,18,38,.96)}
-  .nav-sheet{background:rgba(8,18,38,.985)}
-  .mobilebar{background:rgba(8,18,38,.96)}
-  .chat-shell{background:var(--navy-deep)}
+  nav{background:rgba(255,255,255,.97)}
+  .nav-sheet{background:rgba(252,252,250,.99)}
+  .mobilebar{background:rgba(255,255,255,.97)}
+  .chat-shell{background:#FFFFFF}
   /* phone fallbacks were reading several stops darker than the desktop glass —
      lift every dark surface a step and let more light through */
-  .hstat,.book-point{background:rgba(255,255,255,.09)}
-  .crest .chiplet{background:rgba(16,32,62,.82)}
+  .hstat,.book-point{background:rgba(255,255,255,.92)}
+  .crest .chiplet{background:rgba(255,255,255,.92)}
   .cover-card.liquid-glass{background:var(--cloud)}
   .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
-  .iul-preview.liquid-glass{background:rgba(20,38,74,.55)}
-  .lg-container{background:linear-gradient(160deg,#16294E 0%,#0C1B38 100%)}
-  /* the concierge chat keeps its colourful glass look on phones: a static wash
-     standing in for the WebGL refraction (that renderer is off on touch). Without
-     this the chat box fell back to a flat navy "default" — the user caught it. */
-  .ai-band .lg-container{background:
-    radial-gradient(150% 120% at 12% 6%, rgba(96,32,168,.42), transparent 55%),
-    radial-gradient(140% 130% at 92% 90%, rgba(70,96,220,.40), transparent 58%),
-    radial-gradient(120% 110% at 85% 12%, rgba(28,190,214,.30), transparent 55%),
-    linear-gradient(160deg,#182B52 0%,#0C1B38 100%)}
-  .ai-band .chat-shell{background:rgba(8,18,38,.55)}
-  /* floating concierge panel: desktop gets frosted slate from real backdrop blur —
-     phones get the same look statically instead of a flat navy box */
-  #fabPanel .chat-shell{background:linear-gradient(180deg,#4A5870 0%,#38445A 100%)}
+  .iul-preview.liquid-glass{background:rgba(255,255,255,.85)}
+  .lg-container{background:#FFFFFF;border:1px solid rgba(14,31,62,.10)}
+  /* bright theme: chat surfaces are white frost on every device */
+  .ai-band .lg-container{background:rgba(255,255,255,.94);border:1px solid rgba(14,31,62,.10)}
+  .ai-band .chat-shell{background:rgba(255,255,255,.9)}
+  #fabPanel .chat-shell{background:linear-gradient(180deg,#FFFFFF 0%,#F2F4F9 100%)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
   .cov-scrim{background:rgba(3,8,20,.86)}
   /* big blur radii are paint-bound: keep the colour wash, drop the blur —
@@ -1140,7 +1157,6 @@ html{overflow-x:clip}
   .lg-blob{animation:none!important}
   /* ornamental, always-running, and invisible at phone size */
   .hero-sparks,.sparks{display:none!important}
-  .hero-grain{display:none!important}
 }
 /* ALCHE-style 3D flip-open reveal — panels rotate from edge-on into text boxes */
 .cover-grid,.ann-grid{perspective:1500px;perspective-origin:50% 42%}
@@ -1158,7 +1174,7 @@ html{overflow-x:clip}
 .crest .chiplet{z-index:3}
 .hero-ctas .btn{will-change:transform}
 /* cinematic ignition intro */
-#ignite{position:fixed;inset:0;z-index:9000;background:var(--navy-deep);display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease 1.1s}
+#ignite{position:fixed;inset:0;z-index:9000;background:#FBFAF6;display:flex;align-items:center;justify-content:center;overflow:hidden;transition:opacity .9s ease 1.1s}
 #ignite.gone{opacity:0;pointer-events:none}
 /* Failsafe. Script fades this at 1.5s and removes it at 2.7s; every inline block on
    the page shares one IIFE, so one earlier throw would leave a z-index:9000 curtain
@@ -1169,14 +1185,17 @@ html{overflow-x:clip}
 #ignite .flare{position:absolute;width:2px;height:2px;border-radius:50%;background:#F3D9A0;box-shadow:0 0 60px 30px rgba(226,180,92,.6);animation:igfl 1.5s cubic-bezier(.2,.8,.2,1) .2s forwards}
 @keyframes igfl{0%{transform:scale(0);opacity:0}30%{opacity:1}100%{transform:scale(260);opacity:0}}
 #ignite .imk{width:80px;height:80px;opacity:0;animation:igmk 1.1s ease .1s forwards}
-#ignite .imk path{stroke:#E2B45C;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
+#ignite .imk path{stroke:#B07E22;stroke-dasharray:1400;stroke-dashoffset:1400;animation:igdr 1.3s ease .15s forwards}
 @keyframes igmk{0%,20%{opacity:0}45%,100%{opacity:1}}
 @keyframes igdr{to{stroke-dashoffset:0}}
-@media(max-width:880px){.hero{min-height:auto;display:block}.hero-veil{background:linear-gradient(180deg,rgba(8,18,38,.55),rgba(8,18,38,.2) 40%,transparent 60%)}.crest{width:min(205px,52%)!important}}
+@media(max-width:880px){.hero{min-height:auto;display:block}.crest{width:min(205px,52%)!important}}
 @media(prefers-reduced-motion:reduce){.hero-spark{display:none}#ignite{display:none}}
 </style>
 </head>
 <body>
+
+<!-- reading progress; purely decorative, driven by the block near the page foot -->
+<div class="hx-readbar" id="hxProgress" aria-hidden="true"></div>
 
 <!-- ============ CINEMATIC IGNITION INTRO ============ -->
 <div id="ignite" aria-hidden="true">
@@ -1248,9 +1267,7 @@ html{overflow-x:clip}
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
-  <canvas id="heroGl" class="hero-gl" aria-hidden="true"></canvas>
-  <div class="hero-grain" aria-hidden="true"></div>
-  <div class="hero-veil" aria-hidden="true"></div>
+  <canvas id="heroCrystals" class="hero-gl3d" aria-hidden="true"></canvas>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-sparks" aria-hidden="true">
@@ -1269,6 +1286,11 @@ html{overflow-x:clip}
       <div class="hero-ctas rise d3">
         <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
+      </div>
+      <div class="trust-pills rise d3">
+        <span class="trust-pill"><i></i>20+ carriers compared</span>
+        <span class="trust-pill"><i></i>$0 cost to work with us</span>
+        <span class="trust-pill"><i></i>NPN 21556594</span>
       </div>
       <span class="cta-sub rise d3">No email required to start · $0 to work with us · A real licensed agent, not a call center</span>
       <div class="hero-stats rise d4">
@@ -1321,12 +1343,13 @@ html{overflow-x:clip}
       <h2>The right coverage for every stage of life.</h2>
       <p>Every policy is shopped across the market and built around your budget — not a carrier's quota. Start with what you're protecting.</p>
     </div>
-    <div class="hx-stage">
-    <div class="cover-grid hx-wheel">
+    <div class="hx-stage hx-bento" data-hx-bento="1">
+    <div class="cover-grid">
       <article class="cover-card liquid-glass reveal" id="mortgage">
         <span class="tag">For homeowners</span>
         <h3>Mortgage Protection with Living Benefits</h3>
         <p>Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.</p>
+        <div class="anchor-note"><i>🛡</i><div><b>Living benefits</b><span>Use the death benefit while you're still alive if a critical, chronic or terminal illness hits. Exercising a living-benefit rider reduces the death benefit.</span></div></div>
         <ul><li>No medical exam for most applicants</li><li>Critical, chronic &amp; terminal illness riders</li><li>Coverage matched to your mortgage balance</li></ul>
         <button class="go" data-track="mortgage">Check my fit</button>
       </article>
@@ -1335,6 +1358,7 @@ html{overflow-x:clip}
         <h3>Indexed Universal Life (IUL)</h3>
         <p>Index-linked growth potential with protection from down years, tax-advantaged access in retirement — built for high earners and owner-operators with no 401(k) in the cab.</p>
         <ul><li>Flexible funding, up or down with your income</li><li>Tax-advantaged retirement income design</li><li>Income-tax-free benefit for your family</li></ul>
+        <div class="bento-metric"><b>1099</b><span>built for owner-operators</span></div>
         <button class="go" data-track="iul">Check my fit</button>
         <a class="deep" href="#iul-strategy">See the full IUL strategy ↓</a>
       </article>
@@ -1343,6 +1367,7 @@ html{overflow-x:clip}
         <h3>Hybrid Long-Term Care</h3>
         <p>70% of us will need care after 65 — and Medicare generally won't cover long-term care. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
         <ul><li>Money is never wasted — pays out either way</li><li>One design can cover both spouses</li><li>Protects retirement savings from care costs</li></ul>
+        <div class="bento-metric"><b>70%</b><span>will need care after 65</span></div>
         <button class="go" data-track="ltc">Check my fit</button>
       </article>
       <article class="cover-card liquid-glass reveal" id="final-expense">
@@ -1366,7 +1391,7 @@ html{overflow-x:clip}
         <ul><li>Protects your paycheck, not just your life</li><li>Options for self-employed &amp; business owners</li><li>Short and long-term benefit periods</li></ul>
         <button class="go" data-track="disability">Check my fit</button>
       </article>
-      <article class="cover-card wide liquid-glass reveal" id="term-whole">
+      <article class="cover-card wide-classics liquid-glass reveal" id="term-whole">
         <span class="tag">The classics, done right</span>
         <h3>Standard Term &amp; Whole Life</h3>
         <p>Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.</p>
@@ -1598,37 +1623,36 @@ html{overflow-x:clip}
 <section class="ann-band" id="annuities">
 <style>
 .ann-band{background:
-  radial-gradient(1200px 560px at 22% -6%, rgba(226,180,92,.14), transparent 60%),
-  radial-gradient(1000px 620px at 92% 28%, rgba(76,126,232,.10), transparent 62%),
-  radial-gradient(1700px 950px at 50% 125%, rgba(4,8,18,.8), transparent 72%),
-  linear-gradient(180deg,#10213F 0%,#0A1730 48%,#080F22 100%);
-  box-shadow:inset 0 1px 0 rgba(226,180,92,.14);
-  color:var(--white);position:relative;overflow:hidden;padding:96px 0}
+  radial-gradient(1200px 560px at 22% -6%, rgba(232,190,105,.30), transparent 60%),
+  radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
+  linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
+  box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
+  color:#26365A;position:relative;overflow:hidden;padding:clamp(88px,9vw,152px) 0}
 .ann-band .wrap{position:relative;z-index:1}
 .ann-head{max-width:760px;margin-bottom:44px}
-.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--white)}
-.ann-head h2 .grad{background:linear-gradient(92deg,var(--brass-bright),#F3D9A0);-webkit-background-clip:text;background-clip:text;color:transparent}
-.ann-head p{color:rgba(255,255,255,.75);font-size:17px;margin-top:16px;max-width:62ch}
+.ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
+.ann-head h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ann-head p{color:#3A4A6B;font-size:17px;margin-top:16px;max-width:62ch}
 .ann-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 @media(max-width:880px){.ann-grid{grid-template-columns:1fr}}
-.ann-card{border-radius:22px;padding:30px 28px;background:linear-gradient(150deg,rgba(14,31,62,.72),rgba(8,18,38,.8));position:relative;overflow:hidden}
-.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass-bright);display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
+.ann-card{border-radius:22px;padding:30px 28px;background:rgba(255,255,255,.92);position:relative;overflow:hidden}
+.ann-card .kind{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#96660F;display:inline-flex;align-items:center;gap:8px;margin-bottom:14px}
 .ann-card .kind i{width:6px;height:6px;border-radius:50%;background:var(--brass-bright);display:inline-block}
-.ann-card h3{font-family:'Sora';font-size:23px;color:var(--white);margin-bottom:12px;letter-spacing:-.01em}
+.ann-card h3{font-family:'Sora';font-size:23px;color:var(--navy);margin-bottom:12px;letter-spacing:-.01em}
 .ann-card ul{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
-.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:rgba(255,255,255,.85);line-height:1.55}
+.ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:#3A4A6B;line-height:1.55}
 .ann-card li .em{position:absolute;left:0;top:0;font-size:16px}
-.ann-card li b{color:var(--brass-bright)}
-.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:rgba(255,255,255,.9)}
-.ann-card .key b{color:var(--brass-bright)}
+.ann-card li b{color:#96660F}
+.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:#3A4A6B}
+.ann-card .key b{color:#8A5F10}
 .ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
-.ann-note{margin-top:26px;font-size:12.5px;color:rgba(255,255,255,.45);max-width:96ch;line-height:1.65}
+.ann-note{margin-top:26px;font-size:12.5px;color:#5A6A8C;max-width:96ch;line-height:1.65}
 </style>
   <div class="glow glow-brass" style="top:-160px;right:-180px" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ann-head reveal">
       <span class="eyebrow">Protected growth &amp; income</span>
-      <h2>Annuities, every kind — <span class="grad">explained like a human.</span></h2>
+      <h2>Annuities, every kind — <span class="grad">told straight.</span></h2>
       <p>Two anchors hold a retirement steady: a guaranteed-rate vault, and an indexed engine that can become a paycheck for life. Here's each kind, in plain English — and what it's actually for.</p>
     </div>
     <div class="ann-grid">
@@ -1688,7 +1712,7 @@ html{overflow-x:clip}
 <!-- ============ INTERACTIVE TOOLS ============ -->
 <section class="tools-band" id="tools">
 <style>
-.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:96px 0}
+.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:clamp(88px,9vw,152px) 0}
 .tools-band .wrap{position:relative;z-index:1}
 .tools-head{max-width:720px;margin-bottom:44px}
 .tools-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
@@ -1696,17 +1720,17 @@ html{overflow-x:clip}
 .tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 @media(max-width:920px){.tools-grid{grid-template-columns:1fr}}
 .tool-pane .lg-content{padding:clamp(24px,3vw,42px)}
-.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brass-bright)}
-.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--white);margin:10px 0 8px;letter-spacing:-.01em}
-.tool-pane .t-what{font-size:14.5px;color:rgba(255,255,255,.78);margin-bottom:16px;line-height:1.6}
-.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.25);box-shadow:0 22px 50px -20px rgba(3,10,30,.7);margin-bottom:18px}
+.tool-pane .t-kick{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#96660F}
+.tool-pane h3{font-family:'Sora';font-size:26px;color:var(--navy);margin:10px 0 8px;letter-spacing:-.01em}
+.tool-pane .t-what{font-size:14.5px;color:#3A4A6B;margin-bottom:16px;line-height:1.6}
+.tool-pane .t-shot{border-radius:14px;overflow:hidden;border:1px solid rgba(14,31,62,.14);box-shadow:0 22px 50px -24px rgba(20,38,76,.35);margin-bottom:18px}
 .tool-pane .t-bar{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(3,10,30,.8);border-bottom:1px solid rgba(255,255,255,.12)}
 .tool-pane .t-bar i{width:9px;height:9px;border-radius:50%;display:block}
 .tool-pane .t-bar i:nth-child(1){background:#F2645A}.tool-pane .t-bar i:nth-child(2){background:#F5BE4F}.tool-pane .t-bar i:nth-child(3){background:#5BC466}
-.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.55);letter-spacing:.04em}
+.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.82);letter-spacing:.04em}
 .tool-pane .t-shot img{display:block;width:100%;height:auto}
 .tool-pane .t-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
-.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.2);border-radius:999px;padding:6px 12px}
+.tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#31415F;border:1px solid rgba(14,31,62,.18);border-radius:999px;padding:6px 12px}
 </style>
   <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
   <div class="lg-blob lg-blob-purple" style="top:-160px;right:-120px" aria-hidden="true"></div>
@@ -1721,7 +1745,7 @@ html{overflow-x:clip}
     <div class="tools-grid">
       <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
            by liquid-glass.js; content stays on top (z-20, clickable). -->
-      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="light">
         <div class="lg-content">
           <span class="t-kick">Protect · Grow · Distribute</span>
           <h3>The Wealth Shield Matrix</h3>
@@ -1733,7 +1757,7 @@ html{overflow-x:clip}
       </div>
       <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
            by liquid-glass.js; content stays on top (z-20, clickable). -->
-      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="dark">
+      <div class="lg-container tool-pane reveal" data-liquid-glass data-lg-theme="light">
         <div class="lg-content">
           <span class="t-kick">Care · Paycheck · Home · Legacy</span>
           <h3>The Protection Blueprint</h3>
@@ -1753,10 +1777,6 @@ html{overflow-x:clip}
   <div class="glow glow-blue" style="top:-180px;left:-220px" aria-hidden="true"></div>
   <div class="glow glow-brass" style="bottom:-200px;right:-160px" aria-hidden="true"></div>
   <!-- animated contrast blobs the WebGL glass refracts as it passes over them -->
-  <div class="lg-blob lg-blob-purple" style="top:-120px;right:6%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-indigo" style="bottom:-160px;left:24%" aria-hidden="true"></div>
-  <div class="lg-blob lg-blob-cyan" style="top:22%;right:-140px" aria-hidden="true"></div>
-  <div class="hero-grid-lines" aria-hidden="true"></div>
   <div class="wrap">
     <div class="ai-grid">
       <div class="ai-copy reveal">
@@ -1773,7 +1793,7 @@ html{overflow-x:clip}
       <div class="reveal">
         <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
              by liquid-glass.js; content stays on top (z-20, clickable). -->
-        <div class="lg-container" data-liquid-glass data-lg-theme="dark">
+        <div class="lg-container" data-liquid-glass data-lg-theme="light">
           <div class="lg-content">
             <div class="chat-shell" id="mainChat"></div>
           </div>
@@ -1828,7 +1848,7 @@ html{overflow-x:clip}
     </div>
     <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
          by liquid-glass.js; content stays on top (z-20, clickable). -->
-    <div class="lg-container reveal" data-liquid-glass data-lg-theme="dark">
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
     <div class="lg-content">
     <div class="bp-card">
       <div class="bp-bar">
@@ -1862,7 +1882,7 @@ html{overflow-x:clip}
     </div>
     <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
          by liquid-glass.js; content stays on top (z-20, clickable). -->
-    <div class="lg-container reveal" data-liquid-glass data-lg-theme="dark">
+    <div class="lg-container reveal" data-liquid-glass data-lg-theme="light">
     <div class="lg-content">
     <div class="q-shell">
       <div class="q-tabs" id="qTabs" role="tablist"></div>
@@ -2025,6 +2045,40 @@ html{overflow-x:clip}
 </section>
 
 <!-- ============ FOOTER ============ -->
+
+<!-- ============ TRUST & VERIFICATION HUB ============ -->
+<section class="trust-hub" id="trust" aria-labelledby="trustHubTitle">
+  <div class="wrap">
+    <div class="th-head reveal">
+      <span class="eyebrow">Trust &amp; verification</span>
+      <h2 id="trustHubTitle">Everything you can check before you talk to us.</h2>
+    </div>
+    <div class="th-grid reveal">
+      <div class="th-card">
+        <span class="th-k">Producer</span>
+        <b>Connor Herron</b>
+        <span class="th-v">NPN 21556594 · verifiable on the NIPR national registry</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">Licensed in</span>
+        <b>12 states</b>
+        <span class="th-v">PA · NJ · VA · WI · IA · IN · FL · TX · MA · NC · OH · MN</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">Agency</span>
+        <b>Independent</b>
+        <span class="th-v">20+ carriers · $0 to work with us · not a captive shop</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">What you get</span>
+        <b>Real numbers</b>
+        <span class="th-v">planning ranges on this page, carrier illustrations on the call</span>
+      </div>
+    </div>
+    <p class="th-legal reveal">Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.</p>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="foot-grid">
@@ -2050,15 +2104,16 @@ html{overflow-x:clip}
       </div>
     </div>
     <div class="disclaimer">
-      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
+      Full licensing, carrier and product disclosures are in the <a href="#trust">Trust &amp; Verification Hub</a> above. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
     </div>
   </div>
 </footer>
 
 <!-- ============ FLOATING CHAT ============ -->
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
-<button id="fabChat" aria-label="Open Legacy Concierge chat">
+<button id="fabChat" aria-label="Open Legacy Concierge chat" aria-expanded="false">
   <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
+  <span class="fab-label"><b>Legacy Concierge</b><span><i></i>Ask anything</span></span>
 </button>
 
 <script>
@@ -2335,6 +2390,10 @@ function buildChat(container, compact){
   // greeting
   addMsg(`Hi, I'm the <b>Legacy Concierge</b> 👋 — Herron & Co.'s digital assistant. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap 🎙 and just ask out loud.`,'bot');
   addChips();
+  /* the opening greeting must be readable from its first line — appending the
+     starter chips had scrolled the log to the bottom, cropping the greeting on
+     narrow phones where the content is taller than the pane */
+  log.scrollTop=0;
 }
 
 buildChat(document.getElementById('mainChat'));
@@ -2343,9 +2402,14 @@ buildChat(document.getElementById('fabChat_shell'));
 /* floating widget toggle */
 const fab=document.getElementById('fabChat'), fabPanel=document.getElementById('fabPanel');
 const fabIcon=fab.innerHTML;
+const fabTitle=fab.querySelector('.fab-label b');
+const fabTitleText=fabTitle?fabTitle.textContent:'Legacy Concierge';
+/* keep the labelled pill in both states — swapping innerHTML for a bare glyph
+   was what made the button unrecognisable once opened */
 fab.addEventListener('click',()=>{
   const open=fabPanel.classList.toggle('open');
-  fab.innerHTML=open?'<span style="font-size:26px;color:#081226;font-weight:700">✕</span>':fabIcon;
+  fab.setAttribute('aria-expanded',open?'true':'false');
+  if(fabTitle) fabTitle.textContent=open?'Close':fabTitleText;
 });
 /* hide BOTH the button AND panel whenever the main Legacy Concierge section is anywhere near the viewport */
 const aiSection=document.getElementById('ai');
@@ -2354,7 +2418,8 @@ const fabIO=new IntersectionObserver(es=>{es.forEach(e=>{
     fab.style.display='none';
     fabPanel.style.display='none';
     fabPanel.classList.remove('open');
-    fab.innerHTML=fabIcon;
+    fab.setAttribute('aria-expanded','false');
+    if(fabTitle) fabTitle.textContent=fabTitleText;
   } else {
     fab.style.display='flex';
     fabPanel.style.display='';
@@ -2478,10 +2543,14 @@ function out(){
   if(Q.product==='term') m=interp(termBase,Q.age)*termFac[Q.term]*(Q.sex==='f'?.85:1)*(Q.tob==='y'?2.4:1)*health[Q.hc]*Q.cov/100000;
   if(Q.product==='whole') m=interp(wholeBase,Q.wAge)*(Q.wSex==='f'?.87:1)*(Q.wTob==='y'?1.9:1)*Q.wCov/100000;
   if(Q.product==='fe') m=interp(feBase,Q.fAge)*(Q.fSex==='f'?.82:1)*(Q.fTob==='y'?1.35:1)*Q.fCov/1000;
-  return `<div class="q-out"><div class="cap">Estimated monthly premium</div>
-    <div class="q-price"><em>${money(m*.82)}–${money(m*1.18)}</em></div>
+  return `<div class="q-out"><div class="cap">Healthy applicant range</div>
+    <div class="q-split">
+      <div class="q-half"><span>Low</span><b>${money(m*.82)}</b></div>
+      <div class="q-half hi"><span>High</span><b>${money(m*1.18)}</b></div>
+    </div>
     <div class="q-sub">per month, for a healthy applicant with your inputs — your exact rate comes from a free 15-minute call.</div>
-    <a class="btn btn-brass" href="#booking">Lock in my exact rate →</a></div>`;
+    <a class="btn btn-brass" href="#booking">Lock in my exact rate →</a>
+    <a class="q-cross" href="#blueprint">Build my Blueprint →</a></div>`;
 }
 
 function render(){
@@ -2507,7 +2576,11 @@ function render(){
 }
 function refresh(){
   const old=qStage.querySelector('.q-out');
-  if(old)old.outerHTML=out();
+  if(!old)return;
+  old.outerHTML=out();
+  /* micro-animation: let the new figures settle rather than snapping */
+  const fresh=qStage.querySelector('.q-out');
+  if(fresh){fresh.classList.add('q-tick');setTimeout(()=>fresh.classList.remove('q-tick'),360);}
 }
 render();
 })();
@@ -2585,7 +2658,8 @@ function captureCard(formName, contextLabel, contextValue){
       <input type="text" name="firstname" placeholder="First name" autocomplete="given-name">
       <input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel">
     </div>
-    <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+    <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-describedby="e-${formName}">
+    <p class="field-err" id="e-${formName}" role="alert" hidden></p>
     <div class="cap-consent">
       <input type="checkbox" id="c-${formName}" name="consent">
       <label for="c-${formName}">Text/call me about this at the number above, including automated messages or an AI voice. Not a condition of purchase. Reply STOP to opt out, HELP for help. <a href="privacy-policy.html">Privacy</a></label>
@@ -2596,12 +2670,54 @@ function captureCard(formName, contextLabel, contextValue){
   </div>`;
 }
 
+
+/* ---------- FIELD VALIDATION ------------------------------------------------
+   Every capture card validates before it posts: a real address shape on the
+   email, a plausible number when a phone is supplied, and a name that isn't a
+   single stray character. Errors are announced (role="alert"), tied to the input
+   with aria-describedby, and cleared the moment the field is edited. */
+function fieldError(input, msg){
+  const card=input.closest('.cap-card'); if(!card) return;
+  let slot=card.querySelector('.field-err');
+  input.setAttribute('aria-invalid','true');
+  input.classList.add('is-invalid');
+  if(slot){slot.textContent=msg;slot.hidden=false;}
+  input.focus();
+}
+function clearError(input){
+  const card=input.closest('.cap-card'); if(!card) return;
+  input.removeAttribute('aria-invalid');
+  input.classList.remove('is-invalid');
+  const slot=card.querySelector('.field-err');
+  if(slot){slot.hidden=true;slot.textContent='';}
+}
+function validateCapture(card){
+  const email=card.querySelector('[name=email]');
+  const phone=card.querySelector('[name=phone]');
+  const first=card.querySelector('[name=firstname]');
+  const v=(email.value||'').trim();
+  if(!v){ fieldError(email,'Add an email address so we know where to send it.'); return false; }
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v)){ fieldError(email,'That email address doesn’t look right — check for a typo.'); return false; }
+  if(first && first.value.trim() && first.value.trim().length<2){
+    fieldError(first,'Please enter your first name.'); return false; }
+  if(phone && phone.value.trim()){
+    const digits=phone.value.replace(/\D/g,'');
+    if(digits.length<10||digits.length>11){
+      fieldError(phone,'A mobile number needs 10 digits — or leave it blank.'); return false; }
+  }
+  return true;
+}
+document.addEventListener('input',function(e){
+  const i=e.target;
+  if(i.matches && i.matches('.cap-card input')) clearError(i);
+},true);
+
 document.addEventListener('click', async function(e){
   const btn = e.target.closest('[data-capsend]');
   if(!btn) return;
   const card = btn.closest('.cap-card');
+  if(!validateCapture(card)) return;
   const email = card.querySelector('[name=email]');
-  if(!email.value || !email.value.includes('@')){ email.focus(); email.style.borderColor='#B4232A'; return; }
 
   const data = new URLSearchParams();
   data.append('form-name', card.dataset.capform);
@@ -2700,15 +2816,512 @@ renderFit();
   <a class="mb-book" href="#booking">Get my numbers</a>
 </div>
 <style>
-.mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(8,18,38,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
+.mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
 .mobilebar a{flex:1;text-align:center;font-family:'Sora';font-weight:600;font-size:15px;padding:14px 10px;border-radius:12px;text-decoration:none}
-.mb-call{border:1.5px solid rgba(255,255,255,.25);color:#fff}
+.mb-call{border:1.5px solid rgba(20,38,76,.28);color:var(--navy)}
 .mb-book{background:var(--brass);color:var(--navy-deep)}
 @media(max-width:899px){
   .mobilebar.show{display:flex}
   #fabChat{bottom:88px}
   #fabPanel{bottom:158px}
 }
+
+/* ============================================================================
+   PRESENCE LAYER — the "more oomph" pass.
+   Everything here is depth, light and timing; nothing moves layout, and every
+   hover-driven flourish is fine-pointer only so phones stay cheap. Kept last in
+   the cascade so it wins on plain specificity (never !important against GSAP).
+   ========================================================================== */
+
+/* --- 1. reading progress: one brass hairline across the top of the page --- */
+.hx-readbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:400;pointer-events:none;
+  transform:scaleX(0);transform-origin:0 50%;will-change:transform;
+  background:linear-gradient(90deg,#8A5F10,#C9973B 40%,#E2B45C 70%,#F6E0AC);
+  box-shadow:0 0 14px rgba(201,151,59,.5)}
+
+/* --- 2. display gold: a slow sheen travelling through the gradient ---------
+   Stops stay inside the dark half of the brass ramp: the brightest point still
+   measures over 3:1 on ivory, which is what large text needs. */
+.hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{
+  background:linear-gradient(100deg,#7E5510 0%,#8A5F10 18%,#B98829 42%,#A97719 58%,#8A5F10 80%,#7E5510 100%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:goldSheen 11s ease-in-out infinite}
+@keyframes goldSheen{0%,100%{background-position:8% 50%}50%{background-position:92% 50%}}
+
+/* --- 3. eyebrows get a small brass rule, like a letterhead ---------------- */
+.eyebrow{display:inline-flex;align-items:center;gap:11px}
+.eyebrow::before{content:"";flex:0 0 auto;width:24px;height:1px;
+  background:linear-gradient(90deg,rgba(201,151,59,0),#C9973B)}
+
+/* --- 4. the primary button reads as struck metal, not a flat swatch ------- */
+.btn-brass{background:var(--gold-face);border-color:var(--gold-deep);
+  box-shadow:0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(90,62,10,.35) inset,
+             0 10px 26px -14px rgba(120,84,14,.9)}
+.btn-brass:hover{background:var(--gold-face-hi);
+  box-shadow:0 1px 0 rgba(255,255,255,.65) inset,0 -1px 0 rgba(90,62,10,.35) inset,
+             0 18px 40px -14px rgba(120,84,14,1)}
+.btn-brass:active{transform:translateY(0);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,
+             0 6px 16px -10px rgba(150,102,15,.9)}
+.btn-navy{background:linear-gradient(180deg,#16294E,#0B1A36);
+  box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 10px 26px -14px rgba(8,18,38,.8)}
+
+/* --- 5. cards sit on the page instead of being pasted to it --------------- */
+.cover-card,.ann-card,.t-card,.hx-why-card,.q-shell,.iul-frame-card,.fit-card{box-shadow:var(--e-2)}
+@media(hover:hover) and (pointer:fine){
+  .cover-card:not(.hx-3dcard):hover,.t-card:hover{box-shadow:var(--e-3);border-color:rgba(201,151,59,.55)}
+}
+
+/* --- 6. reveals arrive with a little weight ------------------------------- */
+.reveal{transform:translateY(26px) scale(.988);
+  transition:opacity .74s var(--ease-out),transform .74s var(--ease-out)}
+.reveal.in{transform:none}
+
+/* --- 7. a brass hairline seams the bright bands together ------------------ */
+#coverage,.quote-band,.tools-band,.fitcheck,.bp-band,.final{position:relative}
+#coverage::after,.quote-band::after,.tools-band::after,.fitcheck::after,.bp-band::after,.final::after{
+  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:min(1160px,92vw);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,151,59,.42) 22%,rgba(201,151,59,.42) 78%,transparent);
+  pointer-events:none}
+
+/* --- 8. the numbers are the proof — let them shine ------------------------ */
+.hstat b em,.stat b em{background:linear-gradient(96deg,#B07E22,#8A5F10);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* --- 9. hero card: the deepest object on the page ------------------------- */
+.hx-hero-card{box-shadow:var(--e-3),0 2px 0 rgba(255,255,255,.7) inset}
+
+@media(prefers-reduced-motion:reduce){
+  .hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{animation:none}
+  .hx-readbar{display:none}
+}
+
+
+/* ============================================================================
+   GOLD, NOT YELLOW — every gold-faced surface runs the same metal ramp, and the
+   gold text carries a highlight so it reads as leaf rather than mustard.
+   ========================================================================== */
+.q-tab.on{background:var(--gold-face);border-color:var(--gold-deep);color:var(--navy-deep);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 16px -10px rgba(120,84,14,.9)}
+.msg.user{background:var(--gold-face);border:1px solid var(--gold-deep)}
+.hx-arrow:hover{border-color:var(--gold-deep)}
+.q-price em,.hstat b em,.stat b em{
+  background:linear-gradient(96deg,#8A5F10 0%,#C09338 42%,#A9781C 68%,#7E5510 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+/* gold on the deliberately dark surfaces: champagne, not lemon */
+.cover-card.wide .tag,.cover-card.wide .go,.ann-card .kind i{color:var(--gold-hi)}
+.ann-card .kind i{background:linear-gradient(150deg,#F0DCA6,#BE9235)}
+
+/* ============================================================================
+   THE CONCIERGE BUTTON — it was an unlabelled gold disc, which reads as a logo
+   watermark, not a way in. Now a labelled pill that says what it is.
+   ========================================================================== */
+#fabChat{
+  width:auto;height:58px;border-radius:999px;padding:0 22px 0 12px;gap:11px;
+  background:var(--gold-face);border:1px solid var(--gold-deep);
+  box-shadow:0 14px 34px -12px rgba(120,84,14,.75),0 1px 0 rgba(255,255,255,.5) inset;
+  transform-style:preserve-3d;transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out)}
+#fabChat img{height:30px;width:auto;display:block;flex:0 0 auto}
+#fabChat .fab-label{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+#fabChat .fab-label b{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy-deep);white-space:nowrap}
+#fabChat .fab-label span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(8,18,38,.66);display:flex;align-items:center;gap:5px;white-space:nowrap}
+#fabChat .fab-label span i{width:6px;height:6px;border-radius:50%;background:#0F6B2C;
+  display:inline-block;animation:pulse 2s infinite}
+#fabChat:hover{transform:translateY(-2px) rotateX(6deg) scale(1.03);
+  box-shadow:0 22px 46px -14px rgba(120,84,14,.85),0 1px 0 rgba(255,255,255,.6) inset}
+#fabChat:active{transform:translateY(0) scale(.985)}
+#fabChat[aria-expanded="true"] .fab-label b::after{content:" — close"}
+/* phones: keep the words — a bare disc reads as a logo — but drop the second
+   line and tighten the pill so it never covers a third of the screen */
+@media(max-width:640px){
+  #fabChat{height:48px;padding:0 15px 0 9px;gap:8px}
+  #fabChat img{height:23px}
+  #fabChat .fab-label b{font-size:12.5px}
+  #fabChat .fab-label span{display:none}
+}
+
+/* ============================================================================
+   MORE DEPTH — real 3D, driven by the pointer, fine-pointer only. Never applied
+   to a backdrop-filter surface (Chrome glitches when glass is transformed).
+   ========================================================================== */
+.hero-stage{perspective:1200px}
+@media(hover:hover) and (pointer:fine){
+  [data-hx-depth]{transition:transform .5s var(--ease-out);will-change:transform}
+  .iul-frame-card[data-hx-tilt]{transform-style:preserve-3d;will-change:transform}
+  .cover-card.hx-3dcard .go,.ann-card .kind{transform:translateZ(18px)}
+}
+@media(prefers-reduced-motion:reduce){
+  [data-hx-depth]{transform:none!important}
+}
+
+
+/* ============================================================================
+   BRIGHT CLOUD BEDS — soft banks of light drifting behind the content. Built
+   from stacked radial gradients (no image, no pattern, nothing that can read as
+   a grid), at low alpha in the brand's own ivory / champagne / ice. Two layers
+   drift at different speeds and directions so the light never looks static.
+   ========================================================================== */
+.hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+#coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  background-repeat:no-repeat;background-size:150% 150%,130% 130%,170% 170%,120% 120%;
+  background-image:
+    radial-gradient(46% 30% at 30% 34%, rgba(255,255,255,.92), rgba(255,255,255,0) 68%),
+    radial-gradient(38% 26% at 62% 26%, rgba(255,248,232,.80), rgba(255,248,232,0) 70%),
+    radial-gradient(52% 34% at 50% 62%, rgba(255,255,255,.72), rgba(255,255,255,0) 72%),
+    radial-gradient(30% 22% at 70% 55%, rgba(240,246,255,.72), rgba(240,246,255,0) 70%);
+  filter:blur(26px);opacity:.72;
+  animation:cloudDriftA 46s ease-in-out infinite alternate}
+.hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  background-repeat:no-repeat;background-size:140% 140%,160% 160%,130% 130%;
+  background-image:
+    radial-gradient(40% 24% at 42% 60%, rgba(255,250,238,.66), rgba(255,250,238,0) 72%),
+    radial-gradient(34% 20% at 66% 40%, rgba(255,255,255,.60), rgba(255,255,255,0) 74%),
+    radial-gradient(28% 18% at 26% 52%, rgba(244,248,255,.58), rgba(244,248,255,0) 74%);
+  filter:blur(34px);opacity:.6;
+  animation:cloudDriftB 62s ease-in-out infinite alternate}
+/* drift the gradients, never the box — a transformed pseudo would widen the page */
+@keyframes cloudDriftA{
+  0%{background-position:12% 20%,78% 8%,44% 88%,92% 58%}
+  100%{background-position:26% 30%,62% 20%,58% 74%,74% 46%}}
+@keyframes cloudDriftB{
+  0%{background-position:26% 74%,86% 28%,4% 56%}
+  100%{background-position:40% 60%,70% 40%,20% 44%}}
+/* the band content must stay above the weather */
+.hero .wrap,.hero-grid,#coverage .wrap,.quote-band .wrap,.tools-band .wrap,
+.fitcheck .wrap,.final .wrap,.bp-band .wrap{position:relative;z-index:1}
+/* phones get the light without the compositing cost of two animated blurs */
+@media(pointer:coarse){
+  .hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{display:none}
+  .hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+  #coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before{
+    animation:none;filter:blur(20px);opacity:.6}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+  #coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before,
+  .hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{animation:none}
+}
+
+
+/* ============================================================================
+   ASYMMETRIC BENTO — "What we design". Deliberately uneven spans so the seven
+   products read as a hierarchy rather than a row of equal tiles: mortgage
+   protection takes a double-wide anchor, IUL and hybrid LTC run tall, final
+   expense and annuities balance the middle, and disability + the classics close
+   the grid as one bottom row divided by a structural hairline.
+   ========================================================================== */
+.hx-bento .cover-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;
+  grid-template-areas:
+    "mort mort iul  ltc"
+    "fe   ann  iul  ltc"
+    "di   di   tw   tw"}
+.hx-bento #mortgage{grid-area:mort}
+.hx-bento #iul{grid-area:iul}
+.hx-bento #ltc{grid-area:ltc}
+.hx-bento #final-expense{grid-area:fe}
+.hx-bento #annuities-card{grid-area:ann}
+.hx-bento #disability{grid-area:di}
+.hx-bento #term-whole{grid-area:tw}
+.hx-bento .cover-card{
+  background:var(--white);border:1px solid var(--slate-200);border-radius:18px;
+  display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(10,17,40,.04);
+  transition:transform .3s ease-in-out,box-shadow .3s ease-in-out,border-color .3s ease-in-out}
+/* micro-interaction on every clickable product card */
+@media(hover:hover) and (pointer:fine){
+  .hx-bento .cover-card:hover{transform:translateY(-4px);
+    box-shadow:0 20px 40px rgba(10,17,40,.06);border-color:rgba(190,146,53,.5)}
+}
+.hx-bento .cover-card .go{margin-top:auto;align-self:flex-start}
+/* the double-wide anchor: living benefits called out as the premium signal */
+.hx-bento #mortgage{padding:34px 36px}
+.hx-bento #mortgage h3{font-size:clamp(24px,2.3vw,31px)}
+.hx-bento #mortgage .anchor-note{
+  margin:18px 0 22px;padding:16px 18px;border-radius:14px;
+  background:linear-gradient(120deg,rgba(226,190,120,.16),rgba(255,255,255,0) 78%);
+  border:1px solid rgba(190,146,53,.34);display:flex;gap:14px;align-items:flex-start}
+.hx-bento #mortgage .anchor-note b{font-family:'Sora';font-size:14.5px;color:var(--obsidian);display:block;margin-bottom:3px}
+.hx-bento #mortgage .anchor-note span{font-size:13.5px;color:#3A4A6B;line-height:1.55}
+.hx-bento #mortgage .anchor-note i{font-style:normal;font-size:20px;line-height:1}
+/* the tall pair */
+.hx-bento #iul,.hx-bento #ltc{padding:30px 28px}
+.hx-bento #iul .bento-metric,.hx-bento #ltc .bento-metric{
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--slate-200)}
+.hx-bento .bento-metric b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:34px;
+  line-height:1;color:var(--obsidian);letter-spacing:-.02em}
+.hx-bento .bento-metric span{display:block;margin-top:6px;font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5A6A8C}
+/* the unified bottom row, split by a structural border */
+.hx-bento #disability,.hx-bento #term-whole{padding:30px 30px}
+.hx-bento #term-whole{border-left:1px solid var(--slate-200)}
+@media(max-width:1023px){
+  .hx-bento .cover-grid{grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:"mort mort" "iul ltc" "fe ann" "di di" "tw tw"}
+  .hx-bento #term-whole{border-left:none;border-top:1px solid var(--slate-200)}
+}
+@media(max-width:720px){
+  .hx-bento .cover-grid{grid-template-columns:minmax(0,1fr);gap:14px;
+    grid-template-areas:"mort" "iul" "ltc" "fe" "ann" "di" "tw"}
+  .hx-bento .cover-card,.hx-bento #mortgage{padding:26px 22px}
+}
+
+
+/* ============================================================================
+   IUL WALKTHROUGH — a numbered tab matrix instead of one vertical wall of text.
+   Every word of the original walkthrough is preserved; only its presentation
+   changes. Without JS all eight sections simply render in sequence, so the copy
+   is never hidden behind a control that might not run.
+   ========================================================================== */
+.wt-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 26px;padding-bottom:22px;
+  border-bottom:1px solid var(--slate-200)}
+.wt-tab{display:flex;align-items:center;gap:10px;background:var(--white);
+  border:1px solid var(--slate-200);border-radius:12px;padding:10px 14px;cursor:pointer;
+  font-family:'Inter';font-size:13px;font-weight:500;color:#3A4A6B;text-align:left;
+  transition:all .3s ease-in-out;max-width:100%}
+.wt-tab .n{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+  color:#96660F;flex:0 0 auto}
+.wt-tab .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch}
+.wt-tab:hover{border-color:rgba(190,146,53,.55);transform:translateY(-1px)}
+.wt-tab.on{background:linear-gradient(180deg,#FBF5E9,#F6EEDD);border-color:rgba(190,146,53,.55);
+  color:var(--obsidian);box-shadow:0 6px 18px -12px rgba(120,84,14,.7)}
+.wt-tab:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.wt-nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px;
+  padding-top:20px;border-top:1px solid var(--slate-200)}
+.wt-nav button{background:var(--white);border:1px solid var(--slate-200);border-radius:10px;
+  padding:10px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;color:var(--obsidian);
+  cursor:pointer;transition:all .3s ease-in-out}
+.wt-nav button:hover:not(:disabled){border-color:rgba(190,146,53,.6);transform:translateY(-1px)}
+.wt-nav button:disabled{opacity:.4;cursor:default}
+.wt-js .wt-sec{display:none}
+.wt-js .wt-sec.on{display:block;animation:wtIn .34s var(--ease-out)}
+@keyframes wtIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.wt-tab .t{display:none}.wt-tab{padding:9px 13px}}
+
+/* ============================================================================
+   COMPARISON DASHBOARD — 401(k) vs Roth vs IUL. Light header, generous padding,
+   and the IUL column carried as the highlighted premium lane.
+   ========================================================================== */
+.wt-table{overflow-x:auto;border:1px solid var(--slate-200);border-radius:16px;margin:22px 0;background:var(--white)}
+.wt-table table{border-collapse:separate;border-spacing:0}
+.wt-table thead th{background:var(--silk);color:#3A4A6B;padding:16px 18px;
+  border-bottom:1px solid var(--slate-200)}
+.wt-table thead th:last-child{background:linear-gradient(180deg,#FBF3E4,#F6EBD6);color:#7E5510;
+  border-bottom-color:rgba(190,146,53,.4)}
+.wt-table td{padding:15px 18px;border-top:1px solid var(--slate-100);color:#3A4A6B}
+.wt-table tbody tr:nth-child(even){background:rgba(241,245,249,.5)}
+.wt-table td:first-child{color:var(--obsidian)}
+.wt-table td:last-child{background:rgba(251,243,228,.55);color:#33405E;
+  border-left:1px solid rgba(190,146,53,.28)}
+.wt-table tbody tr:last-child td:last-child{border-bottom-right-radius:15px}
+.wt-table .yes::before{content:"✓";color:#0F6B2C;font-weight:700;margin-right:8px}
+.wt-table .no::before{content:"✕";color:#9A3B3B;font-weight:700;margin-right:8px}
+
+
+/* ============================================================================
+   TRUST & VERIFICATION HUB — licensing and disclosure copy is a credential, so
+   it gets its own pristine component before the footer instead of being buried
+   as a footnote. Every word of the original disclosure is carried verbatim.
+   ========================================================================== */
+.trust-hub{background:var(--silk);border-top:1px solid var(--slate-200);position:relative;overflow:hidden}
+.th-head{max-width:62ch;margin-bottom:44px}
+.th-head h2{font-size:clamp(26px,3vw,40px)}
+.th-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:40px}
+.th-card{background:var(--white);border:1px solid var(--slate-200);border-radius:16px;padding:24px 22px;
+  transition:transform .3s ease-in-out,box-shadow .3s ease-in-out}
+@media(hover:hover) and (pointer:fine){
+  .th-card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(10,17,40,.05)}
+}
+.th-k{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#96660F;margin-bottom:12px}
+.th-card b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:26px;
+  color:var(--obsidian);letter-spacing:-.01em;margin-bottom:8px;line-height:1.1}
+.th-v{display:block;font-size:13px;line-height:1.6;color:#5A6A8C}
+.th-legal{font-size:11.5px;line-height:1.85;letter-spacing:.02em;color:#5F6E8C;max-width:118ch;
+  padding-top:26px;border-top:1px solid var(--slate-200)}
+@media(max-width:900px){.th-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.th-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ============================================================================
+   HERO TRUST PILLS — the three facts a stranger needs, directly under the CTA.
+   ========================================================================== */
+.trust-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-4)}
+.trust-pill{display:inline-flex;align-items:center;gap:7px;background:var(--white);
+  border:1px solid var(--slate-200);border-radius:999px;padding:7px 14px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:#3A4A6B;white-space:nowrap;
+  box-shadow:0 1px 2px rgba(10,17,40,.04)}
+.trust-pill i{width:5px;height:5px;border-radius:50%;background:var(--brass);flex:0 0 auto}
+@media(max-width:420px){.trust-pill{font-size:9.5px;letter-spacing:.08em;padding:6px 11px}}
+
+
+/* ============================================================================
+   ESTIMATE STUDIO — the projection reads as a split range card, and the numbers
+   settle with a short micro-animation whenever a slider moves.
+   ========================================================================== */
+.q-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.q-half{background:var(--white);border:1px solid var(--slate-200);border-radius:14px;padding:16px 14px}
+.q-half.hi{background:linear-gradient(180deg,#FBF3E4,#F7EEDC);border-color:rgba(190,146,53,.4)}
+.q-half span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#5A6A8C;margin-bottom:8px}
+.q-half b{display:block;font-family:'Playfair Display',Georgia,serif;font-weight:600;
+  font-size:clamp(26px,3.2vw,38px);line-height:1;letter-spacing:-.02em;color:var(--obsidian);
+  font-variant-numeric:tabular-nums}
+.q-half.hi b{background:linear-gradient(96deg,#8A5F10,#C09338 45%,#7E5510);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.q-tick .q-half b,.q-tick .q-price em{animation:qTick .34s var(--ease-out)}
+@keyframes qTick{0%{opacity:.35;transform:translateY(5px)}100%{opacity:1;transform:none}}
+.q-cross{display:inline-block;margin-top:14px;font-family:'Sora';font-weight:600;font-size:13.5px;
+  color:#96660F;text-decoration:none;border-bottom:1px solid rgba(150,102,15,.35);padding-bottom:2px;
+  transition:all .3s ease-in-out}
+.q-cross:hover{color:var(--obsidian);border-bottom-color:var(--obsidian)}
+@media(max-width:420px){.q-split{grid-template-columns:1fr}}
+
+/* mic pulse on the concierge, so the voice affordance reads at a glance */
+.chat-input .mic,.chat-head .spk{position:relative}
+.chat-input .mic::after{content:"";position:absolute;inset:-3px;border-radius:inherit;
+  border:1px solid rgba(190,146,53,.55);opacity:0;animation:micPulse 2.8s ease-out infinite;pointer-events:none}
+@keyframes micPulse{0%{opacity:.75;transform:scale(.9)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.chat-input .mic::after{animation:none}}
+
+
+/* validation states — visible, announced, and cleared on edit */
+.cap-card input.is-invalid{border-color:#B4232A!important;box-shadow:0 0 0 3px rgba(180,35,42,.12)}
+.cap-card input:focus-visible{outline:3px solid var(--brass);outline-offset:1px}
+.field-err{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#9A2B31;font-weight:500}
+.q-seg button:active,.q-tab:active{transform:translateY(1px)}
+
+
+/* ============================================================================
+   NO HARSH DARK PANELS — the framework calls for a light-mode surface set, so
+   the last navy panels (the classics card, the faux browser bars, the coverage
+   deep-dive sheet and the NPN chip) become alabaster with slate hairlines.
+   Their text colours come with them, so nothing is left white-on-white.
+   ========================================================================== */
+.cover-card.wide-classics,.cover-card.wide-classics.liquid-glass{
+  background:linear-gradient(150deg,var(--white),var(--silk));border:1px solid var(--slate-200)}
+.cover-card.wide-classics h3,.cover-card.wide-classics li,.cover-card.wide-classics b{color:var(--obsidian)}
+.cover-card.wide-classics p{color:#3A4A6B}
+.cover-card.wide-classics .tag,.cover-card.wide-classics .go{color:#96660F}
+.cover-card.wide-classics .go:hover{color:var(--obsidian)}
+.cover-card.wide-classics:hover h3{color:#96660F}
+
+.wt-bar,.t-bar,.iul-frame-bar,.bp-bar{background:var(--silk)!important;
+  border-bottom:1px solid var(--slate-200)!important}
+.wt-bar b,.t-bar b,.iul-frame-bar b,.bp-bar b{color:var(--obsidian)!important}
+.tool-pane .t-bar span{color:#5A6A8C!important}
+.wt-bar .tag,.iul-frame-bar .tag{color:#96660F!important}
+.wt-bar .close,.iul-frame-bar .close{color:#3A4A6B!important;border-color:var(--slate-200)!important}
+.wt-bar .close:hover,.iul-frame-bar .close:hover{color:var(--obsidian)!important;border-color:rgba(190,146,53,.6)!important}
+.bp-bar .expand{color:#96660F!important}
+.t-bar i,.wt-bar i,.bp-bar i{background:var(--slate-200)!important}
+
+/* The deep-dive modal's panel is .cov-panel — an earlier pass lightened the text
+   against .cov-sheet, which only ever existed as a legacy button selector, so the
+   copy went dark on a still-navy panel and became unreadable. The whole panel and
+   every child now move to the light system together. */
+.cov-panel{background:linear-gradient(155deg,rgba(255,255,255,.96),rgba(247,246,243,.97))!important;
+  color:#3A4A6B!important;border:1px solid var(--slate-200)!important;
+  box-shadow:0 50px 100px -34px rgba(10,17,40,.35),0 0 0 1px rgba(255,255,255,.7) inset!important}
+.cov-scrim{background:rgba(10,17,40,.42)!important}
+.cov-panel::-webkit-scrollbar-thumb{background:rgba(190,146,53,.45)}
+.cov-ic{background:linear-gradient(140deg,#FBF3E4,#F1E6D0)!important;
+  border:1px solid rgba(190,146,53,.42)!important;box-shadow:0 1px 0 rgba(255,255,255,.9) inset!important}
+.cov-eyebrow{color:#96660F!important}
+.cov-title,.cov-panel h3,.cov-panel h4{color:var(--obsidian)!important}
+.cov-hook{color:#3A4A6B!important}
+.cov-hook em{color:#8A5F10!important}
+.cov-row{background:var(--white)!important;border:1px solid var(--slate-200)!important}
+.cov-row:hover{background:var(--silk)!important;border-color:rgba(190,146,53,.5)!important}
+.cov-row span{color:#3A4A6B!important}
+.cov-row .ck{background:linear-gradient(150deg,#FBF3E4,#F0E3C8)!important;
+  border:1px solid rgba(190,146,53,.5)!important;color:#8A5F10!important}
+.cov-stat{background:linear-gradient(120deg,#FBF3E4,#F7F2E6)!important;
+  border:1px solid rgba(190,146,53,.42)!important}
+.cov-stat .s b{color:#8A5F10!important}
+.cov-stat .s span{color:#5A6A8C!important}
+.cov-x{background:var(--white)!important;color:var(--obsidian)!important;border:1px solid var(--slate-200)!important}
+.cov-x:hover{background:var(--silk)!important}
+.cov-panel .btn-ghost-light,.cov-sheet .btn-ghost-light{
+  border-color:rgba(14,31,62,.28)!important;color:var(--obsidian)!important}
+.cov-panel .btn-ghost-light:hover,.cov-sheet .btn-ghost-light:hover{background:rgba(14,31,62,.05)!important}
+.about-photo .npn{background:var(--white)!important;color:var(--obsidian)!important;
+  border:1px solid var(--slate-200)!important}
+.about-photo .npn b,.about-photo .npn span{color:inherit!important}
+
+
+/* ============================================================================
+   THE CONCIERGE, IN ACTUAL FROSTED GLASS
+   It had drifted to 82% opaque white with an 8px blur on desktop and a flat 90%
+   fill on phones — which is a white card, not glass. Glass needs three things:
+   enough transparency for the page to show through, a real blur with a little
+   saturation lift, and a lit edge (bright hairline top, soft rim, layered
+   shadow) so the pane reads as a physical sheet.
+   ========================================================================== */
+.chat-shell,
+.lg-webgl-on .lg-content .chat-shell,
+#fabPanel .chat-shell{
+  background:linear-gradient(157deg,rgba(255,255,255,.62),rgba(255,255,255,.44) 46%,rgba(247,248,252,.58))!important;
+  -webkit-backdrop-filter:blur(30px) saturate(1.7)!important;
+          backdrop-filter:blur(30px) saturate(1.7)!important;
+  border:1px solid rgba(255,255,255,.85)!important;
+  box-shadow:
+    0 1.5px 0 rgba(255,255,255,.95) inset,
+    0 0 0 1px rgba(14,31,62,.06),
+    0 34px 70px -30px rgba(10,17,40,.34),
+    0 8px 26px -18px rgba(10,17,40,.22)!important;
+}
+/* the lit top edge that sells a glass sheet */
+.chat-shell::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent)!important;
+  height:1px!important;z-index:3!important}
+/* interior surfaces stay translucent, or the frost stops at the frame */
+.chat-head{background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.16))!important;
+  border-bottom:1px solid rgba(255,255,255,.7)!important;
+  box-shadow:0 1px 0 rgba(14,31,62,.05)}
+.chat-input{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.46))!important;
+  border-top:1px solid rgba(255,255,255,.7)!important}
+.chat-input input{background:rgba(255,255,255,.72);border:1px solid rgba(14,31,62,.12)}
+.chat-input input:focus{background:rgba(255,255,255,.92)}
+/* message bubbles: the bot reads as a pane within the pane, ink stays dark */
+.msg.bot{background:rgba(255,255,255,.72)!important;border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 6px 18px -14px rgba(10,17,40,.4);color:#26365A!important}
+.chip{background:rgba(255,255,255,.66)!important;border:1px solid rgba(190,146,53,.45)!important;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.chip:hover{background:rgba(251,243,228,.9)!important}
+.chat-head .avatar{box-shadow:0 6px 16px -8px rgba(120,84,14,.8)}
+
+/* Phones drop backdrop-filter sitewide for frame time (see the coarse block), so
+   the frost is done with transparency alone — over the soft cloud beds behind it
+   the result is visually the same and costs nothing. */
+@media(pointer:coarse){
+  .chat-shell,#fabPanel .chat-shell{
+    background:linear-gradient(157deg,rgba(255,255,255,.78),rgba(255,255,255,.62) 46%,rgba(246,248,252,.76))!important;
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    border:1px solid rgba(255,255,255,.9)!important;
+    box-shadow:0 1.5px 0 rgba(255,255,255,.95) inset,0 0 0 1px rgba(14,31,62,.07),
+               0 26px 56px -28px rgba(10,17,40,.34)!important}
+  .msg.bot{background:rgba(255,255,255,.86)!important}
+  .chip{-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+
+/* The chat input row is a flex line whose text field defaults to min-width:auto —
+   the placeholder's min-content width pushed the send button off the pane on a
+   414px phone. min-width:0 lets the field shrink; the buttons stay put. */
+.chat-input{min-width:0;flex-wrap:nowrap}
+.chat-input input{min-width:0;flex:1 1 auto}
+.chat-input .mic,.chat-input button:not(.mic){flex:0 0 auto}
+@media(max-width:520px){
+  .chat-input{gap:8px;padding:11px}
+  .chat-input input{padding:11px 12px;font-size:14px}
+  /* the header stacks badly at this width — let the status line breathe */
+  .chat-head{gap:10px;padding:13px 14px}
+  .chat-head b{font-size:14px;line-height:1.15}
+  .chat-head span{font-size:11px;flex-wrap:wrap}
+  .chat-head .spk{font-size:10px;padding:6px 9px;line-height:1.15}
+}
+
 </style>
 <script>
 (function(){var bar=document.getElementById('mobilebar'),bk=document.getElementById('booking');if(!bar||!bk)return;bar.classList.add('show');new IntersectionObserver(function(es){es.forEach(function(e){bar.classList.toggle('show',!e.isIntersecting)})},{threshold:.05}).observe(bk);})();
@@ -2949,7 +3562,10 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
 /* ---- morphing liquid-chrome heron ---- */
 (function(){
   var cv=document.getElementById('heroHeron'); if(!cv) return;
-  var gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
+  /* antialias OFF on coarse: some mobile drivers resolve MSAA into a ~1-level alpha
+     wash across the whole buffer, which shows as a lighter BOX on the bright page */
+  var aaOK=!matchMedia('(pointer:coarse)').matches;
+  var gl=cv.getContext('webgl',{antialias:aaOK,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
   if(!gl){cv.outerHTML='<svg viewBox="0 0 240 300" fill="none" style="width:72%;height:auto" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/><circle cx="136" cy="66" r="2.8" fill="#fff"/></svg>';return;}
   var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uMorph;',
@@ -3080,7 +3696,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   '  cc=mix(cc,vec3(0.97,0.98,1.0)*0.95+rc*0.3,isE);',
   '  col=cc;alpha=1.;}',
   ' else{float aa=smoothstep(0.028,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.55;alpha=aa;}',
-  ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
+  ' col=pow(max(col,0.),vec3(0.86));if(alpha<0.006){col=vec3(0.);alpha=0.;}gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var coarseH=matchMedia('(pointer:coarse)').matches;
   /* 110 march steps x a ~30-primitive SDF is the single most expensive thing on
@@ -3114,6 +3730,94 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   requestAnimationFrame(loop);
 })();
 
+/* ---- diamond light field ----
+   No floating 3D shapes — mesh gems read as game props (the user called them crap,
+   twice, correctly). "Diamond" is done the way jewelry photography does it: soft
+   glass bokeh with a darker rim so it reads on ivory, a bright twinkling star core,
+   gold/ice dispersion fringes, and one faint prismatic streak. Pure 2D shader, cheap.
+   Wrapped in try/catch — every inline block shares one IIFE and a throw here must
+   never take down the page. */
+(function(){
+try{
+  var cv=document.getElementById('heroCrystals'); if(!cv) return;
+  var gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:true});
+  if(!gl){cv.style.display='none';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=[
+  'precision highp float;uniform vec2 uRes;uniform float uTime;uniform float uLow;',
+  'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
+  /* one glint: twinkling 4-ray star with gold/ice fringe — no rings, no discs
+     (the user called the circles stupid; they were). b = twinkle brightness. */
+  'vec4 glint(vec2 d,float r,float b,float ang){',
+  ' float L=length(d);',
+  
+  
+  ' vec2 q=rot(ang)*d;',
+  ' float rays=(pow(max(0.,1.-abs(q.x)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.y))+',
+  '             pow(max(0.,1.-abs(q.y)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.x)))*b;',
+  ' float core=exp(-L*L/(r*r*.045))*b;',
+  ' float side=clamp(d.x/max(L,1e-4)*.5+.5,0.,1.);',
+  ' vec3 fringe=mix(vec3(.58,.70,1.),vec3(1.,.82,.5),side);',
+  ' vec3 col=vec3(0.);float a=0.;',
+  
+  
+  
+  ' col+=mix(vec3(1.),fringe,.3)*(rays*.9+core*1.0); a+=(rays*.75+core*.85);',
+  ' return vec4(col,a);}',
+  'void main(){',
+  ' float t=uTime;',
+  ' vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
+  ' float AX=uRes.x/uRes.y*.39/.8;',
+  /* glint SIZE has to follow the frame too: the radii are in y-normalised units,
+     so on a narrow portrait phone an unscaled spark swallows a third of the screen. */
+  ' float RS=mix(1.0,AX,.72);',
+  ' vec3 col=vec3(0.);float alpha=0.;',
+  ' vec2 P;float tw;vec4 g;',
+  /* seven glints, staggered twinkle, slow drift; phones skip three */
+  ' P=vec2(.58*AX,.16)+vec2(sin(t*.16),cos(t*.13))*.035; tw=.5+.5*pow(.5+.5*sin(t*.9+0.0),3.);',
+  ' g=glint(uv-P,.105*RS,tw,.5); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.74*AX,-.22)+vec2(sin(t*.21+2.),cos(t*.17+1.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.7+1.7),3.);',
+  ' g=glint(uv-P,.07*RS,tw,.9); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.30*AX,.40)+vec2(sin(t*.19+4.),cos(t*.15+3.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.8+3.1),3.);',
+  ' g=glint(uv-P,.055*RS,tw,.2); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(-.62*AX,.36)+vec2(sin(t*.14+1.),cos(t*.18+5.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.75+4.4),3.);',
+  ' g=glint(uv-P,.075*RS,tw,1.3); col+=g.rgb;alpha+=g.a;',
+  ' if(uLow<.5){',
+  '  P=vec2(.48*AX,-.40)+vec2(sin(t*.23+3.),cos(t*.2+2.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.85+2.2),3.);',
+  '  g=glint(uv-P,.045*RS,tw,.7); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(.10*AX,.47)+vec2(sin(t*.18+5.),cos(t*.23+4.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.95+5.3),3.);',
+  '  g=glint(uv-P,.036*RS,tw,.1); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(-.55*AX,-.35)+vec2(sin(t*.2+2.5),cos(t*.16+.8))*.03; tw=.5+.5*pow(.5+.5*sin(t*.65+1.1),3.);',
+  '  g=glint(uv-P,.055*RS,tw,1.0); col+=g.rgb;alpha+=g.a;}',
+  /* one faint prismatic streak drifting through the upper right */
+  ' vec2 sd=rot(.62)*(uv-vec2((.55+sin(t*.05)*.12)*AX,.10))/RS;',
+  ' float streak=exp(-sd.y*sd.y*900.)*smoothstep(.7,.1,abs(sd.x))*.16;',
+  ' vec3 pr=mix(vec3(1.,.85,.55),vec3(.6,.72,1.),clamp(sd.x*1.2+.5,0.,1.));',
+  ' col+=pr*streak; alpha+=streak*.8;',
+  ' alpha=clamp(alpha,0.,.9);',
+  ' gl_FragColor=vec4(col*.98,alpha);}'].join('\n');
+  function sh(t,src){var o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
+  var coarse=matchMedia('(pointer:coarse)').matches;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uL=gl.getUniformLocation(pr,'uLow');
+  var DPR=Math.min(devicePixelRatio||1,coarse?.8:1.4);
+  function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
+  rs();addEventListener('resize',rs,{passive:true});
+  gl.clearColor(0,0,0,0);
+  var start=performance.now(),run=true;
+  var minDt=coarse?1000/24:1000/30,last=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(now-last<minDt)return;last=now;
+    var ts=RM?3.0:(now-start)/1000;
+    gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uL,coarse?1.0:0.0);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
+  requestAnimationFrame(loop);
+}catch(e){/* decorative only — never let the shared IIFE die */}
+})();
+
 /* ---- magnetic hero CTAs ---- */
 (function(){
   if(window.matchMedia('(pointer:coarse)').matches) return;
@@ -3137,5 +3841,124 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
      ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
 <script defer src="vendor/gsap.min.js"></script>
 <script defer src="js/hx-wheel.js"></script>
+<script>
+/* reading-progress hairline. rAF-coalesced, passive listener, and wrapped so a
+   throw can never take down the shared IIFE (see the #ignite note at the top). */
+(function(){
+try{
+  var bar=document.getElementById('hxProgress'); if(!bar) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var queued=false;
+  function paint(){
+    queued=false;
+    var h=document.documentElement.scrollHeight-innerHeight;
+    var p=h>0?Math.min(1,Math.max(0,scrollY/h)):0;
+    bar.style.transform='scaleX('+p.toFixed(4)+')';
+  }
+  addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(paint);}},{passive:true});
+  addEventListener('resize',paint,{passive:true});
+  paint();
+}catch(e){}
+})();
+
+/* Hero depth: the emblem and the diamond field answer the pointer at different
+   rates, so the hero reads as layers of space rather than a flat picture.
+   Fine-pointer only; the chiplets are deliberately NOT moved (they are
+   backdrop-filter glass, and Chrome glitches when glass is transformed).
+   Own try/catch — every inline block on this page shares one IIFE. */
+(function(){
+try{
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var hero=document.querySelector('.hero'); if(!hero) return;
+  var emblem=document.getElementById('heroHeron');
+  var crystals=document.getElementById('heroCrystals');
+  var tx=0,ty=0,cx=0,cy=0,queued=false;
+  if(emblem) emblem.style.transition='transform .9s cubic-bezier(.16,1,.3,1)';
+  if(crystals) crystals.style.transition='transform 1.4s cubic-bezier(.16,1,.3,1)';
+  function paint(){
+    queued=false;
+    cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
+    if(emblem) emblem.style.transform='perspective(1100px) translate3d('+(cx*16).toFixed(2)+'px,'
+      +(cy*12).toFixed(2)+'px,0) rotateY('+(cx*5).toFixed(2)+'deg) rotateX('+(-cy*4).toFixed(2)+'deg)';
+    if(crystals) crystals.style.transform='translate3d('+(cx*-26).toFixed(2)+'px,'+(cy*-18).toFixed(2)+'px,0)';
+    if(Math.abs(tx-cx)>.001||Math.abs(ty-cy)>.001){queued=true;requestAnimationFrame(paint);}
+  }
+  hero.addEventListener('pointermove',function(e){
+    var r=hero.getBoundingClientRect();
+    tx=(e.clientX-r.left)/r.width*2-1; ty=(e.clientY-r.top)/r.height*2-1;
+    if(!queued){queued=true;requestAnimationFrame(paint);}
+  },{passive:true});
+  hero.addEventListener('pointerleave',function(){
+    tx=0;ty=0; if(!queued){queued=true;requestAnimationFrame(paint);}
+  },{passive:true});
+}catch(e){}
+})();
+
+/* The IUL walkthrough as a numbered tab matrix. Built from the existing sections
+   so every word of the original copy survives untouched; if this block never
+   runs, the sections stay stacked and fully readable. */
+(function(){
+try{
+  var body=document.querySelector('.wt-body'); if(!body) return;
+  var secs=Array.prototype.slice.call(body.querySelectorAll('.wt-sec'));
+  if(secs.length<2) return;
+  var strip=document.createElement('div');
+  strip.className='wt-tabs'; strip.setAttribute('role','tablist');
+  strip.setAttribute('aria-label','IUL strategy steps');
+  var tabs=secs.map(function(sec,i){
+    var step=sec.querySelector('.wt-step');
+    var num=step&&step.querySelector('.n')?step.querySelector('.n').textContent.trim():String(i+1);
+    var ttl=step&&step.querySelector('h3')?step.querySelector('h3').textContent.trim():('Step '+num);
+    var b=document.createElement('button');
+    b.type='button'; b.className='wt-tab'; b.setAttribute('role','tab');
+    b.id='wtTab'+i; b.setAttribute('aria-controls','wtSec'+i);
+    b.innerHTML='<span class="n">'+num+'</span><span class="t"></span>';
+    b.querySelector('.t').textContent=ttl;
+    b.title=num+' — '+ttl;
+    sec.id='wtSec'+i; sec.setAttribute('role','tabpanel'); sec.setAttribute('aria-labelledby','wtTab'+i);
+    b.addEventListener('click',function(){show(i);});
+    strip.appendChild(b);
+    return b;
+  });
+  var nav=document.createElement('div');
+  nav.className='wt-nav';
+  nav.innerHTML='<button type="button" data-wt="prev">← Previous step</button>'+
+                '<button type="button" data-wt="next">Next step →</button>';
+  var cur=0;
+  function show(i){
+    cur=Math.max(0,Math.min(secs.length-1,i));
+    secs.forEach(function(s,j){s.classList.toggle('on',j===cur);});
+    tabs.forEach(function(t,j){
+      t.classList.toggle('on',j===cur);
+      t.setAttribute('aria-selected',j===cur?'true':'false');
+      t.tabIndex=j===cur?0:-1;
+    });
+    nav.querySelector('[data-wt="prev"]').disabled=(cur===0);
+    nav.querySelector('[data-wt="next"]').disabled=(cur===secs.length-1);
+  }
+  nav.addEventListener('click',function(e){
+    var b=e.target.closest('[data-wt]'); if(!b) return;
+    show(b.dataset.wt==='next'?cur+1:cur-1);
+    var box=body.getBoundingClientRect();
+    if(box.top<0) body.scrollIntoView({block:'start'});
+  });
+  strip.addEventListener('keydown',function(e){
+    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return;
+    e.preventDefault();
+    var next=(cur+(e.key==='ArrowRight'?1:-1)+secs.length)%secs.length;
+    show(next); tabs[next].focus();
+  });
+  body.insertBefore(strip,body.firstChild);
+  body.appendChild(nav);
+  body.classList.add('wt-js');
+  show(0);
+  /* deep links into a step still work: #wtSec3 opens that tab */
+  addEventListener('hashchange',function(){
+    var m=/^#wtSec(\d+)$/.exec(location.hash); if(m) show(+m[1]);
+  });
+}catch(e){}
+})();
+</script>
 </body>
 </html>
