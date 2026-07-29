@@ -16,9 +16,9 @@
 <link rel="apple-touch-icon" href="logos/mark/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <noscript><style>
 /* Scroll-reveal starts at opacity:0 and is un-hidden by script. With script off that
    never happens, which would also hide the state list and the rate/illustration
@@ -44,6 +44,9 @@
   --gold-face:linear-gradient(180deg,#F0DCA6 0%,#D9B45F 14%,#BE9235 46%,#9E7420 80%,#B5892C 100%);
   --gold-face-hi:linear-gradient(180deg,#F7E8C4 0%,#E4C476 14%,#CBA043 46%,#AC8128 80%,#C39735 100%);
   --white:#FFFFFF;
+  /* premium light-mode base: alabaster paper, obsidian ink, slate hairlines */
+  --alabaster:#FBFBFA;--silk:#F7F6F3;--obsidian:#0A1128;
+  --slate-100:#F1F5F9;--slate-200:#E2E8F0;
   --cloud:#F4F6FA;
   --mist:#E4EAF4;
   --ink:#101828;
@@ -80,9 +83,11 @@
 html{scroll-behavior:smooth}
 body{
   font-family:'Inter',system-ui,sans-serif;color:var(--ink);
-  background:var(--white);line-height:1.6;font-size:16.5px;-webkit-font-smoothing:antialiased;
+  background:var(--alabaster);line-height:1.68;font-size:16px;-webkit-font-smoothing:antialiased;
 }
-h1,h2,h3{font-family:'Sora',sans-serif;font-weight:600;line-height:1.12;letter-spacing:-.02em}
+/* institutional serif for headings — legacy and trust; Sora stays for UI chrome */
+h1,h2,h3{font-family:'Playfair Display','Iowan Old Style','Palatino Linotype',Georgia,serif;
+  font-weight:600;line-height:1.14;letter-spacing:-.015em;color:var(--obsidian)}
 /* no orphan words in headlines; readable measure in body copy */
 h1,h2,h3,.big{text-wrap:balance;letter-spacing:-.022em}
 p,.lede{text-wrap:pretty}
@@ -93,7 +98,7 @@ p,.lede{text-wrap:pretty}
 .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-32) 0}
 @media(max-width:880px){
   #coverage,.iul-band,.ann-band,.tools-band,.ai-band,.fitcheck,
-  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:var(--sp-24) 0}
+  .bp-band,.quote-band,.states-band,.about-band,.booking,#faq,.final{padding:clamp(88px,9vw,152px) 0}
 }
 /* NOTE: content-visibility:auto was tried here and reverted — nearly every band
    is an in-page anchor target, and estimated intrinsic sizes make hash jumps and
@@ -285,7 +290,8 @@ nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-
 .fitbox.no li::before{content:"✕";color:#B4232A}
 
 /* ---------- SECTIONS ---------- */
-section{padding:96px 0}
+/* fintech white-space — every band roughly doubles its vertical air */
+section{padding:clamp(88px,9vw,152px) 0}
 .sec-head{max-width:660px;margin-bottom:54px}
 .sec-head h2{font-size:clamp(29px,3.4vw,42px);color:var(--navy)}
 .sec-head p{color:var(--ink-soft);margin-top:16px;font-size:17px}
@@ -1189,7 +1195,7 @@ html{overflow-x:clip}
 <body>
 
 <!-- reading progress; purely decorative, driven by the block near the page foot -->
-<div class="hx-progress" id="hxProgress" aria-hidden="true"></div>
+<div class="hx-readbar" id="hxProgress" aria-hidden="true"></div>
 
 <!-- ============ CINEMATIC IGNITION INTRO ============ -->
 <div id="ignite" aria-hidden="true">
@@ -1281,6 +1287,11 @@ html{overflow-x:clip}
         <a class="btn btn-brass" href="#booking">Get my numbers — 15 min</a>
         <a class="btn btn-ghost-light" href="#blueprint">Build my Blueprint</a>
       </div>
+      <div class="trust-pills rise d3">
+        <span class="trust-pill"><i></i>20+ carriers compared</span>
+        <span class="trust-pill"><i></i>$0 cost to work with us</span>
+        <span class="trust-pill"><i></i>NPN 21556594</span>
+      </div>
       <span class="cta-sub rise d3">No email required to start · $0 to work with us · A real licensed agent, not a call center</span>
       <div class="hero-stats rise d4">
         <div class="hstat"><b><span data-count="20">20</span><em>+</em></b><span>carriers compared</span></div>
@@ -1332,12 +1343,13 @@ html{overflow-x:clip}
       <h2>The right coverage for every stage of life.</h2>
       <p>Every policy is shopped across the market and built around your budget — not a carrier's quota. Start with what you're protecting.</p>
     </div>
-    <div class="hx-stage">
-    <div class="cover-grid hx-wheel">
+    <div class="hx-stage hx-bento" data-hx-bento="1">
+    <div class="cover-grid">
       <article class="cover-card liquid-glass reveal" id="mortgage">
         <span class="tag">For homeowners</span>
         <h3>Mortgage Protection with Living Benefits</h3>
         <p>Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.</p>
+        <div class="anchor-note"><i>🛡</i><div><b>Living benefits</b><span>Use the death benefit while you're still alive if a critical, chronic or terminal illness hits. Exercising a living-benefit rider reduces the death benefit.</span></div></div>
         <ul><li>No medical exam for most applicants</li><li>Critical, chronic &amp; terminal illness riders</li><li>Coverage matched to your mortgage balance</li></ul>
         <button class="go" data-track="mortgage">Check my fit</button>
       </article>
@@ -1346,6 +1358,7 @@ html{overflow-x:clip}
         <h3>Indexed Universal Life (IUL)</h3>
         <p>Index-linked growth potential with protection from down years, tax-advantaged access in retirement — built for high earners and owner-operators with no 401(k) in the cab.</p>
         <ul><li>Flexible funding, up or down with your income</li><li>Tax-advantaged retirement income design</li><li>Income-tax-free benefit for your family</li></ul>
+        <div class="bento-metric"><b>1099</b><span>built for owner-operators</span></div>
         <button class="go" data-track="iul">Check my fit</button>
         <a class="deep" href="#iul-strategy">See the full IUL strategy ↓</a>
       </article>
@@ -1354,6 +1367,7 @@ html{overflow-x:clip}
         <h3>Hybrid Long-Term Care</h3>
         <p>70% of us will need care after 65 — and Medicare generally won't cover long-term care. Hybrids fix "use it or lose it": care benefits if you need them, a death benefit for family if you don't.</p>
         <ul><li>Money is never wasted — pays out either way</li><li>One design can cover both spouses</li><li>Protects retirement savings from care costs</li></ul>
+        <div class="bento-metric"><b>70%</b><span>will need care after 65</span></div>
         <button class="go" data-track="ltc">Check my fit</button>
       </article>
       <article class="cover-card liquid-glass reveal" id="final-expense">
@@ -1377,7 +1391,7 @@ html{overflow-x:clip}
         <ul><li>Protects your paycheck, not just your life</li><li>Options for self-employed &amp; business owners</li><li>Short and long-term benefit periods</li></ul>
         <button class="go" data-track="disability">Check my fit</button>
       </article>
-      <article class="cover-card wide liquid-glass reveal" id="term-whole">
+      <article class="cover-card wide-classics liquid-glass reveal" id="term-whole">
         <span class="tag">The classics, done right</span>
         <h3>Standard Term &amp; Whole Life</h3>
         <p>Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.</p>
@@ -1613,7 +1627,7 @@ html{overflow-x:clip}
   radial-gradient(1000px 620px at 92% 28%, rgba(140,166,220,.16), transparent 62%),
   linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
   box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
-  color:#26365A;position:relative;overflow:hidden;padding:96px 0}
+  color:#26365A;position:relative;overflow:hidden;padding:clamp(88px,9vw,152px) 0}
 .ann-band .wrap{position:relative;z-index:1}
 .ann-head{max-width:760px;margin-bottom:44px}
 .ann-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
@@ -1698,7 +1712,7 @@ html{overflow-x:clip}
 <!-- ============ INTERACTIVE TOOLS ============ -->
 <section class="tools-band" id="tools">
 <style>
-.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:96px 0}
+.tools-band{background:var(--cloud);position:relative;overflow:hidden;padding:clamp(88px,9vw,152px) 0}
 .tools-band .wrap{position:relative;z-index:1}
 .tools-head{max-width:720px;margin-bottom:44px}
 .tools-head h2{font-size:clamp(30px,4.4vw,46px);color:var(--navy)}
@@ -2031,6 +2045,40 @@ html{overflow-x:clip}
 </section>
 
 <!-- ============ FOOTER ============ -->
+
+<!-- ============ TRUST & VERIFICATION HUB ============ -->
+<section class="trust-hub" id="trust" aria-labelledby="trustHubTitle">
+  <div class="wrap">
+    <div class="th-head reveal">
+      <span class="eyebrow">Trust &amp; verification</span>
+      <h2 id="trustHubTitle">Everything you can check before you talk to us.</h2>
+    </div>
+    <div class="th-grid reveal">
+      <div class="th-card">
+        <span class="th-k">Producer</span>
+        <b>Connor Herron</b>
+        <span class="th-v">NPN 21556594 · verifiable on the NIPR national registry</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">Licensed in</span>
+        <b>12 states</b>
+        <span class="th-v">PA · NJ · VA · WI · IA · IN · FL · TX · MA · NC · OH · MN</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">Agency</span>
+        <b>Independent</b>
+        <span class="th-v">20+ carriers · $0 to work with us · not a captive shop</span>
+      </div>
+      <div class="th-card">
+        <span class="th-k">What you get</span>
+        <b>Real numbers</b>
+        <span class="th-v">planning ranges on this page, carrier illustrations on the call</span>
+      </div>
+    </div>
+    <p class="th-legal reveal">Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.</p>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <div class="foot-grid">
@@ -2056,7 +2104,7 @@ html{overflow-x:clip}
       </div>
     </div>
     <div class="disclaimer">
-      Connor Herron · NPN 21556594 · Licensed insurance producer in PA, NJ, VA, WI, IA, IN, FL, TX, MA, NC, OH, and MN. Herron &amp; Co. Legacy Agency is an independent insurance agency and is not affiliated with or endorsed by any government agency. Carrier names shown reflect markets we may quote; product availability varies by state and underwriting. Products, riders, and benefits are subject to the terms of the issued policy; living benefit riders may reduce the death benefit when exercised. Indexed universal life illustrations are not guarantees of future performance; index-linked crediting is subject to caps, participation rates, and policy charges set by the issuing carrier, and policy loans reduce cash value and death benefit. Figures produced by the Legacy Blueprint and the estimate studio are illustrative planning ranges, not offers of coverage or quoted rates. The Legacy Concierge provides general information only, not individualized financial, legal, or tax advice. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
+      Full licensing, carrier and product disclosures are in the <a href="#trust">Trust &amp; Verification Hub</a> above. © 2026 Herron &amp; Co. Legacy Agency, Philadelphia, PA. All rights reserved.
     </div>
   </div>
 </footer>
@@ -2491,10 +2539,14 @@ function out(){
   if(Q.product==='term') m=interp(termBase,Q.age)*termFac[Q.term]*(Q.sex==='f'?.85:1)*(Q.tob==='y'?2.4:1)*health[Q.hc]*Q.cov/100000;
   if(Q.product==='whole') m=interp(wholeBase,Q.wAge)*(Q.wSex==='f'?.87:1)*(Q.wTob==='y'?1.9:1)*Q.wCov/100000;
   if(Q.product==='fe') m=interp(feBase,Q.fAge)*(Q.fSex==='f'?.82:1)*(Q.fTob==='y'?1.35:1)*Q.fCov/1000;
-  return `<div class="q-out"><div class="cap">Estimated monthly premium</div>
-    <div class="q-price"><em>${money(m*.82)}–${money(m*1.18)}</em></div>
+  return `<div class="q-out"><div class="cap">Healthy applicant range</div>
+    <div class="q-split">
+      <div class="q-half"><span>Low</span><b>${money(m*.82)}</b></div>
+      <div class="q-half hi"><span>High</span><b>${money(m*1.18)}</b></div>
+    </div>
     <div class="q-sub">per month, for a healthy applicant with your inputs — your exact rate comes from a free 15-minute call.</div>
-    <a class="btn btn-brass" href="#booking">Lock in my exact rate →</a></div>`;
+    <a class="btn btn-brass" href="#booking">Lock in my exact rate →</a>
+    <a class="q-cross" href="#blueprint">Build my Blueprint →</a></div>`;
 }
 
 function render(){
@@ -2520,7 +2572,11 @@ function render(){
 }
 function refresh(){
   const old=qStage.querySelector('.q-out');
-  if(old)old.outerHTML=out();
+  if(!old)return;
+  old.outerHTML=out();
+  /* micro-animation: let the new figures settle rather than snapping */
+  const fresh=qStage.querySelector('.q-out');
+  if(fresh){fresh.classList.add('q-tick');setTimeout(()=>fresh.classList.remove('q-tick'),360);}
 }
 render();
 })();
@@ -2598,7 +2654,8 @@ function captureCard(formName, contextLabel, contextValue){
       <input type="text" name="firstname" placeholder="First name" autocomplete="given-name">
       <input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel">
     </div>
-    <input type="email" name="email" placeholder="you@email.com" autocomplete="email">
+    <input type="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-describedby="e-${formName}">
+    <p class="field-err" id="e-${formName}" role="alert" hidden></p>
     <div class="cap-consent">
       <input type="checkbox" id="c-${formName}" name="consent">
       <label for="c-${formName}">Text/call me about this at the number above, including automated messages or an AI voice. Not a condition of purchase. Reply STOP to opt out, HELP for help. <a href="privacy-policy.html">Privacy</a></label>
@@ -2609,12 +2666,54 @@ function captureCard(formName, contextLabel, contextValue){
   </div>`;
 }
 
+
+/* ---------- FIELD VALIDATION ------------------------------------------------
+   Every capture card validates before it posts: a real address shape on the
+   email, a plausible number when a phone is supplied, and a name that isn't a
+   single stray character. Errors are announced (role="alert"), tied to the input
+   with aria-describedby, and cleared the moment the field is edited. */
+function fieldError(input, msg){
+  const card=input.closest('.cap-card'); if(!card) return;
+  let slot=card.querySelector('.field-err');
+  input.setAttribute('aria-invalid','true');
+  input.classList.add('is-invalid');
+  if(slot){slot.textContent=msg;slot.hidden=false;}
+  input.focus();
+}
+function clearError(input){
+  const card=input.closest('.cap-card'); if(!card) return;
+  input.removeAttribute('aria-invalid');
+  input.classList.remove('is-invalid');
+  const slot=card.querySelector('.field-err');
+  if(slot){slot.hidden=true;slot.textContent='';}
+}
+function validateCapture(card){
+  const email=card.querySelector('[name=email]');
+  const phone=card.querySelector('[name=phone]');
+  const first=card.querySelector('[name=firstname]');
+  const v=(email.value||'').trim();
+  if(!v){ fieldError(email,'Add an email address so we know where to send it.'); return false; }
+  if(!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(v)){ fieldError(email,'That email address doesn’t look right — check for a typo.'); return false; }
+  if(first && first.value.trim() && first.value.trim().length<2){
+    fieldError(first,'Please enter your first name.'); return false; }
+  if(phone && phone.value.trim()){
+    const digits=phone.value.replace(/\D/g,'');
+    if(digits.length<10||digits.length>11){
+      fieldError(phone,'A mobile number needs 10 digits — or leave it blank.'); return false; }
+  }
+  return true;
+}
+document.addEventListener('input',function(e){
+  const i=e.target;
+  if(i.matches && i.matches('.cap-card input')) clearError(i);
+},true);
+
 document.addEventListener('click', async function(e){
   const btn = e.target.closest('[data-capsend]');
   if(!btn) return;
   const card = btn.closest('.cap-card');
+  if(!validateCapture(card)) return;
   const email = card.querySelector('[name=email]');
-  if(!email.value || !email.value.includes('@')){ email.focus(); email.style.borderColor='#B4232A'; return; }
 
   const data = new URLSearchParams();
   data.append('form-name', card.dataset.capform);
@@ -2731,7 +2830,7 @@ renderFit();
    ========================================================================== */
 
 /* --- 1. reading progress: one brass hairline across the top of the page --- */
-.hx-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:400;pointer-events:none;
+.hx-readbar{position:fixed;top:0;left:0;right:0;height:2px;z-index:400;pointer-events:none;
   transform:scaleX(0);transform-origin:0 50%;will-change:transform;
   background:linear-gradient(90deg,#8A5F10,#C9973B 40%,#E2B45C 70%,#F6E0AC);
   box-shadow:0 0 14px rgba(201,151,59,.5)}
@@ -2789,7 +2888,7 @@ renderFit();
 
 @media(prefers-reduced-motion:reduce){
   .hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{animation:none}
-  .hx-progress{display:none}
+  .hx-readbar{display:none}
 }
 
 
@@ -2828,12 +2927,13 @@ renderFit();
   box-shadow:0 22px 46px -14px rgba(120,84,14,.85),0 1px 0 rgba(255,255,255,.6) inset}
 #fabChat:active{transform:translateY(0) scale(.985)}
 #fabChat[aria-expanded="true"] .fab-label b::after{content:" — close"}
-/* narrow phones: keep the label, just tighten it */
-@media(max-width:420px){
-  #fabChat{height:52px;padding:0 16px 0 10px;gap:8px}
-  #fabChat img{height:24px}
+/* phones: keep the words — a bare disc reads as a logo — but drop the second
+   line and tighten the pill so it never covers a third of the screen */
+@media(max-width:640px){
+  #fabChat{height:48px;padding:0 15px 0 9px;gap:8px}
+  #fabChat img{height:23px}
   #fabChat .fab-label b{font-size:12.5px}
-  #fabChat .fab-label span{font-size:9px;letter-spacing:.08em}
+  #fabChat .fab-label span{display:none}
 }
 
 /* ============================================================================
@@ -2899,6 +2999,231 @@ renderFit();
   #coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before,
   .hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{animation:none}
 }
+
+
+/* ============================================================================
+   ASYMMETRIC BENTO — "What we design". Deliberately uneven spans so the seven
+   products read as a hierarchy rather than a row of equal tiles: mortgage
+   protection takes a double-wide anchor, IUL and hybrid LTC run tall, final
+   expense and annuities balance the middle, and disability + the classics close
+   the grid as one bottom row divided by a structural hairline.
+   ========================================================================== */
+.hx-bento .cover-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;
+  grid-template-areas:
+    "mort mort iul  ltc"
+    "fe   ann  iul  ltc"
+    "di   di   tw   tw"}
+.hx-bento #mortgage{grid-area:mort}
+.hx-bento #iul{grid-area:iul}
+.hx-bento #ltc{grid-area:ltc}
+.hx-bento #final-expense{grid-area:fe}
+.hx-bento #annuities-card{grid-area:ann}
+.hx-bento #disability{grid-area:di}
+.hx-bento #term-whole{grid-area:tw}
+.hx-bento .cover-card{
+  background:var(--white);border:1px solid var(--slate-200);border-radius:18px;
+  display:flex;flex-direction:column;box-shadow:0 1px 2px rgba(10,17,40,.04);
+  transition:transform .3s ease-in-out,box-shadow .3s ease-in-out,border-color .3s ease-in-out}
+/* micro-interaction on every clickable product card */
+@media(hover:hover) and (pointer:fine){
+  .hx-bento .cover-card:hover{transform:translateY(-4px);
+    box-shadow:0 20px 40px rgba(10,17,40,.06);border-color:rgba(190,146,53,.5)}
+}
+.hx-bento .cover-card .go{margin-top:auto;align-self:flex-start}
+/* the double-wide anchor: living benefits called out as the premium signal */
+.hx-bento #mortgage{padding:34px 36px}
+.hx-bento #mortgage h3{font-size:clamp(24px,2.3vw,31px)}
+.hx-bento #mortgage .anchor-note{
+  margin:18px 0 22px;padding:16px 18px;border-radius:14px;
+  background:linear-gradient(120deg,rgba(226,190,120,.16),rgba(255,255,255,0) 78%);
+  border:1px solid rgba(190,146,53,.34);display:flex;gap:14px;align-items:flex-start}
+.hx-bento #mortgage .anchor-note b{font-family:'Sora';font-size:14.5px;color:var(--obsidian);display:block;margin-bottom:3px}
+.hx-bento #mortgage .anchor-note span{font-size:13.5px;color:#3A4A6B;line-height:1.55}
+.hx-bento #mortgage .anchor-note i{font-style:normal;font-size:20px;line-height:1}
+/* the tall pair */
+.hx-bento #iul,.hx-bento #ltc{padding:30px 28px}
+.hx-bento #iul .bento-metric,.hx-bento #ltc .bento-metric{
+  margin-top:18px;padding-top:16px;border-top:1px solid var(--slate-200)}
+.hx-bento .bento-metric b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:34px;
+  line-height:1;color:var(--obsidian);letter-spacing:-.02em}
+.hx-bento .bento-metric span{display:block;margin-top:6px;font-family:'IBM Plex Mono',monospace;
+  font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#5A6A8C}
+/* the unified bottom row, split by a structural border */
+.hx-bento #disability,.hx-bento #term-whole{padding:30px 30px}
+.hx-bento #term-whole{border-left:1px solid var(--slate-200)}
+@media(max-width:1023px){
+  .hx-bento .cover-grid{grid-template-columns:repeat(2,minmax(0,1fr));
+    grid-template-areas:"mort mort" "iul ltc" "fe ann" "di di" "tw tw"}
+  .hx-bento #term-whole{border-left:none;border-top:1px solid var(--slate-200)}
+}
+@media(max-width:720px){
+  .hx-bento .cover-grid{grid-template-columns:minmax(0,1fr);gap:14px;
+    grid-template-areas:"mort" "iul" "ltc" "fe" "ann" "di" "tw"}
+  .hx-bento .cover-card,.hx-bento #mortgage{padding:26px 22px}
+}
+
+
+/* ============================================================================
+   IUL WALKTHROUGH — a numbered tab matrix instead of one vertical wall of text.
+   Every word of the original walkthrough is preserved; only its presentation
+   changes. Without JS all eight sections simply render in sequence, so the copy
+   is never hidden behind a control that might not run.
+   ========================================================================== */
+.wt-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 26px;padding-bottom:22px;
+  border-bottom:1px solid var(--slate-200)}
+.wt-tab{display:flex;align-items:center;gap:10px;background:var(--white);
+  border:1px solid var(--slate-200);border-radius:12px;padding:10px 14px;cursor:pointer;
+  font-family:'Inter';font-size:13px;font-weight:500;color:#3A4A6B;text-align:left;
+  transition:all .3s ease-in-out;max-width:100%}
+.wt-tab .n{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;
+  color:#96660F;flex:0 0 auto}
+.wt-tab .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:26ch}
+.wt-tab:hover{border-color:rgba(190,146,53,.55);transform:translateY(-1px)}
+.wt-tab.on{background:linear-gradient(180deg,#FBF5E9,#F6EEDD);border-color:rgba(190,146,53,.55);
+  color:var(--obsidian);box-shadow:0 6px 18px -12px rgba(120,84,14,.7)}
+.wt-tab:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
+.wt-nav{display:flex;justify-content:space-between;gap:12px;margin-top:28px;
+  padding-top:20px;border-top:1px solid var(--slate-200)}
+.wt-nav button{background:var(--white);border:1px solid var(--slate-200);border-radius:10px;
+  padding:10px 18px;font-family:'Sora';font-weight:600;font-size:13.5px;color:var(--obsidian);
+  cursor:pointer;transition:all .3s ease-in-out}
+.wt-nav button:hover:not(:disabled){border-color:rgba(190,146,53,.6);transform:translateY(-1px)}
+.wt-nav button:disabled{opacity:.4;cursor:default}
+.wt-js .wt-sec{display:none}
+.wt-js .wt-sec.on{display:block;animation:wtIn .34s var(--ease-out)}
+@keyframes wtIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(max-width:700px){.wt-tab .t{display:none}.wt-tab{padding:9px 13px}}
+
+/* ============================================================================
+   COMPARISON DASHBOARD — 401(k) vs Roth vs IUL. Light header, generous padding,
+   and the IUL column carried as the highlighted premium lane.
+   ========================================================================== */
+.wt-table{overflow-x:auto;border:1px solid var(--slate-200);border-radius:16px;margin:22px 0;background:var(--white)}
+.wt-table table{border-collapse:separate;border-spacing:0}
+.wt-table thead th{background:var(--silk);color:#3A4A6B;padding:16px 18px;
+  border-bottom:1px solid var(--slate-200)}
+.wt-table thead th:last-child{background:linear-gradient(180deg,#FBF3E4,#F6EBD6);color:#7E5510;
+  border-bottom-color:rgba(190,146,53,.4)}
+.wt-table td{padding:15px 18px;border-top:1px solid var(--slate-100);color:#3A4A6B}
+.wt-table tbody tr:nth-child(even){background:rgba(241,245,249,.5)}
+.wt-table td:first-child{color:var(--obsidian)}
+.wt-table td:last-child{background:rgba(251,243,228,.55);color:#33405E;
+  border-left:1px solid rgba(190,146,53,.28)}
+.wt-table tbody tr:last-child td:last-child{border-bottom-right-radius:15px}
+.wt-table .yes::before{content:"✓";color:#0F6B2C;font-weight:700;margin-right:8px}
+.wt-table .no::before{content:"✕";color:#9A3B3B;font-weight:700;margin-right:8px}
+
+
+/* ============================================================================
+   TRUST & VERIFICATION HUB — licensing and disclosure copy is a credential, so
+   it gets its own pristine component before the footer instead of being buried
+   as a footnote. Every word of the original disclosure is carried verbatim.
+   ========================================================================== */
+.trust-hub{background:var(--silk);border-top:1px solid var(--slate-200);position:relative;overflow:hidden}
+.th-head{max-width:62ch;margin-bottom:44px}
+.th-head h2{font-size:clamp(26px,3vw,40px)}
+.th-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:40px}
+.th-card{background:var(--white);border:1px solid var(--slate-200);border-radius:16px;padding:24px 22px;
+  transition:transform .3s ease-in-out,box-shadow .3s ease-in-out}
+@media(hover:hover) and (pointer:fine){
+  .th-card:hover{transform:translateY(-3px);box-shadow:0 20px 40px rgba(10,17,40,.05)}
+}
+.th-k{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#96660F;margin-bottom:12px}
+.th-card b{display:block;font-family:'Playfair Display',Georgia,serif;font-size:26px;
+  color:var(--obsidian);letter-spacing:-.01em;margin-bottom:8px;line-height:1.1}
+.th-v{display:block;font-size:13px;line-height:1.6;color:#5A6A8C}
+.th-legal{font-size:11.5px;line-height:1.85;letter-spacing:.02em;color:#5F6E8C;max-width:118ch;
+  padding-top:26px;border-top:1px solid var(--slate-200)}
+@media(max-width:900px){.th-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.th-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ============================================================================
+   HERO TRUST PILLS — the three facts a stranger needs, directly under the CTA.
+   ========================================================================== */
+.trust-pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:var(--sp-4)}
+.trust-pill{display:inline-flex;align-items:center;gap:7px;background:var(--white);
+  border:1px solid var(--slate-200);border-radius:999px;padding:7px 14px;
+  font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:#3A4A6B;white-space:nowrap;
+  box-shadow:0 1px 2px rgba(10,17,40,.04)}
+.trust-pill i{width:5px;height:5px;border-radius:50%;background:var(--brass);flex:0 0 auto}
+@media(max-width:420px){.trust-pill{font-size:9.5px;letter-spacing:.08em;padding:6px 11px}}
+
+
+/* ============================================================================
+   ESTIMATE STUDIO — the projection reads as a split range card, and the numbers
+   settle with a short micro-animation whenever a slider moves.
+   ========================================================================== */
+.q-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.q-half{background:var(--white);border:1px solid var(--slate-200);border-radius:14px;padding:16px 14px}
+.q-half.hi{background:linear-gradient(180deg,#FBF3E4,#F7EEDC);border-color:rgba(190,146,53,.4)}
+.q-half span{display:block;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:#5A6A8C;margin-bottom:8px}
+.q-half b{display:block;font-family:'Playfair Display',Georgia,serif;font-weight:600;
+  font-size:clamp(26px,3.2vw,38px);line-height:1;letter-spacing:-.02em;color:var(--obsidian);
+  font-variant-numeric:tabular-nums}
+.q-half.hi b{background:linear-gradient(96deg,#8A5F10,#C09338 45%,#7E5510);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.q-tick .q-half b,.q-tick .q-price em{animation:qTick .34s var(--ease-out)}
+@keyframes qTick{0%{opacity:.35;transform:translateY(5px)}100%{opacity:1;transform:none}}
+.q-cross{display:inline-block;margin-top:14px;font-family:'Sora';font-weight:600;font-size:13.5px;
+  color:#96660F;text-decoration:none;border-bottom:1px solid rgba(150,102,15,.35);padding-bottom:2px;
+  transition:all .3s ease-in-out}
+.q-cross:hover{color:var(--obsidian);border-bottom-color:var(--obsidian)}
+@media(max-width:420px){.q-split{grid-template-columns:1fr}}
+
+/* mic pulse on the concierge, so the voice affordance reads at a glance */
+.chat-input .mic,.chat-head .spk{position:relative}
+.chat-input .mic::after{content:"";position:absolute;inset:-3px;border-radius:inherit;
+  border:1px solid rgba(190,146,53,.55);opacity:0;animation:micPulse 2.8s ease-out infinite;pointer-events:none}
+@keyframes micPulse{0%{opacity:.75;transform:scale(.9)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.chat-input .mic::after{animation:none}}
+
+
+/* validation states — visible, announced, and cleared on edit */
+.cap-card input.is-invalid{border-color:#B4232A!important;box-shadow:0 0 0 3px rgba(180,35,42,.12)}
+.cap-card input:focus-visible{outline:3px solid var(--brass);outline-offset:1px}
+.field-err{margin:8px 0 0;font-size:12.5px;line-height:1.5;color:#9A2B31;font-weight:500}
+.q-seg button:active,.q-tab:active{transform:translateY(1px)}
+
+
+/* ============================================================================
+   NO HARSH DARK PANELS — the framework calls for a light-mode surface set, so
+   the last navy panels (the classics card, the faux browser bars, the coverage
+   deep-dive sheet and the NPN chip) become alabaster with slate hairlines.
+   Their text colours come with them, so nothing is left white-on-white.
+   ========================================================================== */
+.cover-card.wide-classics,.cover-card.wide-classics.liquid-glass{
+  background:linear-gradient(150deg,var(--white),var(--silk));border:1px solid var(--slate-200)}
+.cover-card.wide-classics h3,.cover-card.wide-classics li,.cover-card.wide-classics b{color:var(--obsidian)}
+.cover-card.wide-classics p{color:#3A4A6B}
+.cover-card.wide-classics .tag,.cover-card.wide-classics .go{color:#96660F}
+.cover-card.wide-classics .go:hover{color:var(--obsidian)}
+.cover-card.wide-classics:hover h3{color:#96660F}
+
+.wt-bar,.t-bar,.iul-frame-bar,.bp-bar{background:var(--silk)!important;
+  border-bottom:1px solid var(--slate-200)!important}
+.wt-bar b,.t-bar b,.iul-frame-bar b,.bp-bar b{color:var(--obsidian)!important}
+.tool-pane .t-bar span{color:#5A6A8C!important}
+.wt-bar .tag,.iul-frame-bar .tag{color:#96660F!important}
+.wt-bar .close,.iul-frame-bar .close{color:#3A4A6B!important;border-color:var(--slate-200)!important}
+.wt-bar .close:hover,.iul-frame-bar .close:hover{color:var(--obsidian)!important;border-color:rgba(190,146,53,.6)!important}
+.bp-bar .expand{color:#96660F!important}
+.t-bar i,.wt-bar i,.bp-bar i{background:var(--slate-200)!important}
+
+.cov-sheet{background:linear-gradient(160deg,var(--white),var(--silk))!important;color:#3A4A6B!important;
+  border:1px solid var(--slate-200)}
+.cov-title,.cov-sheet h3,.cov-sheet h4{color:var(--obsidian)!important}
+.cov-hook,.cov-row span,.cov-stat .s span{color:#3A4A6B!important}
+.cov-x{background:var(--white)!important;color:var(--obsidian)!important;border:1px solid var(--slate-200)!important}
+.cov-x:hover{background:var(--silk)!important}
+.cov-sheet .btn-ghost-light{border-color:rgba(14,31,62,.28)!important;color:var(--obsidian)!important}
+.cov-sheet .btn-ghost-light:hover{background:rgba(14,31,62,.05)!important}
+.about-photo .npn{background:var(--white)!important;color:var(--obsidian)!important;
+  border:1px solid var(--slate-200)!important}
+.about-photo .npn b,.about-photo .npn span{color:inherit!important}
 
 </style>
 <script>
@@ -3418,7 +3743,8 @@ try{
 <!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
      ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
 <script defer src="vendor/gsap.min.js"></script>
-<script defer src="js/hx-wheel.js">
+<script defer src="js/hx-wheel.js"></script>
+<script>
 /* reading-progress hairline. rAF-coalesced, passive listener, and wrapped so a
    throw can never take down the shared IIFE (see the #ignite note at the top). */
 (function(){
@@ -3469,6 +3795,71 @@ try{
   hero.addEventListener('pointerleave',function(){
     tx=0;ty=0; if(!queued){queued=true;requestAnimationFrame(paint);}
   },{passive:true});
+}catch(e){}
+})();
+
+/* The IUL walkthrough as a numbered tab matrix. Built from the existing sections
+   so every word of the original copy survives untouched; if this block never
+   runs, the sections stay stacked and fully readable. */
+(function(){
+try{
+  var body=document.querySelector('.wt-body'); if(!body) return;
+  var secs=Array.prototype.slice.call(body.querySelectorAll('.wt-sec'));
+  if(secs.length<2) return;
+  var strip=document.createElement('div');
+  strip.className='wt-tabs'; strip.setAttribute('role','tablist');
+  strip.setAttribute('aria-label','IUL strategy steps');
+  var tabs=secs.map(function(sec,i){
+    var step=sec.querySelector('.wt-step');
+    var num=step&&step.querySelector('.n')?step.querySelector('.n').textContent.trim():String(i+1);
+    var ttl=step&&step.querySelector('h3')?step.querySelector('h3').textContent.trim():('Step '+num);
+    var b=document.createElement('button');
+    b.type='button'; b.className='wt-tab'; b.setAttribute('role','tab');
+    b.id='wtTab'+i; b.setAttribute('aria-controls','wtSec'+i);
+    b.innerHTML='<span class="n">'+num+'</span><span class="t"></span>';
+    b.querySelector('.t').textContent=ttl;
+    b.title=num+' — '+ttl;
+    sec.id='wtSec'+i; sec.setAttribute('role','tabpanel'); sec.setAttribute('aria-labelledby','wtTab'+i);
+    b.addEventListener('click',function(){show(i);});
+    strip.appendChild(b);
+    return b;
+  });
+  var nav=document.createElement('div');
+  nav.className='wt-nav';
+  nav.innerHTML='<button type="button" data-wt="prev">← Previous step</button>'+
+                '<button type="button" data-wt="next">Next step →</button>';
+  var cur=0;
+  function show(i){
+    cur=Math.max(0,Math.min(secs.length-1,i));
+    secs.forEach(function(s,j){s.classList.toggle('on',j===cur);});
+    tabs.forEach(function(t,j){
+      t.classList.toggle('on',j===cur);
+      t.setAttribute('aria-selected',j===cur?'true':'false');
+      t.tabIndex=j===cur?0:-1;
+    });
+    nav.querySelector('[data-wt="prev"]').disabled=(cur===0);
+    nav.querySelector('[data-wt="next"]').disabled=(cur===secs.length-1);
+  }
+  nav.addEventListener('click',function(e){
+    var b=e.target.closest('[data-wt]'); if(!b) return;
+    show(b.dataset.wt==='next'?cur+1:cur-1);
+    var box=body.getBoundingClientRect();
+    if(box.top<0) body.scrollIntoView({block:'start'});
+  });
+  strip.addEventListener('keydown',function(e){
+    if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft') return;
+    e.preventDefault();
+    var next=(cur+(e.key==='ArrowRight'?1:-1)+secs.length)%secs.length;
+    show(next); tabs[next].focus();
+  });
+  body.insertBefore(strip,body.firstChild);
+  body.appendChild(nav);
+  body.classList.add('wt-js');
+  show(0);
+  /* deep links into a step still work: #wtSec3 opens that tab */
+  addEventListener('hashchange',function(){
+    var m=/^#wtSec(\d+)$/.exec(location.hash); if(m) show(+m[1]);
+  });
 }catch(e){}
 })();
 </script>

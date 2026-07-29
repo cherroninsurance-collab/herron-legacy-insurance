@@ -92,8 +92,10 @@
      respects the preference better than tweens do. */
   var OK = window.gsap;
   var calm = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  /* the bento grid is the coverage layout now — no flat carousel fallback either */
+  var isBento = !!document.querySelector('[data-hx-bento]');
   if (!OK || calm) {
-    initFlatCarousel();
+    if (!isBento) initFlatCarousel();
     return;
   }
 
@@ -373,8 +375,13 @@
     };
   }
 
+  /* The coverage section is now an asymmetric bento grid, so it no longer takes
+     the coverflow treatment — the annuities carousel is unchanged. Nav links into
+     card ids still resolve, because the cards keep their ids and the browser can
+     jump to them directly once the ring isn't there to intercept. */
+  var bento = !!document.querySelector('[data-hx-bento]');
   var rings = {
-    coverage: initRing('coverage', '.cover-grid', 'Coverage options'),
+    coverage: bento ? null : initRing('coverage', '.cover-grid', 'Coverage options'),
     annuities: initRing('annuities', '.ann-grid', 'Annuity types')
   };
   window.hxRings = rings;   // used by the audit harness; harmless in production
