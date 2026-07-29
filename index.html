@@ -2390,6 +2390,10 @@ function buildChat(container, compact){
   // greeting
   addMsg(`Hi, I'm the <b>Legacy Concierge</b> 👋 — Herron & Co.'s digital assistant. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap 🎙 and just ask out loud.`,'bot');
   addChips();
+  /* the opening greeting must be readable from its first line — appending the
+     starter chips had scrolled the log to the bottom, cropping the greeting on
+     narrow phones where the content is taller than the pane */
+  log.scrollTop=0;
 }
 
 buildChat(document.getElementById('mainChat'));
@@ -3245,6 +3249,78 @@ renderFit();
 .about-photo .npn{background:var(--white)!important;color:var(--obsidian)!important;
   border:1px solid var(--slate-200)!important}
 .about-photo .npn b,.about-photo .npn span{color:inherit!important}
+
+
+/* ============================================================================
+   THE CONCIERGE, IN ACTUAL FROSTED GLASS
+   It had drifted to 82% opaque white with an 8px blur on desktop and a flat 90%
+   fill on phones — which is a white card, not glass. Glass needs three things:
+   enough transparency for the page to show through, a real blur with a little
+   saturation lift, and a lit edge (bright hairline top, soft rim, layered
+   shadow) so the pane reads as a physical sheet.
+   ========================================================================== */
+.chat-shell,
+.lg-webgl-on .lg-content .chat-shell,
+#fabPanel .chat-shell{
+  background:linear-gradient(157deg,rgba(255,255,255,.62),rgba(255,255,255,.44) 46%,rgba(247,248,252,.58))!important;
+  -webkit-backdrop-filter:blur(30px) saturate(1.7)!important;
+          backdrop-filter:blur(30px) saturate(1.7)!important;
+  border:1px solid rgba(255,255,255,.85)!important;
+  box-shadow:
+    0 1.5px 0 rgba(255,255,255,.95) inset,
+    0 0 0 1px rgba(14,31,62,.06),
+    0 34px 70px -30px rgba(10,17,40,.34),
+    0 8px 26px -18px rgba(10,17,40,.22)!important;
+}
+/* the lit top edge that sells a glass sheet */
+.chat-shell::before{background:linear-gradient(90deg,transparent,rgba(255,255,255,.95),transparent)!important;
+  height:1px!important;z-index:3!important}
+/* interior surfaces stay translucent, or the frost stops at the frame */
+.chat-head{background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,.16))!important;
+  border-bottom:1px solid rgba(255,255,255,.7)!important;
+  box-shadow:0 1px 0 rgba(14,31,62,.05)}
+.chat-input{background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.46))!important;
+  border-top:1px solid rgba(255,255,255,.7)!important}
+.chat-input input{background:rgba(255,255,255,.72);border:1px solid rgba(14,31,62,.12)}
+.chat-input input:focus{background:rgba(255,255,255,.92)}
+/* message bubbles: the bot reads as a pane within the pane, ink stays dark */
+.msg.bot{background:rgba(255,255,255,.72)!important;border:1px solid rgba(255,255,255,.9)!important;
+  box-shadow:0 1px 0 rgba(255,255,255,.8) inset,0 6px 18px -14px rgba(10,17,40,.4);color:#26365A!important}
+.chip{background:rgba(255,255,255,.66)!important;border:1px solid rgba(190,146,53,.45)!important;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.chip:hover{background:rgba(251,243,228,.9)!important}
+.chat-head .avatar{box-shadow:0 6px 16px -8px rgba(120,84,14,.8)}
+
+/* Phones drop backdrop-filter sitewide for frame time (see the coarse block), so
+   the frost is done with transparency alone — over the soft cloud beds behind it
+   the result is visually the same and costs nothing. */
+@media(pointer:coarse){
+  .chat-shell,#fabPanel .chat-shell{
+    background:linear-gradient(157deg,rgba(255,255,255,.78),rgba(255,255,255,.62) 46%,rgba(246,248,252,.76))!important;
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    border:1px solid rgba(255,255,255,.9)!important;
+    box-shadow:0 1.5px 0 rgba(255,255,255,.95) inset,0 0 0 1px rgba(14,31,62,.07),
+               0 26px 56px -28px rgba(10,17,40,.34)!important}
+  .msg.bot{background:rgba(255,255,255,.86)!important}
+  .chip{-webkit-backdrop-filter:none;backdrop-filter:none}
+}
+
+
+/* The chat input row is a flex line whose text field defaults to min-width:auto —
+   the placeholder's min-content width pushed the send button off the pane on a
+   414px phone. min-width:0 lets the field shrink; the buttons stay put. */
+.chat-input{min-width:0;flex-wrap:nowrap}
+.chat-input input{min-width:0;flex:1 1 auto}
+.chat-input .mic,.chat-input button:not(.mic){flex:0 0 auto}
+@media(max-width:520px){
+  .chat-input{gap:8px;padding:11px}
+  .chat-input input{padding:11px 12px;font-size:14px}
+  /* the header stacks badly at this width — let the status line breathe */
+  .chat-head{gap:10px;padding:13px 14px}
+  .chat-head b{font-size:14px;line-height:1.15}
+  .chat-head span{font-size:11px;flex-wrap:wrap}
+  .chat-head .spk{font-size:10px;padding:6px 9px;line-height:1.15}
+}
 
 </style>
 <script>
