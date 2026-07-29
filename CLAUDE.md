@@ -58,9 +58,14 @@ gold `#B07E22`, grads `#B07E22→#8A5F10`.
 - The floating concierge panel fallback is white frost — it matches desktop's blur over
   the now-light page (the old slate matched the dark page).
 - **Diamond layer** (user: "more 3d animations frosted glass … diamond aesthetic"):
-  `#heroCrystals` renders 6 faceted octahedra (L1-norm SDFs, no fbm — cheap) in clear
-  glass with gold/ice/violet facet dispersion and twinkling glints; wrapped in try/catch
-  so a throw can never kill the shared IIFE; phones get 4 shapes at 24fps/0.8 DPR.
+  `#heroCrystals` is a 2D **diamond-light field** — glass bokeh rings with navy rims,
+  twinkling 4-ray star cores with gold/ice fringes, one faint prismatic streak. The
+  first two attempts were floating 3D octahedra; the user called them crap, correctly —
+  low-poly meshes read as game props, so "diamond" is done as LIGHT, the way jewelry
+  photography does it. Positions are in raw uv space (visible x ≈ ±0.8 at 16:9 — the
+  first light pass placed glints off-screen by using the old 3D camera's coordinates).
+  Wrapped in try/catch so a throw can never kill the shared IIFE; phones skip 3 glints
+  at 24fps/0.8 DPR.
   Why-cards carry pointer-tracked 3D tilt (`data-hx-tilt`, fine-pointer only — NEVER
   tilt backdrop-filter glass, Chrome glitches). Prismatic hairline gradient borders on
   why-cards, ann carousel cards and the hero card. Hero sparks are white diamond dust

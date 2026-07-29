@@ -3100,10 +3100,11 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   requestAnimationFrame(loop);
 })();
 
-/* ---- floating crystal field (diamond aesthetic) ----
-   Faceted octahedra in clear glass over the ivory light-field: fresnel edges with a
-   faint gold/blue/violet dispersion tint, hard specular glints that twinkle as the
-   facets rotate through the key light. Cheap by construction: 6 L1-norm SDFs, no fbm.
+/* ---- diamond light field ----
+   No floating 3D shapes — mesh gems read as game props (the user called them crap,
+   twice, correctly). "Diamond" is done the way jewelry photography does it: soft
+   glass bokeh with a darker rim so it reads on ivory, a bright twinkling star core,
+   gold/ice dispersion fringes, and one faint prismatic streak. Pure 2D shader, cheap.
    Wrapped in try/catch — every inline block shares one IIFE and a throw here must
    never take down the page. */
 (function(){
@@ -3115,47 +3116,52 @@ try{
   var fs=[
   'precision highp float;uniform vec2 uRes;uniform float uTime;uniform float uLow;',
   'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
-  'float hash(vec3 p){p=fract(p*vec3(123.34,234.34,345.65));p+=dot(p,p+34.45);return fract(p.x*p.y*p.z);}',
-  'float sdOct(vec3 p,float s){p=abs(p);return (p.x+p.y+p.z-s)*0.57735;}',
-  'vec3 P1,P2,P3,P4,P5,P6;',
-  'vec3 q1(vec3 p){vec3 q=p-P1;q.xz*=rot(uTime*.21+1.0);q.xy*=rot(uTime*.16);return q;}',
-  'vec3 q2(vec3 p){vec3 q=p-P2;q.xz*=rot(-uTime*.17+2.3);q.yz*=rot(uTime*.13);return q;}',
-  'vec3 q3(vec3 p){vec3 q=p-P3;q.xy*=rot(uTime*.19+4.1);q.xz*=rot(-uTime*.11);return q;}',
-  'vec3 q4(vec3 p){vec3 q=p-P4;q.yz*=rot(uTime*.15+0.7);q.xz*=rot(uTime*.18);return q;}',
-  'vec3 q5(vec3 p){vec3 q=p-P5;q.xz*=rot(uTime*.23+5.2);q.xy*=rot(-uTime*.14);return q;}',
-  'vec3 q6(vec3 p){vec3 q=p-P6;q.xy*=rot(-uTime*.12+3.0);q.yz*=rot(uTime*.20);return q;}',
-  'float map(vec3 p){',
-  ' float d=sdOct(q1(p),.30);',
-  ' d=min(d,sdOct(q2(p),.20));',
-  ' d=min(d,sdOct(q4(p),.22));',
-  ' d=min(d,sdOct(q6(p),.26));',
-  ' if(uLow<.5){d=min(d,sdOct(q3(p),.16));d=min(d,sdOct(q5(p),.14));}',
-  ' return d;}',
-  'vec3 nrm(vec3 p){vec2 e=vec2(.0018,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
+  /* one bokeh glint: dark glass rim + soft fill + twinkling 4-ray star core with
+     gold/ice fringe. b = brightness from its twinkle phase. */
+  'vec4 glint(vec2 d,float r,float b,float ang){',
+  ' float L=length(d);',
+  ' float ring=smoothstep(r*.78,r,L)-smoothstep(r,r*1.16,L);',
+  ' float fill=smoothstep(r,r*.2,L);',
+  ' vec2 q=rot(ang)*d;',
+  ' float rays=(pow(max(0.,1.-abs(q.x)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.y))+',
+  '             pow(max(0.,1.-abs(q.y)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.x)))*b;',
+  ' float core=exp(-L*L/(r*r*.045))*b;',
+  ' float side=clamp(d.x/max(L,1e-4)*.5+.5,0.,1.);',
+  ' vec3 fringe=mix(vec3(.58,.70,1.),vec3(1.,.82,.5),side);',
+  ' vec3 col=vec3(0.);float a=0.;',
+  ' col+=vec3(.10,.16,.30)*ring*.30; a+=ring*.30;',
+  ' col+=fringe*ring*.16; a+=ring*.08;',
+  ' col+=vec3(1.,.99,.97)*fill*.07*b; a+=fill*.06*b;',
+  ' col+=mix(vec3(1.),fringe,.3)*(rays*.9+core*1.0); a+=(rays*.75+core*.85);',
+  ' return vec4(col,a);}',
   'void main(){',
   ' float t=uTime;',
-  ' P1=vec3(1.15,.30,-.2)+vec3(sin(t*.23),cos(t*.19),0.)*.09;',
-  ' P2=vec3(1.55,-.38,.3)+vec3(sin(t*.31+2.),cos(t*.24+1.),0.)*.07;',
-  ' P3=vec3(.55,.66,-.5)+vec3(sin(t*.27+4.),cos(t*.22+3.),0.)*.08;',
-  ' P4=vec3(-1.38,.56,-.3)+vec3(sin(t*.21+1.),cos(t*.26+5.),0.)*.09;',
-  ' P5=vec3(-.72,-.74,.2)+vec3(sin(t*.29+3.),cos(t*.2+2.),0.)*.06;',
-  ' P6=vec3(.12,-.20,-.9)+vec3(sin(t*.18+5.),cos(t*.23+4.),0.)*.10;',
   ' vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
-  ' vec3 ro=vec3(0.,0.,4.2);vec3 rd=normalize(vec3(uv,-1.7));',
-  ' float tt=0.,hit=0.;',
-  ' for(int i=0;i<40;i++){vec3 p=ro+rd*tt;float d=map(p);if(d<.0025){hit=1.;break;}tt+=d;if(tt>8.)break;}',
   ' vec3 col=vec3(0.);float alpha=0.;',
-  ' if(hit>.5){vec3 p=ro+rd*tt;vec3 n=nrm(p);',
-  '  float fres=pow(1.-abs(dot(rd,n)),2.1);',
-  /* dispersion tint: facet orientation picks gold / ice-blue / violet */
-  '  vec3 tint=n.y>0.15?vec3(1.0,.84,.55):(n.x>0.?vec3(.60,.72,1.0):vec3(.78,.62,.94));',
-  '  vec3 L1=normalize(vec3(1.,.8,.6));vec3 L2=normalize(vec3(-.7,.3,.8));',
-  '  float tw=.55+.45*sin(t*2.6+hash(floor(n*3.)+floor(p))*6.283);',
-  '  float sp=pow(max(dot(reflect(rd,n),L1),0.),90.)*2.1*tw;',
-  '  sp+=pow(max(dot(reflect(rd,n),L2),0.),60.)*.9;',
-  '  col=tint*fres*.5+vec3(1.,.99,.95)*sp+tint*.05;',
-  '  alpha=clamp(fres*.44+sp*.7,0.,.85);}',
-  ' gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
+  ' vec2 P;float tw;vec4 g;',
+  /* seven glints, staggered twinkle, slow drift; phones skip three */
+  ' P=vec2(.58,.16)+vec2(sin(t*.16),cos(t*.13))*.035; tw=.5+.5*pow(.5+.5*sin(t*.9+0.0),3.);',
+  ' g=glint(uv-P,.105,tw,.5); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.74,-.22)+vec2(sin(t*.21+2.),cos(t*.17+1.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.7+1.7),3.);',
+  ' g=glint(uv-P,.07,tw,.9); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.30,.40)+vec2(sin(t*.19+4.),cos(t*.15+3.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.8+3.1),3.);',
+  ' g=glint(uv-P,.055,tw,.2); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(-.62,.36)+vec2(sin(t*.14+1.),cos(t*.18+5.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.75+4.4),3.);',
+  ' g=glint(uv-P,.075,tw,1.3); col+=g.rgb;alpha+=g.a;',
+  ' if(uLow<.5){',
+  '  P=vec2(.48,-.40)+vec2(sin(t*.23+3.),cos(t*.2+2.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.85+2.2),3.);',
+  '  g=glint(uv-P,.045,tw,.7); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(.10,.47)+vec2(sin(t*.18+5.),cos(t*.23+4.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.95+5.3),3.);',
+  '  g=glint(uv-P,.036,tw,.1); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(-.55,-.35)+vec2(sin(t*.2+2.5),cos(t*.16+.8))*.03; tw=.5+.5*pow(.5+.5*sin(t*.65+1.1),3.);',
+  '  g=glint(uv-P,.055,tw,1.0); col+=g.rgb;alpha+=g.a;}',
+  /* one faint prismatic streak drifting through the upper right */
+  ' vec2 sd=rot(.62)*(uv-vec2(.55+sin(t*.05)*.12,.10));',
+  ' float streak=exp(-sd.y*sd.y*900.)*smoothstep(.7,.1,abs(sd.x))*.16;',
+  ' vec3 pr=mix(vec3(1.,.85,.55),vec3(.6,.72,1.),clamp(sd.x*1.2+.5,0.,1.));',
+  ' col+=pr*streak; alpha+=streak*.8;',
+  ' alpha=clamp(alpha,0.,.9);',
+  ' gl_FragColor=vec4(col*.98,alpha);}'].join('\n');
   function sh(t,src){var o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
   var coarse=matchMedia('(pointer:coarse)').matches;
   var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
