@@ -3116,12 +3116,12 @@ try{
   var fs=[
   'precision highp float;uniform vec2 uRes;uniform float uTime;uniform float uLow;',
   'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
-  /* one bokeh glint: dark glass rim + soft fill + twinkling 4-ray star core with
-     gold/ice fringe. b = brightness from its twinkle phase. */
+  /* one glint: twinkling 4-ray star with gold/ice fringe — no rings, no discs
+     (the user called the circles stupid; they were). b = twinkle brightness. */
   'vec4 glint(vec2 d,float r,float b,float ang){',
   ' float L=length(d);',
-  ' float ring=smoothstep(r*.78,r,L)-smoothstep(r,r*1.16,L);',
-  ' float fill=smoothstep(r,r*.2,L);',
+  
+  
   ' vec2 q=rot(ang)*d;',
   ' float rays=(pow(max(0.,1.-abs(q.x)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.y))+',
   '             pow(max(0.,1.-abs(q.y)/(r*.16)),2.)*smoothstep(r*2.3,0.,abs(q.x)))*b;',
@@ -3129,9 +3129,9 @@ try{
   ' float side=clamp(d.x/max(L,1e-4)*.5+.5,0.,1.);',
   ' vec3 fringe=mix(vec3(.58,.70,1.),vec3(1.,.82,.5),side);',
   ' vec3 col=vec3(0.);float a=0.;',
-  ' col+=vec3(.10,.16,.30)*ring*.30; a+=ring*.30;',
-  ' col+=fringe*ring*.16; a+=ring*.08;',
-  ' col+=vec3(1.,.99,.97)*fill*.07*b; a+=fill*.06*b;',
+  
+  
+  
   ' col+=mix(vec3(1.),fringe,.3)*(rays*.9+core*1.0); a+=(rays*.75+core*.85);',
   ' return vec4(col,a);}',
   'void main(){',
