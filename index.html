@@ -193,7 +193,7 @@ nav{position:sticky;top:0;z-index:200;background:rgba(255,255,255,.88);backdrop-
 
 /* ---------- CARRIER MARQUEE ---------- */
 .carriers{background:#FFFFFF;border-top:1px solid rgba(14,31,62,.08);border-bottom:1px solid rgba(14,31,62,.08);padding:34px 0 40px;overflow:hidden}
-.carriers p.cap{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:24px}
+.carriers p.cap{text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#5A6A8C;margin-bottom:24px}
 .marquee{position:relative;mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .marquee-track{display:flex;gap:18px;width:max-content;animation:scroll 34s linear infinite}
 .marquee:hover .marquee-track{animation-play-state:paused}
@@ -343,7 +343,7 @@ section{padding:96px 0}
 .iul-points{margin-top:26px;display:grid;gap:14px}
 .iul-point{display:flex;gap:14px;align-items:flex-start}
 .iul-point .ic{width:38px;height:38px;border-radius:10px;background:rgba(201,151,59,.14);border:1px solid rgba(201,151,59,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
-.iul-point b{display:block;font-family:'Sora';font-size:15.5px;color:var(--white)}
+.iul-point b{display:block;font-family:'Sora';font-size:15.5px;color:var(--navy)}
 .iul-point span{font-size:14px;color:#3A4A6B}
 .iul-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
 .iul-preview{
@@ -505,7 +505,7 @@ section{padding:96px 0}
 .q-tab:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:0}
 .q-controls{padding:30px 34px;display:flex;flex-direction:column;gap:22px;border-right:1px solid var(--line)}
-.q-field label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px}
+.q-field label{display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:#5A6A8C;margin-bottom:10px}
 .q-field label b{color:#96660F;letter-spacing:.04em;font-weight:500}
 .q-field input[type=range]{width:100%;accent-color:var(--brass);height:5px;cursor:pointer}
 .q-seg{display:flex;flex-wrap:wrap;gap:8px}
@@ -513,15 +513,15 @@ section{padding:96px 0}
 .q-seg button.on{background:rgba(201,151,59,.16);border-color:var(--brass);color:#96660F}
 .q-seg button:focus-visible{outline:3px solid var(--brass);outline-offset:2px}
 .q-out{padding:34px;display:flex;flex-direction:column;justify-content:center;text-align:center}
-.q-out .cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:12px}
+.q-out .cap{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:#5A6A8C;margin-bottom:12px}
 .q-price{font-family:'Sora';font-weight:700;font-size:clamp(38px,4.6vw,56px);color:var(--navy);line-height:1;letter-spacing:-.02em}
 .q-price em{font-style:normal;background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
 .q-sub{font-size:14px;color:#5A6A8C;margin-top:12px;max-width:34ch;margin-left:auto;margin-right:auto}
 .q-out .btn{margin:24px auto 0}
 .q-note{padding:16px 22px;border-top:1px solid var(--line);font-size:11.5px;color:#5A6A8C;line-height:1.7}
 .q-custom{padding:38px 34px;text-align:center}
-.q-custom h3{color:var(--white);font-size:23px;margin-bottom:12px}
-.q-custom p{color:rgba(255,255,255,.7);max-width:56ch;margin:0 auto 22px;font-size:15px}
+.q-custom h3{color:var(--navy);font-size:23px;margin-bottom:12px}
+.q-custom p{color:#3A4A6B;max-width:56ch;margin:0 auto 22px;font-size:15px}
 @media(max-width:820px){.q-grid{grid-template-columns:1fr}.q-controls{border-right:none;border-bottom:1px solid var(--line-light)}}
 
 /* ---------- LEGACY BLUEPRINT APP ---------- */
@@ -529,7 +529,7 @@ section{padding:96px 0}
 .bp-head{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:end;margin-bottom:34px}
 @media(max-width:880px){.bp-head{grid-template-columns:1fr;gap:24px}}
 .bp-head h2{font-size:clamp(29px,3.4vw,42px);color:var(--navy);max-width:17ch}
-.bp-head h2 .grad{background:linear-gradient(92deg,var(--brass),var(--brass-bright));-webkit-background-clip:text;background-clip:text;color:transparent}
+.bp-head h2 .grad{background:linear-gradient(92deg,#B07E22,#8A5F10);-webkit-background-clip:text;background-clip:text;color:transparent}
 .bp-head p{color:var(--ink-soft);margin-top:16px;font-size:17px;max-width:52ch}
 .bp-steps{display:grid;gap:12px}
 .bp-step{display:flex;gap:12px;align-items:flex-start;border-left:2px solid rgba(201,151,59,.5);padding-left:14px}
@@ -605,7 +605,7 @@ section{padding:96px 0}
 .final .hero-ctas{justify-content:center}
 /* risk-reversal line under a primary CTA — this is what removes hesitation */
 .cta-sub{display:block;margin-top:var(--sp-3);font-size:var(--step--1);color:var(--ink-soft);letter-spacing:.01em}
-.hero .cta-sub{color:rgba(255,255,255,.66)}
+.hero .cta-sub{color:#5A6A8C}
 .final .cta-sub{margin-top:var(--sp-4)}
 /* the single escape hatch, deliberately quieter than the primary */
 .final p.final-alt{margin:var(--sp-8) auto 0;max-width:60ch;font-size:var(--step--1);color:var(--ink-soft);line-height:1.6}
@@ -613,7 +613,7 @@ section{padding:96px 0}
 .final p.final-alt a:hover{color:var(--navy)}
 
 /* ---------- FOOTER ---------- */
-.foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:#fff!important}
+.foot-phone{font-family:'IBM Plex Mono',monospace;font-size:16px;letter-spacing:.02em;color:var(--navy)!important}
 footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);padding:66px 0 38px;font-size:14px}
 .foot-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:44px;margin-bottom:44px}
 .foot-grid h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#96660F;margin-bottom:16px;font-weight:500}
@@ -959,12 +959,12 @@ nav.liquid-glass{background:rgba(255,255,255,.6)}
 /* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
    glass so the WebGL refraction has high-contrast shapes to bend. */
 .lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px);will-change:transform}
-.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(96,32,168,.50),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
-.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(70,96,220,.44),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
-.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(28,190,214,.40),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
-.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(128,80,206,.46),transparent 66%);width:720px;height:720px}
-.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(90,116,236,.42),transparent 66%);width:820px;height:820px}
-.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(66,198,220,.40),transparent 66%);width:660px;height:660px}
+.lg-blob-purple{width:640px;height:640px;background:radial-gradient(circle,rgba(226,180,92,.46),transparent 64%);animation:lgDrift 24s ease-in-out infinite alternate}
+.lg-blob-indigo{width:760px;height:760px;background:radial-gradient(circle,rgba(120,152,224,.36),transparent 64%);animation:lgDrift 30s ease-in-out -8s infinite alternate-reverse}
+.lg-blob-cyan{width:600px;height:600px;background:radial-gradient(circle,rgba(246,224,172,.42),transparent 64%);animation:lgDrift 20s ease-in-out -14s infinite alternate}
+.bp-band .lg-blob-purple,.fitcheck .lg-blob-purple,.quote-band .lg-blob-purple{background:radial-gradient(circle,rgba(226,180,92,.40),transparent 66%);width:720px;height:720px}
+.bp-band .lg-blob-indigo,.fitcheck .lg-blob-indigo,.quote-band .lg-blob-indigo{background:radial-gradient(circle,rgba(132,162,228,.30),transparent 66%);width:820px;height:820px}
+.bp-band .lg-blob-cyan,.fitcheck .lg-blob-cyan,.quote-band .lg-blob-cyan{background:radial-gradient(circle,rgba(246,228,186,.38),transparent 66%);width:660px;height:660px}
 @keyframes lgDrift{
   0%{transform:translate3d(0,0,0) scale(1)}
   50%{transform:translate3d(110px,-80px,0) scale(1.22)}
@@ -1184,6 +1184,9 @@ html{overflow-x:clip}
 </style>
 </head>
 <body>
+
+<!-- reading progress; purely decorative, driven by the block near the page foot -->
+<div class="hx-progress" id="hxProgress" aria-hidden="true"></div>
 
 <!-- ============ CINEMATIC IGNITION INTRO ============ -->
 <div id="ignite" aria-hidden="true">
@@ -1623,8 +1626,8 @@ html{overflow-x:clip}
 .ann-card li{position:relative;padding-left:30px;font-size:14.5px;color:#3A4A6B;line-height:1.55}
 .ann-card li .em{position:absolute;left:0;top:0;font-size:16px}
 .ann-card li b{color:#96660F}
-.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:rgba(255,255,255,.9)}
-.ann-card .key b{color:var(--brass-bright)}
+.ann-card .key{background:rgba(201,151,59,.12);border:1px solid rgba(201,151,59,.35);border-radius:11px;padding:11px 14px;font-size:13.5px;color:#3A4A6B}
+.ann-card .key b{color:#8A5F10}
 .ann-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:36px}
 .ann-note{margin-top:26px;font-size:12.5px;color:#5A6A8C;max-width:96ch;line-height:1.65}
 </style>
@@ -1632,7 +1635,7 @@ html{overflow-x:clip}
   <div class="wrap">
     <div class="ann-head reveal">
       <span class="eyebrow">Protected growth &amp; income</span>
-      <h2>Annuities, every kind — <span class="grad">explained like a human.</span></h2>
+      <h2>Annuities, every kind — <span class="grad">told straight.</span></h2>
       <p>Two anchors hold a retirement steady: a guaranteed-rate vault, and an indexed engine that can become a paycheck for life. Here's each kind, in plain English — and what it's actually for.</p>
     </div>
     <div class="ann-grid">
@@ -1707,7 +1710,7 @@ html{overflow-x:clip}
 .tool-pane .t-bar{display:flex;align-items:center;gap:7px;padding:9px 13px;background:rgba(3,10,30,.8);border-bottom:1px solid rgba(255,255,255,.12)}
 .tool-pane .t-bar i{width:9px;height:9px;border-radius:50%;display:block}
 .tool-pane .t-bar i:nth-child(1){background:#F2645A}.tool-pane .t-bar i:nth-child(2){background:#F5BE4F}.tool-pane .t-bar i:nth-child(3){background:#5BC466}
-.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.55);letter-spacing:.04em}
+.tool-pane .t-bar span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(255,255,255,.82);letter-spacing:.04em}
 .tool-pane .t-shot img{display:block;width:100%;height:auto}
 .tool-pane .t-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .tool-pane .t-feat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#31415F;border:1px solid rgba(14,31,62,.18);border-radius:999px;padding:6px 12px}
@@ -2709,6 +2712,76 @@ renderFit();
   #fabChat{bottom:88px}
   #fabPanel{bottom:158px}
 }
+
+/* ============================================================================
+   PRESENCE LAYER — the "more oomph" pass.
+   Everything here is depth, light and timing; nothing moves layout, and every
+   hover-driven flourish is fine-pointer only so phones stay cheap. Kept last in
+   the cascade so it wins on plain specificity (never !important against GSAP).
+   ========================================================================== */
+
+/* --- 1. reading progress: one brass hairline across the top of the page --- */
+.hx-progress{position:fixed;top:0;left:0;right:0;height:2px;z-index:400;pointer-events:none;
+  transform:scaleX(0);transform-origin:0 50%;will-change:transform;
+  background:linear-gradient(90deg,#8A5F10,#C9973B 40%,#E2B45C 70%,#F6E0AC);
+  box-shadow:0 0 14px rgba(201,151,59,.5)}
+
+/* --- 2. display gold: a slow sheen travelling through the gradient ---------
+   Stops stay inside the dark half of the brass ramp: the brightest point still
+   measures over 3:1 on ivory, which is what large text needs. */
+.hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{
+  background:linear-gradient(100deg,#7E5510 0%,#8A5F10 18%,#B98829 42%,#A97719 58%,#8A5F10 80%,#7E5510 100%);
+  background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:goldSheen 11s ease-in-out infinite}
+@keyframes goldSheen{0%,100%{background-position:8% 50%}50%{background-position:92% 50%}}
+
+/* --- 3. eyebrows get a small brass rule, like a letterhead ---------------- */
+.eyebrow{display:inline-flex;align-items:center;gap:11px}
+.eyebrow::before{content:"";flex:0 0 auto;width:24px;height:1px;
+  background:linear-gradient(90deg,rgba(201,151,59,0),#C9973B)}
+
+/* --- 4. the primary button reads as struck metal, not a flat swatch ------- */
+.btn-brass{background:linear-gradient(180deg,#E0B45E 0%,#C9973B 52%,#B4842C 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 -1px 0 rgba(94,64,10,.25) inset,
+             0 10px 26px -14px rgba(150,102,15,.9)}
+.btn-brass:hover{background:linear-gradient(180deg,#EBC375 0%,#D5A244 52%,#BE8D30 100%);
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 -1px 0 rgba(94,64,10,.25) inset,
+             0 18px 40px -14px rgba(150,102,15,1)}
+.btn-brass:active{transform:translateY(0);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,
+             0 6px 16px -10px rgba(150,102,15,.9)}
+.btn-navy{background:linear-gradient(180deg,#16294E,#0B1A36);
+  box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 10px 26px -14px rgba(8,18,38,.8)}
+
+/* --- 5. cards sit on the page instead of being pasted to it --------------- */
+.cover-card,.ann-card,.t-card,.hx-why-card,.q-shell,.iul-frame-card,.fit-card{box-shadow:var(--e-2)}
+@media(hover:hover) and (pointer:fine){
+  .cover-card:not(.hx-3dcard):hover,.t-card:hover{box-shadow:var(--e-3);border-color:rgba(201,151,59,.55)}
+}
+
+/* --- 6. reveals arrive with a little weight ------------------------------- */
+.reveal{transform:translateY(26px) scale(.988);
+  transition:opacity .74s var(--ease-out),transform .74s var(--ease-out)}
+.reveal.in{transform:none}
+
+/* --- 7. a brass hairline seams the bright bands together ------------------ */
+#coverage,.quote-band,.tools-band,.fitcheck,.bp-band,.final{position:relative}
+#coverage::after,.quote-band::after,.tools-band::after,.fitcheck::after,.bp-band::after,.final::after{
+  content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:min(1160px,92vw);height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,151,59,.42) 22%,rgba(201,151,59,.42) 78%,transparent);
+  pointer-events:none}
+
+/* --- 8. the numbers are the proof — let them shine ------------------------ */
+.hstat b em,.stat b em{background:linear-gradient(96deg,#B07E22,#8A5F10);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* --- 9. hero card: the deepest object on the page ------------------------- */
+.hx-hero-card{box-shadow:var(--e-3),0 2px 0 rgba(255,255,255,.7) inset}
+
+@media(prefers-reduced-motion:reduce){
+  .hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{animation:none}
+  .hx-progress{display:none}
+}
+
 </style>
 <script>
 (function(){var bar=document.getElementById('mobilebar'),bk=document.getElementById('booking');if(!bar||!bk)return;bar.classList.add('show');new IntersectionObserver(function(es){es.forEach(function(e){bar.classList.toggle('show',!e.isIntersecting)})},{threshold:.05}).observe(bk);})();
@@ -3227,6 +3300,25 @@ try{
 <!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
      ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
 <script defer src="vendor/gsap.min.js"></script>
-<script defer src="js/hx-wheel.js"></script>
+<script defer src="js/hx-wheel.js">
+/* reading-progress hairline. rAF-coalesced, passive listener, and wrapped so a
+   throw can never take down the shared IIFE (see the #ignite note at the top). */
+(function(){
+try{
+  var bar=document.getElementById('hxProgress'); if(!bar) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var queued=false;
+  function paint(){
+    queued=false;
+    var h=document.documentElement.scrollHeight-innerHeight;
+    var p=h>0?Math.min(1,Math.max(0,scrollY/h)):0;
+    bar.style.transform='scaleX('+p.toFixed(4)+')';
+  }
+  addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(paint);}},{passive:true});
+  addEventListener('resize',paint,{passive:true});
+  paint();
+}catch(e){}
+})();
+</script>
 </body>
 </html>
