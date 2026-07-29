@@ -57,6 +57,14 @@ gold `#B07E22`, grads `#B07E22→#8A5F10`.
 - Coarse-pointer fallbacks are all white-frost now (nav/sheet/mobilebar/chat/panes).
 - The floating concierge panel fallback is white frost — it matches desktop's blur over
   the now-light page (the old slate matched the dark page).
+- **Diamond layer** (user: "more 3d animations frosted glass … diamond aesthetic"):
+  `#heroCrystals` renders 6 faceted octahedra (L1-norm SDFs, no fbm — cheap) in clear
+  glass with gold/ice/violet facet dispersion and twinkling glints; wrapped in try/catch
+  so a throw can never kill the shared IIFE; phones get 4 shapes at 24fps/0.8 DPR.
+  Why-cards carry pointer-tracked 3D tilt (`data-hx-tilt`, fine-pointer only — NEVER
+  tilt backdrop-filter glass, Chrome glitches). Prismatic hairline gradient borders on
+  why-cards, ann carousel cards and the hero card. Hero sparks are white diamond dust
+  with gold/blue glow.
 
 ## The logo — read this before touching it
 The brand mark is a fine-line heron: **crest tuft, long beak, small white eye, S-neck,

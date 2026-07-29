@@ -645,7 +645,7 @@ footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);
 }
 .hx-hero-card::before{
   content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;
-  background:linear-gradient(158deg,rgba(226,180,92,.62),rgba(226,180,92,.10) 34%,rgba(255,255,255,.14) 70%,rgba(255,255,255,.04));
+  background:linear-gradient(158deg,rgba(226,180,92,.65),rgba(150,180,240,.35) 40%,rgba(190,150,230,.30) 62%,rgba(255,255,255,.18));
   -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
           mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
   -webkit-mask-composite:xor;mask-composite:exclude;
@@ -682,6 +682,8 @@ footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);
 .hx-on .hx-stage{cursor:grab;touch-action:pan-y}
 html.hx-grabbing,html.hx-grabbing *{cursor:grabbing!important}
 html.hx-grabbing{user-select:none;-webkit-user-select:none}
+[data-hx-tilt]{transform-style:preserve-3d;will-change:transform}
+[data-hx-tilt].hx-tilt-off{transition:transform .5s cubic-bezier(.16,1,.3,1)}
 .hx-stage .hx-wheel{transform-style:preserve-3d}
 .hx-on .hx-wheel{position:relative;display:block;height:clamp(430px,64vh,600px);margin-inline:auto;max-width:none;pointer-events:none}
 .hx-on .hx-wheel>.hx-3dcard{
@@ -695,7 +697,7 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 }
 /* solid surfaces per family — no glass while transformed */
 .hx-on .cover-grid>.hx-3dcard{background:var(--white)}
-.hx-on .ann-grid>.hx-3dcard{background:rgba(255,255,255,.97);border:1px solid rgba(176,126,34,.3)}
+.hx-on .ann-grid>.hx-3dcard{border:1px solid transparent;background:linear-gradient(rgba(255,255,255,.97),rgba(255,255,255,.97)) padding-box,linear-gradient(135deg,rgba(201,151,59,.55),rgba(140,166,220,.4) 45%,rgba(180,140,220,.34) 70%,rgba(201,151,59,.3)) border-box}
 /* reveal-neutraliser + dim/front states. Deliberately NO !important in this trio:
    the flip-reveal hide is .cover-grid>.reveal / .ann-grid>.reveal (0,2,0), the
    neutraliser below out-specifies it at (0,3,0), and the front card simply never
@@ -757,7 +759,10 @@ html.hx-grabbing{user-select:none;-webkit-user-select:none}
 }
 .hx-why-card{
   position:relative;padding:clamp(22px,2.2vw,30px);border-radius:16px;
-  background:var(--white);border:1px solid var(--line);
+  /* prismatic hairline: white fill clipped to padding-box, faceted gradient on the border */
+  border:1px solid transparent;
+  background:linear-gradient(var(--white),var(--white)) padding-box,
+    linear-gradient(135deg,rgba(201,151,59,.5),rgba(140,166,220,.38) 42%,rgba(180,140,220,.32) 68%,rgba(201,151,59,.28)) border-box;
   box-shadow:0 1px 2px rgba(8,18,38,.05),0 2px 8px -2px rgba(8,18,38,.07);
   transition:transform .42s cubic-bezier(.16,1,.3,1),box-shadow .42s cubic-bezier(.16,1,.3,1),border-color .42s;
   --mx:50%;--my:0%;
@@ -1069,7 +1074,8 @@ nav.liquid-glass{background:rgba(255,255,255,.6)}
 html{overflow-x:clip}
 /* film grain over the hero scene — sits above the canvas, under the copy */
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
-.hero-spark{position:absolute;width:22px;height:22px;background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FBF3DE'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
+.hero-gl3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.hero-spark{position:absolute;width:22px;height:22px;filter:drop-shadow(0 0 7px rgba(226,190,120,.85)) drop-shadow(0 0 2px rgba(140,166,220,.7));background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FFFFFF'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
 /* the emblem is a bare canvas now — kill every remnant of the old framed card.
@@ -1235,6 +1241,7 @@ html{overflow-x:clip}
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
+  <canvas id="heroCrystals" class="hero-gl3d" aria-hidden="true"></canvas>
   <div class="glow glow-brass" style="top:-160px;left:-120px" aria-hidden="true"></div>
   <div class="glow glow-blue" style="bottom:-260px;right:-180px" aria-hidden="true"></div>
   <div class="hero-sparks" aria-hidden="true">
@@ -3091,6 +3098,84 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
     mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uMo,mo);gl.uniform2f(uM,mx,my);gl.drawArrays(gl.TRIANGLES,0,3);}
   if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
   requestAnimationFrame(loop);
+})();
+
+/* ---- floating crystal field (diamond aesthetic) ----
+   Faceted octahedra in clear glass over the ivory light-field: fresnel edges with a
+   faint gold/blue/violet dispersion tint, hard specular glints that twinkle as the
+   facets rotate through the key light. Cheap by construction: 6 L1-norm SDFs, no fbm.
+   Wrapped in try/catch — every inline block shares one IIFE and a throw here must
+   never take down the page. */
+(function(){
+try{
+  var cv=document.getElementById('heroCrystals'); if(!cv) return;
+  var gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:true});
+  if(!gl){cv.style.display='none';return;}
+  var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+  var fs=[
+  'precision highp float;uniform vec2 uRes;uniform float uTime;uniform float uLow;',
+  'mat2 rot(float a){float c=cos(a),s=sin(a);return mat2(c,-s,s,c);}',
+  'float hash(vec3 p){p=fract(p*vec3(123.34,234.34,345.65));p+=dot(p,p+34.45);return fract(p.x*p.y*p.z);}',
+  'float sdOct(vec3 p,float s){p=abs(p);return (p.x+p.y+p.z-s)*0.57735;}',
+  'vec3 P1,P2,P3,P4,P5,P6;',
+  'vec3 q1(vec3 p){vec3 q=p-P1;q.xz*=rot(uTime*.21+1.0);q.xy*=rot(uTime*.16);return q;}',
+  'vec3 q2(vec3 p){vec3 q=p-P2;q.xz*=rot(-uTime*.17+2.3);q.yz*=rot(uTime*.13);return q;}',
+  'vec3 q3(vec3 p){vec3 q=p-P3;q.xy*=rot(uTime*.19+4.1);q.xz*=rot(-uTime*.11);return q;}',
+  'vec3 q4(vec3 p){vec3 q=p-P4;q.yz*=rot(uTime*.15+0.7);q.xz*=rot(uTime*.18);return q;}',
+  'vec3 q5(vec3 p){vec3 q=p-P5;q.xz*=rot(uTime*.23+5.2);q.xy*=rot(-uTime*.14);return q;}',
+  'vec3 q6(vec3 p){vec3 q=p-P6;q.xy*=rot(-uTime*.12+3.0);q.yz*=rot(uTime*.20);return q;}',
+  'float map(vec3 p){',
+  ' float d=sdOct(q1(p),.30);',
+  ' d=min(d,sdOct(q2(p),.20));',
+  ' d=min(d,sdOct(q4(p),.22));',
+  ' d=min(d,sdOct(q6(p),.26));',
+  ' if(uLow<.5){d=min(d,sdOct(q3(p),.16));d=min(d,sdOct(q5(p),.14));}',
+  ' return d;}',
+  'vec3 nrm(vec3 p){vec2 e=vec2(.0018,0.);return normalize(vec3(map(p+e.xyy)-map(p-e.xyy),map(p+e.yxy)-map(p-e.yxy),map(p+e.yyx)-map(p-e.yyx)));}',
+  'void main(){',
+  ' float t=uTime;',
+  ' P1=vec3(1.15,.30,-.2)+vec3(sin(t*.23),cos(t*.19),0.)*.09;',
+  ' P2=vec3(1.55,-.38,.3)+vec3(sin(t*.31+2.),cos(t*.24+1.),0.)*.07;',
+  ' P3=vec3(.55,.66,-.5)+vec3(sin(t*.27+4.),cos(t*.22+3.),0.)*.08;',
+  ' P4=vec3(-1.38,.56,-.3)+vec3(sin(t*.21+1.),cos(t*.26+5.),0.)*.09;',
+  ' P5=vec3(-.72,-.74,.2)+vec3(sin(t*.29+3.),cos(t*.2+2.),0.)*.06;',
+  ' P6=vec3(.12,-.20,-.9)+vec3(sin(t*.18+5.),cos(t*.23+4.),0.)*.10;',
+  ' vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
+  ' vec3 ro=vec3(0.,0.,4.2);vec3 rd=normalize(vec3(uv,-1.7));',
+  ' float tt=0.,hit=0.;',
+  ' for(int i=0;i<40;i++){vec3 p=ro+rd*tt;float d=map(p);if(d<.0025){hit=1.;break;}tt+=d;if(tt>8.)break;}',
+  ' vec3 col=vec3(0.);float alpha=0.;',
+  ' if(hit>.5){vec3 p=ro+rd*tt;vec3 n=nrm(p);',
+  '  float fres=pow(1.-abs(dot(rd,n)),2.1);',
+  /* dispersion tint: facet orientation picks gold / ice-blue / violet */
+  '  vec3 tint=n.y>0.15?vec3(1.0,.84,.55):(n.x>0.?vec3(.60,.72,1.0):vec3(.78,.62,.94));',
+  '  vec3 L1=normalize(vec3(1.,.8,.6));vec3 L2=normalize(vec3(-.7,.3,.8));',
+  '  float tw=.55+.45*sin(t*2.6+hash(floor(n*3.)+floor(p))*6.283);',
+  '  float sp=pow(max(dot(reflect(rd,n),L1),0.),90.)*2.1*tw;',
+  '  sp+=pow(max(dot(reflect(rd,n),L2),0.),60.)*.9;',
+  '  col=tint*fres*.5+vec3(1.,.99,.95)*sp+tint*.05;',
+  '  alpha=clamp(fres*.44+sp*.7,0.,.85);}',
+  ' gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
+  function sh(t,src){var o=gl.createShader(t);gl.shaderSource(o,src);gl.compileShader(o);return o;}
+  var coarse=matchMedia('(pointer:coarse)').matches;
+  var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);gl.useProgram(pr);
+  var b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+  var lp=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(lp);gl.vertexAttribPointer(lp,2,gl.FLOAT,false,0,0);
+  var uR=gl.getUniformLocation(pr,'uRes'),uT=gl.getUniformLocation(pr,'uTime'),uL=gl.getUniformLocation(pr,'uLow');
+  var DPR=Math.min(devicePixelRatio||1,coarse?.8:1.4);
+  function rs(){var w=cv.clientWidth||360,h=cv.clientHeight||360;cv.width=Math.round(w*DPR);cv.height=Math.round(h*DPR);gl.viewport(0,0,cv.width,cv.height);}
+  rs();addEventListener('resize',rs,{passive:true});
+  gl.clearColor(0,0,0,0);
+  var start=performance.now(),run=true;
+  var minDt=coarse?1000/24:1000/30,last=0;
+  function loop(now){if(!run)return;
+    if(!RM)requestAnimationFrame(loop);
+    if(now-last<minDt)return;last=now;
+    var ts=RM?3.0:(now-start)/1000;
+    gl.clear(gl.COLOR_BUFFER_BIT);gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,ts);gl.uniform1f(uL,coarse?1.0:0.0);gl.drawArrays(gl.TRIANGLES,0,3);}
+  if(!RM&&window.IntersectionObserver){new IntersectionObserver(function(es){var v=es[0].isIntersecting;if(v&&!run){run=true;requestAnimationFrame(loop);}else if(!v){run=false;}},{threshold:0}).observe(cv);}
+  requestAnimationFrame(loop);
+}catch(e){/* decorative only — never let the shared IIFE die */}
 })();
 
 /* ---- magnetic hero CTAs ---- */

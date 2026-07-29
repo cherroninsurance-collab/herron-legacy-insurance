@@ -12,13 +12,37 @@
 (function () {
   'use strict';
 
-  /* ---- why-card cursor glow: one delegated, passive listener ---- */
+  /* ---- why-card cursor glow + 3D diamond tilt: one delegated, passive listener.
+     Tilt only touches solid-surface cards (never backdrop-filter glass — Chrome
+     glitches when a blurred element is 3D-transformed) and only on fine pointers. */
+  var TILT_MAX = 6;
+  var fineTilt = matchMedia('(pointer:fine)').matches &&
+                 !matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if (fineTilt) {
+    document.querySelectorAll('.hx-why-card').forEach(function (el) {
+      el.setAttribute('data-hx-tilt', '');
+    });
+  }
   document.addEventListener('pointermove', function (e) {
     var c = e.target.closest && e.target.closest('.hx-why-card');
     if (!c) return;
     var r = c.getBoundingClientRect();
-    c.style.setProperty('--mx', (e.clientX - r.left) + 'px');
-    c.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    var x = e.clientX - r.left, y = e.clientY - r.top;
+    c.style.setProperty('--mx', x + 'px');
+    c.style.setProperty('--my', y + 'px');
+    if (fineTilt && c.hasAttribute('data-hx-tilt')) {
+      c.classList.remove('hx-tilt-off');
+      var rx = (0.5 - y / r.height) * TILT_MAX;
+      var ry = (x / r.width - 0.5) * (TILT_MAX + 2);
+      c.style.transform = 'perspective(900px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(6px)';
+    }
+  }, { passive: true });
+  document.addEventListener('pointerout', function (e) {
+    var c = e.target.closest && e.target.closest('[data-hx-tilt]');
+    if (!c) return;
+    if (e.relatedTarget && c.contains(e.relatedTarget)) return;
+    c.classList.add('hx-tilt-off');
+    c.style.transform = '';
   }, { passive: true });
 
   /* ---- fallback: coverage cards become a flat snap carousel with dots.
