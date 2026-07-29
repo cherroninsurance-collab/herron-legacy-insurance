@@ -161,6 +161,11 @@ frost like the rest, with the chat as white glass.)
   does **not** opt out: `auto` means "use the CSS value", so it still smooth-scrolls. A probe
   that skipped this reported the annuity disclaimer and the states fallback line as stuck at
   `opacity:0` — it had simply never reached the bottom of the page. Both are fine.
+- **A "light" text colour flagged by the pixel harness may just be carousel dimming.**
+  `.hx-dim` runs the side cards at opacity .42 with a saturate/brightness filter, so white
+  text on the deliberately-navy classics card measured 2.4:1 while it was parked at the
+  side and 11.4:1 once undimmed. Re-measure with the card at the front (or force
+  `opacity:1;filter:none` on it) before "fixing" a colour that was never broken.
 - **Contrast cannot be computed from CSS on this site.** The hero sits on a WebGL canvas and
   the tool panes are liquid-glass, so walking up `backgroundColor` finds nothing opaque and
   falls back to the wrong answer — it read the why-cards as 1.28:1 (really 16.35:1) and the
@@ -186,6 +191,23 @@ frost like the rest, with the chat as white glass.)
   at 3.4s (after the scripted 1.5s fade / 2.7s DOM removal, so the normal path is untouched),
   and a `<noscript>` block hides it outright. Verify with Playwright's
   `java_script_enabled=False` — the page must render nav, headline, CTAs and disclosures.
+
+## The estimate studio is a ballpark model, not a quoting engine
+`index.html` (~2370–2485) prices seven products from hand-fit curves: an anchor-age table
+per product, linearly interpolated, times flat multipliers (sex .85, tobacco 2.4, health
+.85/1/1.35), scaled linearly off a per-$100k base, then shown as ±18%. **It is not
+WinFlex/iPipeline accuracy and cannot be** — those pull licensed, carrier-permissioned,
+state-and-product-specific rate cards. The structural gaps, in order of size: no face-amount
+band breaks (real per-$1,000 rates fall at $100k/$250k/$500k/$1M, so linear scaling is wrong
+at both ends), no annual policy fee, three health tiers standing in for the real ladder
+(Preferred Plus → Standard, plus table ratings and flat extras — a spread far wider than
+1.35x), no state/product/carrier/effective-date, and no rider pricing. WL, IUL, hybrid LTC
+and DI are rougher still (IUL is a monthly-annuity FV with a flat 8–28% cost haircut and a
+flat 5% distribution). **Do not describe these as quotes, and never add a WinFlex or
+iPipeline claim.** The `.q-note` disclosure is deliberately precise; keep it that way.
+To make it real: export rate grids from WinFlex for the products Connor actually writes and
+drive the calculator from that JSON (age × band × class × term), or put a licensed
+comparative rater behind a Netlify function.
 
 ## Where things stand
 **SHIPPED 2026-07-27**: the user said "double check everything works on desktop and mobile
