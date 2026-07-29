@@ -15,10 +15,12 @@ serves serverless functions from `netlify/functions`.
 ## Ground rules (important)
 1. **Work on branch `claude/viral-social-content-creation-af6vpq`.** Never push to `main`.
 2. **Do not touch production** (`herronlegacyinsurance.com`) until the user explicitly says
-   **"ship it"**. Everything is reviewed on the Deploy Preview first — currently PR #11:
-   `https://deploy-preview-11--herron-legacy-insurance.netlify.app/`
-   (Previews only build for an *open* PR, so after a merge the next change needs a fresh one.)
-3. **Don't open new PRs** unless asked — PR #11 already tracks this branch.
+   **"ship it"**. Everything is reviewed on a Deploy Preview first. PR #11 was merged on
+   2026-07-29, so there is currently **no open PR** — previews only build for an open PR.
+3. **The next change needs a fresh branch off `origin/main` and a NEW PR.** A merged PR
+   cannot track new work. Restart the branch (`git fetch origin main &&
+   git checkout -B claude/viral-social-content-creation-af6vpq origin/main`), then ask
+   before opening the PR unless the user already asked for one.
 4. **Compliance text must stay intact and visible** wherever it appears: the 12-state list,
    the NPN, IUL/annuity disclaimers ("not guarantees of future performance", caps/participation
    rates, living-benefit riders may reduce the death benefit), "illustrative, not offers of
@@ -223,6 +225,21 @@ drive the calculator from that JSON (age × band × class × term), or put a lic
 comparative rater behind a Netlify function.
 
 ## Where things stand
+**SHIPPED 2026-07-29** — the user said "Ship it"; PR #11 merged to `main` (823256b) →
+production (herronlegacyinsurance.com). That release carries the bright frosted-white
+theme, the bento coverage architecture, the Trust & Verification Hub, the IUL
+walkthrough tab matrix, the 401(k)/Roth/IUL comparison dashboard, metallic gold
+surfaces, the labelled Legacy Concierge pill, bright cloud beds and the frosted
+concierge pane. Gate was 35/35 across desktop 1440, touch phone 414 and no-JS.
+**PR #11 is now merged and cannot track new work.** The next change needs a fresh
+branch off `origin/main` (same branch name is fine) and a NEW PR to get a preview,
+and production only moves again on another explicit "ship it".
+
+*Production cannot be curl-verified from this sandbox — the proxy returns 000 for
+herronlegacyinsurance.com, same class of block as the preview domain. Confirm the
+live site by asking the user or via the Netlify dashboard; the Netlify MCP tools
+need interactive approval and are unavailable in this session.*
+
 **SHIPPED 2026-07-27**: the user said "double check everything works on desktop and mobile
 then ship it"; a 26-point suite passed (carousels drag/arrows/dots/side-click/CTA on both
 devices, touch scroll preserved, reveals, compliance strings, forms byte-intact, overflow
