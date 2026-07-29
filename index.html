@@ -35,8 +35,14 @@
   --navy-mid:#16305C;
   --blue:#3E68B8;
   --blue-bright:#5B8DEF;
-  --brass:#C9973B;
-  --brass-bright:#E2B45C;
+  /* gold, not yellow: the body tone is deeper and the bright stop is champagne
+     rather than lemon. Flat fills read as mustard; metal needs a ramp, so the
+     surfaces below use --gold-face / --gold-face-hi. */
+  --brass:#BE9235;
+  --brass-bright:#DFC078;
+  --gold-hi:#F2E3BC;--gold-deep:#8A6518;
+  --gold-face:linear-gradient(180deg,#F0DCA6 0%,#D9B45F 14%,#BE9235 46%,#9E7420 80%,#B5892C 100%);
+  --gold-face-hi:linear-gradient(180deg,#F7E8C4 0%,#E4C476 14%,#CBA043 46%,#AC8128 80%,#C39735 100%);
   --white:#FFFFFF;
   --cloud:#F4F6FA;
   --mist:#E4EAF4;
@@ -947,8 +953,10 @@ nav.liquid-glass{background:rgba(255,255,255,.6)}
 .lg-content{position:relative;z-index:20;pointer-events:auto;padding:clamp(28px,4.2vw,56px)}
 /* let the refracted scene glow through the chat shell when GL is on */
 .lg-webgl-on .lg-content .chat-shell{
-  background:rgba(8,18,38,.44);box-shadow:none;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  /* was rgba(8,18,38,.44) — a dark-theme leftover that painted the concierge
+     panel navy wherever the glass layer was live. White frost on the bright page. */
+  background:rgba(255,255,255,.82);box-shadow:none;
+  -webkit-backdrop-filter:blur(8px) saturate(1.3);backdrop-filter:blur(8px) saturate(1.3);
 }
 /* no-backdrop-filter browsers: solid fills keep text legible */
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
@@ -1078,14 +1086,9 @@ html{overflow-x:clip}
 /* film grain over the hero scene — sits above the canvas, under the copy */
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
 .hero-gl3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-/* crystal-facet frost: a whisper of cut-glass geometry over the light bands —
-   "almost clear" diamond backdrop. Monochrome ice/gold hairlines at 5% so it reads
-   as frosted crystal, never as a grid. */
-.hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before{
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.05;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 700'%3E%3Cg fill='none' stroke-linejoin='round'%3E%3Cpath d='M0 210 L260 0 M260 0 L520 180 L900 40 M520 180 L470 700 M520 180 L0 480 M470 700 L900 430 M900 430 L520 180 M0 480 L470 700 M260 0 L0 210 L0 480' stroke='%238CA6DC' stroke-width='1.2'/%3E%3Cpath d='M260 0 L470 700 M900 40 L900 430 M0 210 L520 180' stroke='%23C9973B' stroke-width='.8'/%3E%3Cpath d='M520 180 L260 0 L0 210 Z' fill='%23FFFFFF' fill-opacity='.5'/%3E%3Cpath d='M470 700 L900 430 L900 700 Z' fill='%23FFFFFF' fill-opacity='.35'/%3E%3Cpath d='M0 480 L520 180 L470 700 Z' fill='%238CA6DC' fill-opacity='.12'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:min(1200px,120vw) auto;background-position:center top;
-}
+/* The crystal-facet overlay was removed at the user's request — at any opacity
+   it still read as grid lines. The frost now comes from the glass surfaces
+   and the diamond-light field alone. */
 .hero-spark{position:absolute;width:22px;height:22px;filter:drop-shadow(0 0 7px rgba(226,190,120,.85)) drop-shadow(0 0 2px rgba(140,166,220,.7));background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FFFFFF'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
@@ -2060,8 +2063,9 @@ html{overflow-x:clip}
 
 <!-- ============ FLOATING CHAT ============ -->
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
-<button id="fabChat" aria-label="Open Legacy Concierge chat">
+<button id="fabChat" aria-label="Open Legacy Concierge chat" aria-expanded="false">
   <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
+  <span class="fab-label"><b>Legacy Concierge</b><span><i></i>Ask anything</span></span>
 </button>
 
 <script>
@@ -2346,9 +2350,14 @@ buildChat(document.getElementById('fabChat_shell'));
 /* floating widget toggle */
 const fab=document.getElementById('fabChat'), fabPanel=document.getElementById('fabPanel');
 const fabIcon=fab.innerHTML;
+const fabTitle=fab.querySelector('.fab-label b');
+const fabTitleText=fabTitle?fabTitle.textContent:'Legacy Concierge';
+/* keep the labelled pill in both states — swapping innerHTML for a bare glyph
+   was what made the button unrecognisable once opened */
 fab.addEventListener('click',()=>{
   const open=fabPanel.classList.toggle('open');
-  fab.innerHTML=open?'<span style="font-size:26px;color:#081226;font-weight:700">✕</span>':fabIcon;
+  fab.setAttribute('aria-expanded',open?'true':'false');
+  if(fabTitle) fabTitle.textContent=open?'Close':fabTitleText;
 });
 /* hide BOTH the button AND panel whenever the main Legacy Concierge section is anywhere near the viewport */
 const aiSection=document.getElementById('ai');
@@ -2357,7 +2366,8 @@ const fabIO=new IntersectionObserver(es=>{es.forEach(e=>{
     fab.style.display='none';
     fabPanel.style.display='none';
     fabPanel.classList.remove('open');
-    fab.innerHTML=fabIcon;
+    fab.setAttribute('aria-expanded','false');
+    if(fabTitle) fabTitle.textContent=fabTitleText;
   } else {
     fab.style.display='flex';
     fabPanel.style.display='';
@@ -2741,12 +2751,12 @@ renderFit();
   background:linear-gradient(90deg,rgba(201,151,59,0),#C9973B)}
 
 /* --- 4. the primary button reads as struck metal, not a flat swatch ------- */
-.btn-brass{background:linear-gradient(180deg,#E0B45E 0%,#C9973B 52%,#B4842C 100%);
-  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 -1px 0 rgba(94,64,10,.25) inset,
-             0 10px 26px -14px rgba(150,102,15,.9)}
-.btn-brass:hover{background:linear-gradient(180deg,#EBC375 0%,#D5A244 52%,#BE8D30 100%);
-  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 -1px 0 rgba(94,64,10,.25) inset,
-             0 18px 40px -14px rgba(150,102,15,1)}
+.btn-brass{background:var(--gold-face);border-color:var(--gold-deep);
+  box-shadow:0 1px 0 rgba(255,255,255,.55) inset,0 -1px 0 rgba(90,62,10,.35) inset,
+             0 10px 26px -14px rgba(120,84,14,.9)}
+.btn-brass:hover{background:var(--gold-face-hi);
+  box-shadow:0 1px 0 rgba(255,255,255,.65) inset,0 -1px 0 rgba(90,62,10,.35) inset,
+             0 18px 40px -14px rgba(120,84,14,1)}
 .btn-brass:active{transform:translateY(0);box-shadow:0 1px 0 rgba(255,255,255,.4) inset,
              0 6px 16px -10px rgba(150,102,15,.9)}
 .btn-navy{background:linear-gradient(180deg,#16294E,#0B1A36);
@@ -2780,6 +2790,114 @@ renderFit();
 @media(prefers-reduced-motion:reduce){
   .hero h1 .grad,.iul-copy h2 .grad,.ann-head h2 .grad,.final h2 .grad,.bp-head h2 .grad{animation:none}
   .hx-progress{display:none}
+}
+
+
+/* ============================================================================
+   GOLD, NOT YELLOW — every gold-faced surface runs the same metal ramp, and the
+   gold text carries a highlight so it reads as leaf rather than mustard.
+   ========================================================================== */
+.q-tab.on{background:var(--gold-face);border-color:var(--gold-deep);color:var(--navy-deep);
+  box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 6px 16px -10px rgba(120,84,14,.9)}
+.msg.user{background:var(--gold-face);border:1px solid var(--gold-deep)}
+.hx-arrow:hover{border-color:var(--gold-deep)}
+.q-price em,.hstat b em,.stat b em{
+  background:linear-gradient(96deg,#8A5F10 0%,#C09338 42%,#A9781C 68%,#7E5510 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+/* gold on the deliberately dark surfaces: champagne, not lemon */
+.cover-card.wide .tag,.cover-card.wide .go,.cov-sheet .cov-eyebrow,.ann-card .kind i{color:var(--gold-hi)}
+.ann-card .kind i{background:linear-gradient(150deg,#F0DCA6,#BE9235)}
+
+/* ============================================================================
+   THE CONCIERGE BUTTON — it was an unlabelled gold disc, which reads as a logo
+   watermark, not a way in. Now a labelled pill that says what it is.
+   ========================================================================== */
+#fabChat{
+  width:auto;height:58px;border-radius:999px;padding:0 22px 0 12px;gap:11px;
+  background:var(--gold-face);border:1px solid var(--gold-deep);
+  box-shadow:0 14px 34px -12px rgba(120,84,14,.75),0 1px 0 rgba(255,255,255,.5) inset;
+  transform-style:preserve-3d;transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out)}
+#fabChat img{height:30px;width:auto;display:block;flex:0 0 auto}
+#fabChat .fab-label{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
+#fabChat .fab-label b{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy-deep);white-space:nowrap}
+#fabChat .fab-label span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:rgba(8,18,38,.66);display:flex;align-items:center;gap:5px;white-space:nowrap}
+#fabChat .fab-label span i{width:6px;height:6px;border-radius:50%;background:#0F6B2C;
+  display:inline-block;animation:pulse 2s infinite}
+#fabChat:hover{transform:translateY(-2px) rotateX(6deg) scale(1.03);
+  box-shadow:0 22px 46px -14px rgba(120,84,14,.85),0 1px 0 rgba(255,255,255,.6) inset}
+#fabChat:active{transform:translateY(0) scale(.985)}
+#fabChat[aria-expanded="true"] .fab-label b::after{content:" — close"}
+/* narrow phones: keep the label, just tighten it */
+@media(max-width:420px){
+  #fabChat{height:52px;padding:0 16px 0 10px;gap:8px}
+  #fabChat img{height:24px}
+  #fabChat .fab-label b{font-size:12.5px}
+  #fabChat .fab-label span{font-size:9px;letter-spacing:.08em}
+}
+
+/* ============================================================================
+   MORE DEPTH — real 3D, driven by the pointer, fine-pointer only. Never applied
+   to a backdrop-filter surface (Chrome glitches when glass is transformed).
+   ========================================================================== */
+.hero-stage{perspective:1200px}
+@media(hover:hover) and (pointer:fine){
+  [data-hx-depth]{transition:transform .5s var(--ease-out);will-change:transform}
+  .iul-frame-card[data-hx-tilt]{transform-style:preserve-3d;will-change:transform}
+  .cover-card.hx-3dcard .go,.ann-card .kind{transform:translateZ(18px)}
+}
+@media(prefers-reduced-motion:reduce){
+  [data-hx-depth]{transform:none!important}
+}
+
+
+/* ============================================================================
+   BRIGHT CLOUD BEDS — soft banks of light drifting behind the content. Built
+   from stacked radial gradients (no image, no pattern, nothing that can read as
+   a grid), at low alpha in the brand's own ivory / champagne / ice. Two layers
+   drift at different speeds and directions so the light never looks static.
+   ========================================================================== */
+.hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+#coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  background-repeat:no-repeat;background-size:150% 150%,130% 130%,170% 170%,120% 120%;
+  background-image:
+    radial-gradient(46% 30% at 30% 34%, rgba(255,255,255,.92), rgba(255,255,255,0) 68%),
+    radial-gradient(38% 26% at 62% 26%, rgba(255,248,232,.80), rgba(255,248,232,0) 70%),
+    radial-gradient(52% 34% at 50% 62%, rgba(255,255,255,.72), rgba(255,255,255,0) 72%),
+    radial-gradient(30% 22% at 70% 55%, rgba(240,246,255,.72), rgba(240,246,255,0) 70%);
+  filter:blur(26px);opacity:.72;
+  animation:cloudDriftA 46s ease-in-out infinite alternate}
+.hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden;
+  background-repeat:no-repeat;background-size:140% 140%,160% 160%,130% 130%;
+  background-image:
+    radial-gradient(40% 24% at 42% 60%, rgba(255,250,238,.66), rgba(255,250,238,0) 72%),
+    radial-gradient(34% 20% at 66% 40%, rgba(255,255,255,.60), rgba(255,255,255,0) 74%),
+    radial-gradient(28% 18% at 26% 52%, rgba(244,248,255,.58), rgba(244,248,255,0) 74%);
+  filter:blur(34px);opacity:.6;
+  animation:cloudDriftB 62s ease-in-out infinite alternate}
+/* drift the gradients, never the box — a transformed pseudo would widen the page */
+@keyframes cloudDriftA{
+  0%{background-position:12% 20%,78% 8%,44% 88%,92% 58%}
+  100%{background-position:26% 30%,62% 20%,58% 74%,74% 46%}}
+@keyframes cloudDriftB{
+  0%{background-position:26% 74%,86% 28%,4% 56%}
+  100%{background-position:40% 60%,70% 40%,20% 44%}}
+/* the band content must stay above the weather */
+.hero .wrap,.hero-grid,#coverage .wrap,.quote-band .wrap,.tools-band .wrap,
+.fitcheck .wrap,.final .wrap,.bp-band .wrap{position:relative;z-index:1}
+/* phones get the light without the compositing cost of two animated blurs */
+@media(pointer:coarse){
+  .hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{display:none}
+  .hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+  #coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before{
+    animation:none;filter:blur(20px);opacity:.6}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before,
+  #coverage::before,.quote-band::before,.tools-band::before,.fitcheck::before,.final::before,.bp-band::before,
+  .hero::after,.iul-band::after,.ann-band::after,.ai-band::after,.booking::after{animation:none}
 }
 
 </style>
@@ -3317,6 +3435,40 @@ try{
   addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(paint);}},{passive:true});
   addEventListener('resize',paint,{passive:true});
   paint();
+}catch(e){}
+})();
+
+/* Hero depth: the emblem and the diamond field answer the pointer at different
+   rates, so the hero reads as layers of space rather than a flat picture.
+   Fine-pointer only; the chiplets are deliberately NOT moved (they are
+   backdrop-filter glass, and Chrome glitches when glass is transformed).
+   Own try/catch — every inline block on this page shares one IIFE. */
+(function(){
+try{
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  var hero=document.querySelector('.hero'); if(!hero) return;
+  var emblem=document.getElementById('heroHeron');
+  var crystals=document.getElementById('heroCrystals');
+  var tx=0,ty=0,cx=0,cy=0,queued=false;
+  if(emblem) emblem.style.transition='transform .9s cubic-bezier(.16,1,.3,1)';
+  if(crystals) crystals.style.transition='transform 1.4s cubic-bezier(.16,1,.3,1)';
+  function paint(){
+    queued=false;
+    cx+=(tx-cx)*.12; cy+=(ty-cy)*.12;
+    if(emblem) emblem.style.transform='perspective(1100px) translate3d('+(cx*16).toFixed(2)+'px,'
+      +(cy*12).toFixed(2)+'px,0) rotateY('+(cx*5).toFixed(2)+'deg) rotateX('+(-cy*4).toFixed(2)+'deg)';
+    if(crystals) crystals.style.transform='translate3d('+(cx*-26).toFixed(2)+'px,'+(cy*-18).toFixed(2)+'px,0)';
+    if(Math.abs(tx-cx)>.001||Math.abs(ty-cy)>.001){queued=true;requestAnimationFrame(paint);}
+  }
+  hero.addEventListener('pointermove',function(e){
+    var r=hero.getBoundingClientRect();
+    tx=(e.clientX-r.left)/r.width*2-1; ty=(e.clientY-r.top)/r.height*2-1;
+    if(!queued){queued=true;requestAnimationFrame(paint);}
+  },{passive:true});
+  hero.addEventListener('pointerleave',function(){
+    tx=0;ty=0; if(!queued){queued=true;requestAnimationFrame(paint);}
+  },{passive:true});
 }catch(e){}
 })();
 </script>

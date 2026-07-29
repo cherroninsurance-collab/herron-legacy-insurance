@@ -167,9 +167,11 @@
     function measure() {
       /* tighter, shallower geometry on small screens; wider sweep on desktop */
       var small = innerWidth < 720;
-      SPREAD = small ? 0.62 : 0.55;
-      TILT = small ? 30 : 38;
-      DEPTH = small ? 120 : 190;
+      /* deeper stage: more z-separation and a stronger turn on the side cards,
+         so the coverflow reads as real space instead of a fanned deck */
+      SPREAD = small ? 0.62 : 0.56;
+      TILT = small ? 34 : 46;
+      DEPTH = small ? 150 : 250;
       cardW = cards[0].offsetWidth || 520;
       pxPerStep = cardW * SPREAD;
       /* stage height = tallest card + breathing room — measured, not guessed,
