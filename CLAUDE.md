@@ -58,14 +58,27 @@ gold `#B07E22`, grads `#B07E22→#8A5F10`.
 - The floating concierge panel fallback is white frost — it matches desktop's blur over
   the now-light page (the old slate matched the dark page).
 - **Diamond layer** (user: "more 3d animations frosted glass … diamond aesthetic"):
-  `#heroCrystals` is a 2D **diamond-light field** — glass bokeh rings with navy rims,
-  twinkling 4-ray star cores with gold/ice fringes, one faint prismatic streak. The
-  first two attempts were floating 3D octahedra; the user called them crap, correctly —
-  low-poly meshes read as game props, so "diamond" is done as LIGHT, the way jewelry
-  photography does it. Positions are in raw uv space (visible x ≈ ±0.8 at 16:9 — the
-  first light pass placed glints off-screen by using the old 3D camera's coordinates).
-  Wrapped in try/catch so a throw can never kill the shared IIFE; phones skip 3 glints
-  at 24fps/0.8 DPR.
+  `#heroCrystals` is a 2D **diamond-light field** — twinkling 4-ray star cores with
+  gold/ice fringes and one faint prismatic streak. The first two attempts were floating
+  3D octahedra; the user called them crap, correctly — low-poly meshes read as game
+  props, so "diamond" is done as LIGHT, the way jewelry photography does it. Bokeh
+  rings came next and were also cut ("black circles look stupid").
+  **Both the position and the size of a glint must scale with the frame.** uv is
+  y-normalised, so the visible x half-range is only `res.x/res.y*.5` — 0.63 on a 1440
+  desktop hero, 0.18 on a portrait phone. `AX` maps the design's ±0.8 x coordinates
+  into that range with an inset so nothing is clipped, and `RS=mix(1,AX,.72)` shrinks
+  the radii; without RS a spark that looks right on desktop swallows a third of a phone
+  screen. (An early pass placed glints off-screen entirely by reusing the retired 3D
+  camera's coordinates.) Wrapped in try/catch so a throw can never kill the shared
+  IIFE; phones skip 3 glints at 24fps/0.8 DPR.
+  A crystal-facet SVG overlay (`::before` at 5% on hero/iul/ann/ai/booking) adds the
+  cut-glass geometry — at that opacity it reads as frost, never as a grid.
+- **The phone "box" around the emblem was `.crest::before`** — an ambient gold radial
+  from the dark theme that painted a lighter rectangle on the bright page. Both crest
+  pseudos are `display:none`. Belt-and-braces on the heron canvas: `antialias:false` on
+  coarse pointers (some mobile drivers resolve MSAA into a faint full-buffer alpha wash)
+  and the shader zeroes pixels under `alpha 0.006`. Isolate this class of bug by
+  toggling layers off one at a time in a screenshot harness — not by reading CSS.
   Why-cards carry pointer-tracked 3D tilt (`data-hx-tilt`, fine-pointer only — NEVER
   tilt backdrop-filter glass, Chrome glitches). Prismatic hairline gradient borders on
   why-cards, ann carousel cards and the hero card. Hero sparks are white diamond dust
@@ -153,6 +166,11 @@ frost like the rest, with the chat as white glass.)
   falls back to the wrong answer — it read the why-cards as 1.28:1 (really 16.35:1) and the
   quote-band note as white-on-white (really 7.18:1). Screenshot the element's box and measure
   the actual pixels instead.
+- **`scrollWidth` does not prove there is no overflow** — `.hx-on{overflow-x:clip}` swallows
+  it. The concierge grid's `1fr` track floored at the chat column's 410px min-content and
+  pushed the body copy off a 366px phone wrap for weeks, with the overflow test green the
+  whole time. Sweep element rects against `innerWidth` instead (`clipsweep.py`), and use
+  `minmax(0,1fr)` on any grid whose column holds something wide.
 - ScrollTrigger's `onUpdate` fires the moment the scrollbar moves, **before** a `scrub`
   tween has caught up, and no further `onUpdate` arrives once scrolling stops. Anything that
   must agree with what is on screen has to hang off the *tween's* own `onUpdate`.
