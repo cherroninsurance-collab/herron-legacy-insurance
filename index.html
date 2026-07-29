@@ -379,7 +379,7 @@ section{padding:96px 0}
   linear-gradient(180deg,#FDFCF9 0%,#F2F4F9 100%);
   box-shadow:inset 0 1px 0 rgba(201,151,59,.30);
   color:#26365A;position:relative;overflow:hidden}
-.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1}
+.ai-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;position:relative;z-index:1}
 .ai-copy h2{color:var(--navy);font-size:clamp(28px,3.4vw,42px)}
 .ai-copy p{color:#3A4A6B;margin-top:16px;font-size:17px}
 .ai-feats{margin-top:28px;display:grid;gap:14px}
@@ -391,7 +391,10 @@ section{padding:96px 0}
 .ai-feat b{display:block;font-family:'Sora';font-size:15.5px;color:var(--navy)}
 .ai-feat span{font-size:14px;color:#3A4A6B}
 .ai-copy .btn{margin-top:30px}
-@media(max-width:880px){.ai-grid{grid-template-columns:1fr}}
+/* minmax(0,…): a plain 1fr floors at min-content, and the chat column's min-content
+   (410px) pushed the whole track past the 366px phone wrap — the copy ran off-screen,
+   invisibly, because .hx-on clips overflow-x. */
+@media(max-width:880px){.ai-grid{grid-template-columns:minmax(0,1fr)}}
 
 /* ---------- CHAT (shared: embedded panel + floating widget) ---------- */
 .chat-shell{
@@ -1075,6 +1078,14 @@ html{overflow-x:clip}
 /* film grain over the hero scene — sits above the canvas, under the copy */
 .hero-sparks{position:absolute;inset:0;z-index:1;pointer-events:none}
 .hero-gl3d{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+/* crystal-facet frost: a whisper of cut-glass geometry over the light bands —
+   "almost clear" diamond backdrop. Monochrome ice/gold hairlines at 5% so it reads
+   as frosted crystal, never as a grid. */
+.hero::before,.iul-band::before,.ann-band::before,.ai-band::before,.booking::before{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 700'%3E%3Cg fill='none' stroke-linejoin='round'%3E%3Cpath d='M0 210 L260 0 M260 0 L520 180 L900 40 M520 180 L470 700 M520 180 L0 480 M470 700 L900 430 M900 430 L520 180 M0 480 L470 700 M260 0 L0 210 L0 480' stroke='%238CA6DC' stroke-width='1.2'/%3E%3Cpath d='M260 0 L470 700 M900 40 L900 430 M0 210 L520 180' stroke='%23C9973B' stroke-width='.8'/%3E%3Cpath d='M520 180 L260 0 L0 210 Z' fill='%23FFFFFF' fill-opacity='.5'/%3E%3Cpath d='M470 700 L900 430 L900 700 Z' fill='%23FFFFFF' fill-opacity='.35'/%3E%3Cpath d='M0 480 L520 180 L470 700 Z' fill='%238CA6DC' fill-opacity='.12'/%3E%3C/g%3E%3C/svg%3E");
+  background-size:min(1200px,120vw) auto;background-position:center top;
+}
 .hero-spark{position:absolute;width:22px;height:22px;filter:drop-shadow(0 0 7px rgba(226,190,120,.85)) drop-shadow(0 0 2px rgba(140,166,220,.7));background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 0 C12.9 8 16 11.1 24 12 C16 12.9 12.9 16 12 24 C11.1 16 8 12.9 0 12 C8 11.1 11.1 8 12 0Z' fill='%23FFFFFF'/%3E%3C/svg%3E");filter:drop-shadow(0 0 7px rgba(226,180,92,.85));opacity:0;animation:hsp 5.5s ease-in-out infinite}
 @keyframes hsp{0%,100%{opacity:0;transform:scale(.4) rotate(0)}50%{opacity:.85;transform:scale(1) rotate(90deg)}}
 /* chrome heron replaces the framed crest */
@@ -1083,7 +1094,10 @@ html{overflow-x:clip}
    blurs a hard-edged rectangle out of the threshold scene's rays and rock. */
 .crest{background:none!important;border:none!important;box-shadow:none!important;overflow:visible!important;width:min(460px,98%);
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:0!important}
-.crest::after{display:none!important}
+/* ::before was the old dark-theme ambient gold radial — on the bright page it
+   rendered as a visible lighter BOX around the emblem (the user's "box with the
+   liquid metal"). Both pseudos stay dead. */
+.crest::before,.crest::after{display:none!important}
 .hero-heron{position:relative;width:100%;height:100%;display:block;z-index:2}
 /* ============================================================
    MOBILE-LITE — phones pay for two fragment shaders already, and profiling
@@ -2686,7 +2700,7 @@ renderFit();
   <a class="mb-book" href="#booking">Get my numbers</a>
 </div>
 <style>
-.mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(8,18,38,.94);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
+.mobilebar{display:none;position:fixed;left:0;right:0;bottom:0;z-index:390;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-top:1px solid rgba(201,151,59,.4)}
 .mobilebar a{flex:1;text-align:center;font-family:'Sora';font-weight:600;font-size:15px;padding:14px 10px;border-radius:12px;text-decoration:none}
 .mb-call{border:1.5px solid rgba(20,38,76,.28);color:var(--navy)}
 .mb-book{background:var(--brass);color:var(--navy-deep)}
@@ -2935,7 +2949,10 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
 /* ---- morphing liquid-chrome heron ---- */
 (function(){
   var cv=document.getElementById('heroHeron'); if(!cv) return;
-  var gl=cv.getContext('webgl',{antialias:true,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
+  /* antialias OFF on coarse: some mobile drivers resolve MSAA into a ~1-level alpha
+     wash across the whole buffer, which shows as a lighter BOX on the bright page */
+  var aaOK=!matchMedia('(pointer:coarse)').matches;
+  var gl=cv.getContext('webgl',{antialias:aaOK,alpha:true,premultipliedAlpha:true,powerPreference:'high-performance'});
   if(!gl){cv.outerHTML='<svg viewBox="0 0 240 300" fill="none" style="width:72%;height:auto" aria-hidden="true"><path d="M150 214 C176 176 168 138 138 128 C104 117 82 138 84 166 M138 128 C118 122 110 100 116 74 C120 58 136 52 144 62 M144 62 L206 82 M140 178 L136 262 M116 172 L120 262 M130 262 L146 262 M114 262 L128 262" stroke="#E2B45C" stroke-width="3.4" stroke-linecap="round"/><circle cx="136" cy="66" r="2.8" fill="#fff"/></svg>';return;}
   var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
   var fs=['precision highp float;uniform vec2 uRes;uniform float uTime;uniform vec2 uMouse;uniform float uMorph;',
@@ -3066,7 +3083,7 @@ var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce
   '  cc=mix(cc,vec3(0.97,0.98,1.0)*0.95+rc*0.3,isE);',
   '  col=cc;alpha=1.;}',
   ' else{float aa=smoothstep(0.028,0.0,md);col=vec3(1.0,0.82,0.48)*aa*0.55;alpha=aa;}',
-  ' col=pow(max(col,0.),vec3(0.86));gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
+  ' col=pow(max(col,0.),vec3(0.86));if(alpha<0.006){col=vec3(0.);alpha=0.;}gl_FragColor=vec4(col*alpha,alpha);}'].join('\n');
   function sh(t,s){var o=gl.createShader(t);gl.shaderSource(o,s);gl.compileShader(o);return o;}
   var coarseH=matchMedia('(pointer:coarse)').matches;
   /* 110 march steps x a ~30-primitive SDF is the single most expensive thing on
@@ -3137,26 +3154,30 @@ try{
   'void main(){',
   ' float t=uTime;',
   ' vec2 uv=(gl_FragCoord.xy-.5*uRes)/uRes.y;',
+  ' float AX=uRes.x/uRes.y*.39/.8;',
+  /* glint SIZE has to follow the frame too: the radii are in y-normalised units,
+     so on a narrow portrait phone an unscaled spark swallows a third of the screen. */
+  ' float RS=mix(1.0,AX,.72);',
   ' vec3 col=vec3(0.);float alpha=0.;',
   ' vec2 P;float tw;vec4 g;',
   /* seven glints, staggered twinkle, slow drift; phones skip three */
-  ' P=vec2(.58,.16)+vec2(sin(t*.16),cos(t*.13))*.035; tw=.5+.5*pow(.5+.5*sin(t*.9+0.0),3.);',
-  ' g=glint(uv-P,.105,tw,.5); col+=g.rgb;alpha+=g.a;',
-  ' P=vec2(.74,-.22)+vec2(sin(t*.21+2.),cos(t*.17+1.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.7+1.7),3.);',
-  ' g=glint(uv-P,.07,tw,.9); col+=g.rgb;alpha+=g.a;',
-  ' P=vec2(.30,.40)+vec2(sin(t*.19+4.),cos(t*.15+3.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.8+3.1),3.);',
-  ' g=glint(uv-P,.055,tw,.2); col+=g.rgb;alpha+=g.a;',
-  ' P=vec2(-.62,.36)+vec2(sin(t*.14+1.),cos(t*.18+5.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.75+4.4),3.);',
-  ' g=glint(uv-P,.075,tw,1.3); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.58*AX,.16)+vec2(sin(t*.16),cos(t*.13))*.035; tw=.5+.5*pow(.5+.5*sin(t*.9+0.0),3.);',
+  ' g=glint(uv-P,.105*RS,tw,.5); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.74*AX,-.22)+vec2(sin(t*.21+2.),cos(t*.17+1.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.7+1.7),3.);',
+  ' g=glint(uv-P,.07*RS,tw,.9); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(.30*AX,.40)+vec2(sin(t*.19+4.),cos(t*.15+3.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.8+3.1),3.);',
+  ' g=glint(uv-P,.055*RS,tw,.2); col+=g.rgb;alpha+=g.a;',
+  ' P=vec2(-.62*AX,.36)+vec2(sin(t*.14+1.),cos(t*.18+5.))*.035; tw=.5+.5*pow(.5+.5*sin(t*.75+4.4),3.);',
+  ' g=glint(uv-P,.075*RS,tw,1.3); col+=g.rgb;alpha+=g.a;',
   ' if(uLow<.5){',
-  '  P=vec2(.48,-.40)+vec2(sin(t*.23+3.),cos(t*.2+2.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.85+2.2),3.);',
-  '  g=glint(uv-P,.045,tw,.7); col+=g.rgb;alpha+=g.a;',
-  '  P=vec2(.10,.47)+vec2(sin(t*.18+5.),cos(t*.23+4.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.95+5.3),3.);',
-  '  g=glint(uv-P,.036,tw,.1); col+=g.rgb;alpha+=g.a;',
-  '  P=vec2(-.55,-.35)+vec2(sin(t*.2+2.5),cos(t*.16+.8))*.03; tw=.5+.5*pow(.5+.5*sin(t*.65+1.1),3.);',
-  '  g=glint(uv-P,.055,tw,1.0); col+=g.rgb;alpha+=g.a;}',
+  '  P=vec2(.48*AX,-.40)+vec2(sin(t*.23+3.),cos(t*.2+2.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.85+2.2),3.);',
+  '  g=glint(uv-P,.045*RS,tw,.7); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(.10*AX,.47)+vec2(sin(t*.18+5.),cos(t*.23+4.))*.03; tw=.5+.5*pow(.5+.5*sin(t*.95+5.3),3.);',
+  '  g=glint(uv-P,.036*RS,tw,.1); col+=g.rgb;alpha+=g.a;',
+  '  P=vec2(-.55*AX,-.35)+vec2(sin(t*.2+2.5),cos(t*.16+.8))*.03; tw=.5+.5*pow(.5+.5*sin(t*.65+1.1),3.);',
+  '  g=glint(uv-P,.055*RS,tw,1.0); col+=g.rgb;alpha+=g.a;}',
   /* one faint prismatic streak drifting through the upper right */
-  ' vec2 sd=rot(.62)*(uv-vec2(.55+sin(t*.05)*.12,.10));',
+  ' vec2 sd=rot(.62)*(uv-vec2((.55+sin(t*.05)*.12)*AX,.10))/RS;',
   ' float streak=exp(-sd.y*sd.y*900.)*smoothstep(.7,.1,abs(sd.x))*.16;',
   ' vec3 pr=mix(vec3(1.,.85,.55),vec3(.6,.72,1.),clamp(sd.x*1.2+.5,0.,1.));',
   ' col+=pr*streak; alpha+=streak*.8;',
