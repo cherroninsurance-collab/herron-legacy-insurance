@@ -13,7 +13,16 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(ROOT, '..', '..'))
 OUT = os.path.join(REPO, 'social', 'month-01', 'week-01')
 CHROME = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
-FFMPEG = '/opt/pw-browsers/ffmpeg-1011/ffmpeg-linux'
+def _ffmpeg():
+    # Playwright's bundled ffmpeg is a stripped build (no libx264, no -preset)
+    try:
+        import imageio_ffmpeg
+        return imageio_ffmpeg.get_ffmpeg_exe()
+    except Exception:
+        return '/opt/pw-browsers/ffmpeg-1011/ffmpeg-linux'
+
+
+FFMPEG = _ffmpeg()
 FEED = (1080, 1350)
 REEL = (1080, 1920)
 FPS = 15
