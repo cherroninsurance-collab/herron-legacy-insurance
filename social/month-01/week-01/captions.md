@@ -28,6 +28,9 @@ blue accent line `#4C7EE8` for contrast. Type: Sora (headline), Inter (body), IB
 Every keyword reply routes to `herronlegacyinsurance.com/#blueprint` (or a booking link) after a
 short back-and-forth. Never quote a rate in a comment.
 
+**Everything here is rendered — see `README.md` for the file index.** The graphics referenced
+below exist as PNGs and MP4s in this folder; this file is the copy deck that goes with them.
+
 **Compliance line to keep on/near every piece** (short form on-screen, long form in caption —
 full block at the bottom of this file):
 
@@ -48,6 +51,9 @@ gold on navy. End card holds 2 seconds.
 ---
 
 ## REEL 1 — "The 12% average is a sucker's bet" · keyword: FLOOR
+
+> **Video:** `reels/reel-1-the-12-percent-lie.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-1-the-12-percent-lie-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
 
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
@@ -81,6 +87,9 @@ carrier and can change. Not individualized financial advice.
 ---
 
 ## REEL 2 — "Fixed annuity vs. income rider" · keyword: RIDER
+
+> **Video:** `reels/reel-2-fixed-vs-income-rider.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-2-fixed-vs-income-rider-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
 
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
@@ -117,6 +126,9 @@ backed by the issuing carrier's claims-paying ability. Illustrative, not an offe
 
 ## REEL 3 — "What a 20% drop does to your principal" · keyword: DROP
 
+> **Video:** `reels/reel-3-the-20-percent-drop.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-3-the-20-percent-drop-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
+
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
 | Two identical frosted columns filled with liquid gold, side by side in black. Mono: `A` and `B`. Both read `$100,000`. | The S&P drops 20 percent. Watch two accounts. |
@@ -150,6 +162,9 @@ reduce contract value. Illustrative only — not a guarantee of future performan
 ---
 
 ## REEL 4 — "One lump or two" · keyword: LUMP
+
+> **Video:** `reels/reel-4-one-lump-or-two.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-4-one-lump-or-two-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
 
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
@@ -185,6 +200,9 @@ backed by the issuing carrier's claims-paying ability. Not individualized financ
 ---
 
 ## REEL 5 — "What the fee crowd leaves out" · keyword: FEES
+
+> **Video:** `reels/reel-5-what-fees-actually-cost.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-5-what-fees-actually-cost-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
 
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
@@ -222,6 +240,9 @@ not an offer of coverage or a quoted rate. Not individualized financial, legal, 
 
 ## REEL 6 — "Become your own pension" · keyword: PENSION
 
+> **Video:** `reels/reel-6-your-own-pension.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-6-your-own-pension-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
+
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
 | Archival-style 3D: a heavy brass corporate seal dissolving into gold dust. | Your grandfather had a pension. You don't. |
@@ -255,6 +276,9 @@ legal, or tax advice.
 ---
 
 ## REEL 7 — "The IRA transfer trap" · keyword: TRAP
+
+> **Video:** `reels/reel-7-the-transfer-trap.mp4` (1080×1920, 45s) · **Cover:** `reels/reel-7-the-transfer-trap-cover.png`
+> The spoken lines below are burned into the video, one per 3-second beat.
 
 | VISUAL / B-ROLL | SPOKEN |
 | --- | --- |
@@ -301,6 +325,8 @@ afterward so it stays crisp.
 
 ### IMAGE 1 — THE FLOOR
 
+> **File:** `images/image-01-the-floor.png` (1080×1350)
+
 **3D layout:** Center frame, a solid slab of frosted glass, machined and thick, sits on a mirrored
 navy floor. Resting on top of it, perfectly still, is a polished liquid-gold sphere — its
 reflection in the slab is sharp. Directly behind and slightly lower sits a second panel of the
@@ -321,6 +347,8 @@ by the carrier and can change. Not an offer of coverage or a quoted rate.
 
 ### IMAGE 2 — THE CAP AND THE FLOOR
 
+> **File:** `images/image-02-cap-and-floor.png` (1080×1350)
+
 **3D layout:** A tall vertical column of frosted glass, floor to ceiling of frame, half-filled with
 liquid gold that is actively rising — surface tension bulging, small droplets flicking upward. A
 machined brass plate seals the top of the column with visible bolts; gold that reaches it flattens,
@@ -340,6 +368,8 @@ number to ask about before anything else. Illustrative concept, not a product de
 
 ### IMAGE 3 — PILE VS. PAYCHECK
 
+> **File:** `images/image-03-pile-vs-paycheck.png` (1080×1350)
+
 **3D layout:** Split composition, hard vertical seam of frosted glass down the center. Left: a
 single monolithic gold ingot sitting inside an open glass vault — beautiful, static, casting a long
 hard shadow. Small orbiting control dials in brass hover around it, unattended. Right: a sealed
@@ -358,6 +388,8 @@ backed by the issuing carrier's claims-paying ability.
 ---
 
 ### IMAGE 4 — BENEFIT BASE VS. CASH VALUE
+
+> **File:** `images/image-04-benefit-base.png` (1080×1350)
 
 **3D layout:** Two vaults on a shared glass plinth. Front-left: a smaller, completely solid gold
 cube inside a clear glass case with an open door — you can reach in. Labeled by geometry only:
@@ -379,6 +411,8 @@ coverage; terms vary by carrier and product.
 
 ### IMAGE 5 — SEQUENCE OF RETURNS
 
+> **File:** `images/image-05-sequence-of-returns.png` (1080×1350)
+
 **3D layout:** A staircase of floating frosted-glass treads climbing left to right into the frame,
 each tread thick and edge-lit. Liquid gold flows up the staircase like a river running backwards,
 gaining volume on each step. On the fourth tread — the highest one — the glass is shattered, and
@@ -396,6 +430,8 @@ more the order of returns decides the outcome. Illustrative math, not a projecti
 ---
 
 ### IMAGE 6 — DIRECT VS. INDIRECT
+
+> **File:** `images/image-06-direct-vs-indirect.png` (1080×1350)
 
 **3D layout:** Two frosted-glass vaults face each other across the frame. Top half: they're joined
 by a single sealed brass conduit, machined and flanged, with liquid gold visibly flowing through
@@ -425,6 +461,8 @@ the compliance micro-line. Swipe indicator: a thin gold progress bar top-edge.
 ---
 
 ## CAROUSEL 1 — THE FLOOR (keyword: FLOOR)
+
+> **Slides:** `carousels/carousel-1-the-floor/slide-1.png` … `slide-8.png` (1080×1350)
 
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |
@@ -474,6 +512,8 @@ Connor Herron · NPN 21556594 · Licensed in PA, NJ, VA, WI, IA, IN, FL, TX, MA,
 
 ## CAROUSEL 2 — PILE OR PAYCHECK (keyword: RIDER)
 
+> **Slides:** `carousels/carousel-2-pile-or-paycheck/slide-1.png` … `slide-8.png` (1080×1350)
+
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |
 | 1 | "Annuity" isn't a product. It's a category. | Two frosted cubes rotating apart from one another. |
@@ -519,6 +559,8 @@ Connor Herron · NPN 21556594 · Licensed in 12 states.
 
 ## CAROUSEL 3 — THE 20% DROP (keyword: DROP)
 
+> **Slides:** `carousels/carousel-3-the-20-percent-drop/slide-1.png` … `slide-8.png` (1080×1350)
+
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |
 | 1 | The S&P drops 20%. Two accounts. | Twin frosted columns filled with liquid gold, mono-labeled. |
@@ -562,6 +604,8 @@ Connor Herron · NPN 21556594.
 ---
 
 ## CAROUSEL 4 — ONE LUMP OR TWO (keyword: LUMP)
+
+> **Slides:** `carousels/carousel-4-one-lump-or-two/slide-1.png` … `slide-8.png` (1080×1350)
 
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |
@@ -614,6 +658,8 @@ Not individualized financial or tax advice. Connor Herron · NPN 21556594 · Lic
 
 ## CAROUSEL 5 — WHAT IT ACTUALLY COSTS (keyword: FEES)
 
+> **Slides:** `carousels/carousel-5-what-it-actually-costs/slide-1.png` … `slide-8.png` (1080×1350)
+
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |
 | 1 | "Annuities are full of hidden fees." Partly true. | Frosted panel etched FEES being struck by a gold mallet. |
@@ -661,6 +707,8 @@ advice. Connor Herron · NPN 21556594.
 ---
 
 ## CAROUSEL 6 — THE TRANSFER TRAP (keyword: TRAP)
+
+> **Slides:** `carousels/carousel-6-the-transfer-trap/slide-1.png` … `slide-8.png` (1080×1350)
 
 | # | ON-SCREEN TEXT | 3D VISUAL CUE |
 | --- | --- | --- |

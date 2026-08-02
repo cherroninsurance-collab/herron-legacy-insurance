@@ -1,0 +1,104 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:"Sora";src:url("fonts/Sora.ttf");font-weight:100 800;font-display:block}
+@font-face{font-family:"Inter";src:url("fonts/Inter.ttf");font-weight:100 900;font-display:block}
+@font-face{font-family:"PlexMono";src:url("fonts/PlexMono-SemiBold.ttf");font-weight:600;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:#050A16;overflow:hidden}
+#stage{position:relative;overflow:hidden}
+#c{position:absolute;inset:0;width:100%;height:100%}
+#ov{position:absolute;inset:0}
+.blk{position:absolute;left:0;right:0;padding:0 78px}
+.eyebrow{font:600 22px/1 "PlexMono",monospace;letter-spacing:.26em;text-transform:uppercase;
+  color:#E2B45C;margin-bottom:26px;display:flex;align-items:center;gap:16px}
+.eyebrow::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,rgba(226,180,92,.55),rgba(226,180,92,0))}
+h1{font-family:"Sora",sans-serif;font-weight:800;color:#F7FAFF;line-height:1.03;
+  letter-spacing:-.022em;text-wrap:balance;text-shadow:0 6px 34px rgba(2,6,16,.85)}
+h1 em{font-style:normal;background:linear-gradient(96deg,#F6E0AC,#E2B45C 45%,#B07E22);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font:600 24px/1.45 "PlexMono",monospace;letter-spacing:.06em;color:rgba(226,180,92,.82);margin-top:28px}
+.body{font:400 30px/1.5 "Inter",sans-serif;color:#C6D4EC;margin-top:26px;max-width:86%}
+.rule{height:1px;background:linear-gradient(90deg,rgba(226,180,92,.7),rgba(226,180,92,0));margin:34px 0 0}
+#foot{position:absolute;left:78px;right:78px;bottom:52px;display:flex;justify-content:space-between;
+  align-items:center;font:600 19px/1 "PlexMono",monospace;letter-spacing:.16em;color:rgba(198,212,236,.5);text-transform:uppercase}
+#badge{position:absolute;top:56px;right:78px;font:600 20px/1 "PlexMono",monospace;
+  letter-spacing:.22em;color:rgba(226,180,92,.9)}
+#dots{position:absolute;top:0;left:0;right:0;height:5px;background:rgba(255,255,255,.07)}
+#dots i{display:block;height:100%;background:linear-gradient(90deg,#B07E22,#F6E0AC)}
+.card{position:absolute;border-radius:34px;background:linear-gradient(160deg,rgba(18,34,64,.62),rgba(8,16,34,.52));
+  border:1px solid rgba(226,180,92,.28);box-shadow:0 40px 120px rgba(2,6,16,.7), inset 0 1px 0 rgba(255,255,255,.14)}
+.kw{display:inline-flex;align-items:center;gap:14px;margin-top:34px;padding:18px 30px;border-radius:999px;
+  background:linear-gradient(96deg,rgba(226,180,92,.18),rgba(176,126,34,.08));
+  border:1px solid rgba(226,180,92,.5);font:600 24px/1 "PlexMono",monospace;letter-spacing:.16em;color:#F6E0AC}
+.kw b{font-weight:600;color:#fff}
+.cta{font:600 26px/1.35 "PlexMono",monospace;letter-spacing:.08em;color:#F6E0AC}
+.disc{font:400 17px/1.4 "Inter",sans-serif;color:rgba(198,212,236,.42);margin-top:22px;max-width:88%}
+/* reel-specific */
+.reel .blk{padding:0 84px}
+.reel h1{line-height:1.06}
+.reel .lower{bottom:430px}
+#spoken{position:absolute;left:84px;right:84px;bottom:470px;font-family:"Sora",sans-serif;font-weight:800;
+  color:#fff;font-size:74px;line-height:1.08;letter-spacing:-.02em;text-shadow:0 8px 40px rgba(2,6,16,.9)}
+#spoken em{font-style:normal;background:linear-gradient(96deg,#F6E0AC,#E2B45C 50%,#B07E22);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+#beatbar{position:absolute;left:84px;right:84px;bottom:390px;height:4px;background:rgba(255,255,255,.1);border-radius:2px}
+#beatbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#B07E22,#F6E0AC)}
+#tag{position:absolute;left:84px;bottom:300px;font:600 22px/1 "PlexMono",monospace;letter-spacing:.22em;
+  color:rgba(226,180,92,.85);text-transform:uppercase}
+#safe{position:absolute;inset:0;pointer-events:none}
+</style></head>
+<body>
+<div id="stage"><canvas id="c"></canvas><div id="ov"></div></div>
+<script src="scene.js"></script>
+<script>
+window.__MARK = new Image();
+window.__MARK.src = 'mark.png';
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+// *gold* markup
+const mk = s => esc(s).replace(/\*(.+?)\*/g, '<em>$1</em>').replace(/\n/g, '<br>');
+
+function layout(spec){
+  const st = document.getElementById('stage');
+  st.style.width = spec.w+'px'; st.style.height = spec.h+'px';
+  st.className = spec.kind === 'reel' ? 'reel' : '';
+  const ov = document.getElementById('ov');
+  let h = '';
+  if (spec.kind === 'reel') {
+    if (spec.progress != null) h += `<div id="beatbar"><i style="width:${(spec.progress*100).toFixed(1)}%"></i></div>`;
+    if (spec.spoken) {
+      const e = spec.enter == null ? 1 : spec.enter;
+      const ea = Math.min(1, e * 1.2), lift = (1 - e) * 26;
+      h += `<div id="spoken" style="font-size:${spec.spokenSize||74}px;opacity:${ea.toFixed(3)};`
+        + `transform:translateY(${lift.toFixed(1)}px)">${mk(spec.spoken)}</div>`;
+    }
+    if (spec.tag) h += `<div id="tag">${esc(spec.tag)}</div>`;
+    if (spec.title) h += `<div class="blk" style="top:300px"><div class="eyebrow">${esc(spec.eyebrow||'')}</div>`+
+      `<h1 style="font-size:${spec.titleSize||92}px">${mk(spec.title)}</h1>`+
+      (spec.sub?`<div class="sub">${esc(spec.sub)}</div>`:'')+`</div>`;
+    if (spec.kw) h += `<div class="blk" style="bottom:250px"><div class="kw">COMMENT <b>${esc(spec.kw)}</b></div></div>`;
+  } else {
+    if (spec.dots != null) h += `<div id="dots"><i style="width:${(spec.dots*100).toFixed(1)}%"></i></div>`;
+    if (spec.badge) h += `<div id="badge">${esc(spec.badge)}</div>`;
+    const pos = spec.anchor === 'top' ? 'top:112px' : spec.anchor === 'mid' ? 'top:46%;transform:translateY(-50%)' : 'bottom:150px';
+    h += `<div class="blk" style="${pos}">`;
+    if (spec.eyebrow) h += `<div class="eyebrow">${esc(spec.eyebrow)}</div>`;
+    if (spec.title) h += `<h1 style="font-size:${spec.titleSize||78}px">${mk(spec.title)}</h1>`;
+    if (spec.sub) h += `<div class="sub">${esc(spec.sub)}</div>`;
+    if (spec.body) h += `<div class="body">${mk(spec.body)}</div>`;
+    if (spec.kw) h += `<div class="kw">COMMENT <b>${esc(spec.kw)}</b></div>`;
+    if (spec.disc) h += `<div class="disc">${esc(spec.disc)}</div>`;
+    h += `</div>`;
+    if (spec.foot !== false) h += `<div id="foot"><span>${esc(spec.footL||'HERRON & CO. LEGACY AGENCY')}</span><span>${esc(spec.footR||'NPN 21556594')}</span></div>`;
+  }
+  ov.innerHTML = h;
+}
+
+window.renderFrame = function(spec, t){
+  layout(spec);
+  HXScene.render(spec, t);
+  return true;
+};
+window.__ready = true;
+</script>
+</body></html>
