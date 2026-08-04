@@ -19,6 +19,7 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="js/omma-3d.css">
 <noscript><style>
 /* Scroll-reveal starts at opacity:0 and is un-hidden by script. With script off that
    never happens, which would also hide the state list and the rate/illustration
@@ -3837,6 +3838,11 @@ try{
 })();
 </script>
 <script type="module" src="liquid-glass.js"></script>
+<!-- Omma 3D layer. Progressive enhancement in the same shape as liquid-glass.js:
+     it adds canvases and cursor light on top of a page that is already complete,
+     and it gates itself off on touch, reduced motion and low-end devices. If the
+     module fails to load, nothing below it changes. -->
+<script type="module" src="js/omma-3d.js"></script>
 <!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
      ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
 <script defer src="vendor/gsap.min.js"></script>
