@@ -35,6 +35,12 @@
   touch-action: pan-y;
 }
 .omma-orbit.is-grabbing { cursor: grabbing; }
+/* Below ~1200px the hero's emblem sits close enough to the right edge that a
+   172% box pushes the outer ring off-screen and it renders as a cut arc. The
+   page never scrolls sideways (html is overflow-x:clip), but a clipped ring
+   looks like a mistake — pull the rig in instead. */
+@media (max-width: 1400px) { .omma-orbit { width: 150%; height: 150%; } }
+@media (max-width: 1200px) { .omma-orbit { width: 124%; height: 124%; } }
 .omma-on .hero .crest .hero-heron { pointer-events: none; }
 .omma-on .hero .crest { z-index: 2; }
 
@@ -141,7 +147,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: .85;
+  opacity: .5;
 }
 .omma-on .booking { position: relative; }
 .omma-on .booking > .wrap { position: relative; z-index: 1; }
@@ -190,15 +196,21 @@
    has. The number is repeated on the two faces that ever front the camera, so
    the step is readable at every point in the rotation.                      */
 .omma-cube-slot {
-  perspective: 420px;
-  display: inline-flex;
+  perspective: 520px;
+  display: inline-flex !important;
   align-items: center;
   justify-content: center;
+  width: 38px; height: 38px;
+  /* the slot inherits whatever the step number was styled as; the cube supplies
+     its own face, so drop any inherited plate underneath it */
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
 }
 .omma-cube {
   position: relative;
   display: block;
-  width: 1.5em; height: 1.5em;
+  width: 30px; height: 30px;
   transform-style: preserve-3d;
   animation: ommaCube 14s linear infinite;
 }
@@ -209,7 +221,9 @@
   align-items: center;
   justify-content: center;
   font-style: normal;
-  font-size: .72em;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: .02em;
   color: #96660F;
   background: linear-gradient(150deg, rgba(255,255,255,.96), rgba(240,244,251,.9));
@@ -217,12 +231,12 @@
   border-radius: 3px;
   backface-visibility: hidden;
 }
-.omma-cube .f1 { transform: translateZ(.75em); }
-.omma-cube .f2 { transform: rotateY(90deg) translateZ(.75em); }
-.omma-cube .f3 { transform: rotateY(180deg) translateZ(.75em); }
-.omma-cube .f4 { transform: rotateY(-90deg) translateZ(.75em); }
-.omma-cube .f5 { transform: rotateX(90deg) translateZ(.75em); }
-.omma-cube .f6 { transform: rotateX(-90deg) translateZ(.75em); }
+.omma-cube .f1 { transform: translateZ(15px); }
+.omma-cube .f2 { transform: rotateY(90deg) translateZ(15px); }
+.omma-cube .f3 { transform: rotateY(180deg) translateZ(15px); }
+.omma-cube .f4 { transform: rotateY(-90deg) translateZ(15px); }
+.omma-cube .f5 { transform: rotateX(90deg) translateZ(15px); }
+.omma-cube .f6 { transform: rotateX(-90deg) translateZ(15px); }
 @keyframes ommaCube {
   0%   { transform: rotateX(-16deg) rotateY(0deg); }
   100% { transform: rotateX(-16deg) rotateY(360deg); }

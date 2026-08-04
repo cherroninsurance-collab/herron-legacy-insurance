@@ -589,7 +589,7 @@ function quoteTower(painter) {
      the controls are set to while the others stand by as outlines.
      Brushed light steel with navy hairline edges; porcelain on ivory vanishes. */
   const BANK = 7;          /* term, whole, final expense, annuity, IUL, LTC, DI */
-  const N = 14;            /* courses per column */
+  const N = 12;            /* courses per column */
   const STEP = 0.26;
   const GAP = 1.6;
   const blockGeo = new THREE.BoxGeometry(0.86, 0.20, 0.86);
@@ -613,15 +613,9 @@ function quoteTower(painter) {
       mesh.position.y = i * STEP;
       col.add(mesh); blocks.push(mesh);
     }
-    /* full-capacity guide: one hairline per column instead of fourteen ghost
-       slabs. The bank reads as a chart, not as a pile of paper. */
-    const guide = new THREE.Line(
-      new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, (N - 1) * STEP, 0)
-      ]),
-      new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.14 })
-    );
-    col.add(guide);
+    /* A full-height capacity guide was tried here and cut: with the columns
+       only part-filled it read as seven bare antennae. The bank carries its own
+       shape. */
     const beacon = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.22, 0),
       new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.6, metalness: DARK ? 0.85 : 0.35, roughness: 0.16 })
@@ -629,7 +623,7 @@ function quoteTower(painter) {
     beacon.visible = false;
     col.add(beacon);
     tower.add(col);
-    columns.push({ col, blocks, beacon, guide, active: 0, lit: c === 0 ? 1 : 0 });
+    columns.push({ col, blocks, beacon, active: 0, lit: c === 0 ? 1 : 0 });
   }
 
   /* the rail the bank stands on — carries the full width of the frame */
@@ -678,7 +672,10 @@ function quoteTower(painter) {
       });
       if (money) {
         const f = ((+money.value) - (+money.min)) / Math.max(1, (+money.max) - (+money.min));
-        fillTarget = clamp(0.16 + f * 0.84, 0.16, 1);
+        /* the floor is deliberate: at the default coverage the raw ratio is
+           about a fifth, which drew a stump. The column still tracks the
+           control, it just starts from a readable height. */
+        fillTarget = clamp(0.42 + f * 0.58, 0.42, 1);
       }
       /* the age-like control drives how hot the built column glows */
       const ageish = ranges.find(r => (+r.max) <= 90 && (+r.min) >= 18);
@@ -707,8 +704,8 @@ function quoteTower(painter) {
     /* HALF-extents: the bank is railW wide and about 4.6 tall, and the camera
        looks at its middle. Using full extents here parked it twice as far away
        as it needed to be and the whole stage read as empty paper. */
-    const dW = (railW / 2 + 0.5) / (tan * Math.max(0.9, a));
-    const dH = 2.0 / tan;
+    const dW = (railW / 2 + 0.3) / (tan * Math.max(0.9, a));
+    const dH = 2.1 / tan;
     dist = Math.max(dW, dH);
   };
   frame(host.clientWidth, host.clientHeight);
@@ -719,11 +716,15 @@ function quoteTower(painter) {
     update(dt, t) {
       const vp = viewportProgress(host);
       const co = centerOffset(host);
-      camAng = damp(camAng, lerp(-0.30, 0.30, vp) + pointer.nx * 0.07, 2.6, dt);
-      camY = damp(camY, lerp(1.5, 3.2, vp) + co * 0.25, 2.4, dt);
-      camDist = damp(camDist, dist + Math.abs(co) * 0.7, 2.4, dt);
+      camAng = damp(camAng, lerp(-0.20, 0.20, vp) + pointer.nx * 0.06, 2.6, dt);
+      camY = damp(camY, lerp(1.4, 2.6, vp) + co * 0.2, 2.4, dt);
+      /* `dist` frames the bank from the camera's true distance, but the camera
+         also sits camY above the floor — orbit on the shorter radius or the
+         whole bank shrinks to the middle third of the stage. */
+      const orbitR = Math.sqrt(Math.max(1, dist * dist - camY * camY));
+      camDist = damp(camDist, orbitR + Math.abs(co) * 0.5, 2.4, dt);
       camera.position.set(Math.sin(camAng) * camDist, camY, Math.cos(camAng) * camDist);
-      camera.lookAt(0, lerp(1.15, 1.55, vp), 0);
+      camera.lookAt(0, lerp(1.35, 1.65, vp), 0);
 
       heat = damp(heat, heatTarget, 3, dt);
 
@@ -731,7 +732,7 @@ function quoteTower(painter) {
         c.active = damp(c.active, c.lit, 4, dt);
         /* the selected product builds to the coverage on the controls; the rest
            stand by as low outlines */
-        const fill = c.lit ? fillTarget : 0.22;
+        const fill = c.lit ? fillTarget : 0.30;
         let top = 0;
         c.blocks.forEach((b, i) => {
           const d = b.userData;
@@ -747,7 +748,6 @@ function quoteTower(painter) {
           d.edge.material.opacity = d.cur * 0.6 * (0.45 + c.active * 0.55);
           if (d.cur > 0.5) top = y;
         });
-        c.guide.material.opacity = 0.08 + c.active * 0.14;
         c.beacon.visible = c.active > 0.25;
         c.beacon.position.y = top + 0.6 + Math.sin(t * 1.4) * 0.07;
         c.beacon.scale.setScalar(0.4 + c.active * 0.6);
@@ -1112,13 +1112,13 @@ function blueprintDevice(rig) {
   const shields = COLS.map((col, i) => {
     const g = new THREE.Group();
     const plate = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.92, 0.92, 0.07, 6),
+      new THREE.CylinderGeometry(0.66, 0.66, 0.06, 6),
       new THREE.MeshPhysicalMaterial({ color: col, metalness: DARK ? 0.62 : 0.22, roughness: 0.24, clearcoat: 1 })
     );
     plate.rotation.x = Math.PI / 2;
     g.add(plate);
     g.add(new THREE.LineSegments(
-      new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.95, 0.95, 0.08, 6)),
+      new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.69, 0.69, 0.07, 6)),
       new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.4 })
     ).rotateX(Math.PI / 2));
     g.userData = { a: (i / 4) * Math.PI * 2 };
@@ -1127,12 +1127,12 @@ function blueprintDevice(rig) {
   });
 
   const core = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(0.62, 1),
+    new THREE.IcosahedronGeometry(0.5, 1),
     new THREE.MeshPhysicalMaterial({ color: C.porcelain, metalness: 0.45, roughness: 0.2, clearcoat: 1, flatShading: true })
   );
   rig.add(core);
   const coreWire = new THREE.LineSegments(
-    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.64, 1)),
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.52, 1)),
     new THREE.LineBasicMaterial({ color: C.brass, transparent: true, opacity: 0.6 })
   );
   rig.add(coreWire);
@@ -1151,7 +1151,7 @@ function blueprintDevice(rig) {
     shields.forEach((g, i) => {
       const u = g.userData;
       u.a += dt * 0.28;
-      const r = 2.5, y = Math.sin(t * 0.8 + i * 1.6) * 0.35;
+      const r = 2.7, y = Math.sin(t * 0.8 + i * 1.6) * 0.3;
       const x = Math.cos(u.a) * r, z = Math.sin(u.a) * r;
       g.position.set(x, y, z);
       g.rotation.y = -u.a + Math.PI / 2;
@@ -1200,7 +1200,7 @@ function bookingField(painter) {
     }));
     m.userData = {
       bx: (Math.random() - 0.5) * 9.5, by: (Math.random() - 0.5) * 6.4, bz: (Math.random() - 0.5) * 4 - 1,
-      sp: 0.22 + Math.random() * 0.5, ph: Math.random() * 6.28, sc: 0.45 + Math.random() * 0.6
+      sp: 0.22 + Math.random() * 0.5, ph: Math.random() * 6.28, sc: 0.3 + Math.random() * 0.42
     };
     m.scale.setScalar(m.userData.sc);
     shapes.push(m); rig.add(m);
@@ -1221,7 +1221,7 @@ function bookingField(painter) {
   }
 
   painter.add({
-    el: document.querySelector('#booking'), sizeFrom: host, canvas, scene, camera, scale: 0.6,
+    el: document.querySelector('#booking'), sizeFrom: host, canvas, scene, camera, scale: 0.75,
     update(dt, t) {
       const vp = viewportProgress(host);
       const ang = lerp(-0.3, 0.3, vp) + pointer.nx * 0.1;
@@ -1388,10 +1388,14 @@ function polish() {
     n.dataset.ommaCube = '1';
     const num = n.textContent.trim();
     n.classList.add('omma-cube-slot');
+    /* the number goes on all four SIDE faces. Front + right alone leaves a dead
+       zone between 135° and 225° where a blank face is toward the camera and
+       the step silently loses its number. */
     n.innerHTML =
       '<span class="omma-cube" style="animation-delay:' + (-i * 1.7).toFixed(1) + 's">' +
-      '<i class="f1">' + num + '</i><i class="f2">' + num + '</i><i class="f3"></i>' +
-      '<i class="f4"></i><i class="f5"></i><i class="f6"></i></span>';
+      '<i class="f1">' + num + '</i><i class="f2">' + num + '</i>' +
+      '<i class="f3">' + num + '</i><i class="f4">' + num + '</i>' +
+      '<i class="f5"></i><i class="f6"></i></span>';
   });
 
   /* --- fit-check answers get the template's lettered badges --- */
