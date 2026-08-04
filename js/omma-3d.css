@@ -339,3 +339,179 @@
   .omma-magnet { transform: none !important; }
   .omma-cube { animation: none !important; }
 }
+
+/* ============================================================================
+   OMMA DESIGN LAYER — presentation for js/omma-design.js
+   ----------------------------------------------------------------------------
+   Unlike the section above, none of this is gated: it is ordinary CSS, costs
+   nothing to run, and phones get it too. Everything is keyed to classes the
+   design layer adds, so without that script the page is unchanged.
+   ========================================================================== */
+
+/* ---------- 12. PRODUCT TICKER --------------------------------------------
+   The template's marquee, in the site's own key: mono, brass, hairline rules
+   above and below, and quiet enough that it frames the cards rather than
+   competing with the headline over them.                                    */
+.omma-ticker {
+  overflow: hidden;
+  margin: 0 0 clamp(28px, 3.5vw, 44px);
+  padding: 13px 0;
+  border-top: 1px solid rgba(14, 31, 62, .10);
+  border-bottom: 1px solid rgba(14, 31, 62, .10);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.omma-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  width: max-content;
+  animation: ommaTicker 46s linear infinite;
+}
+.omma-ticker:hover .omma-ticker-track { animation-play-state: paused; }
+.omma-ticker span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11.5px;
+  letter-spacing: .22em;
+  color: #5A6A8C;
+  white-space: nowrap;
+}
+.omma-ticker i {
+  font-style: normal;
+  font-size: 7px;
+  color: #B07E22;
+  opacity: .65;
+}
+/* the track holds the list twice, so -50% is exactly one loop */
+@keyframes ommaTicker { to { transform: translateX(-50%); } }
+
+/* ---------- 13. ESTIMATE BREAKDOWN BARS -----------------------------------
+   Proportions of the controls the visitor already set — which lever is doing
+   the work. Deliberately unlabelled: no second figure, no implied precision,
+   and the q-note disclosure underneath still says what the estimate is.     */
+.omma-bars {
+  display: grid;
+  gap: 9px;
+  width: 100%;
+  max-width: 320px;
+  margin: 22px auto 4px;
+  text-align: left;
+}
+.omma-bars-cap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #7C8BA8;
+  margin-bottom: 2px;
+}
+.omma-bar {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.omma-bar span {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #7C8BA8;
+}
+.omma-bar i {
+  display: block;
+  height: 4px;
+  width: 20%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #B07E22, #E0BE79);
+  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) { .omma-bar i { transition: none; } }
+
+/* ---------- 14. STAGGERED 3D LIFT -----------------------------------------
+   The grid tips back and flattens as it enters. Only applied to sets the site
+   does not already drive with an inline transform.                          */
+.omma-lift-set { perspective: 1200px; }
+.omma-lift {
+  opacity: 0;
+  transform: translateY(26px) rotateX(11deg);
+  transform-origin: 50% 0;
+  transition: opacity .7s cubic-bezier(.16, 1, .3, 1),
+              transform .7s cubic-bezier(.16, 1, .3, 1);
+}
+.omma-lift.in { opacity: 1; transform: none; }
+
+/* the template's process cards lift on hover; the site's step cards now match */
+.omma-lift-set > * { transition-property: opacity, transform, border-color, box-shadow; }
+.book-point:hover, .bp-step:hover {
+  border-color: rgba(190, 146, 53, .45);
+}
+.book-point { transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.book-point:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px -18px rgba(8, 18, 38, .35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .omma-lift { opacity: 1; transform: none; transition: none; }
+  .book-point:hover { transform: none; }
+}
+
+/* ---------- 15. RANGE THUMB ------------------------------------------------
+   The template's slider: a hairline track and a brass thumb sitting in a halo
+   that grows on hover. The site used the native accent-color, which gives no
+   affordance that the control is grabbable.                                 */
+.q-field input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 22px;
+}
+.q-field input[type=range]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(190, 146, 53, .55), rgba(14, 31, 62, .16));
+}
+.q-field input[type=range]::-moz-range-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(190, 146, 53, .55), rgba(14, 31, 62, .16));
+}
+.q-field input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 17px; height: 17px;
+  margin-top: -7px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #E0BE79, #B07E22);
+  cursor: grab;
+  box-shadow: 0 0 0 5px rgba(190, 146, 53, .15), 0 1px 3px rgba(8, 18, 38, .3);
+  transition: box-shadow .2s ease;
+}
+.q-field input[type=range]::-moz-range-thumb {
+  width: 17px; height: 17px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #E0BE79, #B07E22);
+  cursor: grab;
+  box-shadow: 0 0 0 5px rgba(190, 146, 53, .15), 0 1px 3px rgba(8, 18, 38, .3);
+}
+.q-field input[type=range]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 0 10px rgba(190, 146, 53, .20), 0 1px 3px rgba(8, 18, 38, .3);
+}
+.q-field input[type=range]:active::-webkit-slider-thumb { cursor: grabbing; }
+.q-field input[type=range]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 7px #B07E22;
+}
+
+/* ---------- 16. ERROR SHAKE ------------------------------------------------
+   Motion only. The message and its aria-live announcement are the site's own
+   and are untouched, so the error still reads for anyone who never sees this. */
+.omma-shake { animation: ommaShake .4s cubic-bezier(.36, .07, .19, .97); }
+@keyframes ommaShake {
+  10%, 90% { transform: translateX(-1.5px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+@media (prefers-reduced-motion: reduce) { .omma-shake { animation: none; } }
