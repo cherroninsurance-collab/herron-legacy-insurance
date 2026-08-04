@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Herron Legacy Insurance — Protect What You Built</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+
+<header id="nav">
+  <a class="brand" href="#top">
+    <canvas id="brand-canvas" width="44" height="44"></canvas>
+    <span class="brand-txt">HERRON<em>LEGACY</em></span>
+  </a>
+  <nav class="nav-links">
+    <a href="#coverage">Coverage</a>
+    <a href="#quoter">Quote Tool</a>
+    <a href="#quiz">Fit Quiz</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="nav-cta" href="#quoter">Get My Number</a>
+  <button class="nav-burger" id="burger" aria-label="menu"><span></span><span></span></button>
+</header>
+
+<main id="top">
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="dot"></span> Independent agency · Licensed in 12 states</div>
+      <h1>Protect the<br><em>legacy</em> you<br>already built.</h1>
+      <p class="lede">Life, final expense, annuities and mortgage protection — engineered around your family, not a call-center script. Explore your coverage in three dimensions below.</p>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="#quoter">Build my quote</a>
+        <a class="btn btn-ghost" href="#quiz">Take the 60-sec quiz</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong data-count="4200">0</strong><span>families covered</span></div>
+        <div><strong data-count="38">0</strong><span>carriers compared</span></div>
+        <div><strong data-count="12">0</strong><span>minute approvals</span></div>
+      </div>
+    </div>
+    <div class="hero-stage">
+      <canvas id="hero-canvas"></canvas>
+      <div class="stage-hint">drag to rotate · scroll to orbit</div>
+    </div>
+  </section>
+
+  <div class="marquee"><div class="marquee-track">
+    <span>TERM LIFE</span><span>◆</span><span>WHOLE LIFE</span><span>◆</span><span>FINAL EXPENSE</span><span>◆</span><span>ANNUITIES</span><span>◆</span><span>MORTGAGE PROTECTION</span><span>◆</span><span>IUL</span><span>◆</span>
+    <span>TERM LIFE</span><span>◆</span><span>WHOLE LIFE</span><span>◆</span><span>FINAL EXPENSE</span><span>◆</span><span>ANNUITIES</span><span>◆</span><span>MORTGAGE PROTECTION</span><span>◆</span><span>IUL</span><span>◆</span>
+  </div></div>
+
+  <!-- ===================== COVERAGE CARDS ===================== -->
+  <section id="coverage" class="section">
+    <div class="sec-head">
+      <h2>Coverage, <em>rendered</em>.</h2>
+      <p>Every product has its own live surface. Hover a card — it tilts, lights and reacts.</p>
+    </div>
+    <div class="card-grid" id="card-grid">
+      <article class="tcard" data-shader="0">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">01 — Protection</div>
+          <h3>Term Life</h3>
+          <p>Maximum coverage, minimum premium. 10–30 year level terms with conversion rights baked in.</p>
+          <ul><li>Up to $5M face</li><li>No-exam options</li><li>Living benefit riders</li></ul>
+          <button class="tcard-btn" data-quote="term">Quote term →</button>
+        </div>
+      </article>
+      <article class="tcard" data-shader="1">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">02 — Permanence</div>
+          <h3>Whole Life</h3>
+          <p>Guaranteed death benefit plus cash value you can borrow against. It never expires on you.</p>
+          <ul><li>Fixed premium forever</li><li>Cash value growth</li><li>Paid-up additions</li></ul>
+          <button class="tcard-btn" data-quote="whole">Quote whole →</button>
+        </div>
+      </article>
+      <article class="tcard" data-shader="2">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">03 — Dignity</div>
+          <h3>Final Expense</h3>
+          <p>$5k–$50k simplified issue. Covers the funeral, the flights, the paperwork — not your kids' savings.</p>
+          <ul><li>Ages 45–85</li><li>No medical exam</li><li>Rates locked at issue</li></ul>
+          <button class="tcard-btn" data-quote="final">Quote final →</button>
+        </div>
+      </article>
+      <article class="tcard" data-shader="3">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">04 — Income</div>
+          <h3>Annuities</h3>
+          <p>Turn a lump sum into a paycheck that outlives you. Fixed and indexed options, principal protected.</p>
+          <ul><li>Guaranteed floors</li><li>Tax-deferred growth</li><li>Lifetime payout riders</li></ul>
+          <button class="tcard-btn" data-quote="annuity">Model income →</button>
+        </div>
+      </article>
+      <article class="tcard" data-shader="4">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">05 — Shelter</div>
+          <h3>Mortgage Protection</h3>
+          <p>Coverage sized to your loan balance so the house stays in the family, fully paid, no matter what.</p>
+          <ul><li>Decreasing or level</li><li>Disability add-on</li><li>Return-of-premium</li></ul>
+          <button class="tcard-btn" data-quote="mortgage">Quote home →</button>
+        </div>
+      </article>
+      <article class="tcard" data-shader="5">
+        <canvas class="tcard-gl"></canvas>
+        <div class="tcard-glare"></div>
+        <div class="tcard-body">
+          <div class="tcard-tag">06 — Strategy</div>
+          <h3>Indexed UL</h3>
+          <p>Market-linked upside with a 0% floor, plus tax-advantaged access to accumulated value.</p>
+          <ul><li>Index crediting</li><li>Flexible premium</li><li>Policy loans</li></ul>
+          <button class="tcard-btn" data-quote="iul">Model IUL →</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== QUOTER TOOL ===================== -->
+  <section id="quoter" class="section quoter">
+    <div class="sec-head">
+      <h2>The <em>quoter</em>.</h2>
+      <p>Move a slider. The tower rebuilds itself in real time and the premium follows.</p>
+    </div>
+    <div class="quoter-wrap">
+      <div class="quoter-panel">
+        <div class="q-row">
+          <label>Product</label>
+          <div class="pills" id="pill-product">
+            <button class="pill active" data-v="term">Term</button>
+            <button class="pill" data-v="whole">Whole</button>
+            <button class="pill" data-v="final">Final Exp.</button>
+            <button class="pill" data-v="mortgage">Mortgage</button>
+            <button class="pill" data-v="iul">IUL</button>
+            <button class="pill" data-v="annuity">Annuity</button>
+          </div>
+        </div>
+        <div class="q-row">
+          <label>Coverage amount <output id="out-cov">$500,000</output></label>
+          <input type="range" id="in-cov" min="10000" max="3000000" step="10000" value="500000">
+        </div>
+        <div class="q-row">
+          <label>Your age <output id="out-age">42</output></label>
+          <input type="range" id="in-age" min="18" max="85" step="1" value="42">
+        </div>
+        <div class="q-row">
+          <label>Term length <output id="out-term">20 years</output></label>
+          <input type="range" id="in-term" min="10" max="40" step="5" value="20">
+        </div>
+        <div class="q-row inline">
+          <div>
+            <label>Health class</label>
+            <div class="pills" id="pill-health">
+              <button class="pill" data-v="0.82">Preferred+</button>
+              <button class="pill active" data-v="1">Standard</button>
+              <button class="pill" data-v="1.45">Substandard</button>
+            </div>
+          </div>
+          <div>
+            <label>Tobacco</label>
+            <div class="pills" id="pill-tob">
+              <button class="pill active" data-v="1">No</button>
+              <button class="pill" data-v="2.15">Yes</button>
+            </div>
+          </div>
+        </div>
+        <div class="q-row">
+          <label>Riders</label>
+          <div class="pills multi" id="pill-riders">
+            <button class="pill" data-v="0.06">Accidental death</button>
+            <button class="pill" data-v="0.09">Waiver of premium</button>
+            <button class="pill" data-v="0.11">Child term</button>
+            <button class="pill" data-v="0.14">Critical illness</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="quoter-viz">
+        <canvas id="tower-canvas"></canvas>
+        <div class="viz-readout">
+          <div class="ro-main"><span class="ro-cur">$</span><span id="ro-premium">31</span><span class="ro-per">/mo</span></div>
+          <div class="ro-sub" id="ro-annual">$372 billed annually</div>
+          <div class="ro-bars">
+            <div class="ro-bar"><span>Base</span><i id="bar-base"></i></div>
+            <div class="ro-bar"><span>Age load</span><i id="bar-age"></i></div>
+            <div class="ro-bar"><span>Riders</span><i id="bar-rider"></i></div>
+          </div>
+          <button class="btn btn-solid full" id="lock-rate">Lock this rate</button>
+          <div class="ro-note" id="ro-note">Illustrative only · final rate set by underwriting</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== QUIZ ===================== -->
+  <section id="quiz" class="section quiz">
+    <div class="sec-head">
+      <h2>Which policy <em>fits</em>?</h2>
+      <p>Four questions. The compass turns as you answer.</p>
+    </div>
+    <div class="quiz-wrap">
+      <div class="quiz-viz">
+        <canvas id="compass-canvas"></canvas>
+        <div class="compass-label" id="compass-label">CALIBRATING</div>
+      </div>
+      <div class="quiz-panel">
+        <div class="quiz-progress"><i id="quiz-bar"></i></div>
+        <div class="quiz-step" id="quiz-step">
+          <div class="qs-num" id="qs-num">Question 1 of 4</div>
+          <h3 id="qs-q">What are you protecting first?</h3>
+          <div class="qs-opts" id="qs-opts"></div>
+        </div>
+        <div class="quiz-result" id="quiz-result">
+          <div class="qr-badge">YOUR MATCH</div>
+          <h3 id="qr-title">—</h3>
+          <p id="qr-body">—</p>
+          <div class="qr-meta" id="qr-meta"></div>
+          <div class="qr-actions">
+            <button class="btn btn-solid" id="qr-quote">Quote this →</button>
+            <button class="btn btn-ghost" id="qr-restart">Retake</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PROCESS ===================== -->
+  <section id="process" class="section">
+    <div class="sec-head">
+      <h2>Three steps. <em>No pressure.</em></h2>
+      <p>Independent means we shop, you choose. Nobody here is quota-chasing your grandmother.</p>
+    </div>
+    <div class="proc-grid">
+      <div class="proc">
+        <div class="proc-ico"><div class="cube"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="proc-n">01</div>
+        <h4>15-minute discovery</h4>
+        <p>We map income, debt, dependents and end-of-life wishes. Zero forms up front.</p>
+      </div>
+      <div class="proc">
+        <div class="proc-ico"><div class="cube alt"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="proc-n">02</div>
+        <h4>38 carriers, one table</h4>
+        <p>We run your profile through every appointed carrier and show you the real spread.</p>
+      </div>
+      <div class="proc">
+        <div class="proc-ico"><div class="cube alt2"><i></i><i></i><i></i><i></i><i></i><i></i></div></div>
+        <div class="proc-n">03</div>
+        <h4>Issued & reviewed yearly</h4>
+        <p>E-signature, e-delivery, then an annual check-in as your life changes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CONTACT FORM ===================== -->
+  <section id="contact" class="section contact">
+    <div class="contact-inner">
+      <div class="contact-left">
+        <canvas id="form-canvas"></canvas>
+        <div class="cl-copy">
+          <h2>Talk to a <em>human</em>.</h2>
+          <p>No robocalls, no lead resale. One licensed agent, one conversation, your pace.</p>
+          <ul class="cl-list">
+            <li><span>☎</span> (704) 555-0142</li>
+            <li><span>✉</span> hello@herronlegacy.com</li>
+            <li><span>◷</span> Mon–Sat · 8a–8p ET</li>
+          </ul>
+        </div>
+      </div>
+      <form class="cform" id="cform" novalidate>
+        <div class="cf-head">Request a callback</div>
+        <div class="cf-field"><input id="f-name" type="text" required placeholder=" "><label>Full name</label><em></em></div>
+        <div class="cf-field"><input id="f-email" type="email" required placeholder=" "><label>Email</label><em></em></div>
+        <div class="cf-field"><input id="f-phone" type="tel" required placeholder=" "><label>Phone</label><em></em></div>
+        <div class="cf-field">
+          <select id="f-int" required>
+            <option value="">Choose…</option>
+            <option>Term Life</option><option>Whole Life</option><option>Final Expense</option>
+            <option>Annuities</option><option>Mortgage Protection</option><option>Indexed UL</option>
+          </select>
+          <label class="static">I'm interested in</label><em></em>
+        </div>
+        <div class="cf-field"><textarea id="f-msg" rows="3" placeholder=" "></textarea><label>Anything we should know?</label></div>
+        <button class="btn btn-solid full" type="submit" id="cf-submit">Send request</button>
+        <div class="cf-ok" id="cf-ok">✓ Received. An agent will reach out within one business day.</div>
+      </form>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <canvas id="foot-canvas" width="40" height="40"></canvas>
+        <span>HERRON<em>LEGACY</em></span>
+        <p>Independent life &amp; retirement brokerage. Licensed in 12 states.</p>
+      </div>
+      <div class="foot-cols">
+        <div><h5>Coverage</h5><a href="#coverage">Term Life</a><a href="#coverage">Whole Life</a><a href="#coverage">Final Expense</a><a href="#coverage">Annuities</a></div>
+        <div><h5>Tools</h5><a href="#quoter">Premium quoter</a><a href="#quiz">Fit quiz</a><a href="#contact">Callback form</a></div>
+        <div><h5>Agency</h5><a href="#process">Our process</a><a href="#contact">Contact</a><a href="javascript:void(0)">Licensing</a></div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <span>© 2026 Herron Legacy Insurance. All rights reserved.</span>
+      <span>Quotes are illustrative and not a contract of insurance.</span>
+    </div>
+  </footer>
+</main>
+
+<!-- ===================== CONCIERGE ===================== -->
+<button class="cc-fab" id="cc-fab" aria-label="concierge"><span>◆</span></button>
+<div class="cc-panel" id="cc-panel">
+  <div class="cc-head"><strong>Legacy Concierge</strong><button id="cc-close">✕</button></div>
+  <div class="cc-log" id="cc-log"></div>
+  <div class="cc-chips">
+    <button data-q="What does final expense cover?">Final expense?</button>
+    <button data-q="How much coverage do I need?">How much?</button>
+    <button data-q="Do I need a medical exam?">Medical exam?</button>
+  </div>
+  <form class="cc-form" id="cc-form"><input id="cc-in" placeholder="Ask anything…" autocomplete="off"><button>→</button></form>
+</div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>
