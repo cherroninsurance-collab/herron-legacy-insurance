@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-omma-theme="dark">
+<html>
 <head>
   <meta charset="utf-8">
   <title>The Protection Blueprint — Herron &amp; Co. Legacy Agency</title>
@@ -21,41 +21,6 @@
 [data-screen-label="05 Advisor Mode"]{display:none!important}
 div[style*="margin-left:auto"][style*="text-align:right"]{display:none!important}
 </style>
-<script id="omma-bootstrap">
-/* This page is a compiled bundle: once it mounts it REPLACES the whole
-   document, which removes any <link>, <style> or <script> tag added here. So
-   the 3D layer is attached from a running interval instead of from markup, and
-   re-attached whenever the document is rebuilt. js/omma-3d.js keeps one
-   renderer for the life of the page and every attach step is guarded, so
-   calling __ommaBoot again only restores what went missing. */
-(function () {
-  var CSS = 'html{background:#05122E}body{background:transparent!important}' +
-            '.omma-backdrop{z-index:-1;opacity:.9}';
-  function ensure() {
-    if (window.__ommaGated) return;                 /* touch / reduced motion */
-    var root = document.documentElement;
-    var head = document.head || root;
-    if (root.dataset.ommaTheme !== 'dark') root.dataset.ommaTheme = 'dark';
-    if (!document.querySelector('link[data-omma]')) {
-      var l = document.createElement('link');
-      l.rel = 'stylesheet'; l.href = 'js/omma-3d.css'; l.setAttribute('data-omma', '');
-      head.appendChild(l);
-      var st = document.createElement('style');
-      st.setAttribute('data-omma', ''); st.textContent = CSS;
-      head.appendChild(st);
-    }
-    if (window.__ommaBoot) {
-      if (!document.querySelector('.omma-backdrop')) window.__ommaBoot();
-    } else if (!document.querySelector('script[data-omma]')) {
-      var sc = document.createElement('script');
-      sc.type = 'module'; sc.src = 'js/omma-3d.js'; sc.setAttribute('data-omma', '');
-      head.appendChild(sc);
-    }
-  }
-  ensure();
-  setInterval(ensure, 900);
-})();
-</script>
 </head>
 <body><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
   <div id="__bundler_thumbnail">

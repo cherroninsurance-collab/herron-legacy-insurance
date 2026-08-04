@@ -8,43 +8,24 @@
 
    BRIGHT / CORPORATE / FINTECH: no dark overlays, no heavy blur, alpha stays
    low enough that every surface reads as ivory glass rather than as a picture.
+
+   NOTHING FLOATS FREE. Rules for a hero orbit, a booking lattice and a fixed
+   page-wide mote field used to live here and were cut — ambient decoration
+   drifting over the page reads as noise, and the motes came out as dark fuzz on
+   a real display. Every canvas that remains is clipped inside a card or a
+   bounded stage.
    ========================================================================== */
 
 /* ---------- shared canvas behaviour ---------- */
 .omma-card-gl,
-.omma-stage-gl,
-.omma-orbit-gl,
-.omma-backdrop-gl {
+.omma-stage-gl {
   display: block;
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
 
-/* ---------- 1. HERO ORBIT --------------------------------------------------
-   Sits behind the heron emblem and overflows the crest so the outer ring can
-   swing wider than the mark. The heron canvas above it is pointer-transparent
-   so the whole emblem area is draggable.                                    */
-.omma-orbit {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 172%; height: 172%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-  cursor: grab;
-  touch-action: pan-y;
-}
-.omma-orbit.is-grabbing { cursor: grabbing; }
-/* Below ~1200px the hero's emblem sits close enough to the right edge that a
-   172% box pushes the outer ring off-screen and it renders as a cut arc. The
-   page never scrolls sideways (html is overflow-x:clip), but a clipped ring
-   looks like a mistake — pull the rig in instead. */
-@media (max-width: 1400px) { .omma-orbit { width: 150%; height: 150%; } }
-@media (max-width: 1200px) { .omma-orbit { width: 124%; height: 124%; } }
-.omma-on .hero .crest .hero-heron { pointer-events: none; }
-.omma-on .hero .crest { z-index: 2; }
-
-/* ---------- 2. CARD + FORM SURFACES ---------------------------------------
+/* ---------- 1. CARD + FORM SURFACES ---------------------------------------
    The canvas is the card's own live surface; the glare is a cursor-tracked
    highlight on top of it. Both sit under the copy, which is lifted to z-index 2
    so nothing here can ever cover text or intercept a click.                 */
@@ -83,7 +64,7 @@
 /* every direct child that carries content rides above the surface */
 .omma-card > *:not(.omma-card-gl):not(.omma-card-glare) { position: relative; z-index: 2; }
 
-/* ---------- 3. SECTION STAGES (studio / fit check / tools) ----------------- */
+/* ---------- 2. SECTION STAGES (studio / fit check / tools) ----------------- */
 .omma-stage {
   position: relative;
   width: 100%;
@@ -140,40 +121,13 @@
   .omma-stage-tool  { height: 165px; }
 }
 
-/* ---------- 4. BOOKING LATTICE --------------------------------------------
-   Fills the booking band behind its copy and the calendar.                  */
-.omma-book-field {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: .5;
-}
-.omma-on .booking { position: relative; }
-.omma-on .booking > .wrap { position: relative; z-index: 1; }
-
-/* ---------- 5. PAGE BACKDROP ----------------------------------------------
-   Fixed, behind everything, and deliberately soft — it is out-of-focus depth,
-   never a texture you can read.                                             */
-.omma-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: .62;
-  filter: blur(.2px);
-}
-/* the page's own sections already stack above z-index 0; the hero is the only
-   full-bleed surface that must stay in front of the motes */
-.omma-on .hero { position: relative; z-index: 1; }
-
-/* ---------- 6. MAGNETIC PRIMARY BUTTONS -----------------------------------
+/* ---------- 3. MAGNETIC PRIMARY BUTTONS -----------------------------------
    The translate is layered on top of the existing hover lift rather than
    replacing it, so the site's own button motion is unchanged.               */
 .omma-magnet { transform: translate(var(--mgx, 0px), var(--mgy, 0px)); }
 .omma-magnet:hover { transform: translate(var(--mgx, 0px), calc(var(--mgy, 0px) - 2px)); }
 
-/* ---------- 7. TRACKED SHEEN ON GLASS PANES -------------------------------
+/* ---------- 4. TRACKED SHEEN ON GLASS PANES -------------------------------
    Glass is never 3D-transformed here (Chrome glitches transformed
    backdrop-filter surfaces) — the depth comes from moving light instead.    */
 .omma-sheen { position: relative; }
@@ -191,7 +145,7 @@
 }
 .omma-sheen:hover::after { opacity: 1; }
 
-/* ---------- 8. 3D CUBE STEP MARKERS ---------------------------------------
+/* ---------- 5. 3D CUBE STEP MARKERS ---------------------------------------
    The template's process cubes, applied to the step numbers this site already
    has. The number is repeated on the two faces that ever front the camera, so
    the step is readable at every point in the rotation.                      */
@@ -242,7 +196,7 @@
   100% { transform: rotateX(-16deg) rotateY(360deg); }
 }
 
-/* ---------- 9. LETTERED ANSWER KEYS ---------------------------------------- */
+/* ---------- 6. LETTERED ANSWER KEYS ---------------------------------------- */
 .omma-opt-key {
   display: inline-flex;
   align-items: center;
@@ -266,7 +220,7 @@
   color: #FFFFFF;
 }
 
-/* ---------- 10. FLOATING-LABEL FIELDS -------------------------------------
+/* ---------- 7. FLOATING-LABEL FIELDS -------------------------------------
    The label rides on the field's top edge once there is focus or a value. The
    input keeps every attribute it shipped with — this is a wrapper, not a
    replacement.                                                              */
@@ -311,30 +265,11 @@
 }
 .omma-float:focus-within::after { transform: scaleX(1); }
 
-/* ---------- 11. HERO DRAG AFFORDANCE -------------------------------------- */
-.omma-hint {
-  position: absolute;
-  left: 50%; bottom: -6px;
-  transform: translateX(-50%);
-  z-index: 4;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: #8B99B2;
-  white-space: nowrap;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity .4s ease;
-}
-.crest:hover .omma-hint { opacity: 1; }
-@media (max-width: 880px) { .omma-hint { display: none; } }
-
 /* ---------- reduced motion / touch ----------------------------------------
    The module never boots in these cases, but if a preference changes after
    load the layer must go quiet rather than keep spinning.                   */
 @media (prefers-reduced-motion: reduce) {
-  .omma-orbit, .omma-backdrop, .omma-book-field, .omma-stage { display: none !important; }
+  .omma-stage { display: none !important; }
   .omma-card > .omma-card-gl, .omma-card > .omma-card-glare { display: none !important; }
   .omma-magnet { transform: none !important; }
   .omma-cube { animation: none !important; }
@@ -348,7 +283,7 @@
    design layer adds, so without that script the page is unchanged.
    ========================================================================== */
 
-/* ---------- 12. PRODUCT TICKER --------------------------------------------
+/* ---------- 8. PRODUCT TICKER --------------------------------------------
    The template's marquee, in the site's own key: mono, brass, hairline rules
    above and below, and quiet enough that it frames the cards rather than
    competing with the headline over them.                                    */
@@ -385,7 +320,7 @@
 /* the track holds the list twice, so -50% is exactly one loop */
 @keyframes ommaTicker { to { transform: translateX(-50%); } }
 
-/* ---------- 13. ESTIMATE BREAKDOWN BARS -----------------------------------
+/* ---------- 9. ESTIMATE BREAKDOWN BARS -----------------------------------
    Proportions of the controls the visitor already set — which lever is doing
    the work. Deliberately unlabelled: no second figure, no implied precision,
    and the q-note disclosure underneath still says what the estimate is.     */
@@ -428,7 +363,7 @@
 }
 @media (prefers-reduced-motion: reduce) { .omma-bar i { transition: none; } }
 
-/* ---------- 14. STAGGERED 3D LIFT -----------------------------------------
+/* ---------- 10. STAGGERED 3D LIFT -----------------------------------------
    The grid tips back and flattens as it enters. Only applied to sets the site
    does not already drive with an inline transform.                          */
 .omma-lift-set { perspective: 1200px; }
@@ -456,7 +391,7 @@
   .book-point:hover { transform: none; }
 }
 
-/* ---------- 15. RANGE THUMB ------------------------------------------------
+/* ---------- 11. RANGE THUMB ------------------------------------------------
    The template's slider: a hairline track and a brass thumb sitting in a halo
    that grows on hover. The site used the native accent-color, which gives no
    affordance that the control is grabbable.                                 */
@@ -504,7 +439,7 @@
   box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 7px #B07E22;
 }
 
-/* ---------- 16. ERROR SHAKE ------------------------------------------------
+/* ---------- 12. ERROR SHAKE ------------------------------------------------
    Motion only. The message and its aria-live announcement are the site's own
    and are untouched, so the error still reads for anyone who never sees this. */
 .omma-shake { animation: ommaShake .4s cubic-bezier(.36, .07, .19, .97); }

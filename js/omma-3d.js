@@ -3,15 +3,18 @@
    ----------------------------------------------------------------------------
    A single WebGL "painter" that drives every interactive 3D surface on the site:
 
-     • hero orbit        — brass/blue instrument rings + 7 product nodes turning
-                           around the liquid-metal heron (the heron itself is
-                           untouched; this renders BEHIND it)
      • coverage cards    — one live shader surface per product card
-     • estimate studio   — a premium tower that rebuilds as the sliders move
+     • estimate studio   — a column bank that rebuilds as the controls move
      • fit check         — a compass whose needle seeks your leading answer
      • tool panes        — the Wealth Shield / Protection Blueprint devices
-     • booking           — a lattice that converges when you focus a field
-     • backdrop          — a slow field of light motes over the whole page
+
+   EVERY SCENE IS CONTAINED. An earlier pass also put instrument rings orbiting
+   the hero emblem, a lattice drifting behind the booking band, and a field of
+   motes fixed over the whole page. All three were cut: ambient decoration
+   floating loose over the page reads as noise, and on a real display the motes
+   read as dark fuzz rather than as depth. What survives is the opposite — 3D
+   that lives inside a bounded stage and answers a control, which reads as
+   software rather than as ornament. Do not reintroduce a free-floating layer.
 
    ---------------------------------------------------------------------------
    WHY ONE RENDERER (read before adding a scene)
@@ -231,160 +234,6 @@ function studioLights(scene, warm = 2.0) {
   const fill = new THREE.DirectionalLight(DARK ? 0x6FE3D6 : 0xD9E4FA, DARK ? 0.9 : 1.15);
   fill.position.set(-5, -1, -4); scene.add(fill);
   return key;
-}
-
-/* ============================================================================
-   1. HERO ORBIT — instrument rings around the liquid-metal heron
-   ========================================================================== */
-function heroOrbit(painter) {
-  const crest = document.querySelector('.hero .crest');
-  const heron = document.getElementById('heroHeron');
-  if (!crest || !heron || crest.querySelector('.omma-orbit')) return;
-
-  const host = document.createElement('div');
-  host.className = 'omma-orbit';
-  host.setAttribute('aria-hidden', 'true');
-  const canvas = mkCanvas('omma-orbit-gl');
-  host.appendChild(canvas);
-  crest.insertBefore(host, crest.firstChild);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-  camera.position.set(0, 0, 8.6);
-  const root = new THREE.Group();
-  scene.add(root);
-  studioLights(scene, 2.2);
-
-  /* --- instrument rings: brass, blue, brass-light --- */
-  const rings = [];
-  [
-    { r: 2.10, tube: 0.017, col: C.brass,    op: 0.90, tilt: [0.42, 0, 0.20], spd: 0.13 },
-    { r: 2.74, tube: 0.011, col: C.blue,     op: 0.62, tilt: [-0.92, 0.40, 0], spd: 0.20 },
-    { r: 3.30, tube: 0.008, col: C.brassLit, op: 0.42, tilt: [1.18, 0.20, 0.5], spd: 0.27 }
-  ].forEach(sp => {
-    const m = new THREE.Mesh(
-      new THREE.TorusGeometry(sp.r, sp.tube, 8, 150),
-      new THREE.MeshBasicMaterial({ color: sp.col, transparent: true, opacity: sp.op })
-    );
-    m.rotation.set(sp.tilt[0], sp.tilt[1], sp.tilt[2]);
-    m.userData.spd = sp.spd;
-    rings.push(m); root.add(m);
-  });
-
-  /* --- seven product nodes: one per line of coverage --- */
-  const nodes = new THREE.Group();
-  const NODE_N = 7;
-  const nodeGeo = new THREE.OctahedronGeometry(0.125, 0);
-  for (let i = 0; i < NODE_N; i++) {
-    const gold = i % 2 === 0;
-    const m = new THREE.Mesh(nodeGeo, new THREE.MeshStandardMaterial({
-      color: gold ? C.brassLit : C.porcelain,
-      emissive: gold ? C.brass : C.blue,
-      emissiveIntensity: gold ? 0.5 : 0.25,
-      metalness: DARK ? 0.72 : 0.4, roughness: 0.22, flatShading: true
-    }));
-    m.userData = { a: (i / NODE_N) * Math.PI * 2, rad: 2.10 + (i % 3) * 0.62, yamp: 0.45 + (i % 4) * 0.26, spd: 0.30 + (i % 3) * 0.14 };
-    nodes.add(m);
-  }
-  root.add(nodes);
-
-  /* --- shield halo: a warm fresnel rim, never a dark sphere --- */
-  const halo = new THREE.Mesh(
-    new THREE.SphereGeometry(3.85, 42, 42),
-    new THREE.ShaderMaterial({
-      transparent: true, side: THREE.BackSide, depthWrite: false,
-      uniforms: { uTime: { value: 0 }, uPulse: { value: 0 } },
-      vertexShader: `varying vec3 vN; varying vec3 vP;
-        void main(){ vN = normalize(normalMatrix * normal); vP = position;
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
-      fragmentShader: `varying vec3 vN; varying vec3 vP; uniform float uTime, uPulse;
-        void main(){
-          float fres  = pow(1.0 - abs(dot(vN, vec3(0.0,0.0,1.0))), 3.0);
-          float bands = sin(vP.y * 2.6 - uTime * 1.1) * 0.5 + 0.5;
-          vec3  col   = mix(vec3(0.86,0.76,0.52), vec3(0.62,0.72,0.92), bands);
-          float a     = fres * (0.10 + bands * 0.07) + uPulse * fres * 0.16;
-          gl_FragColor = vec4(col, a);
-        }`
-    })
-  );
-  root.add(halo);
-
-  /* --- floor plate: a quiet brass baseline under the emblem --- */
-  const plate = new THREE.Group();
-  for (let i = 0; i < 3; i++) {
-    const r = new THREE.Mesh(
-      new THREE.RingGeometry(1.55 + i * 0.52, 1.575 + i * 0.52, 96),
-      new THREE.MeshBasicMaterial({ color: C.brass, transparent: true, opacity: 0.16 - i * 0.04, side: THREE.DoubleSide })
-    );
-    r.rotation.x = -Math.PI / 2;
-    plate.add(r);
-  }
-  plate.position.y = -2.45;
-  root.add(plate);
-
-  /* --- drag to rotate, with inertia. The heron canvas above is pointer-none
-         (see omma CSS) so the whole emblem area is grabbable. --- */
-  let drag = false, px = 0, py = 0, velX = 0, velY = 0, rotX = 0, rotY = 0, hover = 0;
-  host.addEventListener('pointerdown', e => {
-    drag = true; px = e.clientX; py = e.clientY;
-    host.setPointerCapture(e.pointerId); host.classList.add('is-grabbing');
-  });
-  const release = () => { drag = false; host.classList.remove('is-grabbing'); };
-  host.addEventListener('pointerup', release);
-  host.addEventListener('pointercancel', release);
-  host.addEventListener('pointermove', e => {
-    if (!drag) return;
-    velY += (e.clientX - px) * 0.006;
-    velX += (e.clientY - py) * 0.006;
-    px = e.clientX; py = e.clientY;
-  });
-  host.addEventListener('pointerenter', () => { hover = 1; });
-  host.addEventListener('pointerleave', () => { hover = 0; });
-
-  let camDist = 8.6, camY = 0, hoverAmt = 0;
-
-  painter.add({
-    el: host, sizeFrom: host, canvas, scene, camera,
-    update(dt, t) {
-      const vp = viewportProgress(host);
-      const exiting = clamp((vp - 0.5) * 2, 0, 1);
-
-      camDist = damp(camDist, lerp(8.2, 11.4, exiting), 3.0, dt);
-      camY = damp(camY, lerp(0, 1.1, exiting), 2.8, dt);
-      const orbit = vp * 0.9 - 0.30 + pointer.nx * 0.06;
-      camera.position.set(Math.sin(orbit) * camDist * 0.40, camY + Math.sin(t * 0.5) * 0.10, Math.cos(orbit) * camDist);
-      camera.lookAt(0, 0, 0);
-
-      rotY += velY; rotX += velX;
-      velY *= 0.92; velX *= 0.92;
-      rotY += dt * 0.14;
-      rotX = clamp(rotX, -0.8, 0.8);
-      root.rotation.y = rotY;
-      root.rotation.x = rotX + Math.sin(t * 0.35) * 0.05;
-
-      hoverAmt = damp(hoverAmt, hover, 5, dt);
-      const pulse = Math.min(1, Math.abs(scrollState.vel) / 55);
-      halo.material.uniforms.uTime.value = t;
-      halo.material.uniforms.uPulse.value = damp(halo.material.uniforms.uPulse.value, Math.max(hoverAmt * 0.6, pulse), 5, dt);
-
-      rings.forEach((r, i) => {
-        r.rotation.z += dt * r.userData.spd * (1 + hoverAmt);
-        r.rotation.x += dt * r.userData.spd * 0.30;
-        r.scale.setScalar(1 + Math.sin(t * 0.9 + i) * 0.018);
-      });
-
-      nodes.children.forEach((m, i) => {
-        const d = m.userData;
-        d.a += dt * d.spd * (1 + hoverAmt * 0.8);
-        m.position.set(Math.cos(d.a) * d.rad, Math.sin(d.a * 1.4 + i) * d.yamp, Math.sin(d.a) * d.rad);
-        m.rotation.x += dt * 1.5; m.rotation.y += dt * 1.1;
-        m.scale.setScalar(0.85 + Math.sin(t * 2.2 + i) * 0.12 + hoverAmt * 0.22);
-      });
-
-      plate.rotation.y += dt * 0.09;
-      root.visible = vp < 0.995;
-    }
-  });
 }
 
 /* ============================================================================
@@ -1165,202 +1014,6 @@ function blueprintDevice(rig) {
 }
 
 /* ============================================================================
-   6. BOOKING — a lattice that converges when you engage the calendar
-   ========================================================================== */
-function bookingField(painter) {
-  const copy = document.querySelector('#booking .book-copy');
-  if (!copy || document.querySelector('.omma-book-field')) return;
-
-  const host = document.createElement('div');
-  host.className = 'omma-book-field';
-  host.setAttribute('aria-hidden', 'true');
-  const canvas = mkCanvas('omma-stage-gl');
-  host.appendChild(canvas);
-  document.querySelector('#booking').insertBefore(host, document.querySelector('#booking').firstChild);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(48, 2, 0.1, 60);
-  studioLights(scene, 1.9);
-  const rig = new THREE.Group(); scene.add(rig);
-
-  const geos = [
-    new THREE.TorusKnotGeometry(0.5, 0.15, 80, 12),
-    new THREE.IcosahedronGeometry(0.62, 0),
-    new THREE.OctahedronGeometry(0.68, 0),
-    new THREE.TorusGeometry(0.54, 0.13, 12, 50),
-    new THREE.DodecahedronGeometry(0.6, 0)
-  ];
-  const shapes = [];
-  for (let i = 0; i < 10; i++) {
-    const gold = i % 3 === 0;
-    const m = new THREE.Mesh(geos[i % geos.length], new THREE.MeshPhysicalMaterial({
-      color: gold ? C.brassLit : C.porcelain,
-      metalness: DARK ? 0.68 : 0.26, roughness: 0.24, clearcoat: 1,
-      emissive: gold ? C.brass : C.blue, emissiveIntensity: gold ? 0.16 : 0.08
-    }));
-    m.userData = {
-      bx: (Math.random() - 0.5) * 9.5, by: (Math.random() - 0.5) * 6.4, bz: (Math.random() - 0.5) * 4 - 1,
-      sp: 0.22 + Math.random() * 0.5, ph: Math.random() * 6.28, sc: 0.3 + Math.random() * 0.42
-    };
-    m.scale.setScalar(m.userData.sc);
-    shapes.push(m); rig.add(m);
-  }
-
-  const lg = new THREE.BufferGeometry();
-  lg.setAttribute('position', new THREE.BufferAttribute(new Float32Array(shapes.length * 2 * 3), 3));
-  const lines = new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: C.brass, transparent: true, opacity: 0.14 }));
-  rig.add(lines);
-
-  /* the calendar is a third-party iframe, so hovering the frame stands in for
-     "engaging" — the lattice draws together as you reach for a time */
-  let pullTarget = 0, pull = 0;
-  const frame = document.querySelector('#booking .book-frame');
-  if (frame) {
-    frame.addEventListener('pointerenter', () => { pullTarget = 1; });
-    frame.addEventListener('pointerleave', () => { pullTarget = 0; });
-  }
-
-  painter.add({
-    el: document.querySelector('#booking'), sizeFrom: host, canvas, scene, camera, scale: 0.75,
-    update(dt, t) {
-      const vp = viewportProgress(host);
-      const ang = lerp(-0.3, 0.3, vp) + pointer.nx * 0.1;
-      const dist = lerp(12.5, 10.2, Math.min(1, vp * 1.5));
-      camera.position.set(Math.sin(ang) * dist, pointer.ny * 0.6 + lerp(-1, 1, vp) * 0.5, Math.cos(ang) * dist);
-      camera.lookAt(0, 0, 0);
-
-      pull = damp(pull, pullTarget, 3.2, dt);
-      const arr = lg.attributes.position.array;
-      shapes.forEach((m, i) => {
-        const u = m.userData;
-        const px = u.bx * (1 - pull * 0.6) + Math.sin(t * u.sp + u.ph) * 0.45;
-        const py = u.by * (1 - pull * 0.6) + Math.cos(t * u.sp * 0.8 + u.ph) * 0.45;
-        const pz = u.bz * (1 - pull * 0.45) + Math.sin(t * u.sp * 0.6 + u.ph) * 0.3;
-        m.position.set(px, py, pz);
-        m.rotation.x += dt * u.sp * 0.8; m.rotation.y += dt * u.sp * 1.1;
-        m.scale.setScalar(u.sc * (1 + pull * 0.22 + Math.sin(t * 1.5 + u.ph) * 0.035));
-        arr[i * 6] = px; arr[i * 6 + 1] = py; arr[i * 6 + 2] = pz;
-      });
-      lg.attributes.position.needsUpdate = true;
-      lines.material.opacity = 0.08 + pull * 0.22;
-      rig.rotation.z = Math.sin(t * 0.08) * 0.05;
-    }
-  });
-}
-
-/* ============================================================================
-   7. BACKDROP — a slow field of light motes behind the whole page
-   Rendered at a fraction of viewport resolution: it is out-of-focus by design.
-   ========================================================================== */
-function backdrop(painter) {
-  if (document.querySelector('.omma-backdrop')) return;
-  const host = document.createElement('div');
-  host.className = 'omma-backdrop';
-  host.setAttribute('aria-hidden', 'true');
-  const canvas = mkCanvas('omma-backdrop-gl');
-  host.appendChild(canvas);
-  document.body.insertBefore(host, document.body.firstChild);
-
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, 2, 0.1, 120);
-  camera.position.set(0, 0, 26);
-
-  const COUNT = 900;
-  const pos = new Float32Array(COUNT * 3);
-  const seed = new Float32Array(COUNT);
-  const sz = new Float32Array(COUNT);
-  const tone = new Float32Array(COUNT);
-  for (let i = 0; i < COUNT; i++) {
-    pos[i * 3] = (Math.random() - 0.5) * 74;
-    pos[i * 3 + 1] = (Math.random() - 0.5) * 120;
-    pos[i * 3 + 2] = (Math.random() - 0.5) * 32 - 6;
-    seed[i] = Math.random() * Math.PI * 2;
-    sz[i] = 0.5 + Math.random() * 1.7;
-    tone[i] = Math.random();
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
-  g.setAttribute('aSize', new THREE.BufferAttribute(sz, 1));
-  g.setAttribute('aTone', new THREE.BufferAttribute(tone, 1));
-
-  const mat = new THREE.ShaderMaterial({
-    transparent: true, depthWrite: false,
-    uniforms: {
-      uTime: { value: 0 }, uScroll: { value: 0 }, uBoost: { value: 0 },
-      /* brass motes over a cool minority — ink on ivory, light on navy */
-      uWarm: { value: new THREE.Color(DARK ? 0xD4AF37 : 0xBE9235) },
-      uCool: { value: new THREE.Color(DARK ? 0x2DD4BF : 0x6B85B8) },
-      uAlpha: { value: DARK ? 0.55 : 0.30 }
-    },
-    vertexShader: `
-      attribute float aSeed; attribute float aSize; attribute float aTone;
-      uniform float uTime, uScroll, uBoost;
-      varying float vA; varying float vTone;
-      void main(){
-        vec3 p = position;
-        p.y += sin(uTime * 0.22 + aSeed) * 1.3;
-        p.x += cos(uTime * 0.16 + aSeed * 1.7) * 1.0;
-        p.y = mod(p.y + uScroll * 0.010 + 60.0, 120.0) - 60.0;
-        vec4 mv = modelViewMatrix * vec4(p, 1.0);
-        float d = -mv.z;
-        vA = smoothstep(62.0, 6.0, d) * (0.35 + 0.65 * abs(sin(uTime * 0.6 + aSeed)));
-        vA *= 1.0 + uBoost * 1.1;
-        vTone = aTone;
-        gl_Position = projectionMatrix * mv;
-        gl_PointSize = aSize * (300.0 / max(d, 1.0)) * (1.0 + uBoost * 0.5);
-      }`,
-    fragmentShader: `
-      varying float vA; varying float vTone;
-      uniform vec3 uWarm, uCool; uniform float uAlpha;
-      void main(){
-        vec2 c = gl_PointCoord - 0.5;
-        float r = length(c);
-        if(r > 0.5) discard;
-        float a = smoothstep(0.5, 0.0, r) * vA;
-        vec3 col = mix(uWarm, uCool, step(0.72, vTone));
-        gl_FragColor = vec4(col, a * uAlpha);
-      }`
-  });
-  const points = new THREE.Points(g, mat);
-  scene.add(points);
-
-  /* a faint drafting grid that tilts as the page advances */
-  const grid = new THREE.Group();
-  const gm = new THREE.LineBasicMaterial({ color: C.blue, transparent: true, opacity: 0.055 });
-  for (let i = -9; i <= 9; i++) {
-    const a = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i * 4.4, -40, -16), new THREE.Vector3(i * 4.4, 40, -16)]);
-    const b = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-40, i * 4.4, -16), new THREE.Vector3(40, i * 4.4, -16)]);
-    grid.add(new THREE.Line(a, gm), new THREE.Line(b, gm));
-  }
-  scene.add(grid);
-
-  let camX = 0, camY = 0;
-  const sizer = { clientWidth: 0, clientHeight: 0 };
-  const resync = () => { sizer.clientWidth = innerWidth; sizer.clientHeight = innerHeight; };
-  resync();
-  addEventListener('resize', resync, { passive: true });
-
-  const target = painter.add({
-    el: document.documentElement, sizeFrom: sizer, canvas, scene, camera, scale: 0.5,
-    update(dt, t) {
-      mat.uniforms.uTime.value = t;
-      mat.uniforms.uScroll.value = scrollState.smooth;
-      const boost = Math.min(1, Math.abs(scrollState.vel) / 60);
-      mat.uniforms.uBoost.value = damp(mat.uniforms.uBoost.value, boost, 6, dt);
-      camX = damp(camX, pointer.nx * 2.0, 2.2, dt);
-      camY = damp(camY, pointer.ny * 1.4, 2.2, dt);
-      camera.position.set(camX, camY, 26 + scrollState.progress * 7);
-      camera.lookAt(0, camY * 0.3, -6);
-      grid.rotation.x = scrollState.progress * 0.45 - 0.1;
-      grid.rotation.z = Math.sin(t * 0.05) * 0.05 + scrollState.progress * 0.22;
-      points.rotation.z = scrollState.progress * 0.18;
-    }
-  });
-  target.visible = true;   /* documentElement never intersects — keep it on */
-}
-
-/* ============================================================================
    8. NON-WEBGL POLISH — magnetic CTAs, tilting tool panes, marquee of products
    ========================================================================== */
 function polish() {
@@ -1445,16 +1098,6 @@ function polish() {
   new MutationObserver(() => { try { floatLabels(); } catch (e) {} })
     .observe(document.body, { childList: true, subtree: true });
 
-  /* --- the emblem is draggable, so say so once --- */
-  const orbit = document.querySelector('.omma-orbit');
-  if (orbit && !document.querySelector('.omma-hint')) {
-    const hint = document.createElement('span');
-    hint.className = 'omma-hint';
-    hint.setAttribute('aria-hidden', 'true');
-    hint.textContent = 'Drag to rotate';
-    orbit.parentElement.appendChild(hint);
-  }
-
   /* --- tool panes and why-cards get a tracked sheen. Never a 3D tilt: these
          are backdrop-filter surfaces and Chrome glitches transformed glass. --- */
   document.querySelectorAll('.tool-pane, .ann-card').forEach(el => {
@@ -1482,14 +1125,11 @@ function boot() {
   if (!PAINTER) PAINTER = new Painter();
   const painter = PAINTER;
   const steps = [
-    ['hero orbit', () => heroOrbit(painter)],
     ['card surfaces', () => cardSurfaces(painter)],
     ['form surfaces', () => formSurfaces(painter)],
     ['quote tower', () => quoteTower(painter)],
     ['fit compass', () => fitCompass(painter)],
     ['tool devices', () => toolDevices(painter)],
-    ['booking field', () => bookingField(painter)],
-    ['backdrop', () => backdrop(painter)],
     ['polish', () => polish()]
   ];
   for (const [, fn] of steps) {
