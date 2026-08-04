@@ -8,6 +8,7 @@
      • the estimate studio's "what's moving this" breakdown bars
      • a staggered 3D lift as static grids enter the viewport
      • an error shake on invalid capture fields
+     • 3D cube step markers, lettered answer keys, floating-label fields
 
    WHY THIS IS SEPARATE FROM THE 3D FILE
    The 3D layer gates itself off on touch, reduced motion and low-end devices.
@@ -196,8 +197,88 @@
     });
   }
 
+
+  /* ------------------------------------------------------------------ 5 --
+     CUBE STEP MARKERS
+     The template's process cubes, on the step numbers this site already has.
+     Pure CSS 3D — no WebGL — which is why this lives here and not in the gated
+     module: a phone was losing it for no reason.
+     ---------------------------------------------------------------------- */
+  function cubes() {
+    if (REDUCE) return;
+    document.querySelectorAll('.bp-step > .n, .book-point > .n, .proc-n').forEach(function (n, i) {
+      if (n.dataset.ommaCube) return;
+      n.dataset.ommaCube = '1';
+      var num = n.textContent.trim();
+      n.classList.add('omma-cube-slot');
+      /* the number goes on all four SIDE faces. Front + right alone leaves a
+         dead zone between 135 and 225 degrees where a blank face is toward the
+         camera and the step silently loses its number. */
+      n.innerHTML =
+        '<span class="omma-cube" style="animation-delay:' + (-i * 1.7).toFixed(1) + 's">' +
+        '<i class="f1">' + num + '</i><i class="f2">' + num + '</i>' +
+        '<i class="f3">' + num + '</i><i class="f4">' + num + '</i>' +
+        '<i class="f5"></i><i class="f6"></i></span>';
+    });
+  }
+
+  /* ------------------------------------------------------------------ 6 --
+     LETTERED ANSWER KEYS
+     The fit check re-renders on every answer, so watch rather than query once.
+     ---------------------------------------------------------------------- */
+  function answerKeys() {
+    var body = document.getElementById('fitBody');
+    if (!body) return;
+    function mark() {
+      body.querySelectorAll('.fit-opt').forEach(function (b, i) {
+        if (b.dataset.ommaLetter) return;
+        b.dataset.ommaLetter = '1';
+        var tag = document.createElement('i');
+        tag.className = 'omma-opt-key';
+        tag.setAttribute('aria-hidden', 'true');
+        tag.textContent = String.fromCharCode(65 + i);
+        b.insertBefore(tag, b.firstChild);
+      });
+    }
+    mark();
+    new MutationObserver(function () { try { mark(); } catch (e) {} })
+      .observe(body, { childList: true, subtree: true });
+  }
+
+  /* ------------------------------------------------------------------ 7 --
+     FLOATING-LABEL FIELDS
+     Presentational only: name, type, autocomplete, required and
+     aria-describedby all stay on the original input, so validation and the
+     Netlify form stubs behave exactly as before.
+     ---------------------------------------------------------------------- */
+  function floatLabels() {
+    function wrap() {
+      document.querySelectorAll('.cap-card input[placeholder]').forEach(function (input) {
+        if (input.dataset.ommaFloat || input.type === 'checkbox') return;
+        input.dataset.ommaFloat = '1';
+        var text = input.getAttribute('placeholder');
+        var box = document.createElement('span');
+        box.className = 'omma-float';
+        input.parentNode.insertBefore(box, input);
+        box.appendChild(input);
+        var label = document.createElement('span');
+        label.className = 'omma-float-label';
+        label.setAttribute('aria-hidden', 'true');
+        label.textContent = text;
+        box.appendChild(label);
+        /* a space keeps :placeholder-shown accurate while showing nothing */
+        input.setAttribute('placeholder', ' ');
+        input.setAttribute('aria-label', text);
+      });
+    }
+    wrap();
+    new MutationObserver(function () { try { wrap(); } catch (e) {} })
+      .observe(document.body, { childList: true, subtree: true });
+  }
+
   function boot() {
     ticker(); bars(); lift(); shake();
+    cubes(); answerKeys(); floatLabels();
     document.documentElement.classList.add('omma-design-on');
   }
   if (document.readyState === 'loading') {

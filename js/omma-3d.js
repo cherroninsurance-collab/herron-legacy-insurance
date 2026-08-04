@@ -1014,7 +1014,11 @@ function blueprintDevice(rig) {
 }
 
 /* ============================================================================
-   8. NON-WEBGL POLISH — magnetic CTAs, tilting tool panes, marquee of products
+   NON-WEBGL POLISH — pointer affordances only
+   The cube step markers, the lettered answer keys and the floating-label fields
+   used to live here and have moved to js/omma-design.js. They are plain CSS and
+   DOM, and this module gates itself off on touch — so a phone was losing three
+   details that cost it nothing. What is left needs a cursor to mean anything.
    ========================================================================== */
 function polish() {
   /* --- magnetic primary buttons --- */
@@ -1033,70 +1037,6 @@ function polish() {
       btn.style.setProperty('--mgy', '0px');
     });
   });
-
-  /* --- numbered steps become slowly turning 3D cubes. Pure CSS transforms:
-         the number stays readable on the front face at every angle. --- */
-  document.querySelectorAll('.bp-step > .n, .book-point > .n, .proc-n').forEach((n, i) => {
-    if (n.dataset.ommaCube) return;
-    n.dataset.ommaCube = '1';
-    const num = n.textContent.trim();
-    n.classList.add('omma-cube-slot');
-    /* the number goes on all four SIDE faces. Front + right alone leaves a dead
-       zone between 135° and 225° where a blank face is toward the camera and
-       the step silently loses its number. */
-    n.innerHTML =
-      '<span class="omma-cube" style="animation-delay:' + (-i * 1.7).toFixed(1) + 's">' +
-      '<i class="f1">' + num + '</i><i class="f2">' + num + '</i>' +
-      '<i class="f3">' + num + '</i><i class="f4">' + num + '</i>' +
-      '<i class="f5"></i><i class="f6"></i></span>';
-  });
-
-  /* --- fit-check answers get the template's lettered badges --- */
-  const fitBody = document.getElementById('fitBody');
-  if (fitBody) {
-    const letter = () => {
-      const opts = fitBody.querySelectorAll('.fit-opt');
-      opts.forEach((b, i) => {
-        if (b.dataset.ommaLetter) return;
-        b.dataset.ommaLetter = '1';
-        const tag = document.createElement('i');
-        tag.className = 'omma-opt-key';
-        tag.setAttribute('aria-hidden', 'true');
-        tag.textContent = String.fromCharCode(65 + i);
-        b.insertBefore(tag, b.firstChild);
-      });
-    };
-    letter();
-    new MutationObserver(() => { try { letter(); } catch (e) {} })
-      .observe(fitBody, { childList: true, subtree: true });
-  }
-
-  /* --- the template's floating-label fields, applied to the lead-capture
-         forms. Purely presentational: name, type, autocomplete, required and
-         aria-describedby all stay on the original input, so validation and the
-         Netlify form stubs behave exactly as before. --- */
-  const floatLabels = () => {
-    document.querySelectorAll('.cap-card input[placeholder]').forEach(input => {
-      if (input.dataset.ommaFloat || input.type === 'checkbox') return;
-      input.dataset.ommaFloat = '1';
-      const text = input.getAttribute('placeholder');
-      const wrap = document.createElement('span');
-      wrap.className = 'omma-float';
-      input.parentNode.insertBefore(wrap, input);
-      wrap.appendChild(input);
-      const label = document.createElement('span');
-      label.className = 'omma-float-label';
-      label.setAttribute('aria-hidden', 'true');
-      label.textContent = text;
-      wrap.appendChild(label);
-      /* a space keeps :placeholder-shown accurate while showing nothing */
-      input.setAttribute('placeholder', ' ');
-      input.setAttribute('aria-label', text);
-    });
-  };
-  floatLabels();
-  new MutationObserver(() => { try { floatLabels(); } catch (e) {} })
-    .observe(document.body, { childList: true, subtree: true });
 
   /* --- tool panes and why-cards get a tracked sheen. Never a 3D tilt: these
          are backdrop-filter surfaces and Chrome glitches transformed glass. --- */
