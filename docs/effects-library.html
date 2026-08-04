@@ -114,6 +114,9 @@ footer{padding:34px 0 0;max-width:68ch;font-size:14px;color:var(--ink-3)}
 .cap-card input:focus{border-color:var(--brass)}
 .q-field{width:100%;max-width:400px}
 .q-out{width:100%}
+.d-stage{width:100%;height:230px;border-radius:10px;overflow:hidden;
+  background:radial-gradient(120% 100% at 50% 0%,#FFF,#EEF1F7)}
+.d-mask{--p:0%}
 </style>
 </head>
 <body>
@@ -139,6 +142,10 @@ footer{padding:34px 0 0;max-width:68ch;font-size:14px;color:var(--ink-3)}
     <a href="#sheen" data-cat="css"><span>css</span>Cursor-tracked sheen</a>
     <a href="#shake" data-cat="css"><span>css</span>Error shake</a>
     <a href="#spline" data-cat="spline"><span>spline</span>Spline scenes</a>
+    <a href="#pbr" data-cat="advanced"><span>advanced</span>Injecting into Three&#x27;s PBR shader</a>
+    <a href="#instanced" data-cat="advanced"><span>advanced</span>One draw call for thousands of objects</a>
+    <a href="#svgdraw" data-cat="advanced"><span>advanced</span>A line that draws itself on scroll</a>
+    <a href="#typemask" data-cat="advanced"><span>advanced</span>Type filled by scroll position</a>
   </nav>
 
   <main>
@@ -1512,6 +1519,123 @@ function blueprintDevice(rig) {
       attributes: true, subtree: true, attributeFilter: [&#x27;hidden&#x27;]
     });
   }</code></pre></div></section>
+<section id="pbr" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Injecting into Three&#x27;s PBR shader</h2></div><p class="blurb">The technique that stops you having to choose between real lighting and a custom look. A raw <code>ShaderMaterial</code> gives you total control and throws away every bit of shadowing, clearcoat and environment response Three already computes. <code>onBeforeCompile</code> lets you keep the whole <code>MeshPhysicalMaterial</code> and splice your own GLSL into it — here, a travelling band added after <code>&lt;dithering_fragment&gt;</code>, the last hook in the chain. Pass a uniform object you also hold a reference to, or you cannot animate it.</p><div class="demo" data-demo="pbr"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>      /* --- 1. inject into Three&#x27;s PBR shader with onBeforeCompile ---------
+         The material keeps every bit of real lighting, shadowing and clearcoat
+         Three gives it; we only add a travelling band on top. This is how you
+         get a custom look without abandoning MeshPhysicalMaterial for a raw
+         ShaderMaterial and losing the lighting with it. */
+      stage(&#x27;pbrStage&#x27;, function (THREE, scene, cam) {
+        cam.position.set(0, 0.6, 5.4);
+        var uni = { uTime: { value: 0 } };
+        var mat = new THREE.MeshPhysicalMaterial({
+          color: 0xE6EBF5, metalness: 0.16, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.1
+        });
+        mat.onBeforeCompile = function (shader) {
+          shader.uniforms.uTime = uni.uTime;
+          shader.vertexShader = &#x27;varying vec3 vLocal;\n&#x27; + shader.vertexShader.replace(
+            &#x27;#include &lt;begin_vertex&gt;&#x27;, &#x27;#include &lt;begin_vertex&gt;\n  vLocal = position;&#x27;);
+          shader.fragmentShader = &#x27;uniform float uTime;\nvarying vec3 vLocal;\n&#x27; +
+            shader.fragmentShader.replace(&#x27;#include &lt;dithering_fragment&gt;&#x27;,
+              &#x27;#include &lt;dithering_fragment&gt;\n&#x27; +
+              &#x27;  float band = smoothstep(0.16, 0.0, abs(vLocal.y - sin(uTime * 0.6) * 1.1));\n&#x27; +
+              &#x27;  gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.80, 0.62, 0.24), band * 0.75);&#x27;);
+        };
+        var mesh = new THREE.Mesh(new THREE.TorusKnotGeometry(1.05, 0.33, 160, 24), mat);
+        scene.add(mesh);
+        return function (dt, t) {
+          uni.uTime.value = t;
+          mesh.rotation.y += dt * 0.34;
+          mesh.rotation.x = Math.sin(t * 0.3) * 0.22;
+        };
+      });</code></pre></div></section>
+<section id="instanced" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>One draw call for thousands of objects</h2></div><p class="blurb">2,400 boxes as a single <code>InstancedMesh</code>. As 2,400 separate meshes this stalls; as one instanced mesh the per-frame cost is a matrix write each and <b>one</b> draw call. The pattern is always the same: compose a <code>Matrix4</code>, <code>setMatrixAt</code>, then set <code>instanceMatrix.needsUpdate = true</code> once at the end — not per instance. Per-instance colour goes through <code>setColorAt</code> and needs no per-frame update unless it changes.</p><div class="demo" data-demo="instanced"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>      /* --- 2. one instanced draw call ------------------------------------
+         2,400 boxes as a single InstancedMesh. The per-frame cost is one
+         matrix write per instance and ONE draw call — the same scene as 2,400
+         separate Mesh objects would stall any browser. */
+      stage(&#x27;instStage&#x27;, function (THREE, scene, cam) {
+        cam.position.set(0, 6.2, 9.2); cam.lookAt(0, 0, 0);
+        var COLS = 60, ROWS = 40, N = COLS * ROWS;
+        var mesh = new THREE.InstancedMesh(
+          new THREE.BoxGeometry(0.16, 0.16, 0.16),
+          new THREE.MeshStandardMaterial({ color: 0xDCE4F1, metalness: 0.2, roughness: 0.35 }), N);
+        var col = new THREE.Color();
+        for (var i = 0; i &lt; N; i++) {
+          col.setHex(i % 7 === 0 ? 0xC9973B : 0xBFCBE2);
+          mesh.setColorAt(i, col);
+        }
+        scene.add(mesh);
+        var m = new THREE.Matrix4(), q = new THREE.Quaternion(),
+            s = new THREE.Vector3(1, 1, 1), v = new THREE.Vector3();
+        var mx = 0, my = 0;
+        addEventListener(&#x27;pointermove&#x27;, function (e) {
+          mx = (e.clientX / innerWidth) * 2 - 1;
+          my = -((e.clientY / innerHeight) * 2 - 1);
+        }, { passive: true });
+        return function (dt, t) {
+          var k = 0;
+          for (var x = 0; x &lt; COLS; x++) {
+            for (var z = 0; z &lt; ROWS; z++) {
+              var px = (x - COLS / 2) * 0.22, pz = (z - ROWS / 2) * 0.22;
+              var d = Math.hypot(px - mx * 5, pz + my * 3);
+              v.set(px, Math.sin(d * 1.5 - t * 2.2) * 0.42 * Math.exp(-d * 0.16), pz);
+              m.compose(v, q, s);
+              mesh.setMatrixAt(k++, m);
+            }
+          }
+          mesh.instanceMatrix.needsUpdate = true;
+        };
+      });</code></pre></div></section>
+<section id="svgdraw" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>A line that draws itself on scroll</h2></div><p class="blurb">A chart line that draws in proportion to reading position. <code>getTotalLength()</code> gives the path length; set it as both <code>stroke-dasharray</code> and <code>stroke-dashoffset</code> and the line is hidden, then walk the offset to zero. <b>No library and no WebGL</b>, so unlike everything above it this one runs on every phone — which for a financial page is often the better trade.</p><div class="demo" data-demo="svgdraw"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  /* ------------------------------------------------------------ svg draw --
+     A line that draws itself as its container crosses the viewport. Pure
+     stroke-dashoffset — no library, no WebGL, and it runs on every phone. */
+  (function () {
+    var el = set(&#x27;svgdraw&#x27;,
+      &#x27;&lt;span class=&quot;d-label&quot;&gt;Scroll the page — the line draws in proportion&lt;/span&gt;&#x27; +
+      &#x27;&lt;svg viewBox=&quot;0 0 520 120&quot; width=&quot;100%&quot; height=&quot;120&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot;&gt;&#x27; +
+      &#x27;&lt;path d=&quot;M4 96 C 60 92, 92 64, 140 62 S 226 84, 268 56 S 350 16, 404 30 S 486 20, 516 8&quot; &#x27; +
+      &#x27;stroke=&quot;url(#g)&quot; stroke-width=&quot;2.5&quot; stroke-linecap=&quot;round&quot; id=&quot;drawPath&quot;/&gt;&#x27; +
+      &#x27;&lt;defs&gt;&lt;linearGradient id=&quot;g&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;0&quot;&gt;&#x27; +
+      &#x27;&lt;stop offset=&quot;0&quot; stop-color=&quot;#B07E22&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#E0BE79&quot;/&gt;&#x27; +
+      &#x27;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;/svg&gt;&#x27;);
+    if (!el) return;
+    var path = el.querySelector(&#x27;#drawPath&#x27;);
+    var len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = REDUCE ? 0 : len;
+    if (REDUCE) return;
+    function paint() {
+      var r = el.getBoundingClientRect();
+      /* 0 as the element enters the bottom, 1 once it has cleared the middle */
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      path.style.strokeDashoffset = (len * (1 - p)).toFixed(1);
+    }
+    addEventListener(&#x27;scroll&#x27;, paint, { passive: true });
+    addEventListener(&#x27;resize&#x27;, paint, { passive: true });
+    paint();
+  })();</code></pre></div></section>
+<section id="typemask" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Type filled by scroll position</h2></div><p class="blurb">A headline that fills as you read it, using <code>background-clip: text</code> with a hard two-stop gradient and a custom property for the stop position. Tying it to scroll rather than to a keyframe is the whole point — the fill tracks where the reader actually is instead of running on a timer they may never see.</p><div class="demo" data-demo="typemask"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  /* --------------------------------------------------------- type reveal --
+     A gradient that wipes through a headline, driven by scroll rather than by
+     a fixed keyframe, so the reveal is tied to reading position. */
+  (function () {
+    var el = set(&#x27;typemask&#x27;,
+      &#x27;&lt;span class=&quot;d-label&quot;&gt;Scroll — the fill follows your position, it is not on a timer&lt;/span&gt;&#x27; +
+      &#x27;&lt;h3 class=&quot;d-mask&quot; style=&quot;font-family:var(--serif);font-size:clamp(20px,3vw,30px);&#x27; +
+      &#x27;line-height:1.2;margin:0;max-width:16ch&quot;&gt;We engineer the plan that outlives you.&lt;/h3&gt;&#x27;);
+    if (!el) return;
+    var h = el.querySelector(&#x27;.d-mask&#x27;);
+    h.style.backgroundImage = &#x27;linear-gradient(90deg,#B07E22,#B07E22 var(--p,0%),#C9D2E4 var(--p,0%),#C9D2E4)&#x27;;
+    h.style.webkitBackgroundClip = &#x27;text&#x27;;
+    h.style.backgroundClip = &#x27;text&#x27;;
+    h.style.color = &#x27;transparent&#x27;;
+    if (REDUCE) { h.style.setProperty(&#x27;--p&#x27;, &#x27;100%&#x27;); return; }
+    function paint() {
+      var r = el.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.8)));
+      h.style.setProperty(&#x27;--p&#x27;, (p * 100).toFixed(1) + &#x27;%&#x27;);
+    }
+    addEventListener(&#x27;scroll&#x27;, paint, { passive: true });
+    paint();
+  })();</code></pre></div></section>
 <section id="spline" class="entry"><div class="entry-head"><span class="cat">spline</span><h2>Spline scenes</h2></div><p class="blurb">Omma is Spline's natural-language builder, so this is one ecosystem. The difference is what you get: <b>Omma writes Three.js source you own and can retheme</b>, while a Spline scene is a binary <code>.splinecode</code> file played by Spline's runtime. Both embed shapes are below. Weigh them honestly before adopting: the viewer pulls a player from a third-party CDN into your critical path, the scene file is typically hundreds of KB to several MB, and you cannot restyle it in code — you go back to the editor. For a hero centrepiece that is a fair trade. For the kind of small explanatory devices on this page it is not, which is why nothing here uses it.</p><div class="snip"><div class="snip-bar"><span>html — viewer web component</span><button class="copy" type="button">Copy</button></div><pre><code>&lt;!-- Spline: the no-build embed. One web component, a scene URL from
      the editor&#x27;s Export &gt; Code panel. Loads Spline&#x27;s player from their CDN. --&gt;
 &lt;script type=&quot;module&quot;

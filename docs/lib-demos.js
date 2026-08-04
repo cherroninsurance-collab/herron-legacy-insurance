@@ -309,3 +309,199 @@
     });
   })();
 })();
+
+/* ============================================================================
+   ADVANCED TIER — techniques past what the Omma export contained
+   ----------------------------------------------------------------------------
+   Written and verified here rather than lifted. Each one is picked because it
+   suits a bright corporate page and because the export did not demonstrate it:
+   injecting into Three's PBR shader, drawing thousands of objects in one call,
+   a scroll-drawn line, and a scroll-linked type mask.
+   ========================================================================== */
+(function () {
+  'use strict';
+  var REDUCE = matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var set = function (n, h) { var e = document.querySelector('[data-demo="' + n + '"]'); if (e) e.innerHTML = h; return e; };
+
+  /* ------------------------------------------------------------ svg draw --
+     A line that draws itself as its container crosses the viewport. Pure
+     stroke-dashoffset — no library, no WebGL, and it runs on every phone. */
+  (function () {
+    var el = set('svgdraw',
+      '<span class="d-label">Scroll the page — the line draws in proportion</span>' +
+      '<svg viewBox="0 0 520 120" width="100%" height="120" fill="none" aria-hidden="true">' +
+      '<path d="M4 96 C 60 92, 92 64, 140 62 S 226 84, 268 56 S 350 16, 404 30 S 486 20, 516 8" ' +
+      'stroke="url(#g)" stroke-width="2.5" stroke-linecap="round" id="drawPath"/>' +
+      '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0">' +
+      '<stop offset="0" stop-color="#B07E22"/><stop offset="1" stop-color="#E0BE79"/>' +
+      '</linearGradient></defs></svg>');
+    if (!el) return;
+    var path = el.querySelector('#drawPath');
+    var len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = REDUCE ? 0 : len;
+    if (REDUCE) return;
+    function paint() {
+      var r = el.getBoundingClientRect();
+      /* 0 as the element enters the bottom, 1 once it has cleared the middle */
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      path.style.strokeDashoffset = (len * (1 - p)).toFixed(1);
+    }
+    addEventListener('scroll', paint, { passive: true });
+    addEventListener('resize', paint, { passive: true });
+    paint();
+  })();
+
+  /* --------------------------------------------------------- type reveal --
+     A gradient that wipes through a headline, driven by scroll rather than by
+     a fixed keyframe, so the reveal is tied to reading position. */
+  (function () {
+    var el = set('typemask',
+      '<span class="d-label">Scroll — the fill follows your position, it is not on a timer</span>' +
+      '<h3 class="d-mask" style="font-family:var(--serif);font-size:clamp(20px,3vw,30px);' +
+      'line-height:1.2;margin:0;max-width:16ch">We engineer the plan that outlives you.</h3>');
+    if (!el) return;
+    var h = el.querySelector('.d-mask');
+    h.style.backgroundImage = 'linear-gradient(90deg,#B07E22,#B07E22 var(--p,0%),#C9D2E4 var(--p,0%),#C9D2E4)';
+    h.style.webkitBackgroundClip = 'text';
+    h.style.backgroundClip = 'text';
+    h.style.color = 'transparent';
+    if (REDUCE) { h.style.setProperty('--p', '100%'); return; }
+    function paint() {
+      var r = el.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.8)));
+      h.style.setProperty('--p', (p * 100).toFixed(1) + '%');
+    }
+    addEventListener('scroll', paint, { passive: true });
+    paint();
+  })();
+
+  /* ----------------------------------------------------- webgl advanced --
+     Two scenes sharing the page's single-renderer discipline: a PBR material
+     with a band injected into Three's own shader, and 2400 objects in one
+     instanced draw call. */
+  (function () {
+    var a = set('pbr', '<span class="d-label">A real physical material with a band injected into Three\'s shader</span><div class="d-stage" id="pbrStage"></div>');
+    var b = set('instanced', '<span class="d-label">2,400 objects, one draw call — move the cursor</span><div class="d-stage" id="instStage"></div>');
+    if ((!a && !b) || REDUCE) return;
+
+    import('../vendor/three.module.min.js').then(function (THREE) {
+      var pr = Math.min(devicePixelRatio || 1, 2);
+      var gl = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      gl.setPixelRatio(1); gl.setClearColor(0x000000, 0); gl.setScissorTest(true);
+      var targets = [];
+
+      function stage(hostId, build) {
+        var host = document.getElementById(hostId);
+        if (!host) return;
+        var canvas = document.createElement('canvas');
+        canvas.style.cssText = 'display:block;width:100%;height:100%';
+        host.appendChild(canvas);
+        var scene = new THREE.Scene();
+        var cam = new THREE.PerspectiveCamera(42, 2, 0.1, 100);
+        scene.add(new THREE.AmbientLight(0xffffff, 1.05));
+        scene.add(new THREE.HemisphereLight(0xffffff, 0xD9E2F2, 0.85));
+        var key = new THREE.DirectionalLight(0xFFF0D2, 2.1); key.position.set(4, 6, 6); scene.add(key);
+        var fill = new THREE.DirectionalLight(0xD9E4FA, 1.1); fill.position.set(-5, -1, -4); scene.add(fill);
+        var tick = build(THREE, scene, cam);
+        targets.push({ host: host, canvas: canvas, ctx: canvas.getContext('2d'), scene: scene, cam: cam, tick: tick });
+      }
+
+      /* --- 1. inject into Three's PBR shader with onBeforeCompile ---------
+         The material keeps every bit of real lighting, shadowing and clearcoat
+         Three gives it; we only add a travelling band on top. This is how you
+         get a custom look without abandoning MeshPhysicalMaterial for a raw
+         ShaderMaterial and losing the lighting with it. */
+      stage('pbrStage', function (THREE, scene, cam) {
+        cam.position.set(0, 0.6, 5.4);
+        var uni = { uTime: { value: 0 } };
+        var mat = new THREE.MeshPhysicalMaterial({
+          color: 0xE6EBF5, metalness: 0.16, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.1
+        });
+        mat.onBeforeCompile = function (shader) {
+          shader.uniforms.uTime = uni.uTime;
+          shader.vertexShader = 'varying vec3 vLocal;\n' + shader.vertexShader.replace(
+            '#include <begin_vertex>', '#include <begin_vertex>\n  vLocal = position;');
+          shader.fragmentShader = 'uniform float uTime;\nvarying vec3 vLocal;\n' +
+            shader.fragmentShader.replace('#include <dithering_fragment>',
+              '#include <dithering_fragment>\n' +
+              '  float band = smoothstep(0.16, 0.0, abs(vLocal.y - sin(uTime * 0.6) * 1.1));\n' +
+              '  gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.80, 0.62, 0.24), band * 0.75);');
+        };
+        var mesh = new THREE.Mesh(new THREE.TorusKnotGeometry(1.05, 0.33, 160, 24), mat);
+        scene.add(mesh);
+        return function (dt, t) {
+          uni.uTime.value = t;
+          mesh.rotation.y += dt * 0.34;
+          mesh.rotation.x = Math.sin(t * 0.3) * 0.22;
+        };
+      });
+
+      /* --- 2. one instanced draw call ------------------------------------
+         2,400 boxes as a single InstancedMesh. The per-frame cost is one
+         matrix write per instance and ONE draw call — the same scene as 2,400
+         separate Mesh objects would stall any browser. */
+      stage('instStage', function (THREE, scene, cam) {
+        cam.position.set(0, 6.2, 9.2); cam.lookAt(0, 0, 0);
+        var COLS = 60, ROWS = 40, N = COLS * ROWS;
+        var mesh = new THREE.InstancedMesh(
+          new THREE.BoxGeometry(0.16, 0.16, 0.16),
+          new THREE.MeshStandardMaterial({ color: 0xDCE4F1, metalness: 0.2, roughness: 0.35 }), N);
+        var col = new THREE.Color();
+        for (var i = 0; i < N; i++) {
+          col.setHex(i % 7 === 0 ? 0xC9973B : 0xBFCBE2);
+          mesh.setColorAt(i, col);
+        }
+        scene.add(mesh);
+        var m = new THREE.Matrix4(), q = new THREE.Quaternion(),
+            s = new THREE.Vector3(1, 1, 1), v = new THREE.Vector3();
+        var mx = 0, my = 0;
+        addEventListener('pointermove', function (e) {
+          mx = (e.clientX / innerWidth) * 2 - 1;
+          my = -((e.clientY / innerHeight) * 2 - 1);
+        }, { passive: true });
+        return function (dt, t) {
+          var k = 0;
+          for (var x = 0; x < COLS; x++) {
+            for (var z = 0; z < ROWS; z++) {
+              var px = (x - COLS / 2) * 0.22, pz = (z - ROWS / 2) * 0.22;
+              var d = Math.hypot(px - mx * 5, pz + my * 3);
+              v.set(px, Math.sin(d * 1.5 - t * 2.2) * 0.42 * Math.exp(-d * 0.16), pz);
+              m.compose(v, q, s);
+              mesh.setMatrixAt(k++, m);
+            }
+          }
+          mesh.instanceMatrix.needsUpdate = true;
+        };
+      });
+
+      if (!targets.length) return;
+      var last = performance.now();
+      (function loop(now) {
+        requestAnimationFrame(loop);
+        var dt = Math.min((now - last) / 1000, 0.05), t = now / 1000; last = now;
+        var bw = 1, bh = 1;
+        targets.forEach(function (tg) {
+          tg.dw = Math.max(1, Math.round(tg.host.clientWidth * pr));
+          tg.dh = Math.max(1, Math.round(tg.host.clientHeight * pr));
+          if (tg.canvas.width !== tg.dw) {
+            tg.canvas.width = tg.dw; tg.canvas.height = tg.dh;
+            tg.cam.aspect = tg.host.clientWidth / Math.max(1, tg.host.clientHeight);
+            tg.cam.updateProjectionMatrix();
+          }
+          bw = Math.max(bw, tg.dw); bh = Math.max(bh, tg.dh);
+        });
+        gl.setSize(bw, bh, false);
+        targets.forEach(function (tg) {
+          tg.tick(dt, t);
+          gl.setViewport(0, bh - tg.dh, tg.dw, tg.dh);
+          gl.setScissor(0, bh - tg.dh, tg.dw, tg.dh);
+          gl.clear(true, true, true);
+          gl.render(tg.scene, tg.cam);
+          tg.ctx.clearRect(0, 0, tg.dw, tg.dh);
+          tg.ctx.drawImage(gl.domElement, 0, 0, tg.dw, tg.dh, 0, 0, tg.dw, tg.dh);
+        });
+      })(last);
+    }).catch(function () { /* no three.js reachable — stages stay empty */ });
+  })();
+})();
