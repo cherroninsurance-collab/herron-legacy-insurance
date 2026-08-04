@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-omma-theme="dark">
+<html lang="en" data-omma-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -88,8 +88,143 @@
 </style>
 <link rel="stylesheet" href="js/omma-3d.css">
 <style id="omma-page">
-/* the panels get the same live surfaces the homepage cards do; the page-wide
-   mote field that used to sit behind them was cut — it read as fuzz, not depth */
+/* ============================================================================
+   BRIGHT THEME — Wealth Shield Matrix
+   ----------------------------------------------------------------------------
+   The tool shipped as a navy app. This repaints it in the site's ivory key
+   WITHOUT touching the markup: every rule below overrides a Tailwind utility or
+   one of the page's own custom classes by name. Nothing about the simulator's
+   behaviour, its numbers or its disclosures is affected.
+
+   Scoped under html[data-omma-theme] so it outranks Tailwind's single-class
+   utilities on specificity alone — !important only where a utility carries one
+   of its own.
+
+   Semantic colour keeps its meaning and only changes value: the shield stays
+   teal and the loss signal stays red, both darkened to hold contrast on white.
+   ========================================================================== */
+html[data-omma-theme]{background:#FBFAF6}
+
+html[data-omma-theme] body{
+  color:#2B3C5E;
+  background:
+    radial-gradient(1100px 560px at 72% -8%,rgba(190,146,53,.10),transparent 60%),
+    radial-gradient(900px 520px at -5% 108%,rgba(13,125,116,.06),transparent 60%),
+    #FBFAF6;
+}
+html[data-omma-theme] ::selection{background:rgba(190,146,53,.28)}
+
+/* ---- surfaces ---- */
+html[data-omma-theme] .card{
+  background:linear-gradient(180deg,#FFFFFF 0%,#F7F8FB 100%);
+  border:1px solid rgba(14,31,62,.10);
+  box-shadow:0 1px 2px rgba(8,18,38,.04);
+}
+html[data-omma-theme] .card-active{
+  border-color:rgba(190,146,53,.42);
+  box-shadow:0 2px 4px rgba(8,18,38,.05),0 18px 44px -22px rgba(8,18,38,.20),
+             0 0 0 1px rgba(190,146,53,.10);
+}
+/* body itself carries .bg-navy-950 — exclude it, or this rule paints over the
+   ivory ground and its two washes and the page goes flat white */
+html[data-omma-theme] .bg-navy-950:not(body),
+html[data-omma-theme] .bg-navy-900{background-color:#FFFFFF!important}
+html[data-omma-theme] .bg-navy-800{background-color:#F4F6FA!important}
+html[data-omma-theme] .bg-navy-950\/95{background-color:rgba(255,255,255,.92)!important}
+html[data-omma-theme] header{border-bottom-color:rgba(14,31,62,.10)!important}
+
+/* ---- ink. Tailwind's text utilities are named for a dark ground, so each one
+        maps to the equivalent step on a light ground rather than to its name. */
+html[data-omma-theme] .text-white,
+html[data-omma-theme] .text-slate-100,
+html[data-omma-theme] .text-slate-200{color:#0E1F3E!important}
+html[data-omma-theme] .text-slate-300{color:#2B3C5E!important}
+/* one step darker than a literal mapping would give: the compliance footer is
+   .text-slate-500, and 3.5:1 is not good enough for text that has to be read */
+html[data-omma-theme] .text-slate-400{color:#46567A!important}
+html[data-omma-theme] .text-slate-500{color:#5A6A8C!important}
+
+/* brass at 5:1 on white — the display gold is far too light to read as text */
+html[data-omma-theme] .text-gold-400,
+html[data-omma-theme] .text-gold-300,
+html[data-omma-theme] .text-gold-400\/80,
+html[data-omma-theme] .kicker{color:#8A6420!important}
+
+/* semantic: the shield and the loss signal keep their hue, gain contrast */
+html[data-omma-theme] .text-shield{color:#0D7D74!important}
+html[data-omma-theme] .text-signal-red{color:#C2453D!important}
+html[data-omma-theme] .bg-signal-red\/5{background-color:rgba(194,69,61,.055)!important}
+
+/* ---- hairlines ---- */
+html[data-omma-theme] .border-navy-700,
+html[data-omma-theme] .border-navy-800\/60{border-color:rgba(14,31,62,.12)!important}
+html[data-omma-theme] .border-gold-400\/10{border-color:rgba(190,146,53,.20)!important}
+html[data-omma-theme] .border-gold-400\/15,
+html[data-omma-theme] .border-gold-400\/20{border-color:rgba(190,146,53,.28)!important}
+html[data-omma-theme] .border-gold-400\/30,
+html[data-omma-theme] .border-gold-400{border-color:rgba(190,146,53,.45)!important}
+html[data-omma-theme] .border-shield\/40{border-color:rgba(13,125,116,.38)!important}
+html[data-omma-theme] .border-signal-red\/20,
+html[data-omma-theme] .border-signal-red\/25,
+html[data-omma-theme] .border-signal-red\/30{border-color:rgba(194,69,61,.30)!important}
+
+/* ---- controls ---- */
+html[data-omma-theme] .btn-ghost{color:#2B3C5E;border-color:rgba(190,146,53,.40)}
+html[data-omma-theme] .btn-ghost:hover{border-color:rgba(190,146,53,.75);color:#8A6420}
+html[data-omma-theme] .btn-teal{background:rgba(13,125,116,.08);color:#0D7D74;border-color:rgba(13,125,116,.45)}
+html[data-omma-theme] .btn-teal:hover{background:rgba(13,125,116,.14)}
+html[data-omma-theme] .btn-danger{background:rgba(194,69,61,.07);color:#C2453D;border-color:rgba(194,69,61,.42)}
+html[data-omma-theme] .btn-primary{
+  color:#22160A;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 8px 20px -10px rgba(190,146,53,.55);
+}
+html[data-omma-theme] .seg{background:#FFFFFF;border-color:rgba(190,146,53,.30)}
+html[data-omma-theme] .seg button{color:#5A6A8C}
+html[data-omma-theme] .seg button:hover{color:#0E1F3E}
+html[data-omma-theme] .seg button.on{color:#22160A}
+html[data-omma-theme] input[type=range]{
+  background:linear-gradient(90deg,#BE9235 var(--p,50%),rgba(14,31,62,.14) var(--p,50%));
+}
+html[data-omma-theme] input[type=range]::-webkit-slider-thumb{
+  border-color:#FFFFFF;box-shadow:0 0 0 1.5px #BE9235,0 2px 6px rgba(8,18,38,.28);
+}
+html[data-omma-theme] input[type=range]::-moz-range-thumb{
+  border-color:#FFFFFF;box-shadow:0 0 0 1.5px #BE9235,0 2px 6px rgba(8,18,38,.28);
+}
+html[data-omma-theme] [contenteditable]:empty::before{color:#98A4BC}
+html[data-omma-theme] [contenteditable]{border-bottom-color:rgba(190,146,53,.45)}
+html[data-omma-theme] ::-webkit-scrollbar-thumb{background:rgba(14,31,62,.20)}
+
+/* ---- the SVG scenes ----------------------------------------------------
+   These were drawn for a navy ground: solid dark fills read as *absence* there
+   and as heavy blobs here. Flip the two darkest to light surfaces with a navy
+   hairline — the same dark-line-on-light language the rest of the brand uses —
+   and darken the display gold, which is far too pale to read on white.
+
+   Two things deliberately keep their value: the slate water in the unshielded
+   bucket (it has to stay visibly duller than the shielded one, which is the
+   entire point of the scene) and the teal shield outline.                    */
+html[data-omma-theme] svg [fill="#0A1128"]{fill:#F2F5FA}
+html[data-omma-theme] svg [fill="#121B3C"]{fill:#E7ECF5}
+html[data-omma-theme] svg [stroke="#0A1128"]{stroke:rgba(14,31,62,.55)}
+html[data-omma-theme] svg [stroke="#243468"]{stroke:rgba(14,31,62,.18)}
+html[data-omma-theme] svg [stroke="#334155"]{stroke:rgba(14,31,62,.30)}
+
+/* display gold on white needs to come down to a readable brass */
+html[data-omma-theme] svg text[fill="#E8C96A"],
+html[data-omma-theme] svg text[fill="#D4AF37"]{fill:#8A6420}
+html[data-omma-theme] svg text[fill="#94A3B8"],
+html[data-omma-theme] svg text[fill="#CBD5E1"],
+html[data-omma-theme] svg text[fill="#64748B"]{fill:#5A6A8C}
+html[data-omma-theme] svg text[fill="#2DD4BF"]{fill:#0D7D74}
+html[data-omma-theme] svg text[fill="#F87171"]{fill:#C2453D}
+
+/* a dark-navy shield body on white is a blob; make it a light plate that its
+   teal outline still reads against */
+html[data-omma-theme] #shield-badge path[fill="#0A1128"],
+html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
+
+/* the panels get the same live surfaces the homepage cards do */
 .card{position:relative}
 </style>
 </head>
