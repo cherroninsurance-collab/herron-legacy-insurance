@@ -226,6 +226,15 @@ html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
 
 /* the panels get the same live surfaces the homepage cards do */
 .card{position:relative}
+
+/* ---- the bucket scene ----------------------------------------------------
+   The 3D device sits where the SVG was. The SVG is NOT removed: the page's own
+   storm logic writes to its nodes, and it is the fallback when WebGL is
+   unavailable — .omma-bucket-on is only set once a context actually exists. */
+.omma-bucket{display:none}
+html.omma-bucket-on .omma-bucket{display:block;width:100%;height:250px}
+html.omma-bucket-on #iulstep0 svg{display:none}
+@media(max-width:640px){html.omma-bucket-on .omma-bucket{height:200px}}
 </style>
 </head>
 <body class="bg-navy-950 text-slate-200 min-h-screen pb-24"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
@@ -305,7 +314,11 @@ html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
         <button id="stormbtn" class="btn btn-primary mt-6">Simulate a market downturn</button>
       </div>
       <div class="relative">
-        <div id="storm-clouds" class="hidden absolute -top-2 inset-x-0 text-center text-3xl storm select-none" aria-hidden="true">🌩️ ⛈️ 🌩️</div>
+        <!-- The emoji storm sequence that used to live here is gone; the downturn is
+     now shown by the 3D scene draining the unshielded column. The node stays
+     so the page's own toggle logic keeps its target. -->
+        <div id="storm-clouds" class="hidden" aria-hidden="true"></div>
+        <div id="ommaBucket" class="omma-bucket" aria-hidden="true"></div>
         <svg viewBox="0 0 360 240" class="w-full" role="img" aria-label="Two buckets: the shielded bucket holds its level in a market storm, the unshielded bucket drains">
           <path d="M40 70 L60 210 L140 210 L160 70 Z" fill="#0A1128" stroke="#D4AF37" stroke-width="2"/>
           <rect class="water" x="52" y="96" width="96" height="106" fill="#B08E22" opacity="0.85" rx="3"/>
@@ -315,7 +328,7 @@ html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
           <path d="M200 70 L220 210 L300 210 L320 70 Z" fill="#0A1128" stroke="#64748B" stroke-width="2"/>
           <rect id="unshielded-water" class="water" x="212" y="96" height="106" width="96" fill="#475569" opacity="0.9" rx="3"/>
           <text x="260" y="232" text-anchor="middle" fill="#94A3B8" font-size="13">Unshielded market</text>
-          <text id="storm-loss" class="water" x="260" y="52" text-anchor="middle" fill="#F87171" font-size="12" font-weight="600" opacity="0">−40% 📉</text>
+          <text id="storm-loss" class="water" x="260" y="52" text-anchor="middle" fill="#F87171" font-size="12" font-weight="600" opacity="0">−40%</text>
         </svg>
         <p id="storm-caption" class="text-center text-sm mt-3 text-slate-500">Both buckets are full. Run the downturn to compare.</p>
       </div>
@@ -1438,5 +1451,6 @@ renderIulCalc(); renderFiaCalc(); renderMygaCalc(); renderCredit(); renderObject
 })();
 </script>
 <script type="module" src="js/omma-3d.js"></script>
+<script type="module" src="js/omma-matrix.js"></script>
 </body>
 </html>
