@@ -166,6 +166,16 @@ import * as THREE from '../vendor/three.module.min.js';
       '}'].join('\n')
   };
 
+  /* The first version of this swayed the whole extrusion ±22° and hung two
+     torus hoops off it — at any angle off-centre an extruded flat shield reads
+     as a translucent cone with rings floating through it. What reads as a
+     SHIELD is discipline: face the camera, hold still, and draw the boundary
+     as real metal.
+       - the emblem faces the viewer permanently (only a slow float remains)
+       - the rim is a brass TUBE along the outline — a Line is one pixel at
+         any distance, which is why the old edge disappeared
+       - the hoops are gone
+     The glass fill keeps the dispersion, calmer, and never occludes copy. */
   var shield = new THREE.Group();
   var sp = new THREE.Shape();
   sp.moveTo(0, 1.30);
@@ -173,9 +183,10 @@ import * as THREE from '../vendor/three.module.min.js';
   sp.bezierCurveTo(1.00, 0.24, 0.86, -0.34, 0, -1.24);
   sp.bezierCurveTo(-0.86, -0.34, -1.00, 0.24, -0.98, 0.86);
   sp.bezierCurveTo(-0.96, 1.06, -0.62, 1.24, 0, 1.30);
+
   var glassGeo = new THREE.ExtrudeGeometry(sp, {
-    depth: 0.14, bevelEnabled: true, bevelThickness: 0.05,
-    bevelSize: 0.05, bevelSegments: 4, curveSegments: 40
+    depth: 0.10, bevelEnabled: true, bevelThickness: 0.04,
+    bevelSize: 0.04, bevelSegments: 3, curveSegments: 40
   });
   glassGeo.center();
   var glassMat = new THREE.ShaderMaterial({
@@ -183,32 +194,35 @@ import * as THREE from '../vendor/three.module.min.js';
     vertexShader: DISP.vertexShader,
     fragmentShader: DISP.fragmentShader,
     transparent: true,
-    depthWrite: false      /* glass must never occlude the column behind it */
+    depthWrite: false
   });
   var glass = new THREE.Mesh(glassGeo, glassMat);
-  glass.scale.setScalar(1.3);
   glass.renderOrder = 3;
   shield.add(glass);
 
-  /* brass edge tracing the same outline, so the glass reads as SET, not stuck */
-  var edgePts = sp.getPoints(64).map(function (p) {
-    return new THREE.Vector3(p.x * 1.45, p.y * 1.45, 0.24);
+  /* the rim: sweep a 0.045-radius brass tube along the outline */
+  var rimPts = sp.getPoints(96).map(function (p) {
+    return new THREE.Vector3(p.x, p.y, 0.06);
   });
-  var edge = new THREE.Line(
-    new THREE.BufferGeometry().setFromPoints(edgePts),
-    new THREE.LineBasicMaterial({ color: 0xBE9235, transparent: true, opacity: 0.85 }));
-  shield.add(edge);
+  var rimCurve = new THREE.CatmullRomCurve3(rimPts, true);
+  var rim2 = new THREE.Mesh(
+    new THREE.TubeGeometry(rimCurve, 128, 0.045, 10, true),
+    new THREE.MeshStandardMaterial({ color: 0xBE9235, metalness: 0.88, roughness: 0.2 }));
+  shield.add(rim2);
 
-  [1.55, -1.55].forEach(function (y) {
-    var band = new THREE.Mesh(
-      new THREE.TorusGeometry(1.06, 0.032, 10, 80),
-      new THREE.MeshStandardMaterial({ color: 0xBE9235, metalness: 0.85, roughness: 0.22 }));
-    band.rotation.x = Math.PI / 2;
-    band.position.y = y;
-    shield.add(band);
-  });
+  /* a slim brass chevron seats the mark — structure, not decoration */
+  var chev = new THREE.Shape();
+  chev.moveTo(-0.44, 0.16); chev.lineTo(0, -0.3); chev.lineTo(0.44, 0.16);
+  chev.lineTo(0.44, 0.0); chev.lineTo(0, -0.46); chev.lineTo(-0.44, 0.0);
+  chev.closePath();
+  var chevMesh = new THREE.Mesh(
+    new THREE.ExtrudeGeometry(chev, { depth: 0.05, bevelEnabled: false }),
+    new THREE.MeshStandardMaterial({ color: 0xBE9235, metalness: 0.8, roughness: 0.24 }));
+  chevMesh.position.set(0, 0.15, 0.09);
+  shield.add(chevMesh);
 
-  shield.position.set(-1.55, 0, 0.9);   /* glass floats in front of its column */
+  shield.scale.setScalar(1.15);
+  shield.position.set(-1.55, 0.1, 1.05);
   rig.add(shield);
 
   /* --- the market line running behind both ----------------------------- */
@@ -267,17 +281,15 @@ import * as THREE from '../vendor/three.module.min.js';
       c.fill.position.y = -1.8 + h / 2;
     });
 
-    /* the glass presents itself — a slow sway, never a spin (spinning glass
-       reads as a loading indicator), and it braces when the downturn runs:
-       the dispersion widens and the rim warms, the same stress language the
-       export used */
-    shield.rotation.y = Math.sin(t * 0.45) * 0.38;
-    shield.rotation.x = Math.sin(t * 0.3) * 0.05;
-    shield.position.y = Math.sin(t * 0.7) * 0.06;
+    /* the shield HOLDS — that is the argument. It faces the viewer, floats
+       a few pixels, and counter-rotates the rig's own sway so it never turns
+       edge-on. Under the downturn the dispersion widens: the glass braces
+       without moving. */
+    shield.position.y = 0.1 + Math.sin(t * 0.7) * 0.05;
+    shield.rotation.y = -rig.rotation.y;
     glassMat.uniforms.iorR.value = 1.44 - crash * 0.05;
     glassMat.uniforms.iorB.value = 1.53 + crash * 0.07;
     glassMat.uniforms.fresnelPow.value = 3.0 - crash * 0.9;
-    edge.material.opacity = 0.85 + Math.sin(t * 2.0) * 0.1 + crash * 0.15;
 
     var arr = lineGeo.attributes.position.array;
     for (var i = 0; i < PTS; i++) {
