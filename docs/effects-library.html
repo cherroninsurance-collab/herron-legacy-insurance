@@ -146,6 +146,10 @@ footer{padding:34px 0 0;max-width:68ch;font-size:14px;color:var(--ink-3)}
     <a href="#instanced" data-cat="advanced"><span>advanced</span>One draw call for thousands of objects</a>
     <a href="#svgdraw" data-cat="advanced"><span>advanced</span>A line that draws itself on scroll</a>
     <a href="#typemask" data-cat="advanced"><span>advanced</span>Type filled by scroll position</a>
+    <a href="#envcube" data-cat="advanced"><span>advanced</span>An environment map with no asset</a>
+    <a href="#dispersion" data-cat="advanced"><span>advanced</span>Dispersive glass — RGB IOR split</a>
+    <a href="#postchain" data-cat="advanced"><span>advanced</span>Bloom, bokeh and edge aberration</a>
+    <a href="#barfield" data-cat="advanced"><span>advanced</span>JSON to a 3D bar field</a>
   </nav>
 
   <main>
@@ -157,8 +161,14 @@ footer{padding:34px 0 0;max-width:68ch;font-size:14px;color:var(--ink-3)}
         <code>js/omma-3d.css</code> — so what you copy is what is actually shipping,
         not a simplified retelling of it. The CSS effects render live above their
         code; hover and click them.</p>
-      <p>The original Omma export is kept verbatim in <code>docs/omma-source/</code>
-        with a README mapping every file to what we did with it.</p>
+      <p>The last four entries are the exception: they come from Omma exports that
+        have <em>not</em> shipped, and they are here as templates rather than as a
+        record of what runs. All three exports are kept verbatim —
+        <code>docs/omma-source/</code> (the homepage import, which the shipping code
+        came out of), <code>docs/omma-explainer-source/</code> (the four-stop
+        explainer) and <code>docs/omma-matrix-source/</code> (the dispersion and
+        post-processing build) — each with a README mapping every file to what we
+        did with it, and to what could not be used.</p>
       <p><b>Read the two foundation entries first.</b> The scroll spine and the
         single-renderer rule are what make everything after them work together
         instead of fighting.</p>
@@ -1636,6 +1646,220 @@ function blueprintDevice(rig) {
     addEventListener(&#x27;scroll&#x27;, paint, { passive: true });
     paint();
   })();</code></pre></div></section>
+<section id="envcube" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>An environment map with no asset</h2></div><p class="blurb">Six canvas gradients become a cube map. This is the answer to the oldest bug in this project: <b>a metal or glass material with nothing to reflect renders black</b>, which on an ivory page is a hole, and the workaround until now was to drop metalness until the surfaces went flat. Six 256px faces built at runtime cost no network, no asset pipeline and nothing worth measuring, and they give every PBR material a plausible warm-above / cool-below studio to reflect. <b>Set <code>needsUpdate = true</code></b> — a <code>CubeTexture</code> assembled from canvases never uploads without it.</p><div class="snip"><div class="snip-bar"><span>js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A cube map built from six canvas gradients — no HDRI, no network, no
+   asset pipeline. This is the fix for the oldest problem in the file:
+   a metal or glass material with no environment to reflect renders BLACK,
+   which on an ivory page is a hole. Six 256px faces cost microseconds and
+   about nothing in memory, and they give every PBR material something
+   plausible to reflect. Warm above, cool below, one soft highlight blob
+   standing in for a softbox. */
+function buildEnvCube() {
+  const S = 256;
+  const cfg = [
+    { top: &#x27;#FFF6E2&#x27;, bot: &#x27;#E7D6AE&#x27;, blob: [&#x27;#FFFFFF&#x27;, .55, .30, .34] },
+    { top: &#x27;#EAF1FB&#x27;, bot: &#x27;#CFDCF0&#x27;, blob: [&#x27;#FFFFFF&#x27;, .40, .62, .22] },
+    { top: &#x27;#FFFFFF&#x27;, bot: &#x27;#FFF3D8&#x27;, blob: [&#x27;#FFFDF4&#x27;, .50, .50, .46] },
+    { top: &#x27;#F0EDE4&#x27;, bot: &#x27;#DAD5C6&#x27;, blob: null },
+    { top: &#x27;#FFF9EC&#x27;, bot: &#x27;#EADFC2&#x27;, blob: [&#x27;#FFFFFF&#x27;, .62, .40, .26] },
+    { top: &#x27;#EDF2FA&#x27;, bot: &#x27;#D6E0F2&#x27;, blob: null }
+  ];
+  const faces = cfg.map(c =&gt; {
+    const cv = document.createElement(&#x27;canvas&#x27;);
+    cv.width = cv.height = S;
+    const g = cv.getContext(&#x27;2d&#x27;);
+    const grd = g.createLinearGradient(0, 0, 0, S);
+    grd.addColorStop(0, c.top); grd.addColorStop(1, c.bot);
+    g.fillStyle = grd; g.fillRect(0, 0, S, S);
+    if (c.blob) {
+      const [col, cx, cy, r] = c.blob;
+      const rg = g.createRadialGradient(cx*S, cy*S, 0, cx*S, cy*S, r*S);
+      rg.addColorStop(0, col); rg.addColorStop(1, &#x27;rgba(255,255,255,0)&#x27;);
+      g.fillStyle = rg; g.fillRect(0, 0, S, S);
+    }
+    return cv;
+  });
+  const tex = new THREE.CubeTexture(faces);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;              /* required — a CubeTexture built from
+                                          canvases never uploads without it */
+  return tex;
+}
+
+/* then, once: */
+scene.environment = buildEnvCube();
+/* metals and clearcoats now have something to reflect */</code></pre></div></section>
+
+<section id="dispersion" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Dispersive glass — RGB IOR split</h2></div><p class="blurb">Real glass bends red and blue by different amounts, and that divergence is the entire reason a prism has colour. So refraction is sampled three times at three indices — one per channel — and recombined. A single <code>refract()</code> can never produce the fringing no matter how it is tinted. Fresnel decides the mix: head-on you see through it, at grazing angles it reflects. <b>Keep the three IOR values within about 0.1 of each other</b> — spread wider and it stops reading as glass and starts reading as a broken texture. Needs an environment map; pair it with the entry above and the whole effect ships with zero assets.</p><div class="snip"><div class="snip-bar"><span>glsl + js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* Dispersive glass. Refraction is sampled THREE times at three slightly
+   different indices of refraction — one per colour channel — and the
+   channels are recombined. That divergence is the whole effect: the
+   colour fringes at the edges are the red and blue rays bending by
+   different amounts, which is what real glass does and what a single
+   refract() can never show.
+
+   Needs an environment cube map to sample. Pair it with buildEnvCube()
+   above and it costs no assets at all. */
+const DispersionShader = {
+  uniforms: {
+    envMap:     { value: null },
+    iorR:       { value: 1.44 },      /* spread these further apart for a */
+    iorG:       { value: 1.48 },      /* stronger prism; keep them within */
+    iorB:       { value: 1.53 },      /* ~0.1 or it reads as a bug        */
+    fresnelPow: { value: 3.0 },
+    tint:       { value: new THREE.Color(0xF7F2E4) }
+  },
+  vertexShader: `
+    varying vec3 vWorldNormal;
+    varying vec3 vViewDir;
+    void main(){
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      vWorldNormal = normalize(mat3(modelMatrix) * normal);
+      vViewDir = normalize(wp.xyz - cameraPosition);
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }`,
+  fragmentShader: `
+    uniform samplerCube envMap;
+    uniform float iorR, iorG, iorB, fresnelPow;
+    uniform vec3 tint;
+    varying vec3 vWorldNormal;
+    varying vec3 vViewDir;
+    void main(){
+      vec3 N = normalize(vWorldNormal);
+      vec3 V = normalize(vViewDir);
+      /* one refracted ray per channel */
+      vec3 rR = refract(V, N, 1.0 / iorR);
+      vec3 rG = refract(V, N, 1.0 / iorG);
+      vec3 rB = refract(V, N, 1.0 / iorB);
+      vec3 refr = vec3(
+        textureCube(envMap, rR).r,
+        textureCube(envMap, rG).g,
+        textureCube(envMap, rB).b
+      ) * tint;
+      vec3 refl = textureCube(envMap, reflect(V, N)).rgb;
+      /* grazing angles reflect, head-on refracts */
+      float f = pow(1.0 - max(dot(-V, N), 0.0), fresnelPow);
+      vec3 col = mix(refr, refl, clamp(f * 1.35, 0.0, 1.0));
+      col += vec3(1.0, 0.94, 0.80) * f * 0.55;   /* warm rim */
+      gl_FragColor = vec4(col, 1.0);
+    }`
+};
+
+const glass = new THREE.ShaderMaterial({
+  uniforms: THREE.UniformsUtils.clone(DispersionShader.uniforms),
+  vertexShader: DispersionShader.vertexShader,
+  fragmentShader: DispersionShader.fragmentShader
+});
+glass.uniforms.envMap.value = envMap;</code></pre></div></section>
+
+<section id="postchain" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Bloom, bokeh and edge aberration</h2></div><p class="blurb">A full post chain: render, bloom the bright parts, defocus by depth, fringe the corners, output. The chromatic aberration is <b>weighted by squared distance from centre</b>, so the middle of the frame stays clean and only the corners split — that is the difference between reading as a lens and reading as a fault. <b>Two rules.</b> <code>OutputPass</code> goes last and does tone mapping and colour conversion; anything after it is graded twice. And every pass is another full-screen draw at render resolution — this belongs on one hero scene, never on a page that already runs several stages.</p><div class="snip"><div class="snip-bar"><span>js + glsl — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A post chain, in the order that matters: render, bloom the bright bits,
+   defocus by depth, split the colour at the edges, then output.
+   OutputPass goes LAST and does the tone mapping + colour space
+   conversion — put anything after it and you are grading twice.
+
+   Cost is real: each pass is another full-screen draw at render
+   resolution. This belongs on ONE hero scene, never on every stage. */
+import { EffectComposer }  from &#x27;three/examples/jsm/postprocessing/EffectComposer.js&#x27;;
+import { RenderPass }      from &#x27;three/examples/jsm/postprocessing/RenderPass.js&#x27;;
+import { ShaderPass }      from &#x27;three/examples/jsm/postprocessing/ShaderPass.js&#x27;;
+import { UnrealBloomPass } from &#x27;three/examples/jsm/postprocessing/UnrealBloomPass.js&#x27;;
+import { BokehPass }       from &#x27;three/examples/jsm/postprocessing/BokehPass.js&#x27;;
+import { OutputPass }      from &#x27;three/examples/jsm/postprocessing/OutputPass.js&#x27;;
+
+/* chromatic aberration weighted by distance from centre, so the middle of
+   the frame stays clean and only the corners fringe — the difference
+   between &quot;lens&quot; and &quot;broken&quot; */
+const EdgeCAShader = {
+  uniforms: { tDiffuse: { value: null }, amount: { value: 0.0016 } },
+  vertexShader: `
+    varying vec2 vUv;
+    void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform float amount;
+    varying vec2 vUv;
+    void main(){
+      vec2 d = vUv - 0.5;
+      float e = dot(d, d) * 2.2;          /* squared falloff from centre */
+      vec2 off = d * amount * e * 60.0;
+      gl_FragColor = vec4(
+        texture2D(tDiffuse, vUv + off).r,
+        texture2D(tDiffuse, vUv).g,
+        texture2D(tDiffuse, vUv - off).b,
+        1.0);
+    }`
+};
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.62, 0.55, 0.92);
+composer.addPass(bloom);                                  /* strength, radius, threshold */
+composer.addPass(new BokehPass(scene, camera, {
+  focus: 5.2, aperture: 0.00042, maxblur: 0.0075
+}));
+const ca = new ShaderPass(EdgeCAShader);
+composer.addPass(ca);
+composer.addPass(new OutputPass());
+
+/* render with composer.render(), NOT renderer.render() */
+/* and on resize: composer.setSize(w,h) AND bloom.setSize(w,h) */</code></pre></div></section>
+
+<section id="barfield" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>JSON to a 3D bar field</h2></div><p class="blurb">A data array becoming geometry, and rebuilding when a filter changes. Two details carry it. The bar is <b>one extruded rounded-top profile shared by every instance</b>, so the row count does not multiply the geometry in memory. And <b>the spacing is computed from the row count</b> — a filtered set spreads out, a full set stays inside the plate; a fixed step overflows the moment the data grows. Growth is animated on <code>scale.y</code> with a per-index stagger, never by rebuilding geometry per frame, and negative values hang below zero by offsetting position as well as scale.</p><div class="snip"><div class="snip-bar"><span>js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A data file becoming geometry, and rebuilding when a filter changes.
+   The bar is an extruded Shape with a rounded top rather than a BoxGeometry
+   — one profile, reused for every bar, so there is a single geometry in
+   memory no matter how many rows the data has.
+
+   Scale-Y from ~0 and animate it: never rebuild geometry per frame. */
+const SERIES = [ { year: 2019, a: 28.9, b: 10.0 }, /* ... */ ];
+const FILTERS = {
+  all:    d =&gt; d,
+  down:   d =&gt; d.filter(x =&gt; x.a &lt; 0),
+  recent: d =&gt; d.filter(x =&gt; x.year &gt;= 2015)
+};
+
+/* one rounded-top profile, extruded once, shared by every bar */
+const prof = new THREE.Shape();
+const bw = 0.34, br = 0.07;
+prof.moveTo(-bw, 0);
+prof.lineTo(bw, 0);
+prof.lineTo(bw, 1 - br);
+prof.quadraticCurveTo(bw, 1, bw - br, 1);
+prof.lineTo(-bw + br, 1);
+prof.quadraticCurveTo(-bw, 1, -bw, 1 - br);
+prof.closePath();
+const barGeo = new THREE.ExtrudeGeometry(prof, {
+  depth: 0.62, bevelEnabled: true, bevelThickness: 0.035,
+  bevelSize: 0.035, bevelSegments: 2, curveSegments: 6
+});
+barGeo.translate(0, 0, -0.31);          /* centre it on its own Z */
+
+function build(key) {
+  while (field.children.length) field.remove(field.children[0]);
+  bars = [];
+  const data = (FILTERS[key] || FILTERS.all)(SERIES);
+  const n = Math.max(data.length, 1);
+  /* the step SHRINKS as rows are added, so a filtered set spreads out and
+     a full set stays inside the plate — a fixed step overflows */
+  const step = Math.min(1.15, 22 / n);
+  const x0 = -((n - 1) * step) / 2;
+  data.forEach((d, i) =&gt; {
+    const m = new THREE.Mesh(barGeo, d.a &lt; 0 ? matNeg : matGrey);
+    m.position.set(x0 + i * step, 0, 1.5);
+    m.scale.set(step / 1.15, 0.001, 1);     /* start flat */
+    m.userData.h = Math.max(Math.abs(d.a), 0.12) * 0.28;
+    m.userData.neg = d.a &lt; 0;
+    field.add(m); bars.push(m);
+  });
+}
+
+/* per frame: one eased grow, staggered by index */
+grow = Math.min(1, grow + dt * 1.25);
+const e = 1 - Math.pow(1 - grow, 3);
+bars.forEach((b, i) =&gt; {
+  const stagger = Math.min(1, Math.max(0, e * 1.5 - i * 0.012));
+  const h = b.userData.h * stagger;
+  b.scale.y = Math.max(h, 0.001);
+  b.position.y = b.userData.neg ? -h : 0;   /* negatives hang below zero */
+});</code></pre></div></section>
+
 <section id="spline" class="entry"><div class="entry-head"><span class="cat">spline</span><h2>Spline scenes</h2></div><p class="blurb">Omma is Spline's natural-language builder, so this is one ecosystem. The difference is what you get: <b>Omma writes Three.js source you own and can retheme</b>, while a Spline scene is a binary <code>.splinecode</code> file played by Spline's runtime. Both embed shapes are below. Weigh them honestly before adopting: the viewer pulls a player from a third-party CDN into your critical path, the scene file is typically hundreds of KB to several MB, and you cannot restyle it in code — you go back to the editor. For a hero centrepiece that is a fair trade. For the kind of small explanatory devices on this page it is not, which is why nothing here uses it.</p><div class="snip"><div class="snip-bar"><span>html — viewer web component</span><button class="copy" type="button">Copy</button></div><pre><code>&lt;!-- Spline: the no-build embed. One web component, a scene URL from
      the editor&#x27;s Export &gt; Code panel. Loads Spline&#x27;s player from their CDN. --&gt;
 &lt;script type=&quot;module&quot;
