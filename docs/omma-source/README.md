@@ -1,7 +1,8 @@
-# Omma source — reference copy
+# Omma source — reference copy (import #1)
 
 The generated project from your Omma export, kept verbatim so the original is
-always here to read. **Nothing in this folder is loaded by the site.** It is
+always here to read. A second export — the four-stop protection-plan explainer —
+is archived alongside it in [`../omma-explainer-source/`](../omma-explainer-source/README.md). **Nothing in this folder is loaded by the site.** It is
 reference only; the live code is in `js/omma-3d.js`, `js/omma-design.js` and
 `js/omma-3d.css`.
 

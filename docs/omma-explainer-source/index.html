@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Herron Legacy Protection Plan Explainer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ivory:     #F7F4EC;
+      --ivory-deep:#EFE9DC;
+      --white:     #FFFFFF;
+      --navy:      #122544;
+      --navy-mid:  #1E3A66;
+      --navy-soft: #3D5C8C;
+      --slate:     #5A6A82;
+      --gold:      #C8A24A;
+      --gold-bright:#E3C476;
+      --gold-deep: #9C7A2E;
+      --line:      #DCD5C4;
+      --risk:      #B4553C;
+    }
+
+    html { font-family: 'Inter', sans-serif; scroll-behavior: auto; }
+
+    /* ── scroll track ── */
+    #scroll-track {
+      position: fixed; inset: 0; overflow-y: scroll;
+      z-index: 0;
+    }
+    #scroll-spacer { height: 500vh; }
+
+    /* ── Three.js canvas layer ── */
+    #canvas-layer {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    #canvas-layer canvas { display: block; width: 100% !important; height: 100% !important; }
+
+    /* ── top nav bar ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 32px;
+      background: rgba(247,244,236,0.88);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      z-index: 100;
+    }
+    #nav .logo {
+      font-size: 13px; font-weight: 600; letter-spacing: 0.06em;
+      color: var(--navy); text-transform: uppercase;
+    }
+    #nav .logo span { color: var(--gold); }
+    #nav-dots { display: flex; gap: 10px; align-items: center; }
+    .nav-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--line); border: none; cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .nav-dot.active { background: var(--gold); transform: scale(1.3); }
+
+    /* ── section panels ── */
+    #panels {
+      position: fixed; inset: 0;
+      pointer-events: none;
+      z-index: 50;
+    }
+    .section-panel {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 80px 5vw 40px;
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+      pointer-events: none;
+    }
+    .section-panel.visible {
+      opacity: 1; transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* left column */
+    .panel-inner {
+      max-width: 420px;
+    }
+    .shield-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .panel-title {
+      font-size: clamp(28px, 4vw, 44px); font-weight: 700;
+      color: var(--navy); line-height: 1.1; margin-bottom: 16px;
+    }
+    .panel-title em { font-style: normal; color: var(--gold); }
+    .panel-body {
+      font-size: 14px; line-height: 1.7; color: var(--slate);
+      margin-bottom: 28px; max-width: 380px;
+    }
+    .panel-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px;
+      background: var(--navy); color: var(--ivory);
+      font-size: 13px; font-weight: 600; letter-spacing: 0.04em;
+      border: none; border-radius: 6px; cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .panel-cta:hover { background: var(--navy-mid); transform: translateY(-1px); }
+    .panel-cta .arrow { font-size: 16px; transition: transform 0.2s; }
+    .panel-cta:hover .arrow { transform: translateX(3px); }
+
+    /* stats card — right side */
+    .stats-card {
+      position: absolute; right: 5vw; top: 50%; transform: translateY(-50%);
+      width: 260px;
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 24px 20px;
+      box-shadow: 0 4px 24px rgba(18,37,68,0.07);
+    }
+    .stats-card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--slate); margin-bottom: 18px;
+    }
+    .stat-row {
+      display: flex; flex-direction: column; margin-bottom: 18px;
+    }
+    .stat-row:last-child { margin-bottom: 0; }
+    .stat-number {
+      font-size: 32px; font-weight: 700; color: var(--navy);
+      line-height: 1; margin-bottom: 4px;
+    }
+    .stat-number .unit { font-size: 18px; font-weight: 500; }
+    .stat-desc {
+      font-size: 12px; color: var(--slate); line-height: 1.45;
+    }
+    .stat-bar {
+      height: 3px; background: var(--line); border-radius: 2px;
+      margin-top: 8px; overflow: hidden;
+    }
+    .stat-bar-fill {
+      height: 100%; border-radius: 2px;
+      background: var(--gold);
+      width: 0%; transition: width 1.1s cubic-bezier(0.22,1,0.36,1);
+    }
+
+    /* ── footer tag ── */
+    #footer-tag {
+      position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+      font-size: 10px; color: var(--slate); letter-spacing: 0.08em;
+      z-index: 100; white-space: nowrap;
+      opacity: 0.7;
+    }
+
+    /* scroll hint */
+    #scroll-hint {
+      position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      z-index: 100;
+      transition: opacity 0.4s;
+    }
+    #scroll-hint .hint-text {
+      font-size: 10px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--slate);
+    }
+    #scroll-hint .hint-line {
+      width: 1px; height: 32px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 1.6s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100% { opacity: 0.4; transform: scaleY(0.7); }
+      50%      { opacity: 1;   transform: scaleY(1); }
+    }
+  </style>
+</head>
+<body style="background:#F7F4EC; overflow:hidden;">
+
+  <!-- scroll track (captures wheel events) -->
+  <div id="scroll-track">
+    <div id="scroll-spacer"></div>
+  </div>
+
+  <!-- Three.js canvas -->
+  <div id="canvas-layer"></div>
+
+  <!-- nav -->
+  <nav id="nav">
+    <div class="logo">Herron <span>&</span> Co. <span style="color:var(--navy);font-weight:300">|</span> Legacy Agency</div>
+    <div id="nav-dots">
+      <button class="nav-dot active" data-index="0" title="Care Shield"></button>
+      <button class="nav-dot" data-index="1" title="Paycheck Shield"></button>
+      <button class="nav-dot" data-index="2" title="Home Shield"></button>
+      <button class="nav-dot" data-index="3" title="Legacy Shield"></button>
+    </div>
+  </nav>
+
+  <!-- section panels -->
+  <div id="panels">
+
+    <!-- 1. CARE SHIELD -->
+    <div class="section-panel visible" id="panel-care">
+      <div class="panel-inner">
+        <div class="shield-label">01 &nbsp;·&nbsp; Care Shield</div>
+        <h2 class="panel-title">Hybrid<br/><em>Long-Term Care</em></h2>
+        <p class="panel-body">
+          One policy does three jobs: pays for care if you need it, delivers a death benefit to your family if you never do, and leaves whatever's remaining. Money is never wasted.
+        </p>
+        <a class="panel-cta" href="#">Get a Quote <span class="arrow">→</span></a>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-label">The Risk at 65</div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="70">0</span><span class="unit">%</span></div>
+          <div class="stat-desc">of people will need long-term care after age 65</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="70"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="unit">$</span><span class="count" data-target="6200" data-prefix="$">0</span></div>
+          <div class="stat-desc">median monthly assisted-living cost — rising faster than inflation</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="88"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="unit">$</span><span class="count" data-target="0">0</span></div>
+          <div class="stat-desc">Medicare pays toward custodial care</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="4"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PAYCHECK SHIELD -->
+    <div class="section-panel" id="panel-paycheck">
+      <div class="panel-inner">
+        <div class="shield-label">02 &nbsp;·&nbsp; Paycheck Shield</div>
+        <h2 class="panel-title">Disability<br/><em>Income Protection</em></h2>
+        <p class="panel-body">
+          Your earning power is your largest asset. If illness or injury sidelines you, Paycheck Shield replaces a portion of your income — short or long benefit periods, options for the self-employed and business owners.
+        </p>
+        <a class="panel-cta" href="#">Get a Quote <span class="arrow">→</span></a>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-label">Income at Risk</div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="1">0</span><span class="unit"> in 4</span></div>
+          <div class="stat-desc">workers will experience a disabling illness or injury before retirement</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="25"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="34">0</span><span class="unit"> mo</span></div>
+          <div class="stat-desc">average duration of a long-term disability claim</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="57"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="60">0</span><span class="unit">%</span></div>
+          <div class="stat-desc">of income typically replaced by a disability policy</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="60"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. HOME SHIELD -->
+    <div class="section-panel" id="panel-home">
+      <div class="panel-inner">
+        <div class="shield-label">03 &nbsp;·&nbsp; Home Shield</div>
+        <h2 class="panel-title">Mortgage Protection<br/><em>with Living Benefits</em></h2>
+        <p class="panel-body">
+          Pays off the house if you die. Pays <em style="font-style:italic;color:var(--navy)">you</em> if cancer, heart attack, or stroke stops your income. Sized to your mortgage balance — no medical exam for most applicants.
+        </p>
+        <a class="panel-cta" href="#">Get a Quote <span class="arrow">→</span></a>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-label">Protecting Home Equity</div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="unit">$</span><span class="count" data-target="1800" data-comma="true">0</span></div>
+          <div class="stat-desc">avg. monthly mortgage payment a family must cover after losing an earner</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="72"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="3">0</span><span class="unit"> in 5</span></div>
+          <div class="stat-desc">critical illness survivors face major financial hardship within a year</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="60"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="0">0</span><span class="unit"> exam</span></div>
+          <div class="stat-desc">no medical exam required for most applicants</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="95"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LEGACY SHIELD -->
+    <div class="section-panel" id="panel-legacy">
+      <div class="panel-inner">
+        <div class="shield-label">04 &nbsp;·&nbsp; Legacy Shield</div>
+        <h2 class="panel-title">Permanent<br/><em>Life Insurance</em></h2>
+        <p class="panel-body">
+          Coverage that never expires. Guaranteed cash value growth. Premiums locked for life. Built for estate planning and leaving something meaningful behind.
+        </p>
+        <a class="panel-cta" href="#">Get a Quote <span class="arrow">→</span></a>
+      </div>
+      <div class="stats-card">
+        <div class="stats-card-label">The Legacy Advantage</div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="100">0</span><span class="unit">%</span></div>
+          <div class="stat-desc">guaranteed — coverage that never expires regardless of health changes</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="100"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="count" data-target="4">0</span><span class="unit">x</span></div>
+          <div class="stat-desc">estate leverage — death benefit vs. total premiums paid on average</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="80"></div></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-number"><span class="unit">$</span><span class="count" data-target="0">0</span></div>
+          <div class="stat-desc">income tax on death benefit received by beneficiaries</div>
+          <div class="stat-bar"><div class="stat-bar-fill" data-fill="4"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+
+  <!-- scroll hint -->
+  <div id="scroll-hint">
+    <div class="hint-text">Scroll</div>
+    <div class="hint-line"></div>
+  </div>
+
+  <div id="footer-tag">Herron &amp; Co. Legacy Agency &nbsp;·&nbsp; Independent Life Insurance</div>
+
+  <script type="module" src="/palette.js"></script>
+</body>
+</html>
