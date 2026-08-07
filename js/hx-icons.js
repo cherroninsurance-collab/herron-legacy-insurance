@@ -124,7 +124,7 @@
       var st = document.createElement('style');
       st.id = 'hx-icon-style';
       st.textContent =
-        '.hxi{fill:none;stroke:currentColor;stroke-width:1.6;' +
+        '.hxi{fill:none;stroke:currentColor;stroke-width:1.8;' +
         'stroke-linecap:round;stroke-linejoin:round}';
       document.head.appendChild(st);
     }
@@ -139,7 +139,7 @@
     /* stroke lives on the sprite root so no symbol can drift off the set */
     svg.setAttribute('fill', 'none');
     svg.setAttribute('stroke', 'currentColor');
-    svg.setAttribute('stroke-width', '1.6');
+    svg.setAttribute('stroke-width', '1.8');
     svg.setAttribute('stroke-linecap', 'round');
     svg.setAttribute('stroke-linejoin', 'round');
     svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
