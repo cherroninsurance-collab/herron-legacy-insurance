@@ -40,30 +40,41 @@ shape and it is the first export to do it unprompted.
 4. **Shadow maps on the chart** at 1024², plus `castShadow` on every bar.
 5. **`homepill` links to `#`.**
 
-## The copy is invented — it did not import the page
+## The copy: what it imported vs what it wrote
 
-The prompt said to keep the existing layout, copy and structure and not to
-rewrite the text. It did not. This is a **new page that reuses the title**: the
-real Wealth Shield Matrix tool — its vault dial, its brake gauge, its coin flow,
-its bucket simulation — is not in here. Treat `index.html` as a layout study.
+**It did import the page.** An earlier read of this export claimed the copy was
+invented; that was wrong, and the correction matters because it changes who
+owns these words. Checked against the live `wealth-shield-matrix.html`, which
+has carried them since commit `4eaa6ff` — long before any Omma run:
 
-Claims in it that cannot ship, and that are the licensed agent's call rather
-than a generator's:
+| Phrase | On the live page | In this export |
+| --- | --- | --- |
+| "the Herron Method" | yes (×6) | yes (×2) |
+| "The Annuity Anchors" | yes (×2) | yes (×2) |
+| "Worst year? You earn 0%. Never negative." | yes | yes |
+| "Market storms cannot drain it." | yes | yes |
+| "Income you cannot outlive" | **no** | yes |
+| "100% — Principal protected" | **no** | yes |
+| "The Accumulation Anchor" (etc.) | **no** | yes |
 
-- **"the Herron Method"** (appears as the strapline). An invented proprietary
-  methodology name attached to a real agency. The single most important thing
-  to strip.
-- **"The Accumulation Anchor" / "The Income Anchor" / "The Legacy Anchor"** —
-  invented product names presented like real products.
-- **"Income you cannot outlive"** — an absolute guarantee.
-- **"100% — Principal protected"** as a headline statistic.
-- **"Worst year? You earn 0%. Never negative."** and **"Market storms cannot
-  drain it."** — floor claims with no carrier, product or cap qualification.
-- **"Policy loans access cash without a taxable event"** — true only while the
-  policy is not a MEC and does not lapse; stated flatly it is misleading.
+So the strapline, the section names and the two floor claims are the site's own
+copy, faithfully imported. What the generator **added** is the bottom three
+rows: an absolute income guarantee, a 100% principal-protection statistic, and
+three invented product names that read like real products. Those are the ones
+that would be new claims if this were ever built from.
 
-The footer disclaimer it generated is, in fairness, decent and close to the
-site's own language. It does not rescue the body copy.
+What it did drop is the *interactive* Matrix — the vault dial, the brake gauge,
+the coin flow. Only the bucket simulation survived. So `index.html` here is
+still a layout study rather than an upgrade path.
+
+Separately, and independent of this export: the live page's own
+**"Worst year? You earn 0%. Never negative"** and **"Market storms cannot drain
+it"** are unqualified floor claims, and **"the Herron Method"** reads as a
+named proprietary methodology. Those are the licensed agent's call, they are
+already in production, and nothing in this folder changes them.
+
+The footer disclaimer the generator wrote is, in fairness, decent and close to
+the site's own language.
 
 ## The chart data is the subtler problem
 
