@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-omma-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -86,6 +86,156 @@
 #bnav>.grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 .text-right.text-slate-400.leading-relaxed{display:none!important}
 </style>
+<link rel="stylesheet" href="js/omma-3d.css">
+<style id="omma-page">
+/* ============================================================================
+   BRIGHT THEME — Wealth Shield Matrix
+   ----------------------------------------------------------------------------
+   The tool shipped as a navy app. This repaints it in the site's ivory key
+   WITHOUT touching the markup: every rule below overrides a Tailwind utility or
+   one of the page's own custom classes by name. Nothing about the simulator's
+   behaviour, its numbers or its disclosures is affected.
+
+   Scoped under html[data-omma-theme] so it outranks Tailwind's single-class
+   utilities on specificity alone — !important only where a utility carries one
+   of its own.
+
+   Semantic colour keeps its meaning and only changes value: the shield stays
+   teal and the loss signal stays red, both darkened to hold contrast on white.
+   ========================================================================== */
+html[data-omma-theme]{background:#FBFAF6}
+
+html[data-omma-theme] body{
+  color:#2B3C5E;
+  background:
+    radial-gradient(1100px 560px at 72% -8%,rgba(190,146,53,.10),transparent 60%),
+    radial-gradient(900px 520px at -5% 108%,rgba(13,125,116,.06),transparent 60%),
+    #FBFAF6;
+}
+html[data-omma-theme] ::selection{background:rgba(190,146,53,.28)}
+
+/* ---- surfaces ---- */
+html[data-omma-theme] .card{
+  background:linear-gradient(180deg,#FFFFFF 0%,#F7F8FB 100%);
+  border:1px solid rgba(14,31,62,.10);
+  box-shadow:0 1px 2px rgba(8,18,38,.04);
+}
+html[data-omma-theme] .card-active{
+  border-color:rgba(190,146,53,.42);
+  box-shadow:0 2px 4px rgba(8,18,38,.05),0 18px 44px -22px rgba(8,18,38,.20),
+             0 0 0 1px rgba(190,146,53,.10);
+}
+/* body itself carries .bg-navy-950 — exclude it, or this rule paints over the
+   ivory ground and its two washes and the page goes flat white */
+html[data-omma-theme] .bg-navy-950:not(body),
+html[data-omma-theme] .bg-navy-900{background-color:#FFFFFF!important}
+html[data-omma-theme] .bg-navy-800{background-color:#F4F6FA!important}
+html[data-omma-theme] .bg-navy-950\/95{background-color:rgba(255,255,255,.92)!important}
+html[data-omma-theme] header{border-bottom-color:rgba(14,31,62,.10)!important}
+
+/* ---- ink. Tailwind's text utilities are named for a dark ground, so each one
+        maps to the equivalent step on a light ground rather than to its name. */
+html[data-omma-theme] .text-white,
+html[data-omma-theme] .text-slate-100,
+html[data-omma-theme] .text-slate-200{color:#0E1F3E!important}
+html[data-omma-theme] .text-slate-300{color:#2B3C5E!important}
+/* one step darker than a literal mapping would give: the compliance footer is
+   .text-slate-500, and 3.5:1 is not good enough for text that has to be read */
+html[data-omma-theme] .text-slate-400{color:#46567A!important}
+html[data-omma-theme] .text-slate-500{color:#5A6A8C!important}
+
+/* brass at 5:1 on white — the display gold is far too light to read as text */
+html[data-omma-theme] .text-gold-400,
+html[data-omma-theme] .text-gold-300,
+html[data-omma-theme] .text-gold-400\/80,
+html[data-omma-theme] .kicker{color:#8A6420!important}
+
+/* semantic: the shield and the loss signal keep their hue, gain contrast */
+html[data-omma-theme] .text-shield{color:#0D7D74!important}
+html[data-omma-theme] .text-signal-red{color:#C2453D!important}
+html[data-omma-theme] .bg-signal-red\/5{background-color:rgba(194,69,61,.055)!important}
+
+/* ---- hairlines ---- */
+html[data-omma-theme] .border-navy-700,
+html[data-omma-theme] .border-navy-800\/60{border-color:rgba(14,31,62,.12)!important}
+html[data-omma-theme] .border-gold-400\/10{border-color:rgba(190,146,53,.20)!important}
+html[data-omma-theme] .border-gold-400\/15,
+html[data-omma-theme] .border-gold-400\/20{border-color:rgba(190,146,53,.28)!important}
+html[data-omma-theme] .border-gold-400\/30,
+html[data-omma-theme] .border-gold-400{border-color:rgba(190,146,53,.45)!important}
+html[data-omma-theme] .border-shield\/40{border-color:rgba(13,125,116,.38)!important}
+html[data-omma-theme] .border-signal-red\/20,
+html[data-omma-theme] .border-signal-red\/25,
+html[data-omma-theme] .border-signal-red\/30{border-color:rgba(194,69,61,.30)!important}
+
+/* ---- controls ---- */
+html[data-omma-theme] .btn-ghost{color:#2B3C5E;border-color:rgba(190,146,53,.40)}
+html[data-omma-theme] .btn-ghost:hover{border-color:rgba(190,146,53,.75);color:#8A6420}
+html[data-omma-theme] .btn-teal{background:rgba(13,125,116,.08);color:#0D7D74;border-color:rgba(13,125,116,.45)}
+html[data-omma-theme] .btn-teal:hover{background:rgba(13,125,116,.14)}
+html[data-omma-theme] .btn-danger{background:rgba(194,69,61,.07);color:#C2453D;border-color:rgba(194,69,61,.42)}
+html[data-omma-theme] .btn-primary{
+  color:#22160A;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 8px 20px -10px rgba(190,146,53,.55);
+}
+html[data-omma-theme] .seg{background:#FFFFFF;border-color:rgba(190,146,53,.30)}
+html[data-omma-theme] .seg button{color:#5A6A8C}
+html[data-omma-theme] .seg button:hover{color:#0E1F3E}
+html[data-omma-theme] .seg button.on{color:#22160A}
+html[data-omma-theme] input[type=range]{
+  background:linear-gradient(90deg,#BE9235 var(--p,50%),rgba(14,31,62,.14) var(--p,50%));
+}
+html[data-omma-theme] input[type=range]::-webkit-slider-thumb{
+  border-color:#FFFFFF;box-shadow:0 0 0 1.5px #BE9235,0 2px 6px rgba(8,18,38,.28);
+}
+html[data-omma-theme] input[type=range]::-moz-range-thumb{
+  border-color:#FFFFFF;box-shadow:0 0 0 1.5px #BE9235,0 2px 6px rgba(8,18,38,.28);
+}
+html[data-omma-theme] [contenteditable]:empty::before{color:#98A4BC}
+html[data-omma-theme] [contenteditable]{border-bottom-color:rgba(190,146,53,.45)}
+html[data-omma-theme] ::-webkit-scrollbar-thumb{background:rgba(14,31,62,.20)}
+
+/* ---- the SVG scenes ----------------------------------------------------
+   These were drawn for a navy ground: solid dark fills read as *absence* there
+   and as heavy blobs here. Flip the two darkest to light surfaces with a navy
+   hairline — the same dark-line-on-light language the rest of the brand uses —
+   and darken the display gold, which is far too pale to read on white.
+
+   Two things deliberately keep their value: the slate water in the unshielded
+   bucket (it has to stay visibly duller than the shielded one, which is the
+   entire point of the scene) and the teal shield outline.                    */
+html[data-omma-theme] svg [fill="#0A1128"]{fill:#F2F5FA}
+html[data-omma-theme] svg [fill="#121B3C"]{fill:#E7ECF5}
+html[data-omma-theme] svg [stroke="#0A1128"]{stroke:rgba(14,31,62,.55)}
+html[data-omma-theme] svg [stroke="#243468"]{stroke:rgba(14,31,62,.18)}
+html[data-omma-theme] svg [stroke="#334155"]{stroke:rgba(14,31,62,.30)}
+
+/* display gold on white needs to come down to a readable brass */
+html[data-omma-theme] svg text[fill="#E8C96A"],
+html[data-omma-theme] svg text[fill="#D4AF37"]{fill:#8A6420}
+html[data-omma-theme] svg text[fill="#94A3B8"],
+html[data-omma-theme] svg text[fill="#CBD5E1"],
+html[data-omma-theme] svg text[fill="#64748B"]{fill:#5A6A8C}
+html[data-omma-theme] svg text[fill="#2DD4BF"]{fill:#0D7D74}
+html[data-omma-theme] svg text[fill="#F87171"]{fill:#C2453D}
+
+/* a dark-navy shield body on white is a blob; make it a light plate that its
+   teal outline still reads against */
+html[data-omma-theme] #shield-badge path[fill="#0A1128"],
+html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
+
+/* the panels get the same live surfaces the homepage cards do */
+.card{position:relative}
+
+/* ---- the bucket scene ----------------------------------------------------
+   The 3D device sits where the SVG was. The SVG is NOT removed: the page's own
+   storm logic writes to its nodes, and it is the fallback when WebGL is
+   unavailable — .omma-bucket-on is only set once a context actually exists. */
+.omma-bucket{display:none}
+html.omma-bucket-on .omma-bucket{display:block;width:100%;height:250px}
+html.omma-bucket-on #iulstep0 svg{display:none}
+@media(max-width:640px){html.omma-bucket-on .omma-bucket{height:200px}}
+</style>
 </head>
 <body class="bg-navy-950 text-slate-200 min-h-screen pb-24"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
 
@@ -164,7 +314,11 @@
         <button id="stormbtn" class="btn btn-primary mt-6">Simulate a market downturn</button>
       </div>
       <div class="relative">
-        <div id="storm-clouds" class="hidden absolute -top-2 inset-x-0 text-center text-3xl storm select-none" aria-hidden="true">🌩️ ⛈️ 🌩️</div>
+        <!-- The emoji storm sequence that used to live here is gone; the downturn is
+     now shown by the 3D scene draining the unshielded column. The node stays
+     so the page's own toggle logic keeps its target. -->
+        <div id="storm-clouds" class="hidden" aria-hidden="true"></div>
+        <div id="ommaBucket" class="omma-bucket" aria-hidden="true"></div>
         <svg viewBox="0 0 360 240" class="w-full" role="img" aria-label="Two buckets: the shielded bucket holds its level in a market storm, the unshielded bucket drains">
           <path d="M40 70 L60 210 L140 210 L160 70 Z" fill="#0A1128" stroke="#D4AF37" stroke-width="2"/>
           <rect class="water" x="52" y="96" width="96" height="106" fill="#B08E22" opacity="0.85" rx="3"/>
@@ -174,7 +328,7 @@
           <path d="M200 70 L220 210 L300 210 L320 70 Z" fill="#0A1128" stroke="#64748B" stroke-width="2"/>
           <rect id="unshielded-water" class="water" x="212" y="96" height="106" width="96" fill="#475569" opacity="0.9" rx="3"/>
           <text x="260" y="232" text-anchor="middle" fill="#94A3B8" font-size="13">Unshielded market</text>
-          <text id="storm-loss" class="water" x="260" y="52" text-anchor="middle" fill="#F87171" font-size="12" font-weight="600" opacity="0">−40% 📉</text>
+          <text id="storm-loss" class="water" x="260" y="52" text-anchor="middle" fill="#F87171" font-size="12" font-weight="600" opacity="0">−40%</text>
         </svg>
         <p id="storm-caption" class="text-center text-sm mt-3 text-slate-500">Both buckets are full. Run the downturn to compare.</p>
       </div>
@@ -280,7 +434,7 @@
   </div>
 
   <!-- FIXED ANNUITY · THE VAULT -->
-  <div id="fia-vault" class="card card-active p-6 md:p-10">
+  <div id="fia-vault" data-omma-card class="card card-active p-6 md:p-10">
     <div class="grid md:grid-cols-2 gap-8 items-center">
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Guaranteed Vault</h3>
@@ -319,7 +473,7 @@
   </div>
 
   <!-- PHASE 1 · 0% FLOOR ENGINE -->
-  <div id="fia-grow" class="card card-active p-6 md:p-10">
+  <div id="fia-grow" data-omma-card class="card card-active p-6 md:p-10">
     <div class="grid md:grid-cols-2 gap-8 items-center">
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The 0% Floor Engine</h3>
@@ -363,7 +517,7 @@
         </div>
       </div>
       <div>
-        <div class="card p-5" style="background:#0D1530">
+        <div data-omma-card class="card p-5" style="background:#0D1530">
           <div class="flex justify-between text-sm mb-2">
             <label for="cr-idx" class="text-slate-300 font-medium">This year, the index moves…</label>
             <span id="cr-idx-v" class="font-display text-xl tnum text-white"></span>
@@ -378,7 +532,7 @@
         </div>
 
         <div class="space-y-3 mt-4">
-          <div class="card p-4">
+          <div data-omma-card class="card p-4">
             <div class="flex items-center justify-between gap-3">
               <div class="min-w-0">
                 <p class="text-xs uppercase tracking-wider text-gold-400">Cap</p>
@@ -390,7 +544,7 @@
               <p id="cr-cap-out" class="font-display text-2xl tnum text-right shrink-0"></p>
             </div>
           </div>
-          <div class="card p-4">
+          <div data-omma-card class="card p-4">
             <div class="flex items-center justify-between gap-3">
               <div class="min-w-0">
                 <p class="text-xs uppercase tracking-wider text-gold-400">Participation</p>
@@ -402,7 +556,7 @@
               <p id="cr-par-out" class="font-display text-2xl tnum text-right shrink-0"></p>
             </div>
           </div>
-          <div class="card p-4">
+          <div data-omma-card class="card p-4">
             <div class="flex items-center justify-between gap-3">
               <div class="min-w-0">
                 <p class="text-xs uppercase tracking-wider text-gold-400">Spread</p>
@@ -520,22 +674,22 @@
 
     <div class="lg:col-span-3 space-y-6">
       <div class="grid sm:grid-cols-3 gap-4">
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Total you put in</p>
           <p id="iul-paid" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
-        <div class="card card-active p-5">
+        <div data-omma-card class="card card-active p-5">
           <p class="text-xs uppercase tracking-wider text-gold-400">Cash pool at age <span id="iul-cvage" class="tnum">65</span></p>
           <p id="iul-cv" class="mt-1 font-display text-2xl text-gold-300 tnum"></p>
         </div>
-        <div class="card p-5" style="border-color:rgba(45,212,191,.3)">
+        <div data-omma-card class="card p-5" style="border-color:rgba(45,212,191,.3)">
           <p class="text-xs uppercase tracking-wider" style="color:#2DD4BF">Tax-free income / yr</p>
           <p id="iul-inc" class="mt-1 font-display text-2xl text-white tnum"></p>
           <p class="text-[10px] text-slate-500 mt-0.5">beginning at age <span id="iul-incage" class="tnum">65</span></p>
         </div>
       </div>
 
-      <div class="card p-5">
+      <div data-omma-card class="card p-5">
         <h4 id="iul-charttitle" class="text-sm font-semibold text-slate-300 mb-1">Cash value vs. dollars in</h4>
         <div id="iulchart" class="relative"></div>
         <div class="flex gap-5 justify-center text-xs text-slate-400 mt-1">
@@ -544,7 +698,7 @@
         </div>
       </div>
 
-      <details class="card p-5">
+      <details data-omma-card class="card p-5">
         <summary class="text-sm font-semibold text-gold-300 flex items-center gap-2">Show the math — year by year <span class="text-slate-500 font-normal">(tap to open)</span></summary>
         <div class="mt-4 max-h-72 overflow-y-auto rounded-xl border border-gold-400/10">
           <table class="w-full text-xs tnum">
@@ -586,7 +740,7 @@
     </div>
 
     <div class="lg:col-span-3 space-y-6">
-      <div class="card card-active p-8 text-center">
+      <div data-omma-card class="card card-active p-8 text-center">
         <p class="text-xs uppercase tracking-[0.2em] text-gold-400">Lifetime annual paycheck</p>
         <p id="fia-pay" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p>
         <p class="mt-2 text-slate-400 text-sm">every year, starting at age <span id="fia-startage" class="text-gold-300 tnum"></span> — for as long as you live</p>
@@ -594,21 +748,21 @@
       </div>
 
       <div class="grid sm:grid-cols-3 gap-4">
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Income base at activation</p>
           <p id="fia-base" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">You recoup principal by age</p>
           <p id="fia-bea" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Income to age 90</p>
           <p id="fia-to90" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
       </div>
 
-      <div class="card p-5">
+      <div data-omma-card class="card p-5">
         <h4 class="text-sm font-semibold text-slate-300 mb-3">The floor, in one picture</h4>
         <div class="grid grid-cols-2 gap-4 text-center">
           <div class="p-4 rounded-xl bg-navy-950 border border-signal-red/25">
@@ -656,7 +810,7 @@
     </div>
 
     <div class="lg:col-span-3 space-y-6">
-      <div class="card card-active p-8 text-center">
+      <div data-omma-card class="card card-active p-8 text-center">
         <p class="text-xs uppercase tracking-[0.2em] text-gold-400">Guaranteed value at term end</p>
         <p id="myga-val" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p>
         <p class="mt-2 text-slate-400 text-sm">after <span id="myga-term2" class="text-gold-300 tnum"></span> years at <span id="myga-rate2" class="text-gold-300 tnum"></span> — locked by contract</p>
@@ -664,21 +818,21 @@
       </div>
 
       <div class="grid sm:grid-cols-3 gap-4">
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Guaranteed interest earned</p>
           <p id="myga-int" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
-        <div class="card p-5">
+        <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Same-rate CD, after tax</p>
           <p id="myga-cd" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
-        <div class="card p-5" style="border-color:rgba(45,212,191,.3)">
+        <div data-omma-card class="card p-5" style="border-color:rgba(45,212,191,.3)">
           <p class="text-xs uppercase tracking-wider" style="color:#2DD4BF">Deferral advantage, after tax</p>
           <p id="myga-adv" class="mt-1 font-display text-2xl text-white tnum"></p>
         </div>
       </div>
 
-      <div class="card p-5">
+      <div data-omma-card class="card p-5">
         <h4 id="myga-charttitle" class="text-sm font-semibold text-slate-300 mb-1">Vault vs. taxable CD</h4>
         <div id="mygachart" class="relative"></div>
         <div class="flex gap-5 justify-center text-xs text-slate-400 mt-1">
@@ -720,10 +874,10 @@
 
     <h3 class="font-display text-xl text-gold-300 mt-10 mb-4">Quick-reference anchors</h3>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div class="card p-4"><p class="text-2xl">🛡️</p><p class="text-xs text-slate-400 mt-1">IUL floor</p><p class="font-display text-lg text-white">0% — losses excluded by design</p></div>
-      <div class="card p-4"><p class="text-2xl">🚨</p><p class="text-xs text-slate-400 mt-1">OLP rider</p><p class="font-display text-lg text-white">Brake engages → no forced lapse</p></div>
-      <div class="card p-4"><p class="text-2xl">📜</p><p class="text-xs text-slate-400 mt-1">FIA paycheck</p><p class="font-display text-lg text-white">Contractual, for life, joint option</p></div>
-      <div class="card p-4"><p class="text-2xl">🧮</p><p class="text-xs text-slate-400 mt-1">Sequence risk</p><p class="font-display text-lg text-white">Floors remove the worst-decade problem</p></div>
+      <div data-omma-card class="card p-4"><p class="text-2xl">🛡️</p><p class="text-xs text-slate-400 mt-1">IUL floor</p><p class="font-display text-lg text-white">0% — losses excluded by design</p></div>
+      <div data-omma-card class="card p-4"><p class="text-2xl">🚨</p><p class="text-xs text-slate-400 mt-1">OLP rider</p><p class="font-display text-lg text-white">Brake engages → no forced lapse</p></div>
+      <div data-omma-card class="card p-4"><p class="text-2xl">📜</p><p class="text-xs text-slate-400 mt-1">FIA paycheck</p><p class="font-display text-lg text-white">Contractual, for life, joint option</p></div>
+      <div data-omma-card class="card p-4"><p class="text-2xl">🧮</p><p class="text-xs text-slate-400 mt-1">Sequence risk</p><p class="font-display text-lg text-white">Floors remove the worst-decade problem</p></div>
     </div>
   </div>
 </section>
@@ -1249,7 +1403,7 @@ const OBJECTIONS=[
 function renderObjections(){
   $('objections').innerHTML=OBJECTIONS.map((o,i)=>{
     const open=store.openObjection===i;
-    return `<div class="card overflow-hidden transition-all ${open?'card-active':''}">
+    return `<div data-omma-card class="card overflow-hidden transition-all ${open?'card-active':''}">
       <button data-obj="${i}" class="objbtn w-full flex items-center justify-between px-5 py-4 text-left">
         <span class="font-semibold text-slate-100"><span class="mr-2">${o.icon}</span>${o.title}</span>
         <span class="text-gold-400 chev text-sm ${open?'rot180':''}">▼</span>
@@ -1296,5 +1450,7 @@ renderTabs(); renderIulStep(); renderPhase(); renderMode();
 renderIulCalc(); renderFiaCalc(); renderMygaCalc(); renderCredit(); renderObjections();
 })();
 </script>
+<script type="module" src="js/omma-3d.js"></script>
+<script type="module" src="js/omma-matrix.js"></script>
 </body>
 </html>

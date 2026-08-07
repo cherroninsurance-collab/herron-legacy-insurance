@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wealth Shield Matrix Insurance Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Spectral:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ivory:#FBF8F1;
+  --white:#FFFFFF;
+  --navy:#101C36;
+  --navy-2:#1E2E52;
+  --ink-soft:#59647E;
+  --gold:#B8912F;
+  --gold-soft:#E3C776;
+  --teal:#0E8C8C;
+  --line:#E6DFCE;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;min-height:100%}
+html{scroll-behavior:smooth;background:#FBF8F1}
+body{
+  background:#FBF8F1;
+  color:#101C36;
+  font-family:Inter,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+/* ---------- top bar ---------- */
+.topbar{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+  padding:18px 40px 0;background:rgba(251,248,241,.88);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:20;
+}
+.brand{display:flex;align-items:center;gap:14px;padding-bottom:14px}
+.mark{width:34px;height:41px}
+.brandtext h1{font-family:Spectral,Georgia,serif;font-weight:500;font-size:22px;margin:0;letter-spacing:.2px}
+.kicker{margin:3px 0 0;font-size:10px;letter-spacing:.22em;color:var(--gold);font-weight:600}
+.tabs{display:flex;gap:6px}
+.tab{
+  background:none;border:0;border-bottom:2px solid transparent;
+  padding:10px 14px 12px;font:500 13.5px Inter,sans-serif;color:var(--ink-soft);cursor:pointer;
+  transition:color .2s,border-color .2s;
+}
+.tab .num{font-size:10px;letter-spacing:.1em;color:#9AA3B8;margin-right:5px}
+.tab:hover{color:var(--navy)}
+.tab.is-active{color:var(--navy);border-bottom-color:var(--gold)}
+.tab.is-active .num{color:var(--gold)}
+
+/* ---------- panels ---------- */
+main{max-width:1080px;margin:0 auto;padding:0 32px 40px;position:relative;z-index:2}
+.panel{display:none;padding:56px 0 24px;text-align:center;will-change:transform}
+.panel.is-active{display:block;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:10.5px;letter-spacing:.24em;color:var(--gold);font-weight:600;margin:0 0 12px}
+.display{font-family:Spectral,Georgia,serif;font-weight:500;font-size:44px;line-height:1.1;margin:0 0 12px}
+.lede{color:var(--ink-soft);font-size:14.5px;margin:0 auto;max-width:620px}
+.rule{width:88px;height:1px;background:var(--line);margin:26px auto 30px}
+
+/* ---------- hero stage ---------- */
+.herostage{
+  position:relative;width:100%;height:340px;margin:0 0 34px;
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;
+  background:linear-gradient(#FFFFFF,#F7F2E6);
+}
+.herostage canvas{display:block;width:100%;height:100%}
+.herofallback{
+  position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+  font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#A6AEC0;
+}
+
+/* ---------- segmented ---------- */
+.segmented{
+  display:inline-flex;gap:4px;padding:5px;border:1px solid var(--line);
+  border-radius:8px;background:var(--white);margin-bottom:30px;
+}
+.seg{
+  background:none;border:0;border-radius:6px;padding:9px 16px;
+  font:500 13px Inter,sans-serif;color:var(--ink-soft);cursor:pointer;transition:.18s;
+}
+.seg b{font-weight:600;margin-right:5px;color:#9AA3B8}
+.seg:hover{color:var(--navy)}
+.seg.is-active{background:var(--gold-soft);color:#3A2E08}
+.seg.is-active b{color:#3A2E08}
+
+/* ---------- card ---------- */
+.card{
+  background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:34px 36px;text-align:left;
+}
+.card.wide{max-width:920px;margin:0 auto}
+.card-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.card-copy h3{font-family:Spectral,serif;font-weight:500;font-size:22px;color:var(--gold);margin:0 0 18px}
+.bullets{list-style:none;margin:0 0 24px;padding:0;display:grid;gap:12px}
+.bullets li{display:flex;gap:11px;align-items:flex-start;font-size:14px;line-height:1.45}
+.ico{width:18px;flex:0 0 18px;text-align:center}
+.btn.gold{
+  background:var(--gold-soft);color:#3A2E08;border:1px solid #D9BC69;border-radius:7px;
+  padding:11px 18px;font:600 13px Inter,sans-serif;cursor:pointer;transition:.18s;
+}
+.btn.gold:hover{background:#EFD68F}
+
+/* ---------- buckets ---------- */
+.card-vis{text-align:center}
+.buckets{display:flex;gap:34px;justify-content:center;align-items:flex-end}
+.bucketwrap{width:130px}
+.shield{height:64px;display:flex;align-items:center;justify-content:center}
+.shield svg{width:56px;height:64px}
+.shield.ghost{height:64px}
+.bucket{
+  position:relative;height:120px;border-radius:4px 4px 12px 12px;overflow:hidden;
+  border:3px solid #C9CFDC;background:#F2F4F8;
+  clip-path:polygon(6% 0,94% 0,84% 100%,16% 100%);
+}
+.bucket.gold{border-color:var(--gold)}
+.fill{position:absolute;left:0;right:0;bottom:0;height:100%;display:block;transition:height .9s cubic-bezier(.4,0,.2,1)}
+.bucket.gold .fill{background:linear-gradient(#C9A23C,#A8801F)}
+.bucket.grey .fill{background:#8C96AC}
+.blabel{margin:12px 0 0;font-size:13px;font-weight:600;color:var(--ink-soft)}
+.blabel.gold-t{color:var(--gold)}
+.vnote{margin:20px 0 0;font-size:11.5px;color:#8B94A8}
+.hero3d-note{margin-top:26px;font-size:11px;letter-spacing:.14em;color:#A6AEC0;text-transform:uppercase}
+
+/* ---------- product cards ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;perspective:1000px}
+.pcard{
+  background:var(--white);border:1px solid var(--line);border-radius:14px;
+  padding:26px 24px;text-align:left;position:relative;
+  transition:box-shadow .25s,border-color .25s;transform-style:preserve-3d;
+}
+.pcard::after{
+  content:"";position:absolute;inset:0;border-radius:14px;pointer-events:none;
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,50%),rgba(184,145,47,.14),transparent 62%);
+  opacity:0;transition:opacity .25s;
+}
+.pcard:hover{border-color:#DCCB9B;box-shadow:0 14px 34px -22px rgba(16,28,54,.5)}
+.pcard:hover::after{opacity:1}
+.pnum{font-size:10.5px;letter-spacing:.2em;color:var(--gold);font-weight:700}
+.pcard h3{font-family:Spectral,serif;font-weight:500;font-size:19px;margin:10px 0 10px}
+.pcard p{font-size:13.5px;line-height:1.55;color:var(--ink-soft);margin:0 0 14px}
+.pcard ul{margin:0;padding-left:16px;display:grid;gap:6px}
+.pcard li{font-size:12.5px;color:var(--navy-2)}
+
+/* ---------- chart ---------- */
+.filterbar{display:flex;gap:8px;justify-content:center;margin-bottom:22px;flex-wrap:wrap}
+.chip{
+  background:var(--white);border:1px solid var(--line);border-radius:999px;
+  padding:8px 16px;font:500 12.5px Inter,sans-serif;color:var(--ink-soft);cursor:pointer;transition:.18s;
+}
+.chip:hover{border-color:#DCCB9B;color:var(--navy)}
+.chip.is-active{background:var(--gold-soft);border-color:#D9BC69;color:#3A2E08}
+.chartframe{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:10px 10px 6px}
+#chartHost{position:relative;width:100%;height:380px;border-radius:10px;overflow:hidden;background:#FDFBF6}
+#chartHost canvas{display:block;width:100%;height:100%}
+.legend{display:flex;gap:20px;justify-content:center;padding:10px 0 8px;font-size:11.5px;color:var(--ink-soft)}
+.legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.sw.gold{background:var(--gold)}
+.sw.grey{background:#98A2B8}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.stat{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:20px}
+.stat b{display:block;font-family:Spectral,serif;font-size:30px;font-weight:500;color:var(--gold)}
+.stat span{font-size:11.5px;color:var(--ink-soft);letter-spacing:.04em}
+
+/* ---------- footer ---------- */
+.disclaimer{max-width:1080px;margin:0 auto;padding:22px 32px 70px;text-align:center;position:relative;z-index:2}
+.disclaimer p{font-size:10.5px;line-height:1.6;color:#98A0B2;margin:0}
+.homepill{
+  position:fixed;left:16px;bottom:16px;z-index:30;
+  background:var(--white);border:1px solid var(--line);border-radius:999px;
+  padding:9px 16px;font-size:12px;color:var(--navy);text-decoration:none;
+}
+.homepill:hover{border-color:#DCCB9B}
+
+@media (max-width:880px){
+  .topbar{flex-direction:column;align-items:flex-start;padding:16px 20px 0}
+  .card-grid{grid-template-columns:1fr}
+  .cards,.stats{grid-template-columns:1fr}
+  .display{font-size:34px}
+  .herostage{height:260px}
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 48" aria-hidden="true">
+        <path d="M20 3 L35 10 V24 C35 34 28 41 20 45 C12 41 5 34 5 24 V10 Z" fill="none" stroke="#B8912F" stroke-width="2"/>
+        <path d="M20 14 v20 M14 18 c0-4 12-4 12 0 s-12 2-12 6 s12 4 12 0" fill="none" stroke="#B8912F" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="brandtext">
+        <h1>The Wealth Shield Matrix</h1>
+        <p class="kicker">PROTECT · GROW · DISTRIBUTE</p>
+      </div>
+    </div>
+    <nav class="tabs" id="mainTabs">
+      <button class="tab is-active" data-panel="iul"><span class="num">01</span> The IUL Shield</button>
+      <button class="tab" data-panel="annuity"><span class="num">02</span> The Annuity Anchors</button>
+      <button class="tab" data-panel="numbers"><span class="num">03</span> The Numbers</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="panel is-active" id="panel-iul" data-parallax="0.18">
+      <p class="eyebrow">PROTECTION STRATEGY</p>
+      <h2 class="display">The IUL Shield</h2>
+      <p class="lede">Max-funded indexed universal life, engineered with the Herron Method.</p>
+      <div class="rule"></div>
+
+      <div class="herostage">
+        <canvas id="gl"></canvas>
+        <div class="herofallback" id="heroFallback">Glass shield unavailable on this device</div>
+      </div>
+
+      <div class="segmented" id="iulSteps">
+        <button class="seg is-active" data-step="0"><b>1</b> Bucket &amp; Shield</button>
+        <button class="seg" data-step="1"><b>2</b> Premium Pipeline</button>
+        <button class="seg" data-step="2"><b>3</b> Emergency Brake</button>
+      </div>
+
+      <div class="card wide" id="iulCard">
+        <div class="card-grid">
+          <div class="card-copy">
+            <h3 id="stepTitle">The Bucket &amp; the Shield</h3>
+            <ul class="bullets" id="stepList">
+              <li><span class="ico">💧</span> Your money fills a bucket.</li>
+              <li><span class="ico">📈</span> The bucket grows with the market index.</li>
+              <li><span class="ico">🛡️</span> A shield covers the bucket.</li>
+              <li><span class="ico">🌊</span> Market storms cannot drain it.</li>
+              <li><span class="ico">🔒</span> Worst year? You earn 0%. Never negative.</li>
+            </ul>
+            <button class="btn gold" id="downturnBtn">Simulate a market downturn</button>
+          </div>
+          <div class="card-vis">
+            <div class="buckets">
+              <div class="bucketwrap">
+                <div class="shield"><svg viewBox="0 0 60 68"><path d="M30 4 L54 14 V32 C54 47 42 57 30 63 C18 57 6 47 6 32 V14 Z" fill="none" stroke="#0E8C8C" stroke-width="3"/><path d="M18 33 l8 8 16-17" fill="none" stroke="#0E8C8C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+                <div class="bucket gold"><i class="fill" id="fillA"></i></div>
+                <p class="blabel gold-t">Your bucket</p>
+              </div>
+              <div class="bucketwrap">
+                <div class="shield ghost"></div>
+                <div class="bucket grey"><i class="fill" id="fillB"></i></div>
+                <p class="blabel">Unshielded market</p>
+              </div>
+            </div>
+            <p class="vnote" id="vnote">Both buckets are full. Run the downturn to compare.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero3d-note">Glass shield — dispersive, refractive, rendered live.</div>
+    </section>
+
+    <section class="panel" id="panel-annuity" data-parallax="0.26">
+      <p class="eyebrow">INCOME STRATEGY</p>
+      <h2 class="display">The Annuity Anchors</h2>
+      <p class="lede">Fixed indexed annuities that anchor retirement income against market drift.</p>
+      <div class="rule"></div>
+
+      <div class="cards" id="productCards">
+        <article class="pcard" data-tilt>
+          <span class="pnum">01</span>
+          <h3>The Accumulation Anchor</h3>
+          <p>Index-linked growth with a 0% floor. Deferral years compound without downside participation.</p>
+          <ul><li>Principal protected</li><li>Index credited annually</li><li>Tax-deferred growth</li></ul>
+        </article>
+        <article class="pcard" data-tilt>
+          <span class="pnum">02</span>
+          <h3>The Income Anchor</h3>
+          <p>A guaranteed lifetime withdrawal benefit. Income you cannot outlive, funded before you retire.</p>
+          <ul><li>Lifetime payout</li><li>Roll-up during deferral</li><li>Joint option available</li></ul>
+        </article>
+        <article class="pcard" data-tilt>
+          <span class="pnum">03</span>
+          <h3>The Legacy Anchor</h3>
+          <p>Death benefit continuation for heirs, bypassing probate and preserving the estate intent.</p>
+          <ul><li>Named beneficiaries</li><li>Probate avoidance</li><li>Enhanced DB rider</li></ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-numbers" data-parallax="0.34">
+      <p class="eyebrow">THE EVIDENCE</p>
+      <h2 class="display">The Numbers</h2>
+      <p class="lede">Illustrative index credits under the Herron Method floor. Filter to rebuild the field.</p>
+      <div class="rule"></div>
+
+      <div class="filterbar" id="filterBar">
+        <button class="chip is-active" data-filter="all">All years</button>
+        <button class="chip" data-filter="down">Down markets</button>
+        <button class="chip" data-filter="up">Up markets</button>
+        <button class="chip" data-filter="recent">Last decade</button>
+      </div>
+
+      <div class="chartframe">
+        <div id="chartHost"></div>
+        <div class="legend">
+          <span><i class="sw gold"></i> Shielded credit</span>
+          <span><i class="sw grey"></i> Raw index return</span>
+        </div>
+      </div>
+
+      <div class="stats">
+        <div class="stat"><b>0%</b><span>Worst credited year</span></div>
+        <div class="stat"><b>100%</b><span>Principal protected</span></div>
+        <div class="stat"><b>3</b><span>Anchors in the matrix</span></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="disclaimer">
+    <p>Educational illustration only — not a guarantee, projection of actual performance, or an offer of any product. Actual values depend on the carrier's official illustration, product terms, fees, and crediting methods, and are not guaranteed. Policy loans and withdrawals reduce cash value and death benefit. FIA guarantees are backed by the claims-paying ability of the issuing insurer. Review with your licensed advisor and the carrier illustration before making decisions.</p>
+  </footer>
+
+  <a class="homepill" href="#">← Herron &amp; Co. home</a>
+
+  <script type="module" src="/main.js"></script>
+</body>
+</html>

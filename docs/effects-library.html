@@ -1,0 +1,1907 @@
+<!DOCTYPE html>
+<html lang="en" data-omma-lib>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Effects library — Herron &amp; Co.</title>
+<style>
+:root{
+  --paper:#FBFAF6;--panel:#FFFFFF;--sunk:#F2F4F9;
+  --ink:#0E1F3E;--ink-2:#46567A;--ink-3:#7C89A6;
+  --brass:#8A6420;--brass-lit:#B07E22;--brass-soft:rgba(190,146,53,.30);
+  --rule:rgba(14,31,62,.13);--rule-soft:rgba(14,31,62,.07);
+  --serif:Georgia,'Iowan Old Style','Palatino Linotype',Palatino,serif;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+  --mono:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,monospace;
+  --ease-out:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink-2);font-family:var(--sans);
+  font-size:16px;line-height:1.66;-webkit-font-smoothing:antialiased}
+h1,h2{font-family:var(--serif);color:var(--ink);font-weight:600;line-height:1.14;
+  letter-spacing:-.015em;margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+code{font-family:var(--mono);font-size:.88em}
+a{color:var(--brass)}
+
+.shell{display:grid;grid-template-columns:246px minmax(0,1fr);gap:0;max-width:1320px;margin:0 auto}
+@media(max-width:900px){.shell{grid-template-columns:1fr}}
+
+/* ---- rail ---- */
+.rail{position:sticky;top:0;align-self:start;max-height:100vh;overflow-y:auto;
+  padding:34px 18px 40px 24px;border-right:1px solid var(--rule-soft)}
+@media(max-width:900px){.rail{position:static;max-height:none;border-right:0;
+  border-bottom:1px solid var(--rule-soft)}}
+.rail h1{font-size:19px;margin-bottom:4px}
+.rail .sub{font-family:var(--mono);font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--brass);margin-bottom:22px}
+.rail a{display:flex;flex-direction:column;gap:1px;padding:7px 10px;border-radius:7px;
+  text-decoration:none;color:var(--ink);font-size:13.6px;line-height:1.35;
+  border:1px solid transparent;transition:background .16s,border-color .16s}
+.rail a span{font-family:var(--mono);font-size:9px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3)}
+.rail a:hover{background:var(--sunk);border-color:var(--rule-soft)}
+.rail a:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+
+/* ---- content ---- */
+main{padding:44px clamp(20px,3.4vw,52px) 96px;min-width:0}
+.intro{max-width:66ch;padding-bottom:34px;margin-bottom:14px;border-bottom:1px solid var(--rule)}
+.intro h1{font-size:clamp(1.9rem,4vw,2.7rem);margin-bottom:16px}
+.intro p+p{margin-top:13px}
+.intro .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--brass);margin-bottom:14px;display:block}
+
+.entry{padding:44px 0;border-bottom:1px solid var(--rule-soft);scroll-margin-top:18px}
+.entry-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.entry h2{font-size:clamp(1.24rem,2.2vw,1.62rem)}
+.cat{font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--brass);border:1px solid var(--brass-soft);border-radius:999px;padding:3px 9px}
+.blurb{max-width:68ch;font-size:15.4px;margin-bottom:20px}
+.blurb b{color:var(--ink);font-weight:600}
+.blurb code{background:var(--sunk);padding:1px 5px;border-radius:4px;color:var(--ink)}
+
+/* ---- live demo strip ---- */
+.demo{position:relative;background:linear-gradient(180deg,#FFF,#F4F6FA);
+  border:1px solid var(--rule-soft);border-radius:12px;padding:26px;margin-bottom:16px;
+  min-height:96px;display:flex;align-items:center;gap:22px;flex-wrap:wrap;overflow:hidden}
+.demo::before{content:"";position:absolute;inset:0 0 auto 0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--brass-soft),transparent)}
+.demo::after{content:"live";position:absolute;right:11px;bottom:8px;font-family:var(--mono);
+  font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+
+/* ---- code ---- */
+.snip{border:1px solid var(--rule-soft);border-radius:11px;overflow:hidden;margin-bottom:12px;
+  background:var(--panel)}
+.snip-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 12px;background:var(--sunk);border-bottom:1px solid var(--rule-soft)}
+.snip-bar span{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:var(--ink-3)}
+.copy{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  background:#FFF;border:1px solid var(--rule);border-radius:6px;color:var(--ink);
+  padding:5px 11px;cursor:pointer;transition:background .16s,border-color .16s,color .16s}
+.copy:hover{border-color:var(--brass);color:var(--brass)}
+.copy.done{background:var(--brass);border-color:var(--brass);color:#FFF}
+.copy:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+pre{margin:0;max-height:460px;overflow:auto;padding:15px 16px;background:var(--panel)}
+pre code{font-size:12.4px;line-height:1.62;color:#2C3A57;white-space:pre;display:block}
+
+footer{padding:34px 0 0;max-width:68ch;font-size:14px;color:var(--ink-3)}
+
+/* ---------- demo-only styling ---------- */
+.d-label{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);width:100%}
+.d-btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;
+  padding:14px 26px;border-radius:12px;border:0;cursor:pointer;
+  background:linear-gradient(180deg,#E0BE79,#B07E22);color:#0E1F3E;
+  transition:box-shadow .18s}
+.d-btn:hover{box-shadow:0 12px 26px -12px rgba(190,146,53,.6)}
+.d-card{position:relative;width:270px;height:150px;border-radius:14px;overflow:hidden;
+  border:1px solid var(--rule);background:rgba(255,255,255,.86);padding:16px}
+.d-card h3{font-family:var(--serif);color:var(--ink);font-size:17px;margin:0 0 5px}
+.d-card p{font-size:13px;color:var(--ink-2)}
+.d-step{display:flex;align-items:center;gap:13px}
+.d-step .n{font-family:var(--mono);font-size:12px;color:var(--brass)}
+.d-step b{color:var(--ink);font-size:14.5px;display:block}
+.d-step span{font-size:13px}
+.fit-opt{display:flex;align-items:center;width:100%;max-width:400px;text-align:left;
+  background:rgba(255,255,255,.9);border:1px solid var(--rule);border-radius:11px;
+  padding:13px 16px;font-size:14.5px;color:var(--ink);cursor:pointer;
+  transition:border-color .18s,transform .18s}
+.fit-opt:hover{border-color:var(--brass);transform:translateX(4px)}
+.cap-card{width:100%;max-width:330px}
+.cap-card input{width:100%;padding:13px 14px;border:1px solid var(--rule);border-radius:10px;
+  background:#FFF;font-family:var(--sans);font-size:14.5px;color:var(--ink);outline:none}
+.cap-card input:focus{border-color:var(--brass)}
+.q-field{width:100%;max-width:400px}
+.q-out{width:100%}
+.d-stage{width:100%;height:230px;border-radius:10px;overflow:hidden;
+  background:radial-gradient(120% 100% at 50% 0%,#FFF,#EEF1F7)}
+.d-mask{--p:0%}
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <nav class="rail">
+    <h1>Effects library</h1>
+    <div class="sub">Herron &amp; Co.</div>
+    <a href="#spine" data-cat="foundation"><span>foundation</span>The scroll spine</a>
+    <a href="#painter" data-cat="foundation"><span>foundation</span>One renderer, many canvases</a>
+    <a href="#surfaces" data-cat="webgl"><span>webgl</span>Live card surfaces</a>
+    <a href="#bank" data-cat="webgl"><span>webgl</span>A column bank driven by DOM controls</a>
+    <a href="#compass" data-cat="webgl"><span>webgl</span>A needle that seeks an answer</a>
+    <a href="#devices" data-cat="webgl"><span>webgl</span>Small explanatory devices</a>
+    <a href="#cubes" data-cat="css"><span>css</span>3D cube step markers</a>
+    <a href="#float" data-cat="css"><span>css</span>Floating-label fields</a>
+    <a href="#ticker" data-cat="css"><span>css</span>Marquee ticker</a>
+    <a href="#bars" data-cat="css"><span>css</span>Proportion bars</a>
+    <a href="#keys" data-cat="css"><span>css</span>Lettered answer keys</a>
+    <a href="#lift" data-cat="css"><span>css</span>Staggered entry lift</a>
+    <a href="#thumb" data-cat="css"><span>css</span>Range thumb with a halo</a>
+    <a href="#magnet" data-cat="css"><span>css</span>Magnetic buttons</a>
+    <a href="#sheen" data-cat="css"><span>css</span>Cursor-tracked sheen</a>
+    <a href="#shake" data-cat="css"><span>css</span>Error shake</a>
+    <a href="#spline" data-cat="spline"><span>spline</span>Spline scenes</a>
+    <a href="#pbr" data-cat="advanced"><span>advanced</span>Injecting into Three&#x27;s PBR shader</a>
+    <a href="#instanced" data-cat="advanced"><span>advanced</span>One draw call for thousands of objects</a>
+    <a href="#svgdraw" data-cat="advanced"><span>advanced</span>A line that draws itself on scroll</a>
+    <a href="#typemask" data-cat="advanced"><span>advanced</span>Type filled by scroll position</a>
+    <a href="#envcube" data-cat="advanced"><span>advanced</span>An environment map with no asset</a>
+    <a href="#dispersion" data-cat="advanced"><span>advanced</span>Dispersive glass — RGB IOR split</a>
+    <a href="#postchain" data-cat="advanced"><span>advanced</span>Bloom, bokeh and edge aberration</a>
+    <a href="#barfield" data-cat="advanced"><span>advanced</span>JSON to a 3D bar field</a>
+  </nav>
+
+  <main>
+    <div class="intro">
+      <span class="kicker">Copy · paste · keep</span>
+      <h1>Every effect from the Omma build, with its working code.</h1>
+      <p>Each entry below is lifted straight out of the files running on the site —
+        <code>js/omma-3d.js</code>, <code>js/omma-design.js</code> and
+        <code>js/omma-3d.css</code> — so what you copy is what is actually shipping,
+        not a simplified retelling of it. The CSS effects render live above their
+        code; hover and click them.</p>
+      <p>The last four entries are the exception: they come from Omma exports that
+        have <em>not</em> shipped, and they are here as templates rather than as a
+        record of what runs. All three exports are kept verbatim —
+        <code>docs/omma-source/</code> (the homepage import, which the shipping code
+        came out of), <code>docs/omma-explainer-source/</code> (the four-stop
+        explainer) and <code>docs/omma-matrix-source/</code> (the dispersion and
+        post-processing build) — each with a README mapping every file to what we
+        did with it, and to what could not be used.</p>
+      <p><b>Read the two foundation entries first.</b> The scroll spine and the
+        single-renderer rule are what make everything after them work together
+        instead of fighting.</p>
+    </div>
+
+    <section id="spine" class="entry"><div class="entry-head"><span class="cat">foundation</span><h2>The scroll spine</h2></div><p class="blurb">The single most valuable forty lines in the whole template. Every scene reads the same two numbers — how far an element has travelled through the viewport (0&nbsp;→&nbsp;1) and how far it sits from centre (−1&nbsp;→&nbsp;1) — and drives its camera from them. That shared vocabulary is why the page moves as one instrument instead of six unrelated widgets. <code>damp()</code> is the other half: frame-rate-independent easing, so motion feels identical at 60fps and 144fps.</p><div class="snip"><div class="snip-bar"><span>js — js/omma-3d.js</span><button class="copy" type="button">Copy</button></div><pre><code>const clamp = (v, a, b) =&gt; Math.min(b, Math.max(a, v));
+const lerp  = (a, b, t) =&gt; a + (b - a) * t;
+const damp  = (cur, tgt, l, dt) =&gt; lerp(cur, tgt, 1 - Math.exp(-l * dt));
+
+const scrollState = {
+  y: 0, smooth: 0, vel: 0, progress: 0, _last: 0,
+  update() {
+    const y = window.scrollY || 0;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    this.vel += ((y - this._last) - this.vel) * 0.18;
+    this._last = y; this.y = y;
+    this.progress = Math.min(1, y / max);
+    this.smooth += (y - this.smooth) * 0.09;
+  }
+};
+
+const pointer = { nx: 0, ny: 0 };
+addEventListener(&#x27;pointermove&#x27;, e =&gt; {
+  pointer.nx = (e.clientX / innerWidth) * 2 - 1;
+  pointer.ny = -((e.clientY / innerHeight) * 2 - 1);
+}, { passive: true });
+
+/* 0 → 1 as an element travels through the viewport */
+function viewportProgress(el) {
+  if (!el) return 0;
+  const r = el.getBoundingClientRect();
+  return clamp((innerHeight - r.top) / (innerHeight + r.height), 0, 1);
+}
+/* -1 → 1, zero when the element is centred */
+function centerOffset(el) {
+  if (!el) return 0;
+  const r = el.getBoundingClientRect();
+  const c = r.top + r.height / 2;
+  return clamp((c - innerHeight / 2) / (innerHeight / 2 + r.height / 2), -1, 1);
+}</code></pre></div></section>
+<section id="painter" class="entry"><div class="entry-head"><span class="cat">foundation</span><h2>One renderer, many canvases</h2></div><p class="blurb">Browsers cap live WebGL contexts around sixteen and evict the oldest, so a renderer per scene is how you silently kill something else on the page. This keeps exactly one, draws each scene into an offscreen buffer, and hands every target its frame by <code>drawImage</code>. <b>The trap:</b> a WebGL canvas is presented to <code>drawImage</code> already flipped to top-left, so a region rendered at viewport <code>y = bufferH − h</code> must be read from source <code>y = 0</code>. Read it from <code>bufferH − h</code> and every target shows a slice of another target's scene.</p><div class="snip"><div class="snip-bar"><span>js — js/omma-3d.js</span><button class="copy" type="button">Copy</button></div><pre><code>class Painter {
+  constructor() {
+    this.pr = Math.min(devicePixelRatio || 1, 2);
+    this.gl = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: &#x27;high-performance&#x27; });
+    this.gl.setPixelRatio(1);                 /* device pixels are managed here */
+    this.gl.setClearColor(0x000000, 0);
+    this.gl.setScissorTest(true);
+    this.buf = this.gl.domElement;
+    this.bw = 0; this.bh = 0;
+    this.targets = [];
+    this.clock = new THREE.Clock();
+    this.running = false;
+    this.hidden = false;
+    document.addEventListener(&#x27;visibilitychange&#x27;, () =&gt; { this.hidden = document.hidden; });
+  }
+
+  /* spec: {el, canvas, scene, camera, update(dt,t,ctx), resize(w,h), scale} */
+  add(spec) {
+    spec.visible = false;
+    spec.scale = spec.scale || 1;
+    spec.ctx = spec.canvas.getContext(&#x27;2d&#x27;);
+    spec.w = 0; spec.h = 0;
+    this.targets.push(spec);
+    new IntersectionObserver(
+      es =&gt; es.forEach(e =&gt; { spec.visible = e.isIntersecting; }),
+      { threshold: 0, rootMargin: &#x27;120px&#x27; }
+    ).observe(spec.el);
+    this.measure(spec);
+    return spec;
+  }
+
+  measure(t) {
+    const box = t.sizeFrom || t.el;
+    const w = Math.max(1, Math.round(box.clientWidth));
+    const h = Math.max(1, Math.round(box.clientHeight));
+    if (w === t.w &amp;&amp; h === t.h) return false;
+    t.w = w; t.h = h;
+    t.dw = Math.max(1, Math.round(w * this.pr * t.scale));
+    t.dh = Math.max(1, Math.round(h * this.pr * t.scale));
+    t.canvas.width = t.dw; t.canvas.height = t.dh;
+    if (t.camera &amp;&amp; t.camera.isPerspectiveCamera) {
+      t.camera.aspect = w / h;
+      t.camera.updateProjectionMatrix();
+    }
+    if (t.resize) t.resize(w, h);
+    return true;
+  }
+
+  /* the offscreen buffer is as large as the biggest visible target */
+  fitBuffer() {
+    let mw = 1, mh = 1;
+    for (const t of this.targets) {
+      if (!t.visible) continue;
+      if (t.dw &gt; mw) mw = t.dw;
+      if (t.dh &gt; mh) mh = t.dh;
+    }
+    mw = Math.min(mw, 2400); mh = Math.min(mh, 1600);
+    if (mw === this.bw &amp;&amp; mh === this.bh) return;
+    this.bw = mw; this.bh = mh;
+    this.gl.setSize(mw, mh, false);
+  }
+
+  start() {
+    if (this.running) return;
+    this.running = true;
+    const loop = () =&gt; {
+      requestAnimationFrame(loop);
+      const dt = Math.min(this.clock.getDelta(), 0.05);
+      if (this.hidden) return;
+      const t = this.clock.elapsedTime;
+      scrollState.update();
+      /* drop targets whose host left the document — the Protection Blueprint is
+         a compiled bundle that replaces the whole DOM once it mounts, and the
+         layer is re-attached afterwards rather than left pointing at ghosts */
+      if (this.targets.some(t =&gt; t.el !== document.documentElement &amp;&amp; !t.el.isConnected)) {
+        this.targets = this.targets.filter(t =&gt; t.el === document.documentElement || t.el.isConnected);
+      }
+      this.fitBuffer();
+      for (const tg of this.targets) {
+        if (!tg.visible) continue;
+        this.measure(tg);
+        try { tg.update(dt, t); } catch (e) { tg.visible = false; continue; }
+        if (tg.paint === false) continue;
+        const dw = Math.min(tg.dw, this.bw), dh = Math.min(tg.dh, this.bh);
+        /* GL&#x27;s origin is bottom-left, but a WebGL canvas is PRESENTED to
+           drawImage already flipped to top-left. Rendering into the viewport
+           at y = bh - dh therefore lands at y = 0 of the source image — read
+           from 0, not from bh - dh, or every target shows another target&#x27;s
+           slice of the buffer. */
+        this.gl.setViewport(0, this.bh - dh, dw, dh);
+        this.gl.setScissor(0, this.bh - dh, dw, dh);
+        this.gl.clear(true, true, true);
+        this.gl.render(tg.scene, tg.camera);
+        tg.ctx.clearRect(0, 0, tg.dw, tg.dh);
+        tg.ctx.drawImage(this.buf, 0, 0, dw, dh, 0, 0, tg.dw, tg.dh);
+      }
+    };
+    loop();
+  }
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>js — the studio light rig</span><button class="copy" type="button">Copy</button></div><pre><code>function studioLights(scene, warm = 2.0) {
+  scene.add(new THREE.AmbientLight(0xFFFFFF, DARK ? 0.55 : 1.15));
+  scene.add(new THREE.HemisphereLight(0xFFFFFF, DARK ? 0x18244A : 0xD9E2F2, DARK ? 0.6 : 0.9));
+  const key = new THREE.DirectionalLight(0xFFF0D2, warm); key.position.set(4, 6, 6); scene.add(key);
+  const fill = new THREE.DirectionalLight(DARK ? 0x6FE3D6 : 0xD9E4FA, DARK ? 0.9 : 1.15);
+  fill.position.set(-5, -1, -4); scene.add(fill);
+  return key;
+}</code></pre></div></section>
+<section id="surfaces" class="entry"><div class="entry-head"><span class="cat">webgl</span><h2>Live card surfaces</h2></div><p class="blurb">One fragment shader, seven variants, keyed to product. A shelter lattice, an index curve drawn above its floor, closing care rings, a settled drift, income bars stepping up, a paycheck pulse, level scanlines. The cursor drags a light across whichever card it is over. <b>On a light page the ramp matters more than the pattern:</b> ink the figure in navy and brass at low alpha rather than glowing gold on black, or it turns to grey mush.</p><div class="demo" data-demo="surface"></div><div class="snip"><div class="snip-bar"><span>glsl + js — the shader</span><button class="copy" type="button">Copy</button></div><pre><code>const CARD_VERT = `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }`;
+const CARD_FRAG = `
+precision highp float;
+varying vec2 vUv;
+uniform float uTime, uHover, uVariant, uDark;
+uniform vec2 uMouse;
+
+mat2 rot(float a){ return mat2(cos(a),-sin(a),sin(a),cos(a)); }
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+float noise(vec2 p){
+  vec2 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
+  return mix(mix(hash(i), hash(i+vec2(1,0)), f.x), mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+}
+float fbm(vec2 p){ float v=0.0, a=0.5; for(int i=0;i&lt;4;i++){ v += a*noise(p); p *= 2.03; a *= 0.5; } return v; }
+
+void main(){
+  vec2 uv = vUv;
+  vec2 p  = (uv - 0.5) * vec2(1.7, 1.0);
+  float t = uTime * (0.30 + uHover * 0.45);
+  float v = uVariant;
+  float f = 0.0;
+
+  if(v &lt; 0.5){
+    /* 00 mortgage protection — a shelter lattice, roof pitch and beams */
+    vec2 q = p * rot(0.52) * 6.4;
+    vec2 gv = abs(fract(q) - 0.5);
+    f = smoothstep(0.45, 0.5, max(gv.x, gv.y));
+    f *= 0.55 + 0.45 * sin(length(p) * 5.5 - t * 1.4);
+  } else if(v &lt; 1.5){
+    /* 01 IUL — an index curve with its floor drawn under it */
+    float y = sin(p.x * 3.6 + t) * 0.17 + fbm(vec2(p.x * 2.0, t * 0.22)) * 0.32;
+    f  = smoothstep(0.045, 0.0, abs(p.y - y));
+    f += smoothstep(0.085, 0.0, abs(p.y + 0.26)) * 0.45;
+  } else if(v &lt; 2.5){
+    /* 02 long-term care — concentric care rings, one closing over the other */
+    float r = length(p * rot(t * 0.13));
+    f  = smoothstep(0.045, 0.0, abs(sin(r * 11.0 - t * 1.0)) * 0.06);
+    f += (1.0 - r) * 0.16;
+  } else if(v &lt; 3.5){
+    /* 03 final expense — a slow, settled drift */
+    f = fbm(p * 2.1 + vec2(t * 0.10, -t * 0.06));
+    f = pow(f, 1.8) * 1.35;
+  } else if(v &lt; 4.5){
+    /* 04 annuities — income bars stepping up */
+    float col = floor(uv.x * 13.0);
+    float h = 0.22 + 0.55 * fract(sin(col * 12.9898) * 43758.5453);
+    h *= 0.68 + 0.32 * sin(t * 1.2 + col * 0.8);
+    f = step(uv.y, h) * (0.35 + 0.45 * fract(sin(col) * 99.0));
+    f *= smoothstep(0.0, 0.22, uv.y);
+  } else if(v &lt; 5.5){
+    /* 05 disability — a paycheck pulse, steady then interrupted */
+    float beat = abs(sin(uv.x * 9.0 - t * 1.6));
+    f = smoothstep(0.10, 0.0, abs(p.y - (beat - 0.5) * 0.30));
+    f *= 0.5 + 0.5 * smoothstep(0.0, 0.35, fract(uv.x - t * 0.06));
+  } else {
+    /* 06 term &amp; whole — level scanlines, the plainest product drawn plainly */
+    float g = sin(p.y * 19.0 + t * 1.7 + fbm(p * 3.0 + t * 0.18) * 2.6);
+    f = smoothstep(0.72, 1.0, g) * 0.85 + fbm(p * 2.0 - t * 0.1) * 0.22;
+  }
+
+  /* the cursor carries a soft light across the surface */
+  float ml = smoothstep(0.62, 0.0, length(uv - uMouse)) * uHover;
+
+  /* BRIGHT PAGE: ink the pattern in navy + brass at low alpha over the glass.
+     uDark flips the ramp for dark surfaces (the wide classics card, and the
+     two navy tool pages) where light must be added rather than subtracted. */
+  vec3 inkCol   = mix(vec3(0.055,0.122,0.243), vec3(0.94,0.86,0.65), uDark);
+  vec3 brassCol = mix(vec3(0.745,0.573,0.208), vec3(1.00,0.92,0.72), uDark);
+  vec3 col = mix(inkCol, brassCol, clamp(f * 0.9 + ml * 0.5, 0.0, 1.0));
+
+  float vig = smoothstep(1.35, 0.30, length((uv - 0.5) * 2.0));
+  float base = mix(0.22, 0.34, uDark);
+  float a = clamp(f * base + ml * 0.18, 0.0, 1.0) * vig * (0.62 + uHover * 0.38);
+  gl_FragColor = vec4(col, a);
+}`;
+
+/* attach a live shader surface + cursor glare to any card-shaped element */</code></pre></div><div class="snip"><div class="snip-bar"><span>js — attaching it to any card</span><button class="copy" type="button">Copy</button></div><pre><code>function attachSurface(painter, card, variant, dark, scale) {
+  if (card.dataset.ommaSurface) return;
+  card.dataset.ommaSurface = &#x27;1&#x27;;
+
+  const canvas = mkCanvas(&#x27;omma-card-gl&#x27;);
+  const glare = document.createElement(&#x27;span&#x27;);
+  glare.className = &#x27;omma-card-glare&#x27;;
+  glare.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+  card.insertBefore(glare, card.firstChild);
+  card.insertBefore(canvas, card.firstChild);
+  card.classList.add(&#x27;omma-card&#x27;);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  const uniforms = {
+    uTime: { value: Math.random() * 12 }, uHover: { value: 0 },
+    uVariant: { value: variant }, uDark: { value: dark ? 1 : 0 },
+    uMouse: { value: new THREE.Vector2(0.5, 0.5) }
+  };
+  scene.add(new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2),
+    new THREE.ShaderMaterial({ vertexShader: CARD_VERT, fragmentShader: CARD_FRAG, uniforms, transparent: true })
+  ));
+
+  let hover = 0;
+  card.addEventListener(&#x27;pointerenter&#x27;, () =&gt; { hover = 1; });
+  card.addEventListener(&#x27;pointerleave&#x27;, () =&gt; {
+    hover = 0;
+    card.style.setProperty(&#x27;--ogx&#x27;, &#x27;50%&#x27;);
+    card.style.setProperty(&#x27;--ogy&#x27;, &#x27;0%&#x27;);
+  });
+  card.addEventListener(&#x27;pointermove&#x27;, e =&gt; {
+    const r = card.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width, ny = (e.clientY - r.top) / r.height;
+    uniforms.uMouse.value.set(nx, 1 - ny);
+    card.style.setProperty(&#x27;--ogx&#x27;, (nx * 100).toFixed(1) + &#x27;%&#x27;);
+    card.style.setProperty(&#x27;--ogy&#x27;, (ny * 100).toFixed(1) + &#x27;%&#x27;);
+  }, { passive: true });
+
+  /* a focused field counts as engagement — the surface warms under the form */
+  card.addEventListener(&#x27;focusin&#x27;, () =&gt; { hover = 1; });
+  card.addEventListener(&#x27;focusout&#x27;, () =&gt; {
+    if (!card.contains(document.activeElement)) hover = 0;
+  });
+
+  return painter.add({
+    el: card, canvas, scene, camera, scale: scale || 0.75,
+    update(dt) {
+      uniforms.uTime.value += dt;
+      uniforms.uHover.value = damp(uniforms.uHover.value, hover, 5, dt);
+    }
+  });
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 1. CARD + FORM SURFACES ---------------------------------------
+   The canvas is the card&#x27;s own live surface; the glare is a cursor-tracked
+   highlight on top of it. Both sit under the copy, which is lifted to z-index 2
+   so nothing here can ever cover text or intercept a click.                 */
+.omma-card { position: relative; }
+.omma-card &gt; .omma-card-gl,
+.omma-card &gt; .omma-card-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+}
+.omma-card &gt; .omma-card-gl {
+  opacity: 0;
+  transition: opacity .5s var(--ease-out, cubic-bezier(.16,1,.3,1));
+}
+.omma-card.in &gt; .omma-card-gl,
+.omma-card:not(.reveal) &gt; .omma-card-gl { opacity: 1; }
+
+.omma-card &gt; .omma-card-glare {
+  background: radial-gradient(340px circle at var(--ogx, 50%) var(--ogy, 0%),
+              rgba(226, 180, 92, .16), rgba(226, 180, 92, .05) 42%, transparent 68%);
+  opacity: 0;
+  transition: opacity .35s ease;
+  mix-blend-mode: multiply;
+}
+.omma-card:hover &gt; .omma-card-glare,
+.omma-card:focus-within &gt; .omma-card-glare { opacity: 1; }
+/* the one deliberately dark card wants light added, not multiplied out */
+.omma-card.wide-classics &gt; .omma-card-glare {
+  mix-blend-mode: screen;
+  background: radial-gradient(340px circle at var(--ogx, 50%) var(--ogy, 0%),
+              rgba(240, 220, 166, .20), rgba(240, 220, 166, .06) 42%, transparent 68%);
+}
+
+/* every direct child that carries content rides above the surface */
+.omma-card &gt; *:not(.omma-card-gl):not(.omma-card-glare) { position: relative; z-index: 2; }</code></pre></div></section>
+<section id="bank" class="entry"><div class="entry-head"><span class="cat">webgl</span><h2>A column bank driven by DOM controls</h2></div><p class="blurb">The template's premium tower, rebuilt as seven columns — one per product tab. The selected one builds to whatever the amount control is set to and warms with the age control; the rest stand by. <b>It reads the rendered controls rather than the calculator's private state</b>, which is what keeps a pricing model and its disclosure completely untouched by an animation. Frame the camera from half-extents and from its <em>true</em> distance (the orbit radius has to account for camera height) or the object parks twice as far away as it should.</p><div class="snip"><div class="snip-bar"><span>js — js/omma-3d.js</span><button class="copy" type="button">Copy</button></div><pre><code>function quoteTower(painter) {
+  const shell = document.querySelector(&#x27;#quotes .q-shell&#x27;);
+  const tabs = document.getElementById(&#x27;qTabs&#x27;);
+  const stage = document.getElementById(&#x27;qStage&#x27;);
+  if (!shell || !tabs || !stage || shell.querySelector(&#x27;.omma-stage-quote&#x27;)) return;
+
+  const host = document.createElement(&#x27;div&#x27;);
+  host.className = &#x27;omma-stage omma-stage-quote&#x27;;
+  host.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+  const canvas = mkCanvas(&#x27;omma-stage-gl&#x27;);
+  host.appendChild(canvas);
+  const cap = document.createElement(&#x27;div&#x27;);
+  cap.className = &#x27;omma-stage-cap&#x27;;
+  cap.textContent = &#x27;Illustration only&#x27;;
+  host.appendChild(cap);
+  tabs.insertAdjacentElement(&#x27;afterend&#x27;, host);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(44, 2, 0.1, 100);
+  studioLights(scene, 2.3);
+
+  const tower = new THREE.Group();
+  scene.add(tower);
+
+  /* A BANK, NOT A TOWER. The stage is a wide letterbox, and one centred column
+     left two thirds of it empty. Seven columns — one per product tab — fill the
+     frame and say something true: the selected product builds to the coverage
+     the controls are set to while the others stand by as outlines.
+     Brushed light steel with navy hairline edges; porcelain on ivory vanishes. */
+  const BANK = 7;          /* term, whole, final expense, annuity, IUL, LTC, DI */
+  const N = 12;            /* courses per column */
+  const STEP = 0.26;
+  const GAP = 1.6;
+  const blockGeo = new THREE.BoxGeometry(0.86, 0.20, 0.86);
+  const edgeGeo = new THREE.EdgesGeometry(blockGeo);
+  const columns = [];
+  for (let c = 0; c &lt; BANK; c++) {
+    const col = new THREE.Group();
+    col.position.x = (c - (BANK - 1) / 2) * GAP;
+    const blocks = [];
+    for (let i = 0; i &lt; N; i++) {
+      const mesh = new THREE.Mesh(blockGeo, new THREE.MeshPhysicalMaterial({
+        color: DARK ? C.mist : 0xEFF3FA, roughness: 0.26, metalness: DARK ? 0.5 : 0.12,
+        transparent: true, opacity: 0.94, clearcoat: 1, clearcoatRoughness: 0.12,
+        emissive: C.brass, emissiveIntensity: 0
+      }));
+      const edge = new THREE.LineSegments(edgeGeo, new THREE.LineBasicMaterial({
+        color: C.navy, transparent: true, opacity: 0.55
+      }));
+      mesh.add(edge);
+      mesh.userData = { edge, cur: 0 };
+      mesh.position.y = i * STEP;
+      col.add(mesh); blocks.push(mesh);
+    }
+    /* A full-height capacity guide was tried here and cut: with the columns
+       only part-filled it read as seven bare antennae. The bank carries its own
+       shape. */
+    const beacon = new THREE.Mesh(
+      new THREE.OctahedronGeometry(0.22, 0),
+      new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.6, metalness: DARK ? 0.85 : 0.35, roughness: 0.16 })
+    );
+    beacon.visible = false;
+    col.add(beacon);
+    tower.add(col);
+    columns.push({ col, blocks, beacon, active: 0, lit: c === 0 ? 1 : 0 });
+  }
+
+  /* the rail the bank stands on — carries the full width of the frame */
+  const rail = new THREE.Group();
+  const railW = BANK * GAP + 1.2;
+  for (let i = 0; i &lt; 3; i++) {
+    const g = new THREE.BufferGeometry().setFromPoints([
+      new THREE.Vector3(-railW / 2, 0, (i - 1) * 0.85),
+      new THREE.Vector3(railW / 2, 0, (i - 1) * 0.85)
+    ]);
+    rail.add(new THREE.Line(g, new THREE.LineBasicMaterial({
+      color: i === 1 ? C.brass : C.navy, transparent: true, opacity: i === 1 ? 0.45 : 0.16
+    })));
+  }
+  rail.position.y = -0.22;
+  tower.add(rail);
+
+  /* markers that sweep the bank — one per option group in the active product */
+  const sats = new THREE.Group();
+  const satGeo = new THREE.TetrahedronGeometry(0.17, 0);
+  for (let i = 0; i &lt; 5; i++) {
+    const m = new THREE.Mesh(satGeo, new THREE.MeshStandardMaterial({
+      color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.45, roughness: 0.28, metalness: DARK ? 0.6 : 0.25
+    }));
+    m.userData = { a: (i / 5) * Math.PI * 2, on: 0 };
+    m.visible = false;
+    sats.add(m);
+  }
+  tower.add(sats);
+
+  /* ---- read the studio&#x27;s rendered state; never its private variables.
+     The pricing model, its ranges and its disclosure are untouched by this. --- */
+  let fillTarget = 0.5, heatTarget = 0.4, satCount = 0, activeTab = 0;
+  function sample() {
+    const tabList = [...tabs.querySelectorAll(&#x27;.q-tab&#x27;)];
+    const on = tabList.findIndex(b =&gt; b.classList.contains(&#x27;on&#x27;));
+    activeTab = on &lt; 0 ? 0 : on;
+
+    const ranges = [...stage.querySelectorAll(&#x27;input[type=range]&#x27;)];
+    if (ranges.length) {
+      /* the widest range is the money control on every tab */
+      let money = null, span = -1;
+      ranges.forEach(r =&gt; {
+        const s = (+r.max) - (+r.min);
+        if (s &gt; span) { span = s; money = r; }
+      });
+      if (money) {
+        const f = ((+money.value) - (+money.min)) / Math.max(1, (+money.max) - (+money.min));
+        /* the floor is deliberate: at the default coverage the raw ratio is
+           about a fifth, which drew a stump. The column still tracks the
+           control, it just starts from a readable height. */
+        fillTarget = clamp(0.42 + f * 0.58, 0.42, 1);
+      }
+      /* the age-like control drives how hot the built column glows */
+      const ageish = ranges.find(r =&gt; (+r.max) &lt;= 90 &amp;&amp; (+r.min) &gt;= 18);
+      heatTarget = ageish
+        ? clamp(((+ageish.value) - (+ageish.min)) / Math.max(1, (+ageish.max) - (+ageish.min)), 0, 1)
+        : 0.4;
+    }
+    satCount = Math.min(5, stage.querySelectorAll(&#x27;.q-seg&#x27;).length);
+    columns.forEach((c, i) =&gt; { c.lit = i === activeTab ? 1 : 0; });
+    sats.children.forEach((m, i) =&gt; { m.userData.on = i &lt; satCount ? 1 : 0; });
+  }
+  const resample = () =&gt; { try { sample(); } catch (e) {} };
+  shell.addEventListener(&#x27;input&#x27;, resample, { passive: true });
+  shell.addEventListener(&#x27;click&#x27;, () =&gt; setTimeout(resample, 0), { passive: true });
+  new MutationObserver(resample).observe(stage, { childList: true, subtree: true });
+  resample();
+
+  let camAng = -0.25, camY = 2.2, camDist = 9.4, heat = 0.4;
+  /* frame from the stage aspect: the bank is railW wide, so a wide letterbox
+     pulls in while a narrow one pulls back rather than clipping the ends */
+  let dist = 9.4;
+  const frame = (w, h) =&gt; {
+    const a = w / Math.max(1, h);
+    const vFov = 44 * Math.PI / 180;
+    const tan = Math.tan(vFov / 2);
+    /* HALF-extents: the bank is railW wide and about 4.6 tall, and the camera
+       looks at its middle. Using full extents here parked it twice as far away
+       as it needed to be and the whole stage read as empty paper. */
+    const dW = (railW / 2 + 0.3) / (tan * Math.max(0.9, a));
+    const dH = 2.1 / tan;
+    dist = Math.max(dW, dH);
+  };
+  frame(host.clientWidth, host.clientHeight);
+
+  painter.add({
+    el: host, sizeFrom: host, canvas, scene, camera, scale: 0.9,
+    resize: frame,
+    update(dt, t) {
+      const vp = viewportProgress(host);
+      const co = centerOffset(host);
+      camAng = damp(camAng, lerp(-0.20, 0.20, vp) + pointer.nx * 0.06, 2.6, dt);
+      camY = damp(camY, lerp(1.4, 2.6, vp) + co * 0.2, 2.4, dt);
+      /* `dist` frames the bank from the camera&#x27;s true distance, but the camera
+         also sits camY above the floor — orbit on the shorter radius or the
+         whole bank shrinks to the middle third of the stage. */
+      const orbitR = Math.sqrt(Math.max(1, dist * dist - camY * camY));
+      camDist = damp(camDist, orbitR + Math.abs(co) * 0.5, 2.4, dt);
+      camera.position.set(Math.sin(camAng) * camDist, camY, Math.cos(camAng) * camDist);
+      camera.lookAt(0, lerp(1.35, 1.65, vp), 0);
+
+      heat = damp(heat, heatTarget, 3, dt);
+
+      columns.forEach((c, ci) =&gt; {
+        c.active = damp(c.active, c.lit, 4, dt);
+        /* the selected product builds to the coverage on the controls; the rest
+           stand by as low outlines */
+        const fill = c.lit ? fillTarget : 0.30;
+        let top = 0;
+        c.blocks.forEach((b, i) =&gt; {
+          const d = b.userData;
+          const want = (i / N) &lt; fill ? 1 : 0;
+          d.cur = damp(d.cur, want, 6 + i * 0.3, dt);
+          const y = i * STEP + Math.sin(t * 1.1 + i * 0.4 + ci) * 0.015 * d.cur;
+          b.position.y = y;
+          b.scale.set(0.55 + d.cur * 0.45, 0.18 + d.cur * 0.82, 0.55 + d.cur * 0.45);
+          b.rotation.y = (1 - d.cur) * 0.9 + t * 0.03 + i * 0.03;
+          /* unfilled courses keep only their navy hairline */
+          b.material.opacity = d.cur * 0.94 * (0.55 + c.active * 0.45);
+          b.material.emissiveIntensity = d.cur * c.active * heat * (0.24 + 0.14 * Math.sin(t * 2 - i * 0.5));
+          d.edge.material.opacity = d.cur * 0.6 * (0.45 + c.active * 0.55);
+          if (d.cur &gt; 0.5) top = y;
+        });
+        c.beacon.visible = c.active &gt; 0.25;
+        c.beacon.position.y = top + 0.6 + Math.sin(t * 1.4) * 0.07;
+        c.beacon.scale.setScalar(0.4 + c.active * 0.6);
+        c.beacon.rotation.y += dt * 1.0; c.beacon.rotation.x += dt * 0.6;
+      });
+
+      tower.rotation.y = Math.sin(t * 0.09) * 0.05;
+
+      sats.children.forEach((m, i) =&gt; {
+        const d = m.userData;
+        d.a += dt * (0.34 + i * 0.05);
+        m.visible = d.on &gt; 0 &amp;&amp; i &lt; 3;
+        /* markers travel the rail, they do not float loose in the frame */
+        m.position.set(Math.sin(d.a) * (railW * 0.46), 0.16, 1.5 + i * 0.55);
+        m.rotation.y += dt * 1.4;
+      });
+    }
+  });
+}</code></pre></div></section>
+<section id="compass" class="entry"><div class="entry-head"><span class="cat">webgl</span><h2>A needle that seeks an answer</h2></div><p class="blurb">A dial with eight markers, one per branch of a quiz, and a needle that swings to whichever branch is leading while a bezel fills with progress. It follows the quiz by watching what the quiz renders. <b>The detail that makes it:</b> sixty radial ticks and a brass bezel. A bare disc reads as a grey pancake no matter how good the lighting is.</p><div class="snip"><div class="snip-bar"><span>js — js/omma-3d.js</span><button class="copy" type="button">Copy</button></div><pre><code>function fitCompass(painter) {
+  const shell = document.querySelector(&#x27;#fitcheck .fit-shell&#x27;);
+  const body = document.getElementById(&#x27;fitBody&#x27;);
+  const bar = document.getElementById(&#x27;fitBar&#x27;);
+  if (!shell || !body || shell.querySelector(&#x27;.omma-stage-fit&#x27;)) return;
+
+  const host = document.createElement(&#x27;div&#x27;);
+  host.className = &#x27;omma-stage omma-stage-fit&#x27;;
+  host.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+  const canvas = mkCanvas(&#x27;omma-stage-gl&#x27;);
+  host.appendChild(canvas);
+  const label = document.createElement(&#x27;div&#x27;);
+  label.className = &#x27;omma-compass-label&#x27;;
+  host.appendChild(label);
+  shell.insertBefore(host, shell.firstChild);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(44, 2, 0.1, 60);
+  studioLights(scene, 2.1);
+  const rig = new THREE.Group(); scene.add(rig);
+
+  /* a thin instrument plate: cool steel face, navy edge, brass bezel */
+  const disc = new THREE.Mesh(
+    new THREE.CylinderGeometry(2.35, 2.35, 0.09, 72),
+    new THREE.MeshPhysicalMaterial({
+      color: DARK ? C.porcelain : 0xF4F7FC,
+      metalness: DARK ? 0.5 : 0.10, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.1
+    })
+  );
+  rig.add(disc);
+  rig.add(new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.CylinderGeometry(2.37, 2.37, 0.10, 72)),
+    new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.45 })
+  ));
+  const bezel = new THREE.Mesh(
+    new THREE.TorusGeometry(2.37, 0.035, 8, 120),
+    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.4, metalness: DARK ? 0.9 : 0.35, roughness: 0.2 })
+  );
+  bezel.rotation.x = -Math.PI / 2; bezel.position.y = 0.05; rig.add(bezel);
+
+  /* radial ticks — this is what makes a disc read as an instrument rather
+     than a pancake. 60 minor, every 5th major. */
+  const tickPts = [];
+  for (let i = 0; i &lt; 60; i++) {
+    const a = (i / 60) * Math.PI * 2;
+    const inner = i % 5 === 0 ? 1.95 : 2.12;
+    tickPts.push(
+      new THREE.Vector3(Math.sin(a) * inner, 0.051, Math.cos(a) * inner),
+      new THREE.Vector3(Math.sin(a) * 2.28, 0.051, Math.cos(a) * 2.28)
+    );
+  }
+  const ticks = new THREE.LineSegments(
+    new THREE.BufferGeometry().setFromPoints(tickPts),
+    new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.34 })
+  );
+  rig.add(ticks);
+
+  /* the eight doors of the fit check, in the order the first question lists them */
+  const TRACKS = [&#x27;mortgage&#x27;, &#x27;iul&#x27;, &#x27;trucker&#x27;, &#x27;ltc&#x27;, &#x27;final&#x27;, &#x27;term&#x27;, &#x27;annuity&#x27;, &#x27;disability&#x27;];
+  const markers = TRACKS.map((key, i) =&gt; {
+    const a = (i / TRACKS.length) * Math.PI * 2;
+    const g = new THREE.Group();
+    const post = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.028, 0.028, 0.8, 8),
+      new THREE.MeshBasicMaterial({ color: C.ink, transparent: true, opacity: 0.30 })
+    );
+    post.position.y = 0.4; g.add(post);
+    const orb = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.17, 0),
+      new THREE.MeshStandardMaterial({ color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.22, roughness: 0.3, metalness: DARK ? 0.6 : 0.2, flatShading: true })
+    );
+    orb.position.y = 0.9; g.add(orb);
+    g.position.set(Math.sin(a) * 1.92, 0.05, Math.cos(a) * 1.92);
+    g.userData = { key, angle: a, orb, post, lit: 0, cur: 0 };
+    rig.add(g);
+    return g;
+  });
+
+  const needle = new THREE.Group();
+  const shaft = new THREE.Mesh(
+    new THREE.ConeGeometry(0.15, 1.9, 4),
+    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.5, metalness: DARK ? 0.8 : 0.35, roughness: 0.18 })
+  );
+  shaft.rotation.x = -Math.PI / 2; shaft.position.z = 0.95; needle.add(shaft);
+  const tail = new THREE.Mesh(
+    new THREE.ConeGeometry(0.10, 0.72, 4),
+    new THREE.MeshStandardMaterial({ color: C.navy, metalness: 0.7, roughness: 0.3 })
+  );
+  tail.rotation.x = Math.PI / 2; tail.position.z = -0.36; needle.add(tail);
+  needle.add(new THREE.Mesh(
+    new THREE.SphereGeometry(0.22, 24, 24),
+    new THREE.MeshPhysicalMaterial({ color: C.navy, metalness: 0.9, roughness: 0.14, clearcoat: 1 })
+  ));
+  needle.position.y = 0.28;
+  rig.add(needle);
+
+  /* progress halo — fills as the four questions are answered */
+  const halo = new THREE.Mesh(
+    new THREE.TorusGeometry(2.62, 0.055, 8, 140),
+    new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false,
+      uniforms: { uTime: { value: 0 }, uProg: { value: 0 } },
+      vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+      fragmentShader: `varying vec2 vUv; uniform float uTime, uProg;
+        void main(){
+          float a = smoothstep(uProg, uProg - 0.02, vUv.x);
+          float pulse = 0.5 + 0.5 * sin(vUv.x * 34.0 - uTime * 2.6);
+          vec3 c = mix(vec3(0.745,0.573,0.208), vec3(0.94,0.86,0.66), pulse);
+          gl_FragColor = vec4(c, a * (0.45 + pulse * 0.4));
+        }`
+    })
+  );
+  halo.rotation.x = -Math.PI / 2; halo.position.y = 0.09; rig.add(halo);
+
+  /* ---- follow the quiz by reading what it renders ---- */
+  let targetAngle = 0, progress = 0, settled = false;
+  function sync() {
+    const w = bar ? parseFloat(bar.style.width) || 0 : 0;
+    progress = clamp(w / 100, 0, 1);
+    settled = progress &gt;= 0.999;
+    const stepLabel = body.querySelector(&#x27;.fit-step-label&#x27;);
+    const heading = body.querySelector(&#x27;.fit-result h3&#x27;);
+    let name = &#x27;&#x27;;
+    if (heading) name = heading.textContent.replace(/ looks like your fit\.?$/, &#x27;&#x27;);
+    else if (stepLabel &amp;&amp; stepLabel.textContent.includes(&#x27;·&#x27;)) name = stepLabel.textContent.split(&#x27;·&#x27;)[1].trim();
+
+    if (name) {
+      const n = name.toLowerCase();
+      let key = &#x27;term&#x27;;
+      if (n.includes(&#x27;mortgage&#x27;)) key = &#x27;mortgage&#x27;;
+      else if (n.includes(&#x27;indexed&#x27;) || n.includes(&#x27;iul&#x27;)) key = &#x27;iul&#x27;;
+      else if (n.includes(&#x27;truck&#x27;) || n.includes(&#x27;owner-operator&#x27;)) key = &#x27;trucker&#x27;;
+      else if (n.includes(&#x27;care&#x27;)) key = &#x27;ltc&#x27;;
+      else if (n.includes(&#x27;final&#x27;)) key = &#x27;final&#x27;;
+      else if (n.includes(&#x27;annuit&#x27;)) key = &#x27;annuity&#x27;;
+      else if (n.includes(&#x27;disab&#x27;) || n.includes(&#x27;paycheck&#x27;)) key = &#x27;disability&#x27;;
+      const m = markers.find(x =&gt; x.userData.key === key);
+      if (m) targetAngle = m.userData.angle;
+      markers.forEach(x =&gt; { x.userData.lit = x.userData.key === key ? 1 : 0; });
+      label.textContent = name;
+    } else {
+      markers.forEach(x =&gt; { x.userData.lit = 0; });
+      label.textContent = &#x27;&#x27;;
+    }
+  }
+  new MutationObserver(() =&gt; { try { sync(); } catch (e) {} }).observe(body, { childList: true, subtree: true });
+  sync();
+
+  let needleAng = 0, camY = 2.0, camAng = 0, camDist = 6.4;
+  let dNear = 6.6, dFar = 5.8;
+  const frame = (w, h) =&gt; {
+    /* fit the dial&#x27;s 4.9 diameter — half-extents, and the dial is raked so its
+       on-screen height is much less than its width */
+    const a = w / Math.max(1, h);
+    const tan = Math.tan(44 * Math.PI / 360);
+    const need = Math.max(2.7 / (tan * Math.max(0.8, a)), 1.65 / tan);
+    dNear = need + 0.6; dFar = need;
+  };
+  frame(host.clientWidth, host.clientHeight);
+
+  painter.add({
+    el: host, sizeFrom: host, canvas, scene, camera, scale: 0.9,
+    resize: frame,
+    update(dt, t) {
+      const vp = viewportProgress(host);
+      const co = centerOffset(host);
+      camY = damp(camY, lerp(1.5, 3.4, vp), 2.5, dt);
+      camAng = damp(camAng, lerp(-0.38, 0.38, vp) + co * 0.14 + pointer.nx * 0.07, 2.5, dt);
+      camDist = damp(camDist, lerp(dNear, dFar, Math.min(1, vp * 1.4)) + Math.abs(co) * 0.6, 2.5, dt);
+      camera.position.set(Math.sin(camAng) * camDist, camY, Math.cos(camAng) * camDist);
+      camera.lookAt(0, 0.3, 0);
+      rig.rotation.y = Math.sin(t * 0.1) * 0.06 + co * 0.1;
+
+      let d = targetAngle - needleAng;
+      while (d &gt; Math.PI) d -= Math.PI * 2;
+      while (d &lt; -Math.PI) d += Math.PI * 2;
+      needleAng += d * (1 - Math.exp(-(settled ? 4.5 : 6.5) * dt));
+      needle.rotation.y = needleAng + (settled ? 0 : Math.sin(t * 6) * 0.03);
+      needle.position.y = 0.28 + Math.sin(t * 1.3) * 0.025;
+
+      halo.material.uniforms.uTime.value = t;
+      halo.material.uniforms.uProg.value = damp(halo.material.uniforms.uProg.value, progress, 4, dt);
+
+      markers.forEach(m =&gt; {
+        const u = m.userData;
+        u.cur = damp(u.cur, u.lit, 5, dt);
+        u.orb.material.emissiveIntensity = 0.14 + u.cur * (1.0 + Math.sin(t * 3) * 0.3);
+        u.orb.material.color.setHex(u.cur &gt; 0.5 ? C.brassLit : C.blueSoft);
+        u.orb.scale.setScalar(1 + u.cur * 0.6);
+        u.post.material.opacity = 0.24 + u.cur * 0.5;
+        u.orb.rotation.y += dt * (0.6 + u.cur * 2.0);
+      });
+      disc.rotation.y -= dt * 0.05;
+    }
+  });
+}</code></pre></div></section>
+<section id="devices" class="entry"><div class="entry-head"><span class="cat">webgl</span><h2>Small explanatory devices</h2></div><p class="blurb">Two objects that argue a point rather than decorate. A shielded and an unshielded column of value with a market line running behind them — the downturn drains one and the other holds. And four plates orbiting a core, wired back to it. <b>Do not put <code>EdgesGeometry</code> on an open cylinder:</b> it draws every facet seam and the result looks like a barcode. Two clean rim rings instead.</p><div class="snip"><div class="snip-bar"><span>js — the shielded columns</span><button class="copy" type="button">Copy</button></div><pre><code>/* two value columns — the shielded one holds when the market drops */
+function shieldDevice(rig) {
+  const cols = [];
+  for (let i = 0; i &lt; 2; i++) {
+    const g = new THREE.Group();
+    const glassMat = new THREE.MeshPhysicalMaterial({
+      color: C.porcelain, roughness: 0.12, metalness: 0.1,
+      transparent: true, opacity: 0.34, clearcoat: 1
+    });
+    const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 3.6, 44, 1, true), glassMat);
+    g.add(tube);
+    /* EdgesGeometry on an open cylinder draws every facet seam — it looked like
+       a barcode. Two clean rim rings instead. */
+    [-1.8, 1.8].forEach(y =&gt; {
+      const rim = new THREE.Mesh(
+        new THREE.TorusGeometry(0.82, 0.018, 8, 60),
+        new THREE.MeshBasicMaterial({ color: C.navy, transparent: true, opacity: 0.45 })
+      );
+      rim.rotation.x = Math.PI / 2; rim.position.y = y; g.add(rim);
+    });
+    const fill = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.76, 0.76, 1, 44),
+      new THREE.MeshStandardMaterial({
+        color: i === 0 ? C.brassLit : C.blueSoft,
+        emissive: i === 0 ? C.brass : C.blue,
+        emissiveIntensity: i === 0 ? 0.4 : 0.2,
+        metalness: DARK ? 0.55 : 0.18, roughness: 0.26
+      })
+    );
+    g.add(fill);
+    g.position.x = i === 0 ? -1.5 : 1.5;
+    rig.add(g);
+    cols.push({ g, fill, level: 0.72, target: 0.72, shielded: i === 0 });
+  }
+
+  /* the shield: a brass torus cage around the protected column */
+  const shield = new THREE.Group();
+  for (let i = 0; i &lt; 3; i++) {
+    const t = new THREE.Mesh(
+      new THREE.TorusGeometry(1.1, 0.028, 8, 90),
+      new THREE.MeshBasicMaterial({ color: C.brass, transparent: true, opacity: 0.7 - i * 0.14 })
+    );
+    t.rotation.x = Math.PI / 2;
+    t.position.y = -1.1 + i * 1.1;
+    shield.add(t);
+  }
+  shield.position.x = -1.5;
+  rig.add(shield);
+
+  /* the market line running behind both */
+  const PTS = 90;
+  const lg = new THREE.BufferGeometry();
+  const lp = new Float32Array(PTS * 3);
+  lg.setAttribute(&#x27;position&#x27;, new THREE.BufferAttribute(lp, 3));
+  const line = new THREE.Line(lg, new THREE.LineBasicMaterial({ color: C.blue, transparent: true, opacity: 0.5 }));
+  line.position.z = -1.9;
+  rig.add(line);
+
+  let cycle = 0;
+  return (dt, t) =&gt; {
+    cycle = (cycle + dt * 0.16) % 1;
+    /* a downturn sweeps through the middle of every cycle */
+    const crash = Math.max(0, Math.sin((cycle - 0.35) * Math.PI / 0.4)) * (cycle &gt; 0.35 &amp;&amp; cycle &lt; 0.75 ? 1 : 0);
+    cols.forEach(c =&gt; {
+      c.target = c.shielded ? 0.78 : 0.78 - crash * 0.52;
+      c.level = damp(c.level, c.target, 3.2, dt);
+      const h = Math.max(0.04, c.level * 3.4);
+      c.fill.scale.y = h;
+      c.fill.position.y = -1.8 + h / 2;
+    });
+    shield.rotation.y += dt * 0.5;
+    shield.children.forEach((s, i) =&gt; {
+      s.material.opacity = (0.5 - i * 0.11) * (0.7 + 0.3 * Math.sin(t * 2 + i)) + crash * 0.25;
+    });
+    const arr = lg.attributes.position.array;
+    for (let i = 0; i &lt; PTS; i++) {
+      const x = -3.6 + (i / (PTS - 1)) * 7.2;
+      const ph = i / (PTS - 1);
+      const dip = Math.max(0, Math.sin((ph - 0.35) * Math.PI / 0.4)) * (ph &gt; 0.35 &amp;&amp; ph &lt; 0.75 ? 1 : 0);
+      arr[i * 3] = x;
+      arr[i * 3 + 1] = 1.0 + Math.sin(ph * 16 + t * 0.7) * 0.14 + ph * 0.5 - dip * 2.1;
+      arr[i * 3 + 2] = 0;
+    }
+    lg.attributes.position.needsUpdate = true;
+    rig.rotation.y = Math.sin(t * 0.13) * 0.09;
+  };
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>js — the orbiting plates</span><button class="copy" type="button">Copy</button></div><pre><code>/* four shields orbiting a core — care, paycheck, home, legacy */
+function blueprintDevice(rig) {
+  const COLS = [C.brassLit, C.blueSoft, C.mist, C.brass];
+  const shields = COLS.map((col, i) =&gt; {
+    const g = new THREE.Group();
+    const plate = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.66, 0.66, 0.06, 6),
+      new THREE.MeshPhysicalMaterial({ color: col, metalness: DARK ? 0.62 : 0.22, roughness: 0.24, clearcoat: 1 })
+    );
+    plate.rotation.x = Math.PI / 2;
+    g.add(plate);
+    g.add(new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.CylinderGeometry(0.69, 0.69, 0.07, 6)),
+      new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.4 })
+    ).rotateX(Math.PI / 2));
+    g.userData = { a: (i / 4) * Math.PI * 2 };
+    rig.add(g);
+    return g;
+  });
+
+  const core = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(0.5, 1),
+    new THREE.MeshPhysicalMaterial({ color: C.porcelain, metalness: 0.45, roughness: 0.2, clearcoat: 1, flatShading: true })
+  );
+  rig.add(core);
+  const coreWire = new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.52, 1)),
+    new THREE.LineBasicMaterial({ color: C.brass, transparent: true, opacity: 0.6 })
+  );
+  rig.add(coreWire);
+
+  const spokes = new THREE.BufferGeometry();
+  const sp = new Float32Array(4 * 2 * 3);
+  spokes.setAttribute(&#x27;position&#x27;, new THREE.BufferAttribute(sp, 3));
+  const spokeLines = new THREE.LineSegments(spokes, new THREE.LineBasicMaterial({ color: C.navy, transparent: true, opacity: 0.2 }));
+  rig.add(spokeLines);
+
+  return (dt, t) =&gt; {
+    core.rotation.y += dt * 0.32; core.rotation.x += dt * 0.14;
+    coreWire.rotation.copy(core.rotation);
+    core.scale.setScalar(1 + Math.sin(t * 1.5) * 0.03);
+    const arr = spokes.attributes.position.array;
+    shields.forEach((g, i) =&gt; {
+      const u = g.userData;
+      u.a += dt * 0.28;
+      const r = 2.7, y = Math.sin(t * 0.8 + i * 1.6) * 0.3;
+      const x = Math.cos(u.a) * r, z = Math.sin(u.a) * r;
+      g.position.set(x, y, z);
+      g.rotation.y = -u.a + Math.PI / 2;
+      g.rotation.z = Math.sin(t * 0.9 + i) * 0.16;
+      arr[i * 6] = x; arr[i * 6 + 1] = y; arr[i * 6 + 2] = z;
+      arr[i * 6 + 3] = 0; arr[i * 6 + 4] = 0; arr[i * 6 + 5] = 0;
+    });
+    spokes.attributes.position.needsUpdate = true;
+    rig.rotation.y = Math.sin(t * 0.1) * 0.1;
+  };
+}</code></pre></div></section>
+<section id="cubes" class="entry"><div class="entry-head"><span class="cat">css</span><h2>3D cube step markers</h2></div><p class="blurb">A step number becomes a slowly turning cube. Pure CSS 3D, no WebGL, no cost worth measuring. <b>Put the number on all four side faces</b> — front and right alone leave a dead zone between 135° and 225° where a blank face is toward the camera and the step silently loses its number.</p><div class="demo" data-demo="cube"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 5. 3D CUBE STEP MARKERS ---------------------------------------
+   The template&#x27;s process cubes, applied to the step numbers this site already
+   has. The number is repeated on the two faces that ever front the camera, so
+   the step is readable at every point in the rotation.                      */
+.omma-cube-slot {
+  perspective: 520px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 38px; height: 38px;
+  /* the slot inherits whatever the step number was styled as; the cube supplies
+     its own face, so drop any inherited plate underneath it */
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+.omma-cube {
+  position: relative;
+  display: block;
+  width: 30px; height: 30px;
+  transform-style: preserve-3d;
+  animation: ommaCube 14s linear infinite;
+}
+.omma-cube &gt; i {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  font-family: &#x27;IBM Plex Mono&#x27;, monospace;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .02em;
+  color: #96660F;
+  background: linear-gradient(150deg, rgba(255,255,255,.96), rgba(240,244,251,.9));
+  border: 1px solid rgba(190, 146, 53, .38);
+  border-radius: 3px;
+  backface-visibility: hidden;
+}
+.omma-cube .f1 { transform: translateZ(15px); }
+.omma-cube .f2 { transform: rotateY(90deg) translateZ(15px); }
+.omma-cube .f3 { transform: rotateY(180deg) translateZ(15px); }
+.omma-cube .f4 { transform: rotateY(-90deg) translateZ(15px); }
+.omma-cube .f5 { transform: rotateX(90deg) translateZ(15px); }
+.omma-cube .f6 { transform: rotateX(-90deg) translateZ(15px); }
+@keyframes ommaCube {
+  0%   { transform: rotateX(-16deg) rotateY(0deg); }
+  100% { transform: rotateX(-16deg) rotateY(360deg); }
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function cubes() {
+    if (REDUCE) return;
+    document.querySelectorAll(&#x27;.bp-step &gt; .n, .book-point &gt; .n, .proc-n&#x27;).forEach(function (n, i) {
+      if (n.dataset.ommaCube) return;
+      n.dataset.ommaCube = &#x27;1&#x27;;
+      var num = n.textContent.trim();
+      n.classList.add(&#x27;omma-cube-slot&#x27;);
+      /* the number goes on all four SIDE faces. Front + right alone leaves a
+         dead zone between 135 and 225 degrees where a blank face is toward the
+         camera and the step silently loses its number. */
+      n.innerHTML =
+        &#x27;&lt;span class=&quot;omma-cube&quot; style=&quot;animation-delay:&#x27; + (-i * 1.7).toFixed(1) + &#x27;s&quot;&gt;&#x27; +
+        &#x27;&lt;i class=&quot;f1&quot;&gt;&#x27; + num + &#x27;&lt;/i&gt;&lt;i class=&quot;f2&quot;&gt;&#x27; + num + &#x27;&lt;/i&gt;&#x27; +
+        &#x27;&lt;i class=&quot;f3&quot;&gt;&#x27; + num + &#x27;&lt;/i&gt;&lt;i class=&quot;f4&quot;&gt;&#x27; + num + &#x27;&lt;/i&gt;&#x27; +
+        &#x27;&lt;i class=&quot;f5&quot;&gt;&lt;/i&gt;&lt;i class=&quot;f6&quot;&gt;&lt;/i&gt;&lt;/span&gt;&#x27;;
+    });
+  }</code></pre></div></section>
+<section id="float" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Floating-label fields</h2></div><p class="blurb">The label rides on the field's top edge once there is focus or a value, and a brass rule sweeps in underneath. Implemented as a <em>wrapper</em>: the input keeps its name, type, autocomplete, required and aria-describedby, so validation and any form back-end behave exactly as before. The placeholder is replaced with a single space so <code>:placeholder-shown</code> stays accurate while showing nothing.</p><div class="demo" data-demo="float"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 7. FLOATING-LABEL FIELDS -------------------------------------
+   The label rides on the field&#x27;s top edge once there is focus or a value. The
+   input keeps every attribute it shipped with — this is a wrapper, not a
+   replacement.                                                              */
+.omma-float { position: relative; display: block; }
+.cap-row .omma-float { flex: 1 1 0; min-width: 0; }
+.omma-float &gt; input { width: 100%; }
+.omma-float-label {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 14.5px;
+  line-height: 1;
+  color: #7B89A6;
+  background: transparent;
+  padding: 0 4px;
+  transition: top .18s var(--ease-out, cubic-bezier(.16,1,.3,1)),
+              font-size .18s ease, color .18s ease, background .18s ease;
+}
+.omma-float &gt; input:focus + .omma-float-label,
+.omma-float &gt; input:not(:placeholder-shown) + .omma-float-label {
+  top: 0;
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #96660F;
+  background: #FFFFFF;
+  border-radius: 3px;
+}
+/* a brass rule sweeps in under the focused field */
+.omma-float::after {
+  content: &quot;&quot;;
+  position: absolute;
+  left: 10px; right: 10px; bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #B07E22, #E0BE79);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .28s var(--ease-out, cubic-bezier(.16,1,.3,1));
+  pointer-events: none;
+}
+.omma-float:focus-within::after { transform: scaleX(1); }</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function floatLabels() {
+    function wrap() {
+      document.querySelectorAll(&#x27;.cap-card input[placeholder]&#x27;).forEach(function (input) {
+        if (input.dataset.ommaFloat || input.type === &#x27;checkbox&#x27;) return;
+        input.dataset.ommaFloat = &#x27;1&#x27;;
+        var text = input.getAttribute(&#x27;placeholder&#x27;);
+        var box = document.createElement(&#x27;span&#x27;);
+        box.className = &#x27;omma-float&#x27;;
+        input.parentNode.insertBefore(box, input);
+        box.appendChild(input);
+        var label = document.createElement(&#x27;span&#x27;);
+        label.className = &#x27;omma-float-label&#x27;;
+        label.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+        label.textContent = text;
+        box.appendChild(label);
+        /* a space keeps :placeholder-shown accurate while showing nothing */
+        input.setAttribute(&#x27;placeholder&#x27;, &#x27; &#x27;);
+        input.setAttribute(&#x27;aria-label&#x27;, text);
+      });
+    }
+    wrap();
+    new MutationObserver(function () { try { wrap(); } catch (e) {} })
+      .observe(document.body, { childList: true, subtree: true });
+  }</code></pre></div></section>
+<section id="ticker" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Marquee ticker</h2></div><p class="blurb">Duplicate the list once and translate the track by exactly −50% — that is what makes the loop seamless. Masked at both edges so items fade rather than clip, and paused on hover.</p><div class="demo" data-demo="ticker"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 8. PRODUCT TICKER --------------------------------------------
+   The template&#x27;s marquee, in the site&#x27;s own key: mono, brass, hairline rules
+   above and below, and quiet enough that it frames the cards rather than
+   competing with the headline over them.                                    */
+.omma-ticker {
+  overflow: hidden;
+  margin: 0 0 clamp(28px, 3.5vw, 44px);
+  padding: 13px 0;
+  border-top: 1px solid rgba(14, 31, 62, .10);
+  border-bottom: 1px solid rgba(14, 31, 62, .10);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+}
+.omma-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  width: max-content;
+  animation: ommaTicker 46s linear infinite;
+}
+.omma-ticker:hover .omma-ticker-track { animation-play-state: paused; }
+.omma-ticker span {
+  font-family: &#x27;IBM Plex Mono&#x27;, monospace;
+  font-size: 11.5px;
+  letter-spacing: .22em;
+  color: #5A6A8C;
+  white-space: nowrap;
+}
+.omma-ticker i {
+  font-style: normal;
+  font-size: 7px;
+  color: #B07E22;
+  opacity: .65;
+}
+/* the track holds the list twice, so -50% is exactly one loop */
+@keyframes ommaTicker { to { transform: translateX(-50%); } }</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function ticker() {
+    try {
+      var head = document.querySelector(&#x27;#coverage .sec-head&#x27;);
+      if (!head || document.querySelector(&#x27;.omma-ticker&#x27;)) return;
+      var words = [
+        &#x27;MORTGAGE PROTECTION&#x27;, &#x27;INDEXED UNIVERSAL LIFE&#x27;, &#x27;HYBRID LONG-TERM CARE&#x27;,
+        &#x27;FINAL EXPENSE&#x27;, &#x27;FIXED ANNUITIES&#x27;, &#x27;DISABILITY INCOME&#x27;, &#x27;TERM &amp; WHOLE LIFE&#x27;
+      ];
+      var row = words.map(function (w) {
+        return &#x27;&lt;span&gt;&#x27; + w + &#x27;&lt;/span&gt;&lt;i aria-hidden=&quot;true&quot;&gt;&amp;#9670;&lt;/i&gt;&#x27;;
+      }).join(&#x27;&#x27;);
+      var el = document.createElement(&#x27;div&#x27;);
+      el.className = &#x27;omma-ticker&#x27;;
+      el.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+      /* the track is duplicated so the -50% translate loops seamlessly */
+      el.innerHTML = &#x27;&lt;div class=&quot;omma-ticker-track&quot;&gt;&#x27; + row + row + &#x27;&lt;/div&gt;&#x27;;
+      head.insertAdjacentElement(&#x27;afterend&#x27;, el);
+    } catch (e) {}
+  }</code></pre></div></section>
+<section id="bars" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Proportion bars</h2></div><p class="blurb">Which lever is doing the work, shown as three bars. <b>Deliberately carrying no numbers.</b> They are proportions read back off controls the visitor already set — not a second, more precise-looking figure sitting next to a disclosure that says the first one is a ballpark.</p><div class="demo" data-demo="bars"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 9. ESTIMATE BREAKDOWN BARS -----------------------------------
+   Proportions of the controls the visitor already set — which lever is doing
+   the work. Deliberately unlabelled: no second figure, no implied precision,
+   and the q-note disclosure underneath still says what the estimate is.     */
+.omma-bars {
+  display: grid;
+  gap: 9px;
+  width: 100%;
+  max-width: 320px;
+  margin: 22px auto 4px;
+  text-align: left;
+}
+.omma-bars-cap {
+  font-family: &#x27;IBM Plex Mono&#x27;, monospace;
+  font-size: 10px;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: #7C8BA8;
+  margin-bottom: 2px;
+}
+.omma-bar {
+  display: grid;
+  grid-template-columns: 68px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.omma-bar span {
+  font-family: &#x27;IBM Plex Mono&#x27;, monospace;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #7C8BA8;
+}
+.omma-bar i {
+  display: block;
+  height: 4px;
+  width: 20%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #B07E22, #E0BE79);
+  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) { .omma-bar i { transition: none; } }</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function bars() {
+    var stage = document.getElementById(&#x27;qStage&#x27;);
+    var shell = document.querySelector(&#x27;#quotes .q-shell&#x27;);
+    if (!stage || !shell) return;
+
+    function read() {
+      var ranges = [].slice.call(stage.querySelectorAll(&#x27;input[type=range]&#x27;));
+      if (!ranges.length) return null;
+      var money = null, span = -1;
+      ranges.forEach(function (r) {
+        var s = (+r.max) - (+r.min);
+        if (s &gt; span) { span = s; money = r; }
+      });
+      var age = null;
+      ranges.forEach(function (r) {
+        if (r !== money &amp;&amp; (+r.max) &lt;= 90 &amp;&amp; (+r.min) &gt;= 18) age = age || r;
+      });
+      var norm = function (r) {
+        return r ? ((+r.value) - (+r.min)) / Math.max(1, (+r.max) - (+r.min)) : 0;
+      };
+      /* how many option groups are set away from their first choice */
+      var segs = [].slice.call(stage.querySelectorAll(&#x27;.q-seg&#x27;));
+      var moved = segs.filter(function (sg) {
+        var on = sg.querySelector(&#x27;.on&#x27;);
+        return on &amp;&amp; on !== sg.firstElementChild;
+      }).length;
+      return [
+        [&#x27;Amount&#x27;, Math.max(0.06, norm(money))],
+        [&#x27;Age&#x27;, Math.max(0.06, norm(age))],
+        [&#x27;Options&#x27;, segs.length ? Math.max(0.06, moved / segs.length) : 0.06]
+      ];
+    }
+
+    function paint() {
+      try {
+        var out = stage.querySelector(&#x27;.q-out&#x27;);
+        if (!out) return;
+        var data = read();
+        if (!data) return;
+        var box = out.querySelector(&#x27;.omma-bars&#x27;);
+        if (!box) {
+          box = document.createElement(&#x27;div&#x27;);
+          box.className = &#x27;omma-bars&#x27;;
+          box.innerHTML =
+            &#x27;&lt;span class=&quot;omma-bars-cap&quot;&gt;What\&#x27;s moving this estimate&lt;/span&gt;&#x27; +
+            data.map(function (d) {
+              return &#x27;&lt;div class=&quot;omma-bar&quot;&gt;&lt;span&gt;&#x27; + d[0] + &#x27;&lt;/span&gt;&lt;i&gt;&lt;/i&gt;&lt;/div&gt;&#x27;;
+            }).join(&#x27;&#x27;);
+          /* above the CTA, below the figure — never between the figure and its
+             disclosure, and never inside .q-note */
+          var cta = out.querySelector(&#x27;.btn&#x27;);
+          if (cta) out.insertBefore(box, cta); else out.appendChild(box);
+        }
+        var fills = box.querySelectorAll(&#x27;.omma-bar i&#x27;);
+        data.forEach(function (d, i) {
+          if (fills[i]) fills[i].style.width = Math.round(d[1] * 100) + &#x27;%&#x27;;
+        });
+      } catch (e) {}
+    }
+
+    paint();
+    new MutationObserver(paint).observe(stage, { childList: true, subtree: true });
+    shell.addEventListener(&#x27;input&#x27;, paint, { passive: true });
+  }</code></pre></div></section>
+<section id="keys" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Lettered answer keys</h2></div><p class="blurb">A mono letter badge on each option that inverts on hover. Costs nothing and makes a list of long sentences scannable.</p><div class="demo" data-demo="keys"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 6. LETTERED ANSWER KEYS ---------------------------------------- */
+.omma-opt-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  flex: 0 0 22px;
+  margin-right: 12px;
+  font-style: normal;
+  font-family: &#x27;IBM Plex Mono&#x27;, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #96660F;
+  background: rgba(255, 255, 255, .9);
+  border: 1px solid rgba(190, 146, 53, .38);
+  border-radius: 6px;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+.fit-opt:hover .omma-opt-key {
+  background: #96660F;
+  border-color: #96660F;
+  color: #FFFFFF;
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function answerKeys() {
+    var body = document.getElementById(&#x27;fitBody&#x27;);
+    if (!body) return;
+    function mark() {
+      body.querySelectorAll(&#x27;.fit-opt&#x27;).forEach(function (b, i) {
+        if (b.dataset.ommaLetter) return;
+        b.dataset.ommaLetter = &#x27;1&#x27;;
+        var tag = document.createElement(&#x27;i&#x27;);
+        tag.className = &#x27;omma-opt-key&#x27;;
+        tag.setAttribute(&#x27;aria-hidden&#x27;, &#x27;true&#x27;);
+        tag.textContent = String.fromCharCode(65 + i);
+        b.insertBefore(tag, b.firstChild);
+      });
+    }
+    mark();
+    new MutationObserver(function () { try { mark(); } catch (e) {} })
+      .observe(body, { childList: true, subtree: true });
+  }</code></pre></div></section>
+<section id="lift" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Staggered entry lift</h2></div><p class="blurb">The grid tips back and flattens as it enters, staggered by index. <b>Only apply this to elements nothing else is transforming.</b> Anything already carrying an inline transform — a GSAP carousel, a pointer tilt — will fight for the same property and the loser flickers.</p><div class="demo" data-demo="lift"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 10. STAGGERED 3D LIFT -----------------------------------------
+   The grid tips back and flattens as it enters. Only applied to sets the site
+   does not already drive with an inline transform.                          */
+.omma-lift-set { perspective: 1200px; }
+.omma-lift {
+  opacity: 0;
+  transform: translateY(26px) rotateX(11deg);
+  transform-origin: 50% 0;
+  transition: opacity .7s cubic-bezier(.16, 1, .3, 1),
+              transform .7s cubic-bezier(.16, 1, .3, 1);
+}
+.omma-lift.in { opacity: 1; transform: none; }
+
+/* the template&#x27;s process cards lift on hover; the site&#x27;s step cards now match */
+.omma-lift-set &gt; * { transition-property: opacity, transform, border-color, box-shadow; }
+.book-point:hover, .bp-step:hover {
+  border-color: rgba(190, 146, 53, .45);
+}
+.book-point { transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.book-point:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 34px -18px rgba(8, 18, 38, .35);
+}
+@media (prefers-reduced-motion: reduce) {
+  .omma-lift { opacity: 1; transform: none; transition: none; }
+  .book-point:hover { transform: none; }
+}</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function lift() {
+    if (REDUCE) return;
+    var SETS = [&#x27;.bp-steps&#x27;, &#x27;.book-points&#x27;, &#x27;.iul-points&#x27;, &#x27;.ai-feats&#x27;, &#x27;.states-grid&#x27;];
+    var items = [];
+    SETS.forEach(function (sel) {
+      var box = document.querySelector(sel);
+      if (!box) return;
+      /* the states grid already animates its chips in; don&#x27;t double it up */
+      if (sel === &#x27;.states-grid&#x27;) return;
+      box.classList.add(&#x27;omma-lift-set&#x27;);
+      [].slice.call(box.children).forEach(function (c, i) {
+        c.classList.add(&#x27;omma-lift&#x27;);
+        c.style.transitionDelay = (i * 70) + &#x27;ms&#x27;;
+        items.push(c);
+      });
+    });
+    if (!items.length) return;
+    if (!(&#x27;IntersectionObserver&#x27; in window)) {
+      items.forEach(function (c) { c.classList.add(&#x27;in&#x27;); });
+      return;
+    }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add(&#x27;in&#x27;); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    items.forEach(function (c) { io.observe(c); });
+  }</code></pre></div></section>
+<section id="thumb" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Range thumb with a halo</h2></div><p class="blurb">A native <code>accent-color</code> slider gives no signal that the control is grabbable. A brass thumb sitting in a halo that grows on hover does.</p><div class="demo" data-demo="thumb"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 11. RANGE THUMB ------------------------------------------------
+   The template&#x27;s slider: a hairline track and a brass thumb sitting in a halo
+   that grows on hover. The site used the native accent-color, which gives no
+   affordance that the control is grabbable.                                 */
+.q-field input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  height: 22px;
+}
+.q-field input[type=range]::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(190, 146, 53, .55), rgba(14, 31, 62, .16));
+}
+.q-field input[type=range]::-moz-range-track {
+  height: 3px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, rgba(190, 146, 53, .55), rgba(14, 31, 62, .16));
+}
+.q-field input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 17px; height: 17px;
+  margin-top: -7px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #E0BE79, #B07E22);
+  cursor: grab;
+  box-shadow: 0 0 0 5px rgba(190, 146, 53, .15), 0 1px 3px rgba(8, 18, 38, .3);
+  transition: box-shadow .2s ease;
+}
+.q-field input[type=range]::-moz-range-thumb {
+  width: 17px; height: 17px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #E0BE79, #B07E22);
+  cursor: grab;
+  box-shadow: 0 0 0 5px rgba(190, 146, 53, .15), 0 1px 3px rgba(8, 18, 38, .3);
+}
+.q-field input[type=range]:hover::-webkit-slider-thumb {
+  box-shadow: 0 0 0 10px rgba(190, 146, 53, .20), 0 1px 3px rgba(8, 18, 38, .3);
+}
+.q-field input[type=range]:active::-webkit-slider-thumb { cursor: grabbing; }
+.q-field input[type=range]:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 4px #FFFFFF, 0 0 0 7px #B07E22;
+}</code></pre></div></section>
+<section id="magnet" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Magnetic buttons</h2></div><p class="blurb">The button leans a few pixels toward the cursor. Layered on top of an existing hover lift with a CSS variable rather than replacing the transform, so it composes with whatever the button already does.</p><div class="demo" data-demo="magnet"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 3. MAGNETIC PRIMARY BUTTONS -----------------------------------
+   The translate is layered on top of the existing hover lift rather than
+   replacing it, so the site&#x27;s own button motion is unchanged.               */
+.omma-magnet { transform: translate(var(--mgx, 0px), var(--mgy, 0px)); }
+.omma-magnet:hover { transform: translate(var(--mgx, 0px), calc(var(--mgy, 0px) - 2px)); }</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  document.querySelectorAll(&#x27;.btn-brass, .btn-navy&#x27;).forEach(btn =&gt; {
+    if (btn.classList.contains(&#x27;omma-magnet&#x27;)) return;
+    btn.classList.add(&#x27;omma-magnet&#x27;);
+    btn.addEventListener(&#x27;pointermove&#x27;, e =&gt; {
+      const r = btn.getBoundingClientRect();
+      const mx = (e.clientX - r.left - r.width / 2) / r.width;
+      const my = (e.clientY - r.top - r.height / 2) / r.height;
+      btn.style.setProperty(&#x27;--mgx&#x27;, (mx * 8).toFixed(2) + &#x27;px&#x27;);
+      btn.style.setProperty(&#x27;--mgy&#x27;, (my * 6).toFixed(2) + &#x27;px&#x27;);
+    }, { passive: true });
+    btn.addEventListener(&#x27;pointerleave&#x27;, () =&gt; {
+      btn.style.setProperty(&#x27;--mgx&#x27;, &#x27;0px&#x27;);
+      btn.style.setProperty(&#x27;--mgy&#x27;, &#x27;0px&#x27;);
+    });
+  });</code></pre></div></section>
+<section id="sheen" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Cursor-tracked sheen</h2></div><p class="blurb">Depth on a glass pane without transforming it. <b>Never 3D-transform a <code>backdrop-filter</code> surface</b> — Chrome glitches it. Move light across it instead.</p><div class="demo" data-demo="sheen"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 4. TRACKED SHEEN ON GLASS PANES -------------------------------
+   Glass is never 3D-transformed here (Chrome glitches transformed
+   backdrop-filter surfaces) — the depth comes from moving light instead.    */
+.omma-sheen { position: relative; }
+.omma-sheen::after {
+  content: &quot;&quot;;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(420px circle at var(--ogx, 50%) var(--ogy, 50%),
+              rgba(255, 255, 255, .55), rgba(255, 255, 255, .12) 40%, transparent 66%);
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.omma-sheen:hover::after { opacity: 1; }</code></pre></div></section>
+<section id="shake" class="entry"><div class="entry-head"><span class="cat">css</span><h2>Error shake</h2></div><p class="blurb">Motion only, layered onto a validation message that already announces itself. Restart the animation by removing the class, reading <code>offsetWidth</code>, then re-adding it.</p><div class="demo" data-demo="shake"></div><div class="snip"><div class="snip-bar"><span>css</span><button class="copy" type="button">Copy</button></div><pre><code>/* ---------- 12. ERROR SHAKE ------------------------------------------------
+   Motion only. The message and its aria-live announcement are the site&#x27;s own
+   and are untouched, so the error still reads for anyone who never sees this. */
+.omma-shake { animation: ommaShake .4s cubic-bezier(.36, .07, .19, .97); }
+@keyframes ommaShake {
+  10%, 90% { transform: translateX(-1.5px); }
+  20%, 80% { transform: translateX(3px); }
+  30%, 50%, 70% { transform: translateX(-5px); }
+  40%, 60% { transform: translateX(5px); }
+}
+@media (prefers-reduced-motion: reduce) { .omma-shake { animation: none; } }</code></pre></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  function shake() {
+    if (REDUCE) return;
+    document.addEventListener(&#x27;animationend&#x27;, function (e) {
+      if (e.animationName === &#x27;ommaShake&#x27;) e.target.classList.remove(&#x27;omma-shake&#x27;);
+    });
+    /* the site toggles [hidden] on .field-err when a field fails */
+    new MutationObserver(function (recs) {
+      recs.forEach(function (r) {
+        var el = r.target;
+        if (!el.classList || !el.classList.contains(&#x27;field-err&#x27;)) return;
+        if (el.hasAttribute(&#x27;hidden&#x27;)) return;
+        var card = el.closest(&#x27;.cap-card&#x27;);
+        if (!card) return;
+        card.classList.remove(&#x27;omma-shake&#x27;);
+        void card.offsetWidth;                 /* restart the animation */
+        card.classList.add(&#x27;omma-shake&#x27;);
+      });
+    }).observe(document.body, {
+      attributes: true, subtree: true, attributeFilter: [&#x27;hidden&#x27;]
+    });
+  }</code></pre></div></section>
+<section id="pbr" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Injecting into Three&#x27;s PBR shader</h2></div><p class="blurb">The technique that stops you having to choose between real lighting and a custom look. A raw <code>ShaderMaterial</code> gives you total control and throws away every bit of shadowing, clearcoat and environment response Three already computes. <code>onBeforeCompile</code> lets you keep the whole <code>MeshPhysicalMaterial</code> and splice your own GLSL into it — here, a travelling band added after <code>&lt;dithering_fragment&gt;</code>, the last hook in the chain. Pass a uniform object you also hold a reference to, or you cannot animate it.</p><div class="demo" data-demo="pbr"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>      /* --- 1. inject into Three&#x27;s PBR shader with onBeforeCompile ---------
+         The material keeps every bit of real lighting, shadowing and clearcoat
+         Three gives it; we only add a travelling band on top. This is how you
+         get a custom look without abandoning MeshPhysicalMaterial for a raw
+         ShaderMaterial and losing the lighting with it. */
+      stage(&#x27;pbrStage&#x27;, function (THREE, scene, cam) {
+        cam.position.set(0, 0.6, 5.4);
+        var uni = { uTime: { value: 0 } };
+        var mat = new THREE.MeshPhysicalMaterial({
+          color: 0xE6EBF5, metalness: 0.16, roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.1
+        });
+        mat.onBeforeCompile = function (shader) {
+          shader.uniforms.uTime = uni.uTime;
+          shader.vertexShader = &#x27;varying vec3 vLocal;\n&#x27; + shader.vertexShader.replace(
+            &#x27;#include &lt;begin_vertex&gt;&#x27;, &#x27;#include &lt;begin_vertex&gt;\n  vLocal = position;&#x27;);
+          shader.fragmentShader = &#x27;uniform float uTime;\nvarying vec3 vLocal;\n&#x27; +
+            shader.fragmentShader.replace(&#x27;#include &lt;dithering_fragment&gt;&#x27;,
+              &#x27;#include &lt;dithering_fragment&gt;\n&#x27; +
+              &#x27;  float band = smoothstep(0.16, 0.0, abs(vLocal.y - sin(uTime * 0.6) * 1.1));\n&#x27; +
+              &#x27;  gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(0.80, 0.62, 0.24), band * 0.75);&#x27;);
+        };
+        var mesh = new THREE.Mesh(new THREE.TorusKnotGeometry(1.05, 0.33, 160, 24), mat);
+        scene.add(mesh);
+        return function (dt, t) {
+          uni.uTime.value = t;
+          mesh.rotation.y += dt * 0.34;
+          mesh.rotation.x = Math.sin(t * 0.3) * 0.22;
+        };
+      });</code></pre></div></section>
+<section id="instanced" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>One draw call for thousands of objects</h2></div><p class="blurb">2,400 boxes as a single <code>InstancedMesh</code>. As 2,400 separate meshes this stalls; as one instanced mesh the per-frame cost is a matrix write each and <b>one</b> draw call. The pattern is always the same: compose a <code>Matrix4</code>, <code>setMatrixAt</code>, then set <code>instanceMatrix.needsUpdate = true</code> once at the end — not per instance. Per-instance colour goes through <code>setColorAt</code> and needs no per-frame update unless it changes.</p><div class="demo" data-demo="instanced"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>      /* --- 2. one instanced draw call ------------------------------------
+         2,400 boxes as a single InstancedMesh. The per-frame cost is one
+         matrix write per instance and ONE draw call — the same scene as 2,400
+         separate Mesh objects would stall any browser. */
+      stage(&#x27;instStage&#x27;, function (THREE, scene, cam) {
+        cam.position.set(0, 6.2, 9.2); cam.lookAt(0, 0, 0);
+        var COLS = 60, ROWS = 40, N = COLS * ROWS;
+        var mesh = new THREE.InstancedMesh(
+          new THREE.BoxGeometry(0.16, 0.16, 0.16),
+          new THREE.MeshStandardMaterial({ color: 0xDCE4F1, metalness: 0.2, roughness: 0.35 }), N);
+        var col = new THREE.Color();
+        for (var i = 0; i &lt; N; i++) {
+          col.setHex(i % 7 === 0 ? 0xC9973B : 0xBFCBE2);
+          mesh.setColorAt(i, col);
+        }
+        scene.add(mesh);
+        var m = new THREE.Matrix4(), q = new THREE.Quaternion(),
+            s = new THREE.Vector3(1, 1, 1), v = new THREE.Vector3();
+        var mx = 0, my = 0;
+        addEventListener(&#x27;pointermove&#x27;, function (e) {
+          mx = (e.clientX / innerWidth) * 2 - 1;
+          my = -((e.clientY / innerHeight) * 2 - 1);
+        }, { passive: true });
+        return function (dt, t) {
+          var k = 0;
+          for (var x = 0; x &lt; COLS; x++) {
+            for (var z = 0; z &lt; ROWS; z++) {
+              var px = (x - COLS / 2) * 0.22, pz = (z - ROWS / 2) * 0.22;
+              var d = Math.hypot(px - mx * 5, pz + my * 3);
+              v.set(px, Math.sin(d * 1.5 - t * 2.2) * 0.42 * Math.exp(-d * 0.16), pz);
+              m.compose(v, q, s);
+              mesh.setMatrixAt(k++, m);
+            }
+          }
+          mesh.instanceMatrix.needsUpdate = true;
+        };
+      });</code></pre></div></section>
+<section id="svgdraw" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>A line that draws itself on scroll</h2></div><p class="blurb">A chart line that draws in proportion to reading position. <code>getTotalLength()</code> gives the path length; set it as both <code>stroke-dasharray</code> and <code>stroke-dashoffset</code> and the line is hidden, then walk the offset to zero. <b>No library and no WebGL</b>, so unlike everything above it this one runs on every phone — which for a financial page is often the better trade.</p><div class="demo" data-demo="svgdraw"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  /* ------------------------------------------------------------ svg draw --
+     A line that draws itself as its container crosses the viewport. Pure
+     stroke-dashoffset — no library, no WebGL, and it runs on every phone. */
+  (function () {
+    var el = set(&#x27;svgdraw&#x27;,
+      &#x27;&lt;span class=&quot;d-label&quot;&gt;Scroll the page — the line draws in proportion&lt;/span&gt;&#x27; +
+      &#x27;&lt;svg viewBox=&quot;0 0 520 120&quot; width=&quot;100%&quot; height=&quot;120&quot; fill=&quot;none&quot; aria-hidden=&quot;true&quot;&gt;&#x27; +
+      &#x27;&lt;path d=&quot;M4 96 C 60 92, 92 64, 140 62 S 226 84, 268 56 S 350 16, 404 30 S 486 20, 516 8&quot; &#x27; +
+      &#x27;stroke=&quot;url(#g)&quot; stroke-width=&quot;2.5&quot; stroke-linecap=&quot;round&quot; id=&quot;drawPath&quot;/&gt;&#x27; +
+      &#x27;&lt;defs&gt;&lt;linearGradient id=&quot;g&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;1&quot; y2=&quot;0&quot;&gt;&#x27; +
+      &#x27;&lt;stop offset=&quot;0&quot; stop-color=&quot;#B07E22&quot;/&gt;&lt;stop offset=&quot;1&quot; stop-color=&quot;#E0BE79&quot;/&gt;&#x27; +
+      &#x27;&lt;/linearGradient&gt;&lt;/defs&gt;&lt;/svg&gt;&#x27;);
+    if (!el) return;
+    var path = el.querySelector(&#x27;#drawPath&#x27;);
+    var len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = REDUCE ? 0 : len;
+    if (REDUCE) return;
+    function paint() {
+      var r = el.getBoundingClientRect();
+      /* 0 as the element enters the bottom, 1 once it has cleared the middle */
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75)));
+      path.style.strokeDashoffset = (len * (1 - p)).toFixed(1);
+    }
+    addEventListener(&#x27;scroll&#x27;, paint, { passive: true });
+    addEventListener(&#x27;resize&#x27;, paint, { passive: true });
+    paint();
+  })();</code></pre></div></section>
+<section id="typemask" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Type filled by scroll position</h2></div><p class="blurb">A headline that fills as you read it, using <code>background-clip: text</code> with a hard two-stop gradient and a custom property for the stop position. Tying it to scroll rather than to a keyframe is the whole point — the fill tracks where the reader actually is instead of running on a timer they may never see.</p><div class="demo" data-demo="typemask"></div><div class="snip"><div class="snip-bar"><span>js</span><button class="copy" type="button">Copy</button></div><pre><code>  /* --------------------------------------------------------- type reveal --
+     A gradient that wipes through a headline, driven by scroll rather than by
+     a fixed keyframe, so the reveal is tied to reading position. */
+  (function () {
+    var el = set(&#x27;typemask&#x27;,
+      &#x27;&lt;span class=&quot;d-label&quot;&gt;Scroll — the fill follows your position, it is not on a timer&lt;/span&gt;&#x27; +
+      &#x27;&lt;h3 class=&quot;d-mask&quot; style=&quot;font-family:var(--serif);font-size:clamp(20px,3vw,30px);&#x27; +
+      &#x27;line-height:1.2;margin:0;max-width:16ch&quot;&gt;We engineer the plan that outlives you.&lt;/h3&gt;&#x27;);
+    if (!el) return;
+    var h = el.querySelector(&#x27;.d-mask&#x27;);
+    h.style.backgroundImage = &#x27;linear-gradient(90deg,#B07E22,#B07E22 var(--p,0%),#C9D2E4 var(--p,0%),#C9D2E4)&#x27;;
+    h.style.webkitBackgroundClip = &#x27;text&#x27;;
+    h.style.backgroundClip = &#x27;text&#x27;;
+    h.style.color = &#x27;transparent&#x27;;
+    if (REDUCE) { h.style.setProperty(&#x27;--p&#x27;, &#x27;100%&#x27;); return; }
+    function paint() {
+      var r = el.getBoundingClientRect();
+      var p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.8)));
+      h.style.setProperty(&#x27;--p&#x27;, (p * 100).toFixed(1) + &#x27;%&#x27;);
+    }
+    addEventListener(&#x27;scroll&#x27;, paint, { passive: true });
+    paint();
+  })();</code></pre></div></section>
+<section id="envcube" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>An environment map with no asset</h2></div><p class="blurb">Six canvas gradients become a cube map. This is the answer to the oldest bug in this project: <b>a metal or glass material with nothing to reflect renders black</b>, which on an ivory page is a hole, and the workaround until now was to drop metalness until the surfaces went flat. Six 256px faces built at runtime cost no network, no asset pipeline and nothing worth measuring, and they give every PBR material a plausible warm-above / cool-below studio to reflect. <b>Set <code>needsUpdate = true</code></b> — a <code>CubeTexture</code> assembled from canvases never uploads without it.</p><div class="snip"><div class="snip-bar"><span>js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A cube map built from six canvas gradients — no HDRI, no network, no
+   asset pipeline. This is the fix for the oldest problem in the file:
+   a metal or glass material with no environment to reflect renders BLACK,
+   which on an ivory page is a hole. Six 256px faces cost microseconds and
+   about nothing in memory, and they give every PBR material something
+   plausible to reflect. Warm above, cool below, one soft highlight blob
+   standing in for a softbox. */
+function buildEnvCube() {
+  const S = 256;
+  const cfg = [
+    { top: &#x27;#FFF6E2&#x27;, bot: &#x27;#E7D6AE&#x27;, blob: [&#x27;#FFFFFF&#x27;, .55, .30, .34] },
+    { top: &#x27;#EAF1FB&#x27;, bot: &#x27;#CFDCF0&#x27;, blob: [&#x27;#FFFFFF&#x27;, .40, .62, .22] },
+    { top: &#x27;#FFFFFF&#x27;, bot: &#x27;#FFF3D8&#x27;, blob: [&#x27;#FFFDF4&#x27;, .50, .50, .46] },
+    { top: &#x27;#F0EDE4&#x27;, bot: &#x27;#DAD5C6&#x27;, blob: null },
+    { top: &#x27;#FFF9EC&#x27;, bot: &#x27;#EADFC2&#x27;, blob: [&#x27;#FFFFFF&#x27;, .62, .40, .26] },
+    { top: &#x27;#EDF2FA&#x27;, bot: &#x27;#D6E0F2&#x27;, blob: null }
+  ];
+  const faces = cfg.map(c =&gt; {
+    const cv = document.createElement(&#x27;canvas&#x27;);
+    cv.width = cv.height = S;
+    const g = cv.getContext(&#x27;2d&#x27;);
+    const grd = g.createLinearGradient(0, 0, 0, S);
+    grd.addColorStop(0, c.top); grd.addColorStop(1, c.bot);
+    g.fillStyle = grd; g.fillRect(0, 0, S, S);
+    if (c.blob) {
+      const [col, cx, cy, r] = c.blob;
+      const rg = g.createRadialGradient(cx*S, cy*S, 0, cx*S, cy*S, r*S);
+      rg.addColorStop(0, col); rg.addColorStop(1, &#x27;rgba(255,255,255,0)&#x27;);
+      g.fillStyle = rg; g.fillRect(0, 0, S, S);
+    }
+    return cv;
+  });
+  const tex = new THREE.CubeTexture(faces);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;              /* required — a CubeTexture built from
+                                          canvases never uploads without it */
+  return tex;
+}
+
+/* then, once: */
+scene.environment = buildEnvCube();
+/* metals and clearcoats now have something to reflect */</code></pre></div></section>
+
+<section id="dispersion" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Dispersive glass — RGB IOR split</h2></div><p class="blurb">Real glass bends red and blue by different amounts, and that divergence is the entire reason a prism has colour. So refraction is sampled three times at three indices — one per channel — and recombined. A single <code>refract()</code> can never produce the fringing no matter how it is tinted. Fresnel decides the mix: head-on you see through it, at grazing angles it reflects. <b>Keep the three IOR values within about 0.1 of each other</b> — spread wider and it stops reading as glass and starts reading as a broken texture. Needs an environment map; pair it with the entry above and the whole effect ships with zero assets.</p><div class="snip"><div class="snip-bar"><span>glsl + js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* Dispersive glass. Refraction is sampled THREE times at three slightly
+   different indices of refraction — one per colour channel — and the
+   channels are recombined. That divergence is the whole effect: the
+   colour fringes at the edges are the red and blue rays bending by
+   different amounts, which is what real glass does and what a single
+   refract() can never show.
+
+   Needs an environment cube map to sample. Pair it with buildEnvCube()
+   above and it costs no assets at all. */
+const DispersionShader = {
+  uniforms: {
+    envMap:     { value: null },
+    iorR:       { value: 1.44 },      /* spread these further apart for a */
+    iorG:       { value: 1.48 },      /* stronger prism; keep them within */
+    iorB:       { value: 1.53 },      /* ~0.1 or it reads as a bug        */
+    fresnelPow: { value: 3.0 },
+    tint:       { value: new THREE.Color(0xF7F2E4) }
+  },
+  vertexShader: `
+    varying vec3 vWorldNormal;
+    varying vec3 vViewDir;
+    void main(){
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      vWorldNormal = normalize(mat3(modelMatrix) * normal);
+      vViewDir = normalize(wp.xyz - cameraPosition);
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }`,
+  fragmentShader: `
+    uniform samplerCube envMap;
+    uniform float iorR, iorG, iorB, fresnelPow;
+    uniform vec3 tint;
+    varying vec3 vWorldNormal;
+    varying vec3 vViewDir;
+    void main(){
+      vec3 N = normalize(vWorldNormal);
+      vec3 V = normalize(vViewDir);
+      /* one refracted ray per channel */
+      vec3 rR = refract(V, N, 1.0 / iorR);
+      vec3 rG = refract(V, N, 1.0 / iorG);
+      vec3 rB = refract(V, N, 1.0 / iorB);
+      vec3 refr = vec3(
+        textureCube(envMap, rR).r,
+        textureCube(envMap, rG).g,
+        textureCube(envMap, rB).b
+      ) * tint;
+      vec3 refl = textureCube(envMap, reflect(V, N)).rgb;
+      /* grazing angles reflect, head-on refracts */
+      float f = pow(1.0 - max(dot(-V, N), 0.0), fresnelPow);
+      vec3 col = mix(refr, refl, clamp(f * 1.35, 0.0, 1.0));
+      col += vec3(1.0, 0.94, 0.80) * f * 0.55;   /* warm rim */
+      gl_FragColor = vec4(col, 1.0);
+    }`
+};
+
+const glass = new THREE.ShaderMaterial({
+  uniforms: THREE.UniformsUtils.clone(DispersionShader.uniforms),
+  vertexShader: DispersionShader.vertexShader,
+  fragmentShader: DispersionShader.fragmentShader
+});
+glass.uniforms.envMap.value = envMap;</code></pre></div></section>
+
+<section id="postchain" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>Bloom, bokeh and edge aberration</h2></div><p class="blurb">A full post chain: render, bloom the bright parts, defocus by depth, fringe the corners, output. The chromatic aberration is <b>weighted by squared distance from centre</b>, so the middle of the frame stays clean and only the corners split — that is the difference between reading as a lens and reading as a fault. <b>Two rules.</b> <code>OutputPass</code> goes last and does tone mapping and colour conversion; anything after it is graded twice. And every pass is another full-screen draw at render resolution — this belongs on one hero scene, never on a page that already runs several stages.</p><div class="snip"><div class="snip-bar"><span>js + glsl — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A post chain, in the order that matters: render, bloom the bright bits,
+   defocus by depth, split the colour at the edges, then output.
+   OutputPass goes LAST and does the tone mapping + colour space
+   conversion — put anything after it and you are grading twice.
+
+   Cost is real: each pass is another full-screen draw at render
+   resolution. This belongs on ONE hero scene, never on every stage. */
+import { EffectComposer }  from &#x27;three/examples/jsm/postprocessing/EffectComposer.js&#x27;;
+import { RenderPass }      from &#x27;three/examples/jsm/postprocessing/RenderPass.js&#x27;;
+import { ShaderPass }      from &#x27;three/examples/jsm/postprocessing/ShaderPass.js&#x27;;
+import { UnrealBloomPass } from &#x27;three/examples/jsm/postprocessing/UnrealBloomPass.js&#x27;;
+import { BokehPass }       from &#x27;three/examples/jsm/postprocessing/BokehPass.js&#x27;;
+import { OutputPass }      from &#x27;three/examples/jsm/postprocessing/OutputPass.js&#x27;;
+
+/* chromatic aberration weighted by distance from centre, so the middle of
+   the frame stays clean and only the corners fringe — the difference
+   between &quot;lens&quot; and &quot;broken&quot; */
+const EdgeCAShader = {
+  uniforms: { tDiffuse: { value: null }, amount: { value: 0.0016 } },
+  vertexShader: `
+    varying vec2 vUv;
+    void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+  fragmentShader: `
+    uniform sampler2D tDiffuse;
+    uniform float amount;
+    varying vec2 vUv;
+    void main(){
+      vec2 d = vUv - 0.5;
+      float e = dot(d, d) * 2.2;          /* squared falloff from centre */
+      vec2 off = d * amount * e * 60.0;
+      gl_FragColor = vec4(
+        texture2D(tDiffuse, vUv + off).r,
+        texture2D(tDiffuse, vUv).g,
+        texture2D(tDiffuse, vUv - off).b,
+        1.0);
+    }`
+};
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.62, 0.55, 0.92);
+composer.addPass(bloom);                                  /* strength, radius, threshold */
+composer.addPass(new BokehPass(scene, camera, {
+  focus: 5.2, aperture: 0.00042, maxblur: 0.0075
+}));
+const ca = new ShaderPass(EdgeCAShader);
+composer.addPass(ca);
+composer.addPass(new OutputPass());
+
+/* render with composer.render(), NOT renderer.render() */
+/* and on resize: composer.setSize(w,h) AND bloom.setSize(w,h) */</code></pre></div></section>
+
+<section id="barfield" class="entry"><div class="entry-head"><span class="cat">advanced</span><h2>JSON to a 3D bar field</h2></div><p class="blurb">A data array becoming geometry, and rebuilding when a filter changes. Two details carry it. The bar is <b>one extruded rounded-top profile shared by every instance</b>, so the row count does not multiply the geometry in memory. And <b>the spacing is computed from the row count</b> — a filtered set spreads out, a full set stays inside the plate; a fixed step overflows the moment the data grows. Growth is animated on <code>scale.y</code> with a per-index stagger, never by rebuilding geometry per frame, and negative values hang below zero by offsetting position as well as scale.</p><div class="snip"><div class="snip-bar"><span>js — from the Wealth Shield Matrix export</span><button class="copy" type="button">Copy</button></div><pre><code>/* A data file becoming geometry, and rebuilding when a filter changes.
+   The bar is an extruded Shape with a rounded top rather than a BoxGeometry
+   — one profile, reused for every bar, so there is a single geometry in
+   memory no matter how many rows the data has.
+
+   Scale-Y from ~0 and animate it: never rebuild geometry per frame. */
+const SERIES = [ { year: 2019, a: 28.9, b: 10.0 }, /* ... */ ];
+const FILTERS = {
+  all:    d =&gt; d,
+  down:   d =&gt; d.filter(x =&gt; x.a &lt; 0),
+  recent: d =&gt; d.filter(x =&gt; x.year &gt;= 2015)
+};
+
+/* one rounded-top profile, extruded once, shared by every bar */
+const prof = new THREE.Shape();
+const bw = 0.34, br = 0.07;
+prof.moveTo(-bw, 0);
+prof.lineTo(bw, 0);
+prof.lineTo(bw, 1 - br);
+prof.quadraticCurveTo(bw, 1, bw - br, 1);
+prof.lineTo(-bw + br, 1);
+prof.quadraticCurveTo(-bw, 1, -bw, 1 - br);
+prof.closePath();
+const barGeo = new THREE.ExtrudeGeometry(prof, {
+  depth: 0.62, bevelEnabled: true, bevelThickness: 0.035,
+  bevelSize: 0.035, bevelSegments: 2, curveSegments: 6
+});
+barGeo.translate(0, 0, -0.31);          /* centre it on its own Z */
+
+function build(key) {
+  while (field.children.length) field.remove(field.children[0]);
+  bars = [];
+  const data = (FILTERS[key] || FILTERS.all)(SERIES);
+  const n = Math.max(data.length, 1);
+  /* the step SHRINKS as rows are added, so a filtered set spreads out and
+     a full set stays inside the plate — a fixed step overflows */
+  const step = Math.min(1.15, 22 / n);
+  const x0 = -((n - 1) * step) / 2;
+  data.forEach((d, i) =&gt; {
+    const m = new THREE.Mesh(barGeo, d.a &lt; 0 ? matNeg : matGrey);
+    m.position.set(x0 + i * step, 0, 1.5);
+    m.scale.set(step / 1.15, 0.001, 1);     /* start flat */
+    m.userData.h = Math.max(Math.abs(d.a), 0.12) * 0.28;
+    m.userData.neg = d.a &lt; 0;
+    field.add(m); bars.push(m);
+  });
+}
+
+/* per frame: one eased grow, staggered by index */
+grow = Math.min(1, grow + dt * 1.25);
+const e = 1 - Math.pow(1 - grow, 3);
+bars.forEach((b, i) =&gt; {
+  const stagger = Math.min(1, Math.max(0, e * 1.5 - i * 0.012));
+  const h = b.userData.h * stagger;
+  b.scale.y = Math.max(h, 0.001);
+  b.position.y = b.userData.neg ? -h : 0;   /* negatives hang below zero */
+});</code></pre></div></section>
+
+<section id="spline" class="entry"><div class="entry-head"><span class="cat">spline</span><h2>Spline scenes</h2></div><p class="blurb">Omma is Spline's natural-language builder, so this is one ecosystem. The difference is what you get: <b>Omma writes Three.js source you own and can retheme</b>, while a Spline scene is a binary <code>.splinecode</code> file played by Spline's runtime. Both embed shapes are below. Weigh them honestly before adopting: the viewer pulls a player from a third-party CDN into your critical path, the scene file is typically hundreds of KB to several MB, and you cannot restyle it in code — you go back to the editor. For a hero centrepiece that is a fair trade. For the kind of small explanatory devices on this page it is not, which is why nothing here uses it.</p><div class="snip"><div class="snip-bar"><span>html — viewer web component</span><button class="copy" type="button">Copy</button></div><pre><code>&lt;!-- Spline: the no-build embed. One web component, a scene URL from
+     the editor&#x27;s Export &gt; Code panel. Loads Spline&#x27;s player from their CDN. --&gt;
+&lt;script type=&quot;module&quot;
+        src=&quot;https://unpkg.com/@splinetool/viewer/build/spline-viewer.js&quot;&gt;&lt;/script&gt;
+&lt;spline-viewer url=&quot;https://prod.spline.design/YOUR-SCENE/scene.splinecode&quot;&gt;&lt;/spline-viewer&gt;</code></pre></div><div class="snip"><div class="snip-bar"><span>js — runtime, for scenes you need to control</span><button class="copy" type="button">Copy</button></div><pre><code>// Spline: the controllable embed. Export &gt; Code &gt; Vanilla JS gives the URL.
+// Lets you read and drive named objects and listen for scene events.
+import { Application } from &#x27;@splinetool/runtime&#x27;;
+
+const canvas = document.getElementById(&#x27;spline-canvas&#x27;);
+const app = new Application(canvas);
+
+await app.load(&#x27;https://prod.spline.design/YOUR-SCENE/scene.splinecode&#x27;);
+
+// objects are addressed by the name you gave them in the editor
+const heron = app.findObjectByName(&#x27;Heron&#x27;);
+heron.rotation.y += 0.4;
+
+// and the scene can emit events back to the page
+app.addEventListener(&#x27;mouseDown&#x27;, (e) =&gt; {
+  if (e.target.name === &#x27;CTA&#x27;) document.querySelector(&#x27;#booking&#x27;).scrollIntoView();
+});</code></pre></div></section>
+
+    <footer>
+      <p>Not linked from the site and marked <code>noindex</code> — this page is a
+      workbench, not a page for visitors. It ships with the repo so the code travels
+      with the project rather than living in a chat log.</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+/* copy buttons */
+document.addEventListener('click', function (e) {
+  var b = e.target.closest('.copy');
+  if (!b) return;
+  var code = b.closest('.snip').querySelector('code').textContent;
+  navigator.clipboard.writeText(code).then(function () {
+    b.textContent = 'Copied'; b.classList.add('done');
+    setTimeout(function () { b.textContent = 'Copy'; b.classList.remove('done'); }, 1400);
+  }).catch(function () { b.textContent = 'Select all'; });
+});
+</script>
+<script src="lib-demos.js"></script>
+</body>
+</html>
