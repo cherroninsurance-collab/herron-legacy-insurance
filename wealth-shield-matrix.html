@@ -308,9 +308,19 @@ html.omma-bucket-on #iulstep0 svg{display:none}
           <li class="flex gap-3"><span>💧</span><span>Your money fills a bucket.</span></li>
           <li class="flex gap-3"><span>📈</span><span>The bucket grows with the market index.</span></li>
           <li class="flex gap-3"><span>🛡️</span><span>A shield covers the bucket.</span></li>
-          <li class="flex gap-3"><span>⛈️</span><span>Market storms cannot drain it.</span></li>
-          <li class="flex gap-3"><span>🔒</span><span>Worst year? You earn 0%. Never negative.</span></li>
+          <li class="flex gap-3"><span>⛈️</span><span>A market drop isn't subtracted from it.</span></li>
+          <li class="flex gap-3"><span>🔒</span><span>In a down year the index credit is 0% — losses aren't passed through.</span></li>
         </ul>
+        <!-- The floor applies to the INDEX CREDIT, not to the account value.
+             Policy charges are deducted whatever the index does, so an account
+             can still fall in a flat or down year. "Never negative" and "storms
+             cannot drain it" both stated otherwise. -->
+        <p class="mt-4 text-sm leading-relaxed" style="color:#5A6A8C">
+          The 0% floor applies to the index credit, not to the account value:
+          policy charges are deducted regardless, so cash value can still fall in
+          a year with no credit. Caps and participation rates limit the upside and
+          are set by the carrier, which can change them.
+        </p>
         <button id="stormbtn" class="btn btn-primary mt-6">Simulate a market downturn</button>
       </div>
       <div class="relative">
