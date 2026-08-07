@@ -20,6 +20,16 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <link rel="stylesheet" href="js/omma-3d.css">
+<style id="hxi-css">
+/* Brand line icons (js/hx-icons.js) — inherit currentColor, sized by context.
+   The emoji they replaced were sized by font-size; these size explicitly. */
+.hxi{width:1.15em;height:1.15em;vertical-align:-0.18em;display:inline-block;flex:none}
+.iul-point .ic .hxi,.ai-feat .ic .hxi{width:19px;height:19px;color:#96660F;vertical-align:0}
+.ann-card li .em .hxi{width:15px;height:15px;color:#96660F;vertical-align:-2px}
+.anchor-note i .hxi{width:17px;height:17px;color:#96660F;vertical-align:-3px}
+.hxi-cov{width:32px;height:32px;color:#96660F}
+.chat-actions .hxi,.icon-btn .hxi{width:16px;height:16px;vertical-align:-3px}
+</style>
 <noscript><style>
 /* Scroll-reveal starts at opacity:0 and is un-hidden by script. With script off that
    never happens, which would also hide the state list and the rate/illustration
@@ -971,6 +981,36 @@ nav.liquid-glass{background:rgba(255,255,255,.6)}
   .lg-container[data-lg-theme="light"]{background:var(--cloud)}
 }
 
+/* ============================== GLASS REFINEMENT =========================
+   The frosted panes read muddy: blur(30px) liquifies whatever sits behind
+   into grey soup, the 34px radius reads consumer-app, and the glow shadows
+   smear. Fintech glass is TIGHT: less blur so the aurora stays legible as
+   shapes, a crisp 1px ink hairline, one bright top edge where light lands,
+   and a shadow that sits under the pane instead of radiating from it.
+   Overrides only — the fallback and webgl-on states keep their handoffs. */
+.lg-container{
+  border-radius:24px;
+  -webkit-backdrop-filter:blur(16px) saturate(1.5);
+  backdrop-filter:blur(16px) saturate(1.5);
+}
+.lg-container[data-lg-theme="light"]{
+  background:rgba(255,255,255,.58);
+  border-color:rgba(14,31,62,.11);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),          /* the lit top edge */
+    inset 0 0 0 .5px rgba(255,255,255,.35),      /* inner hairline */
+    0 1px 2px rgba(14,31,62,.05),
+    0 24px 48px -24px rgba(14,31,62,.22);
+}
+/* interior surfaces align to one radius + hairline grammar */
+.fit-shell,.q-shell{border-radius:18px}
+.q-shell{border:1px solid rgba(14,31,62,.12);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(14,31,62,.05),
+    0 20px 44px -22px rgba(14,31,62,.2)}
+.cap-card{border-radius:12px}
+.chat-shell{border-radius:16px;
+  -webkit-backdrop-filter:blur(12px) saturate(1.4);backdrop-filter:blur(12px) saturate(1.4)}
+
 /* Animated backdrop blobs — deep purple / indigo / cyan drifting behind the
    glass so the WebGL refraction has high-contrast shapes to bend. */
 .lg-blob{position:absolute;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px);will-change:transform}
@@ -1351,7 +1391,7 @@ html{overflow-x:clip}
         <span class="tag">For homeowners</span>
         <h3>Mortgage Protection with Living Benefits</h3>
         <p>Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.</p>
-        <div class="anchor-note"><i>🛡</i><div><b>Living benefits</b><span>Use the death benefit while you're still alive if a critical, chronic or terminal illness hits. Exercising a living-benefit rider reduces the death benefit.</span></div></div>
+        <div class="anchor-note"><i><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></i><div><b>Living benefits</b><span>Use the death benefit while you're still alive if a critical, chronic or terminal illness hits. Exercising a living-benefit rider reduces the death benefit.</span></div></div>
         <ul><li>No medical exam for most applicants</li><li>Critical, chronic &amp; terminal illness riders</li><li>Coverage matched to your mortgage balance</li></ul>
         <button class="go" data-track="mortgage">Check my fit</button>
       </article>
@@ -1451,10 +1491,10 @@ html{overflow-x:clip}
         <h2>Growth when the market runs. <span class="grad">A floor when it doesn't.</span></h2>
         <p>An IUL isn't a product off a shelf — it's a design. Done right, it gives you index-linked cash value growth, protection from down years, tax-advantaged access in retirement, and an income-tax-free benefit for your family.</p>
         <div class="iul-points">
-          <div class="iul-point"><span class="ic">📈</span><div><b>Upside tied to an index</b><span>Your cash value tracks a market index — subject to caps and participation rates set by the carrier.</span></div></div>
-          <div class="iul-point"><span class="ic">🛡</span><div><b>Downside floor</b><span>When the index drops, your credited rate doesn't go negative. Policy charges still apply.</span></div></div>
-          <div class="iul-point"><span class="ic">🧾</span><div><b>Tax-advantaged access</b><span>Funded correctly and kept under MEC limits, policy loans can deliver income without a tax bill.</span></div></div>
-          <div class="iul-point"><span class="ic">🚛</span><div><b>Built for 1099 income</b><span>Fund more when freight's good, less when it's slow. No 401(k)? This is the closest thing you own outright.</span></div></div>
+          <div class="iul-point"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-trendUp"></use></svg></span><div><b>Upside tied to an index</b><span>Your cash value tracks a market index — subject to caps and participation rates set by the carrier.</span></div></div>
+          <div class="iul-point"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></span><div><b>Downside floor</b><span>When the index drops, your credited rate doesn't go negative. Policy charges still apply.</span></div></div>
+          <div class="iul-point"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-receipt"></use></svg></span><div><b>Tax-advantaged access</b><span>Funded correctly and kept under MEC limits, policy loans can deliver income without a tax bill.</span></div></div>
+          <div class="iul-point"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-truck"></use></svg></span><div><b>Built for 1099 income</b><span>Fund more when freight's good, less when it's slow. No 401(k)? This is the closest thing you own outright.</span></div></div>
         </div>
         <div class="iul-ctas">
           <button class="btn btn-brass" id="iulToggle" type="button" aria-expanded="false" aria-controls="iulEmbed">Open the full strategy walkthrough ↓</button>
@@ -1662,10 +1702,10 @@ html{overflow-x:clip}
         <span class="kind"><i></i> Fixed annuity · MYGA</span>
         <h3>The Guaranteed Vault</h3>
         <ul>
-          <li><span class="em">🏦</span>One interest rate. <b>Guaranteed. In writing.</b></li>
-          <li><span class="em">🔒</span>Locked for the full term you choose.</li>
-          <li><span class="em">🛡</span>Your principal never goes backward.</li>
-          <li><span class="em">🧾</span>Taxes wait until you take money out.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-bank"></use></svg></span>One interest rate. <b>Guaranteed. In writing.</b></li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg></span>Locked for the full term you choose.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></span>Your principal never goes backward.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-receipt"></use></svg></span>Taxes wait until you take money out.</li>
         </ul>
         <div class="key"><b>Think CD — built for retirement money.</b> Choose a term. Lock the rate. Sleep well.</div>
       </article>
@@ -1673,10 +1713,10 @@ html{overflow-x:clip}
         <span class="kind"><i></i> Fixed indexed · FIA</span>
         <h3>The 0% Floor Engine</h3>
         <ul>
-          <li><span class="em">🪜</span>Your value climbs a ladder — <b>every gain locks in. Permanently.</b></li>
-          <li><span class="em">📉</span>Market falls? Your worst year is 0%.</li>
-          <li><span class="em">🚫</span>You never have to climb back from a loss.</li>
-          <li><span class="em">⚙️</span>Zero is your hero.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-ladder"></use></svg></span>Your value climbs a ladder — <b>every gain locks in. Permanently.</b></li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-trendDown"></use></svg></span>Market falls? Your worst year is 0%.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-ban"></use></svg></span>You never have to climb back from a loss.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-gear"></use></svg></span>Zero is your hero.</li>
         </ul>
         <div class="key"><b>Gains ratchet up. Market losses don’t reduce your locked value.</b> Growth potential without market risk to principal.</div>
       </article>
@@ -1684,10 +1724,10 @@ html{overflow-x:clip}
         <span class="kind"><i></i> FIA · how growth is measured</span>
         <h3>Caps, Participation &amp; Spreads</h3>
         <ul>
-          <li><span class="em">🧢</span><b>Cap</b> — a ceiling. Keep everything up to it.</li>
-          <li><span class="em">🍰</span><b>Participation</b> — a share. Keep a slice of any gain.</li>
-          <li><span class="em">🎟</span><b>Spread</b> — a toll. Keep everything past it.</li>
-          <li><span class="em">📅</span>The carrier declares these yearly. The 0% floor never moves.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-cap"></use></svg></span><b>Cap</b> — a ceiling. Keep everything up to it.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-pie"></use></svg></span><b>Participation</b> — a share. Keep a slice of any gain.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-ticket"></use></svg></span><b>Spread</b> — a toll. Keep everything past it.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-calendar"></use></svg></span>The carrier declares these yearly. The 0% floor never moves.</li>
         </ul>
         <div class="key"><b>Caps and shares can move — in both directions. The floor cannot.</b> Ask for the guaranteed minimums before you sign.</div>
       </article>
@@ -1695,10 +1735,10 @@ html{overflow-x:clip}
         <span class="kind"><i></i> Lifetime income · SPIA &amp; income riders</span>
         <h3>The Income Spigot</h3>
         <ul>
-          <li><span class="em">🛢</span>Your savings fill a tank.</li>
-          <li><span class="em">🚰</span>At retirement, you open the spigot.</li>
-          <li><span class="em">💵</span>Out flows a paycheck. Every year.</li>
-          <li><span class="em">♾️</span><b>The paycheck outlives the tank</b> — guaranteed by contract. For life.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-barrel"></use></svg></span>Your savings fill a tank.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-tap"></use></svg></span>At retirement, you open the spigot.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-banknote"></use></svg></span>Out flows a paycheck. Every year.</li>
+          <li><span class="em"><svg class="hxi" aria-hidden="true"><use href="#i-infinity"></use></svg></span><b>The paycheck outlives the tank</b> — guaranteed by contract. For life.</li>
         </ul>
         <div class="key"><b>Income you can't outlive.</b> The fix for the retirement question nobody can answer: "how long will I live?"</div>
       </article>
@@ -1786,9 +1826,9 @@ html{overflow-x:clip}
         <h2>Every insurance question. Answered instantly. Out loud, if you want.</h2>
         <p>The Legacy Concierge knows every product we design — term vs. whole, living benefits, IUL mechanics, long-term care, what things cost, and who qualifies. Ask by typing or just talk to it.</p>
         <div class="ai-feats">
-          <div class="ai-feat"><span class="ic">🎙</span><div><b>Voice-enabled</b><span>Tap the mic and ask out loud — it listens and speaks its answers back.</span></div></div>
-          <div class="ai-feat"><span class="ic">🧠</span><div><b>Knows every product</b><span>Mortgage protection, IUL, hybrid LTC, final expense, annuities — and the fine print.</span></div></div>
-          <div class="ai-feat"><span class="ic">📅</span><div><b>Hands off to a human</b><span>When you're ready, it books you straight onto Connor's calendar. No bots pretending to be people.</span></div></div>
+          <div class="ai-feat"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-mic"></use></svg></span><div><b>Voice-enabled</b><span>Tap the mic and ask out loud — it listens and speaks its answers back.</span></div></div>
+          <div class="ai-feat"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-node"></use></svg></span><div><b>Knows every product</b><span>Mortgage protection, IUL, hybrid LTC, final expense, annuities — and the fine print.</span></div></div>
+          <div class="ai-feat"><span class="ic"><svg class="hxi" aria-hidden="true"><use href="#i-calendar"></use></svg></span><div><b>Hands off to a human</b><span>When you're ready, it books you straight onto Connor's calendar. No bots pretending to be people.</span></div></div>
         </div>
         <button class="btn btn-brass" id="aiScrollBtn" type="button">Ask the Concierge</button>
       </div>
@@ -2290,11 +2330,11 @@ function buildChat(container, compact){
     <div class="chat-head">
       <span class="avatar"><img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async"></span>
       <div><b>Legacy Concierge</b><span><i></i> Online · answers in seconds</span></div>
-      <button class="spk" type="button" title="Toggle spoken replies">🔈 Voice replies</button>
+      <button class="spk" type="button" title="Toggle spoken replies"><svg class="hxi" aria-hidden="true"><use href="#i-speaker"></use></svg> Voice replies</button>
     </div>
     <div class="chat-log" role="log" aria-live="polite"></div>
     <div class="chat-input">
-      <button class="icon-btn mic" type="button" title="Ask by voice" aria-label="Ask by voice">🎙</button>
+      <button class="icon-btn mic" type="button" title="Ask by voice" aria-label="Ask by voice"><svg class="hxi" aria-hidden="true"><use href="#i-mic"></use></svg></button>
       <input type="text" placeholder="Ask about coverage, cost, IULs…" aria-label="Ask the Legacy Concierge a question">
       <button class="icon-btn send" type="button" aria-label="Send">➤</button>
     </div>`;
@@ -2372,7 +2412,7 @@ function buildChat(container, compact){
   input.addEventListener('keydown',e=>{if(e.key==='Enter')handle(input.value)});
   spkBtn.addEventListener('click',()=>{
     speak=!speak; spkBtn.classList.toggle('on',speak);
-    spkBtn.textContent = speak ? '🔊 Voice on' : '🔈 Voice replies';
+    spkBtn.innerHTML = (speak ? '<svg class="hxi" aria-hidden="true"><use href="#i-speaker"></use></svg> Voice on' : '<svg class="hxi" aria-hidden="true"><use href="#i-speaker"></use></svg> Voice replies');
     if(!speak&&synth) synth.cancel();
   });
   if(SR){
@@ -2383,14 +2423,14 @@ function buildChat(container, compact){
       try{rec.start();listening=true;micBtn.classList.add('listening');micBtn.textContent='●';}catch(e){}
     });
     rec.onresult=e=>{const said=e.results[0][0].transcript; handle(said);};
-    rec.onend=()=>{listening=false;micBtn.classList.remove('listening');micBtn.textContent='🎙';};
-    rec.onerror=()=>{listening=false;micBtn.classList.remove('listening');micBtn.textContent='🎙';};
+    rec.onend=()=>{listening=false;micBtn.classList.remove('listening');micBtn.innerHTML='<svg class="hxi" aria-hidden="true"><use href="#i-mic"></use></svg>';};
+    rec.onerror=()=>{listening=false;micBtn.classList.remove('listening');micBtn.innerHTML='<svg class="hxi" aria-hidden="true"><use href="#i-mic"></use></svg>';};
   } else {
     micBtn.title='Voice input works best in Chrome or Edge';
-    micBtn.addEventListener('click',()=>addMsg('Voice input isn\'t supported in this browser — try Chrome or Edge, or just type your question below. 🙂','bot'));
+    micBtn.addEventListener('click',()=>addMsg('Voice input isn\'t supported in this browser — try Chrome or Edge, or just type your question below.','bot'));
   }
   // greeting
-  addMsg(`Hi, I'm the <b>Legacy Concierge</b> 👋 — Herron & Co.'s digital assistant. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap 🎙 and just ask out loud.`,'bot');
+  addMsg(`Hi, I'm the <b>Legacy Concierge</b> — Herron & Co.'s digital assistant. Ask me anything about protecting your family, your home, or your retirement. Type below, or tap the mic and just ask out loud.`,'bot');
   addChips();
   /* the opening greeting must be readable from its first line — appending the
      starter chips had scrolled the log to the bottom, cropping the greeting on
@@ -3366,33 +3406,33 @@ renderFit();
 /* ===== Coverage detail modal ===== */
 (function(){
   var COV={
-    mortgage:{ic:'🏠',eyebrow:'For homeowners',title:'Mortgage Protection with Living Benefits',
+    mortgage:{ic:'house',eyebrow:'For homeowners',title:'Mortgage Protection with Living Benefits',
       hook:'Pays off the house if you pass — and pays <em>you</em> if a critical illness like cancer, heart attack, or stroke stops your income.',
       rows:['No medical exam for most applicants','Critical, chronic &amp; terminal illness riders','Coverage matched to your mortgage balance','Living benefits you can use while you’re alive'],
       stat:[['$0','out-of-pocket cost to work with us'],['Living','benefits — use it while alive']],track:'mortgage'},
-    iul:{ic:'📈',eyebrow:'For builders of wealth',title:'Indexed Universal Life (IUL)',
+    iul:{ic:'trendUp',eyebrow:'For builders of wealth',title:'Indexed Universal Life (IUL)',
       hook:'Index-linked growth with a floor in down years and tax-advantaged access in retirement — built for high earners and 1099 owner-operators with no 401(k).',
       rows:['Flexible funding, up or down with your income','Tax-advantaged retirement income design','Income-tax-free benefit for your family','A 0% floor so a market crash never drains your cash value'],
       stat:[['0%','floor — your credited rate never goes negative'],['20+','carriers compared for you']],track:'iul',
       extra:{label:'See the full IUL strategy',href:'#iul-strategy'}},
-    ltc:{ic:'🛡️',eyebrow:'For ages 50–68',title:'Hybrid Long-Term Care',
+    ltc:{ic:'shield',eyebrow:'For ages 50–68',title:'Hybrid Long-Term Care',
       hook:'70% of us will need care after 65 — and Medicare generally <em>won’t cover it.</em> Hybrids fix “use it or lose it”: care benefits if you need them, a death benefit for family if you don’t.',
       rows:['Money is never wasted — it pays out either way','One design can cover both spouses','Protects retirement savings from care costs','Locks in while you’re healthy enough to qualify'],
       stat:[['70%','will need long-term care after 65'],['$0','Medicare pays toward custodial care']],track:'ltc'},
-    final:{ic:'🕊️',eyebrow:'For peace of mind',title:'Final Expense',
+    final:{ic:'bird',eyebrow:'For peace of mind',title:'Final Expense',
       hook:'Simple whole life that covers funeral and end-of-life costs — so <em>grief never comes with a bill attached.</em>',
       rows:['No-exam and guaranteed-issue options','Premiums locked for life','Approvals often same-day','A small policy that does one big, kind thing'],
       stat:[['$10–15k','the bill it quietly covers'],['Same-day','approvals available']],track:'final'},
-    annuity:{ic:'🏦',eyebrow:'For principal protection',title:'Fixed Annuities',
+    annuity:{ic:'bank',eyebrow:'For principal protection',title:'Fixed Annuities',
       hook:'Guaranteed rates with protection from market loss — turning savings into tax-deferred growth, or income that arrives like a paycheck for life.',
       rows:['Guaranteed rates from established carriers','A CD alternative for retirement money','Income you can’t outlive','Your principal never goes backward'],
       stat:[['0%','market risk to your principal'],['For life','income you can’t outlive']],track:'annuity',
       extra:{label:'See every kind of annuity',href:'#annuities'}},
-    disability:{ic:'💪',eyebrow:'For your paycheck',title:'Disability Insurance',
+    disability:{ic:'trendUp',eyebrow:'For your paycheck',title:'Disability Insurance',
       hook:'Your ability to earn is your biggest asset. If illness or injury stops you from working, disability insurance replaces part of your income until you’re back on your feet.',
       rows:['Protects your paycheck, not just your life','Options for self-employed &amp; business owners','Short and long-term benefit periods','The one coverage people skip and regret'],
       stat:[['$2M+','a 30-year-old’s lifetime earnings'],['Your','biggest asset, insured']],track:'disability'},
-    term:{ic:'📋',eyebrow:'The classics, done right',title:'Standard Term &amp; Whole Life',
+    term:{ic:'clipboard',eyebrow:'The classics, done right',title:'Standard Term &amp; Whole Life',
       hook:'Sometimes the right answer is the simple one. We quote straightforward term and whole life across 20+ carriers — and tell you honestly which one your situation calls for.',
       rows:['Term — the most coverage per dollar','10, 15, 20, or 30-year terms to match your mortgage','Whole life — coverage that never expires','Guaranteed cash value growth and locked premiums'],
       stat:[['20+','carriers, shopped honestly'],['$0','to work with us']],track:'term'}
@@ -3406,7 +3446,7 @@ renderFit();
     var stat=d.stat?('<div class="cov-stat">'+d.stat.map(function(x){return '<div class="s"><b>'+x[0]+'</b><span>'+x[1]+'</span></div>';}).join('')+'</div>'):'';
     var extra=d.extra?('<a class="btn btn-ghost-light" href="'+d.extra.href+'" data-cov-close>'+d.extra.label+'</a>'):'';
     inner.innerHTML=
-      '<div class="cov-hero"><div class="cov-ic">'+d.ic+'</div><div><span class="cov-eyebrow">'+d.eyebrow+'</span><h3 class="cov-title" id="covTitle">'+d.title+'</h3></div></div>'+
+      '<div class="cov-hero"><div class="cov-ic"><svg class="hxi hxi-cov" aria-hidden="true"><use href="#i-'+d.ic+'"></use></svg></div><div><span class="cov-eyebrow">'+d.eyebrow+'</span><h3 class="cov-title" id="covTitle">'+d.title+'</h3></div></div>'+
       '<p class="cov-hook">'+d.hook+'</p>'+
       '<div class="cov-rows">'+rows+'</div>'+stat+
       '<div class="cov-ctas"><button class="btn btn-brass" data-cov-fit="'+d.track+'">Check my fit →</button>'+
@@ -3850,6 +3890,7 @@ try{
 <!-- The template's non-3D design code (ticker, breakdown bars, staggered lift,
      error shake). Deliberately NOT gated like the 3D layer — it is ordinary CSS
      and DOM, so phones get it too. -->
+<script defer src="js/hx-icons.js"></script>
 <script defer src="js/omma-design.js"></script>
 <!-- GSAP 3.12.5 self-hosted in vendor/ (repo convention, same as three.js) — no third-party CDN dependency.
      ScrollTrigger is no longer loaded: the carousels are user-driven (drag/arrows/dots), not scroll-pinned. -->
