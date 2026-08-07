@@ -295,11 +295,95 @@ function mkCanvas(cls) {
 }
 /* studio light rig shared by the solid scenes — warm key, cool fill, bright
    ambient so nothing on this page ever renders as a dark hole */
+/* ---------------------------------------------------- environment cube map --
+   SIX CANVAS GRADIENTS, NO ASSET, NO NETWORK.
+
+   Read this before touching any metalness value in this file.
+
+   A metallic surface renders by reflecting its surroundings. Given nothing to
+   reflect it resolves to BLACK — invisible on the two navy tool pages, a hole
+   on the ivory homepage. There was no environment map here, so every material
+   below carried two numbers: real metal on dark (0.5-0.9) and metal dialled
+   down until the holes stopped (0.10-0.35) on bright. The brass on the bright
+   pages was reading as matte plastic, and that was the reason.
+
+   This gives them something to reflect. Warm above, cool below, one soft
+   highlight standing in for a studio softbox — six 256px faces built once and
+   shared by every scene, costing microseconds and no payload at all.
+
+   needsUpdate is REQUIRED: a CubeTexture assembled from canvases never uploads
+   without it, and the failure mode is silent — materials simply stay black,
+   which looks exactly like the bug this fixes.
+
+   INTENSITY IS BAKED INTO THE GRADIENTS, NOT SET ON THE SCENE.
+   scene.environmentIntensity landed in three r163; vendor/three.module.min.js
+   is r161, where setting it is silently ignored and the map applies at full
+   strength — which on an ivory page blows the metal out. Dimming the source
+   colours does the same job on any revision and costs nothing at runtime. */
+let ENV = null;
+const ENV_GAIN = DARK ? 0.55 : 0.72;
+/* multiply a #rrggbb by a scalar */
+function dim(hex, k) {
+  const n = parseInt(hex.slice(1), 16);
+  const r = Math.round(Math.min(255, ((n >> 16) & 255) * k));
+  const g = Math.round(Math.min(255, ((n >> 8) & 255) * k));
+  const b = Math.round(Math.min(255, (n & 255) * k));
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+function envCube() {
+  if (ENV) return ENV;
+  const S = 256;
+  /* dark pages want a dimmer, cooler room or the metal blows out against the
+     navy; bright pages want the near-white studio */
+  const cfg = DARK ? [
+    { top: '#5A6480', bot: '#2A3350', blob: ['#C9D6F0', .55, .30, .32] },
+    { top: '#3A4667', bot: '#1E2740', blob: ['#9FB4DC', .40, .62, .22] },
+    { top: '#7C88A8', bot: '#4A5678', blob: ['#E8EEFA', .50, .50, .44] },
+    { top: '#232C46', bot: '#141B2E', blob: null },
+    { top: '#606B88', bot: '#333C5C', blob: ['#D2DCF2', .62, .40, .26] },
+    { top: '#2E3752', bot: '#1A2138', blob: null }
+  ] : [
+    { top: '#FFF6E2', bot: '#E7D6AE', blob: ['#FFFFFF', .55, .30, .34] },
+    { top: '#EAF1FB', bot: '#CFDCF0', blob: ['#FFFFFF', .40, .62, .22] },
+    { top: '#FFFFFF', bot: '#FFF3D8', blob: ['#FFFDF4', .50, .50, .46] },
+    { top: '#F0EDE4', bot: '#DAD5C6', blob: null },
+    { top: '#FFF9EC', bot: '#EADFC2', blob: ['#FFFFFF', .62, .40, .26] },
+    { top: '#EDF2FA', bot: '#D6E0F2', blob: null }
+  ];
+  const faces = cfg.map(c => {
+    const cv = document.createElement('canvas');
+    cv.width = cv.height = S;
+    const g = cv.getContext('2d');
+    const grd = g.createLinearGradient(0, 0, 0, S);
+    grd.addColorStop(0, dim(c.top, ENV_GAIN));
+    grd.addColorStop(1, dim(c.bot, ENV_GAIN));
+    g.fillStyle = grd; g.fillRect(0, 0, S, S);
+    if (c.blob) {
+      const col = c.blob[0], cx = c.blob[1], cy = c.blob[2], r = c.blob[3];
+      const rg = g.createRadialGradient(cx * S, cy * S, 0, cx * S, cy * S, r * S);
+      /* the softbox keeps a little more punch than the walls — that contrast
+         is what makes a highlight travel across a rim as it turns */
+      rg.addColorStop(0, dim(col, Math.min(1, ENV_GAIN * 1.25)));
+      rg.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = rg; g.fillRect(0, 0, S, S);
+    }
+    return cv;
+  });
+  ENV = new THREE.CubeTexture(faces);
+  ENV.colorSpace = THREE.SRGBColorSpace;
+  ENV.needsUpdate = true;
+  return ENV;
+}
+
 function studioLights(scene, warm = 2.0) {
-  scene.add(new THREE.AmbientLight(0xFFFFFF, DARK ? 0.55 : 1.15));
-  scene.add(new THREE.HemisphereLight(0xFFFFFF, DARK ? 0x18244A : 0xD9E2F2, DARK ? 0.6 : 0.9));
+  /* the room comes first — the direct lights below are shaped around it */
+  scene.environment = envCube();
+  /* ambient drops now that reflections carry part of the fill; leaving it at
+     the old level on top of an environment flattens everything back out */
+  scene.add(new THREE.AmbientLight(0xFFFFFF, DARK ? 0.42 : 0.86));
+  scene.add(new THREE.HemisphereLight(0xFFFFFF, DARK ? 0x18244A : 0xD9E2F2, DARK ? 0.5 : 0.72));
   const key = new THREE.DirectionalLight(0xFFF0D2, warm); key.position.set(4, 6, 6); scene.add(key);
-  const fill = new THREE.DirectionalLight(DARK ? 0x6FE3D6 : 0xD9E4FA, DARK ? 0.9 : 1.15);
+  const fill = new THREE.DirectionalLight(DARK ? 0x6FE3D6 : 0xD9E4FA, DARK ? 0.9 : 1.05);
   fill.position.set(-5, -1, -4); scene.add(fill);
   return key;
 }
@@ -518,7 +602,7 @@ function quoteTower(painter) {
     const blocks = [];
     for (let i = 0; i < N; i++) {
       const mesh = new THREE.Mesh(blockGeo, new THREE.MeshPhysicalMaterial({
-        color: DARK ? C.mist : 0xEFF3FA, roughness: 0.26, metalness: DARK ? 0.5 : 0.12,
+        color: DARK ? C.mist : 0xEFF3FA, roughness: 0.26, metalness: DARK ? 0.5 : 0.34,
         transparent: true, opacity: 0.94, clearcoat: 1, clearcoatRoughness: 0.12,
         emissive: C.brass, emissiveIntensity: 0
       }));
@@ -535,7 +619,7 @@ function quoteTower(painter) {
        shape. */
     const beacon = new THREE.Mesh(
       new THREE.OctahedronGeometry(0.22, 0),
-      new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.6, metalness: DARK ? 0.85 : 0.35, roughness: 0.16 })
+      new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.6, metalness: DARK ? 0.85 : 0.72, roughness: 0.16 })
     );
     beacon.visible = false;
     col.add(beacon);
@@ -563,7 +647,7 @@ function quoteTower(painter) {
   const satGeo = new THREE.TetrahedronGeometry(0.17, 0);
   for (let i = 0; i < 5; i++) {
     const m = new THREE.Mesh(satGeo, new THREE.MeshStandardMaterial({
-      color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.45, roughness: 0.28, metalness: DARK ? 0.6 : 0.25
+      color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.45, roughness: 0.28, metalness: DARK ? 0.6 : 0.52
     }));
     m.userData = { a: (i / 5) * Math.PI * 2, on: 0 };
     m.visible = false;
@@ -714,7 +798,7 @@ function fitCompass(painter) {
     new THREE.CylinderGeometry(2.35, 2.35, 0.09, 72),
     new THREE.MeshPhysicalMaterial({
       color: DARK ? C.porcelain : 0xF4F7FC,
-      metalness: DARK ? 0.5 : 0.10, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.1
+      metalness: DARK ? 0.5 : 0.32, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.1
     })
   );
   rig.add(disc);
@@ -724,7 +808,7 @@ function fitCompass(painter) {
   ));
   const bezel = new THREE.Mesh(
     new THREE.TorusGeometry(2.37, 0.035, 8, 120),
-    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.4, metalness: DARK ? 0.9 : 0.35, roughness: 0.2 })
+    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.4, metalness: DARK ? 0.9 : 0.74, roughness: 0.2 })
   );
   bezel.rotation.x = -Math.PI / 2; bezel.position.y = 0.05; rig.add(bezel);
 
@@ -757,7 +841,7 @@ function fitCompass(painter) {
     post.position.y = 0.4; g.add(post);
     const orb = new THREE.Mesh(
       new THREE.IcosahedronGeometry(0.17, 0),
-      new THREE.MeshStandardMaterial({ color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.22, roughness: 0.3, metalness: DARK ? 0.6 : 0.2, flatShading: true })
+      new THREE.MeshStandardMaterial({ color: C.blueSoft, emissive: C.blue, emissiveIntensity: 0.22, roughness: 0.3, metalness: DARK ? 0.6 : 0.46, flatShading: true })
     );
     orb.position.y = 0.9; g.add(orb);
     g.position.set(Math.sin(a) * 1.92, 0.05, Math.cos(a) * 1.92);
@@ -769,7 +853,7 @@ function fitCompass(painter) {
   const needle = new THREE.Group();
   const shaft = new THREE.Mesh(
     new THREE.ConeGeometry(0.15, 1.9, 4),
-    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.5, metalness: DARK ? 0.8 : 0.35, roughness: 0.18 })
+    new THREE.MeshStandardMaterial({ color: C.brassLit, emissive: C.brass, emissiveIntensity: 0.5, metalness: DARK ? 0.8 : 0.70, roughness: 0.18 })
   );
   shaft.rotation.x = -Math.PI / 2; shaft.position.z = 0.95; needle.add(shaft);
   const tail = new THREE.Mesh(
@@ -941,7 +1025,7 @@ function shieldDevice(rig) {
   for (let i = 0; i < 2; i++) {
     const g = new THREE.Group();
     const glassMat = new THREE.MeshPhysicalMaterial({
-      color: C.porcelain, roughness: 0.12, metalness: 0.1,
+      color: C.porcelain, roughness: 0.12, metalness: DARK ? 0.1 : 0.38,
       transparent: true, opacity: 0.34, clearcoat: 1
     });
     const tube = new THREE.Mesh(new THREE.CylinderGeometry(0.82, 0.82, 3.6, 44, 1, true), glassMat);
@@ -961,7 +1045,7 @@ function shieldDevice(rig) {
         color: i === 0 ? C.brassLit : C.blueSoft,
         emissive: i === 0 ? C.brass : C.blue,
         emissiveIntensity: i === 0 ? 0.4 : 0.2,
-        metalness: DARK ? 0.55 : 0.18, roughness: 0.26
+        metalness: DARK ? 0.55 : 0.48, roughness: 0.26
       })
     );
     g.add(fill);
@@ -1030,7 +1114,7 @@ function blueprintDevice(rig) {
     const g = new THREE.Group();
     const plate = new THREE.Mesh(
       new THREE.CylinderGeometry(0.66, 0.66, 0.06, 6),
-      new THREE.MeshPhysicalMaterial({ color: col, metalness: DARK ? 0.62 : 0.22, roughness: 0.24, clearcoat: 1 })
+      new THREE.MeshPhysicalMaterial({ color: col, metalness: DARK ? 0.62 : 0.55, roughness: 0.24, clearcoat: 1 })
     );
     plate.rotation.x = Math.PI / 2;
     g.add(plate);
