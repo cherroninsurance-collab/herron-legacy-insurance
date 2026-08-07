@@ -87,6 +87,17 @@
 .text-right.text-slate-400.leading-relaxed{display:none!important}
 </style>
 <link rel="stylesheet" href="js/omma-3d.css">
+<style id="hx-icon-css">
+/* Brand line icons (js/hx-icons.js). They inherit currentColor, so colour is
+   set by context — gold in a gold label, ink in body copy. */
+.hxi{width:1.15em;height:1.15em;vertical-align:-0.18em;display:inline-block;flex:none}
+li.flex > .hxi-slot{display:inline-flex;align-items:center;justify-content:center;
+  width:1.7em;height:1.55em;flex:none;color:#B08E22}
+li.flex > .hxi-slot .hxi{width:1.25em;height:1.25em;vertical-align:0}
+.hxi-big{line-height:1}
+.hxi-xl{width:1.9em;height:1.9em;vertical-align:-0.3em}
+.hxi-2x{width:2.5em;height:2.5em;vertical-align:-0.3em}
+</style>
 <style id="omma-page">
 /* ============================================================================
    BRIGHT THEME — Wealth Shield Matrix
@@ -233,7 +244,7 @@ html[data-omma-theme] svg path[fill="#0A1128"]{fill:#EDF2F9}
    unavailable — .omma-bucket-on is only set once a context actually exists. */
 .omma-bucket{display:none}
 html.omma-bucket-on .omma-bucket{display:block;width:100%;height:250px}
-html.omma-bucket-on #iulstep0 svg{display:none}
+html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a bare "svg" here also hides every icon in the step */
 @media(max-width:640px){html.omma-bucket-on .omma-bucket{height:200px}}
 </style>
 </head>
@@ -305,11 +316,11 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Bucket &amp; the Shield</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>💧</span><span>Your money fills a bucket.</span></li>
-          <li class="flex gap-3"><span>📈</span><span>The bucket grows with the market index.</span></li>
-          <li class="flex gap-3"><span>🛡️</span><span>A shield covers the bucket.</span></li>
-          <li class="flex gap-3"><span>⛈️</span><span>A market drop isn't subtracted from it.</span></li>
-          <li class="flex gap-3"><span>🔒</span><span>In a down year the index credit is 0% — losses aren't passed through.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-droplet"></use></svg></span><span>Your money fills a bucket.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-trendUp"></use></svg></span><span>The bucket grows with the market index.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></span><span>A shield covers the bucket.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-storm"></use></svg></span><span>A market drop isn't subtracted from it.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg></span><span>In a down year the index credit is 0% — losses aren't passed through.</span></li>
         </ul>
         <!-- The floor applies to the INDEX CREDIT, not to the account value.
              Policy charges are deducted whatever the index does, so an account
@@ -353,28 +364,28 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Added Premium Pipeline</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>🏷️</span><span>Most policies: big insurance, small savings.</span></li>
-          <li class="flex gap-3"><span>🔁</span><span>The Herron Method flips the design.</span></li>
-          <li class="flex gap-3"><span>📉</span><span>Buy the <em>minimum</em> insurance allowed.</span></li>
-          <li class="flex gap-3"><span>🚰</span><span>Pour the <em>maximum</em> cash through the pipeline.</span></li>
-          <li class="flex gap-3"><span>🪣</span><span>More of every dollar lands in your bucket.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-tag"></use></svg></span><span>Most policies: big insurance, small savings.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-swap"></use></svg></span><span>The Herron Method flips the design.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-trendDown"></use></svg></span><span>Buy the <em>minimum</em> insurance allowed.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-tap"></use></svg></span><span>Pour the <em>maximum</em> cash through the pipeline.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-bucket"></use></svg></span><span>More of every dollar lands in your bucket.</span></li>
         </ul>
         <div class="mt-6 p-4 rounded-xl bg-navy-950 border border-gold-400/20 text-sm text-slate-300">
-          💡 <span class="text-gold-300 font-semibold">The Herron Method:</span> minimum insurance, maximum cash.
+          <svg class="hxi" aria-hidden="true"><use href="#i-bulb"></use></svg> <span class="text-gold-300 font-semibold">The Herron Method:</span> minimum insurance, maximum cash.
         </div>
       </div>
       <svg viewBox="0 0 360 250" class="w-full" role="img" aria-label="Premium splits: a thin pipe pays insurance cost, a wide gold pipe overfunds the cash bucket">
         <rect x="20" y="95" width="110" height="60" rx="10" fill="#121B3C" stroke="#D4AF37" stroke-width="2"/>
         <text x="75" y="120" text-anchor="middle" fill="#fff" font-size="13" font-weight="600">Your dollars</text>
-        <text x="75" y="140" text-anchor="middle" fill="#E8C96A" font-size="15">💵💵💵</text>
+        <use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" href="#i-banknote" x="55" y="128" width="14" height="14" stroke="#E8C96A"/><use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" href="#i-banknote" x="68" y="128" width="14" height="14" stroke="#E8C96A"/><use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" href="#i-banknote" x="81" y="128" width="14" height="14" stroke="#E8C96A"/>
         <path d="M130 110 H190 V60 H250" fill="none" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
         <rect x="250" y="38" width="92" height="44" rx="8" fill="#0A1128" stroke="#64748B" stroke-width="1.5"/>
         <text x="296" y="56" text-anchor="middle" fill="#94A3B8" font-size="11">Insurance cost</text>
-        <text x="296" y="72" text-anchor="middle" fill="#94A3B8" font-size="11">kept tiny 🤏</text>
+        <text x="296" y="72" text-anchor="middle" fill="#94A3B8" font-size="11">kept tiny</text>
         <path d="M130 140 H190 V190 H240" fill="none" stroke="#B08E22" stroke-width="22" stroke-linecap="round"/>
         <path d="M130 140 H190 V190 H240" fill="none" stroke="#E8C96A" stroke-width="3" stroke-dasharray="6 10" class="pulse-slow"/>
         <rect x="240" y="160" width="102" height="62" rx="10" fill="#121B3C" stroke="#D4AF37" stroke-width="2"/>
-        <text x="291" y="186" text-anchor="middle" fill="#E8C96A" font-size="12" font-weight="600">Cash bucket 🪣</text>
+        <text x="291" y="186" text-anchor="middle" fill="#E8C96A" font-size="12" font-weight="600">Cash bucket</text><use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" href="#i-bucket" x="132" y="176" width="13" height="13" stroke="#E8C96A"/>
         <text x="291" y="206" text-anchor="middle" fill="#2DD4BF" font-size="11">grows tax-advantaged</text>
         <text x="185" y="243" text-anchor="middle" fill="#64748B" font-size="11">The wide pipe is the “added premium” — the overfunding.</text>
       </svg>
@@ -387,11 +398,11 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The OLP Tax Emergency Brake</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>💳</span><span>Retirement income comes from policy loans.</span></li>
-          <li class="flex gap-3"><span>❓</span><span>“What if I borrow too much?”</span></li>
-          <li class="flex gap-3"><span>🚨</span><span>The Overloan Protection rider watches for you.</span></li>
-          <li class="flex gap-3"><span>🛑</span><span>Too close to the edge? Brake engages.</span></li>
-          <li class="flex gap-3"><span>✅</span><span>Policy self-completes. No surprise tax bill.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-card"></use></svg></span><span>Retirement income comes from policy loans.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-question"></use></svg></span><span>“What if I borrow too much?”</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-siren"></use></svg></span><span>The Overloan Protection rider watches for you.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-brake"></use></svg></span><span>Too close to the edge? Brake engages.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-shieldOk"></use></svg></span><span>Policy self-completes. No surprise tax bill.</span></li>
         </ul>
         <button id="brakebtn" class="btn btn-primary mt-6">Engage the emergency brake</button>
       </div>
@@ -408,7 +419,7 @@ html.omma-bucket-on #iulstep0 svg{display:none}
           <text x="252" y="208" fill="#F87171" font-size="11">Danger zone</text>
           <g id="brake-badge" class="water" opacity="0">
             <rect x="118" y="28" width="124" height="34" rx="17" fill="#0A1128" stroke="#2DD4BF" stroke-width="2"/>
-            <text x="180" y="50" text-anchor="middle" fill="#2DD4BF" font-size="13" font-weight="700">🛑 BRAKE ENGAGED</text>
+            <text x="180" y="50" text-anchor="middle" fill="#2DD4BF" font-size="13" font-weight="700">BRAKE ENGAGED</text>
           </g>
         </svg>
         <div id="brake-steps" class="grid grid-cols-3 gap-2 text-center text-xs mt-3">
@@ -451,11 +462,11 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Guaranteed Vault</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>🏦</span><span>One interest rate. Guaranteed. In writing.</span></li>
-          <li class="flex gap-3"><span>🔒</span><span>Locked for the full term you choose.</span></li>
-          <li class="flex gap-3"><span>🛡️</span><span>Your principal never goes backward.</span></li>
-          <li class="flex gap-3"><span>🧾</span><span>Taxes wait until you take money out.</span></li>
-          <li class="flex gap-3"><span>💡</span><span>Think CD — built for retirement money.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-bank"></use></svg></span><span>One interest rate. Guaranteed. In writing.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg></span><span>Locked for the full term you choose.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></span><span>Your principal never goes backward.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-receipt"></use></svg></span><span>Taxes wait until you take money out.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-bulb"></use></svg></span><span>Think CD — built for retirement money.</span></li>
         </ul>
         <button id="vaultbtn" class="btn btn-primary mt-6">Lock the vault</button>
       </div>
@@ -490,14 +501,14 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The 0% Floor Engine</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>🪜</span><span>Your value climbs a ladder.</span></li>
-          <li class="flex gap-3"><span>🔒</span><span>Every gain locks in. Permanently.</span></li>
-          <li class="flex gap-3"><span>📉</span><span>Market falls? Your worst year is 0%.</span></li>
-          <li class="flex gap-3"><span>🚫</span><span>You never have to climb back from a loss.</span></li>
-          <li class="flex gap-3"><span>⚙️</span><span>Zero is your hero.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-ladder"></use></svg></span><span>Your value climbs a ladder.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg></span><span>Every gain locks in. Permanently.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-trendDown"></use></svg></span><span>Market falls? Your worst year is 0%.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-ban"></use></svg></span><span>You never have to climb back from a loss.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-gear"></use></svg></span><span>Zero is your hero.</span></li>
         </ul>
         <div class="mt-6 p-4 rounded-xl bg-navy-950 border border-gold-400/20 text-sm text-slate-300">
-          🔑 Gains ratchet up. Losses never touch you.
+          <svg class="hxi" aria-hidden="true"><use href="#i-key"></use></svg> Gains ratchet up. Losses never touch you.
         </div>
       </div>
       <div>
@@ -517,15 +528,15 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">How the Growth Is Measured</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>🛡️</span><span>The shield is fixed. Forever. In the contract.</span></li>
-          <li class="flex gap-3"><span>🚪</span><span>The bucket&rsquo;s opening can change each year.</span></li>
-          <li class="flex gap-3"><span>🧢</span><span><b>Cap</b> — a ceiling. Keep everything up to it.</span></li>
-          <li class="flex gap-3"><span>🍰</span><span><b>Participation</b> — a share. Keep a slice of any gain.</span></li>
-          <li class="flex gap-3"><span>🎟️</span><span><b>Spread</b> — a toll. Keep everything past it.</span></li>
-          <li class="flex gap-3"><span>📅</span><span>The carrier declares these yearly. The 0% floor never moves.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-shield"></use></svg></span><span>The shield is fixed. Forever. In the contract.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-door"></use></svg></span><span>The bucket&rsquo;s opening can change each year.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-cap"></use></svg></span><span><b>Cap</b> — a ceiling. Keep everything up to it.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-pie"></use></svg></span><span><b>Participation</b> — a share. Keep a slice of any gain.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-ticket"></use></svg></span><span><b>Spread</b> — a toll. Keep everything past it.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-calendar"></use></svg></span><span>The carrier declares these yearly. The 0% floor never moves.</span></li>
         </ul>
         <div class="mt-6 p-4 rounded-xl bg-navy-950 border border-gold-400/20 text-sm text-slate-300">
-          🔑 Caps and shares can move — in both directions. The floor cannot.
+          <svg class="hxi" aria-hidden="true"><use href="#i-key"></use></svg> Caps and shares can move — in both directions. The floor cannot.
         </div>
       </div>
       <div>
@@ -537,9 +548,9 @@ html.omma-bucket-on #iulstep0 svg{display:none}
           <input id="cr-idx" type="range" min="-30" max="30" step="1" value="14">
           <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>−30% crash</span><span>0%</span><span>+30% boom</span></div>
           <div class="grid grid-cols-3 gap-2 mt-3">
-            <button data-idx="-30" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs">📉 Crash year</button>
-            <button data-idx="8" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs">📊 Average year</button>
-            <button data-idx="25" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs">🚀 Boom year</button>
+            <button data-idx="-30" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs"><svg class="hxi" aria-hidden="true"><use href="#i-trendDown"></use></svg> Crash year</button>
+            <button data-idx="8" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs"><svg class="hxi" aria-hidden="true"><use href="#i-bars"></use></svg> Average year</button>
+            <button data-idx="25" class="scnbtn btn btn-ghost !px-2 !py-2 text-xs"><svg class="hxi" aria-hidden="true"><use href="#i-rocket"></use></svg> Boom year</button>
           </div>
         </div>
 
@@ -593,11 +604,11 @@ html.omma-bucket-on #iulstep0 svg{display:none}
       <div>
         <h3 class="font-display text-2xl text-gold-300 mb-4">The Lifetime Income Spigot</h3>
         <ul class="space-y-3 text-lg leading-snug">
-          <li class="flex gap-3"><span>🛢️</span><span>Your savings fill a tank.</span></li>
-          <li class="flex gap-3"><span>🚰</span><span>At retirement, you open the spigot.</span></li>
-          <li class="flex gap-3"><span>💵</span><span>Out flows a paycheck. Every year.</span></li>
-          <li class="flex gap-3"><span>♾️</span><span>The paycheck outlives the tank.</span></li>
-          <li class="flex gap-3"><span>📜</span><span>Guaranteed by contract. For life.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-barrel"></use></svg></span><span>Your savings fill a tank.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-tap"></use></svg></span><span>At retirement, you open the spigot.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-banknote"></use></svg></span><span>Out flows a paycheck. Every year.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-infinity"></use></svg></span><span>The paycheck outlives the tank.</span></li>
+          <li class="flex gap-3"><span class="hxi-slot"><svg class="hxi" aria-hidden="true"><use href="#i-scroll"></use></svg></span><span>Guaranteed by contract. For life.</span></li>
         </ul>
         <button id="spigotbtn" class="btn btn-primary mt-6">Open the income spigot</button>
       </div>
@@ -614,15 +625,15 @@ html.omma-bucket-on #iulstep0 svg{display:none}
             <circle class="drop" cx="244" cy="172" r="2.6" fill="#2DD4BF" style="animation-delay:.8s"/>
           </g>
           <g id="coins" class="hidden">
-            <text class="coin" x="250" y="215" font-size="16">💵</text>
-            <text class="coin" x="250" y="215" font-size="16" style="animation-delay:.55s">💵</text>
-            <text class="coin" x="250" y="215" font-size="16" style="animation-delay:1.1s">💵</text>
+            <use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="coin" href="#i-banknote" x="243" y="203" width="15" height="15" stroke="#E8C96A"/>
+            <use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="coin" href="#i-banknote" x="243" y="203" width="15" height="15" stroke="#E8C96A" style="animation-delay:.55s"/>
+            <use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="coin" href="#i-banknote" x="243" y="203" width="15" height="15" stroke="#E8C96A" style="animation-delay:1.1s"/>
           </g>
           <rect id="paycheck-rect" x="246" y="196" width="108" height="34" rx="17" fill="#121B3C" stroke="#334155" stroke-width="2"/>
           <text id="paycheck-text" x="300" y="216" text-anchor="middle" fill="#64748B" font-size="10" font-weight="600">Yearly paycheck</text>
           <g id="tank-overlay" class="hidden">
             <rect x="52" y="98" width="166" height="26" rx="13" fill="#0A1128" opacity="0.85"/>
-            <text x="135" y="115" text-anchor="middle" fill="#2DD4BF" font-size="10.5" font-weight="600">♾️ Paycheck never stops</text>
+            <text x="135" y="115" text-anchor="middle" fill="#2DD4BF" font-size="10.5" font-weight="600">Paycheck never stops</text>
           </g>
         </svg>
         <p id="spigot-caption" class="text-center text-sm mt-3 text-slate-500">The tank is full. Open the spigot to begin income.</p>
@@ -778,13 +789,13 @@ html.omma-bucket-on #iulstep0 svg{display:none}
         <h4 class="text-sm font-semibold text-slate-300 mb-3">The floor, in one picture</h4>
         <div class="grid grid-cols-2 gap-4 text-center">
           <div class="p-4 rounded-xl bg-navy-950 border border-signal-red/25">
-            <p class="text-2xl">📉</p>
+            <p class="hxi-big" style="color:#B4553C"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-trendDown"></use></svg></p>
             <p class="text-sm text-slate-300 mt-1">Market's worst year</p>
             <p class="font-display text-2xl text-signal-red tnum mt-1">−38%</p>
             <p class="text-[10px] text-slate-500 mt-1">e.g., 2008-style shock</p>
           </div>
           <div class="p-4 rounded-xl bg-navy-950 border" style="border-color:rgba(45,212,191,.35)">
-            <p class="text-2xl">🛡️</p>
+            <p class="hxi-big" style="color:#0E8C8C"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-shieldOk"></use></svg></p>
             <p class="text-sm text-slate-300 mt-1">Your worst year</p>
             <p class="font-display text-2xl tnum mt-1" style="color:#2DD4BF">0%</p>
             <p class="text-[10px] text-slate-500 mt-1">the floor, by contract</p>
@@ -862,7 +873,7 @@ html.omma-bucket-on #iulstep0 svg{display:none}
 <!-- ============ TAB 4 · ADVISOR MODE ============ -->
 <section id="tab-advisor" class="tabsec hidden py-8">
   <div id="advisor-gate" class="max-w-md mx-auto card p-8 text-center mt-8">
-    <p class="text-4xl mb-3">🔒</p>
+    <p class="hxi-big mb-3" style="color:#B08E22"><svg class="hxi hxi-2x" aria-hidden="true"><use href="#i-lock"></use></svg></p>
     <h2 class="font-display text-2xl text-white">Advisor Mode</h2>
     <p class="mt-2 text-sm text-slate-400">Backstage prep — objection handling and talk tracks. Not designed for client screens.</p>
     <button id="unlockbtn" class="btn btn-primary mt-6">I'm the advisor — unlock</button>
@@ -875,21 +886,21 @@ html.omma-bucket-on #iulstep0 svg{display:none}
         <h2 class="font-display text-3xl text-white">Objection Dashboard</h2>
         <p class="mt-1 text-slate-400 text-sm">Objection → reframe → one-liner. Return to the analogy, not the argument.</p>
       </div>
-      <button id="lockbtn" class="shrink-0 text-xs text-slate-500 hover:text-slate-300 border border-navy-700 rounded-lg px-3 py-1.5">Lock 🔒</button>
+      <button id="lockbtn" class="shrink-0 text-xs text-slate-500 hover:text-slate-300 border border-navy-700 rounded-lg px-3 py-1.5">Lock <svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg></button>
     </div>
 
     <div class="mb-6 p-4 rounded-xl border border-signal-red/30 bg-signal-red/5 text-xs text-slate-300">
-      ⚠️ <span class="font-semibold text-signal-red">Compliance first:</span> never call an IUL an "investment," never guarantee non-guaranteed values, and always pair projections with the carrier illustration. Talk tracks below are positioning aids — your broker-dealer / IMO compliance guidance governs.
+      <svg class="hxi" aria-hidden="true"><use href="#i-warning"></use></svg> <span class="font-semibold text-signal-red">Compliance first:</span> never call an IUL an "investment," never guarantee non-guaranteed values, and always pair projections with the carrier illustration. Talk tracks below are positioning aids — your broker-dealer / IMO compliance guidance governs.
     </div>
 
     <div id="objections" class="space-y-3"></div>
 
     <h3 class="font-display text-xl text-gold-300 mt-10 mb-4">Quick-reference anchors</h3>
     <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <div data-omma-card class="card p-4"><p class="text-2xl">🛡️</p><p class="text-xs text-slate-400 mt-1">IUL floor</p><p class="font-display text-lg text-white">0% — losses excluded by design</p></div>
-      <div data-omma-card class="card p-4"><p class="text-2xl">🚨</p><p class="text-xs text-slate-400 mt-1">OLP rider</p><p class="font-display text-lg text-white">Brake engages → no forced lapse</p></div>
-      <div data-omma-card class="card p-4"><p class="text-2xl">📜</p><p class="text-xs text-slate-400 mt-1">FIA paycheck</p><p class="font-display text-lg text-white">Contractual, for life, joint option</p></div>
-      <div data-omma-card class="card p-4"><p class="text-2xl">🧮</p><p class="text-xs text-slate-400 mt-1">Sequence risk</p><p class="font-display text-lg text-white">Floors remove the worst-decade problem</p></div>
+      <div data-omma-card class="card p-4"><p class="hxi-big" style="color:#0E8C8C"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-shieldOk"></use></svg></p><p class="text-xs text-slate-400 mt-1">IUL floor</p><p class="font-display text-lg text-white">0% — losses excluded by design</p></div>
+      <div data-omma-card class="card p-4"><p class="hxi-big" style="color:#B08E22"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-siren"></use></svg></p><p class="text-xs text-slate-400 mt-1">OLP rider</p><p class="font-display text-lg text-white">Brake engages → no forced lapse</p></div>
+      <div data-omma-card class="card p-4"><p class="hxi-big" style="color:#B08E22"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-scroll"></use></svg></p><p class="text-xs text-slate-400 mt-1">FIA paycheck</p><p class="font-display text-lg text-white">Contractual, for life, joint option</p></div>
+      <div data-omma-card class="card p-4"><p class="hxi-big" style="color:#B08E22"><svg class="hxi hxi-xl" aria-hidden="true"><use href="#i-abacus"></use></svg></p><p class="text-xs text-slate-400 mt-1">Sequence risk</p><p class="font-display text-lg text-white">Floors remove the worst-decade problem</p></div>
     </div>
   </div>
 </section>
@@ -1126,6 +1137,7 @@ $('spigotbtn').addEventListener('click',()=>{ buzz();
 (function floorChart(){
   const market=[100,112,92,100,115,106,118,134,101,119,131];   // hypothetical — not any actual index
   const fia   =[100,109,109,119,130,130,141,154,154,168,183];  // 0% floor + ratchet pattern
+  window.__floorData={market,fia,down:[1,4,7]};   // one source of truth for the 3D field
   const down  =[1,4,7];
   const X=i=>42+i*32.6, Y=v=>210-(v-85)*(164/105);
   const pts=a=>a.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ');
@@ -1137,7 +1149,7 @@ $('spigotbtn').addEventListener('click',()=>{ buzz();
   down.forEach(d=>svg+=`<rect x="${X(d).toFixed(1)}" y="46" width="32.6" height="164" fill="#F87171" opacity="0.06"/>`);
   svg+=`<polyline points="${pts(market)}" fill="none" stroke="#64748B" stroke-width="2" stroke-linejoin="round"/>`;
   svg+=`<polyline points="${pts(fia)}" fill="none" stroke="#B08E22" stroke-width="2.5" stroke-linejoin="round"/>`;
-  down.forEach(d=>svg+=`<text x="${(X(d)+16.3).toFixed(1)}" y="${(Y(fia[d])-8).toFixed(1)}" text-anchor="middle" font-size="10">🔒</text>`);
+  down.forEach(d=>svg+=`<use fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" href="#i-lock" x="${(X(d)+16.3-5).toFixed(1)}" y="${(Y(fia[d])-16).toFixed(1)}" width="10" height="10" stroke="#B08E22"/>`);
   svg+=`<text x="${(X(10)-4).toFixed(1)}" y="${(Y(fia[10])-8).toFixed(1)}" fill="#E8C96A" font-size="11" font-weight="600" text-anchor="end">FIA</text>`;
   svg+=`<text x="${(X(10)-4).toFixed(1)}" y="${(Y(market[10])+14).toFixed(1)}" fill="#94A3B8" font-size="11" text-anchor="end">Market</text>`;
   svg+='<g id="floor-cross" style="display:none"><line id="fc-line" y1="46" y2="210" stroke="#D4AF37" stroke-width="1" opacity="0.5" stroke-dasharray="3 3"/><circle id="fc-fia" r="4.5" fill="#B08E22" stroke="#0A1128" stroke-width="2"/><circle id="fc-mkt" r="4.5" fill="#64748B" stroke="#0A1128" stroke-width="2"/></g>';
@@ -1299,7 +1311,7 @@ function renderCredit(){
     const el=$(id);
     el.textContent=(v>0?'+':'')+v.toFixed(1)+'%';
     el.style.color = v>0?'#E8C96A':'#2DD4BF';
-    if(v===0) el.textContent='0% 🛡️';
+    if(v===0) el.textContent='0% — floor holds';
   });
   $('cr-note').textContent = idx<0
     ? 'Down year — every strategy holds at the 0% floor.'
@@ -1382,31 +1394,31 @@ function renderMygaCalc(){
 
 /* ---------- advisor dashboard ---------- */
 const OBJECTIONS=[
-  {icon:'💸',title:'“IULs have high fees.”',
+  {icon:'moneyOut',title:'“IULs have high fees.”',
    objection:'I read that IULs are loaded with fees and commissions.',
    reframe:'True for badly designed policies. The Herron Method buys the MINIMUM insurance the IRS allows and overfunds the rest, so cost per dollar of cash value collapses after the early years. Show the drag column in the calculator — 1.5% early, 0.5% later — against the value of never taking a negative year.',
    oneliner:'You are not paying for insurance — you are paying for the floor.'},
-  {icon:'📊',title:'“Buy term and invest the difference.”',
+  {icon:'bars',title:'“Buy term and invest the difference.”',
    objection:'Term is cheaper. I would rather invest the difference in index funds.',
    reframe:'It works if they actually invest the difference, never panic-sell in a crash, and accept a tax bill on every dollar out. This strategy is not instead of the market — it is the tax-free, loss-free slice that lets their market money ride out storms.',
    oneliner:'Term protects your family. This protects your retirement paycheck.'},
-  {icon:'🔐',title:'“Annuities lock up my money.”',
+  {icon:'lock',title:'“Annuities lock up my money.”',
    objection:'I do not want my money tied up for ten years.',
    reframe:'Reframe from lockup to job assignment: this slice of money has ONE job — a guaranteed paycheck. Most FIAs still allow around 10% free withdrawals annually, and the rest of the portfolio stays fully liquid. Ask: what is the job of this specific dollar?',
    oneliner:'We are not locking money up — we are locking income in.'},
-  {icon:'🏦',title:'“What if the insurance company fails?”',
+  {icon:'bank',title:'“What if the insurance company fails?”',
    objection:'A guarantee is only as good as the company behind it.',
    reframe:'Agree — and make it a selection criterion. Walk through carrier ratings (A or better), statutory reserve requirements, and the state guaranty association backstop. Insurers must hold reserves against every contract; that is why the guarantee is credible.',
    oneliner:'That is exactly why we focus on established, financially strong carriers with long track records.'},
-  {icon:'📉',title:'“The caps will get lowered.”',
+  {icon:'trendDown',title:'“The caps will get lowered.”',
    objection:'Carriers can cut the cap after I buy. Then what?',
    reframe:'Honest answer: yes, caps float with interest rates and options pricing — in both directions. What never moves is the 0% floor, which is contractual. That is why the calculator defaults are conservative rather than showing the current cap as forever.',
    oneliner:'Caps can move. The 0% floor never does.'},
-  {icon:'🏦',title:'“Why not just buy a CD?”',
+  {icon:'bank',title:'“Why not just buy a CD?”',
    objection:'The bank is FDIC-insured. Why would I take carrier risk for a similar rate?',
    reframe:'Acknowledge FDIC, then compare the full picture: fixed annuities typically out-yield same-term CDs, interest compounds tax-deferred instead of being taxed every April, and carriers stand behind reserves plus the state guaranty association. Run Mode C — the after-tax gap widens every extra year of deferral.',
    oneliner:'A CD pays the IRS every year — the vault lets your interest compound untouched.'},
-  {icon:'🚀',title:'“I can do better in the market.”',
+  {icon:'rocket',title:'“I can do better in the market.”',
    objection:'The S&P averages 10%. Why would I accept capped returns?',
    reframe:'Agree enthusiastically — then reframe roles. This is not the growth engine; it is the anchor that removes sequence-of-returns risk from the income years. Because the floor money is safe, the market money can stay aggressive instead of de-risking at the worst time.',
    oneliner:'Keep your growth money growing — this is the money that lets it.'},
@@ -1417,19 +1429,19 @@ function renderObjections(){
     const open=store.openObjection===i;
     return `<div data-omma-card class="card overflow-hidden transition-all ${open?'card-active':''}">
       <button data-obj="${i}" class="objbtn w-full flex items-center justify-between px-5 py-4 text-left">
-        <span class="font-semibold text-slate-100"><span class="mr-2">${o.icon}</span>${o.title}</span>
+        <span class="font-semibold text-slate-100"><svg class="hxi mr-2" aria-hidden="true"><use href="#i-${o.icon}"></use></svg>${o.title}</span>
         <span class="text-gold-400 chev text-sm ${open?'rot180':''}">▼</span>
       </button>
       <div class="acc-body ${open?'openacc':''}"><div class="acc-inner">
         <div class="px-5 pb-5 grid md:grid-cols-3 gap-3 text-sm">
           <div class="p-4 rounded-xl bg-navy-950 border border-signal-red/20">
-            <p class="text-[10px] uppercase tracking-wider text-signal-red mb-1.5">🗣️ The objection</p>
+            <p class="text-[10px] uppercase tracking-wider text-signal-red mb-1.5"><svg class="hxi" aria-hidden="true"><use href="#i-speech"></use></svg> The objection</p>
             <p class="text-slate-300 italic">“${o.objection}”</p></div>
           <div class="p-4 rounded-xl bg-navy-950 border border-gold-400/20">
-            <p class="text-[10px] uppercase tracking-wider text-gold-400 mb-1.5">🔁 The reframe</p>
+            <p class="text-[10px] uppercase tracking-wider text-gold-400 mb-1.5"><svg class="hxi" aria-hidden="true"><use href="#i-swap"></use></svg> The reframe</p>
             <p class="text-slate-300">${o.reframe}</p></div>
           <div class="p-4 rounded-xl bg-navy-950 border" style="border-color:rgba(45,212,191,.25)">
-            <p class="text-[10px] uppercase tracking-wider mb-1.5" style="color:#2DD4BF">🎯 The one-liner</p>
+            <p class="text-[10px] uppercase tracking-wider mb-1.5" style="color:#2DD4BF"><svg class="hxi" aria-hidden="true"><use href="#i-target"></use></svg> The one-liner</p>
             <p class="text-white font-medium">“${o.oneliner}”</p></div>
         </div></div></div></div>`;
   }).join('');
@@ -1463,6 +1475,8 @@ renderIulCalc(); renderFiaCalc(); renderMygaCalc(); renderCredit(); renderObject
 })();
 </script>
 <script type="module" src="js/omma-3d.js"></script>
+<script defer src="js/hx-icons.js"></script>
 <script type="module" src="js/omma-matrix.js"></script>
+<script type="module" src="js/omma-charts.js"></script>
 </body>
 </html>
