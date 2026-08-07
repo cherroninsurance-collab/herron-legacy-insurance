@@ -35,8 +35,10 @@
    same "dark line on light" language as the heron emblem.
 
    SAFETY
-     • fine pointers only — phones/tablets keep the existing lighter page
-       (profiling history in CLAUDE.md: mobile cost is cumulative compositing)
+     • touch devices run the REDUCED profile, not the full one — see MOBILE
+       below (profiling history in CLAUDE.md: mobile cost is cumulative
+       compositing, so the cap is on how many targets paint, not on how many
+       exist)
      • prefers-reduced-motion and low-end devices bail entirely
      • every init is wrapped; one throwing scene can never stop the others
      • all of it is decoration — no content, disclosure or control depends on it
@@ -50,6 +52,26 @@ import * as THREE from '../vendor/three.module.min.js';
    and the same scenes invert to bright metal on a dark field. Nothing else in
    the module branches on theme. */
 const DARK = document.documentElement.dataset.ommaTheme === 'dark';
+
+/* ------------------------------------------------------------ device profile --
+   MOBILE is not "off". It is a reduced profile, and the reduction that matters
+   is in the Painter's loop, not in what gets built:
+
+     • ONE target paints per frame — the one nearest the middle of the viewport.
+       This is the whole fix. The mobile cost on this site has always been
+       cumulative compositing (CLAUDE.md), and a per-frame drawImage into every
+       on-screen canvas is exactly that. Capping the count means the bill does
+       not grow when a phone happens to show three cards at once; the others
+       simply hold the last frame they were painted, which on a slow drift is
+       indistinguishable.
+     • 24fps, device pixel ratio 1, antialias off — the same three levers the
+       hero scene already pulls on its reduced path.
+     • the quote tower is skipped: it is the largest geometry here and it sits
+       beside the estimate figures, where a phone can least afford it. */
+const MOBILE = (() => {
+  try { return matchMedia('(pointer:coarse)').matches; } catch (e) { return false; }
+})();
+const MOBILE_FPS = 24;
 const C = DARK ? {
   navy:      0xE8C96A,   /* "edge" colour — gold hairlines on a navy page */
   navyDeep:  0x0A1128,
@@ -119,8 +141,11 @@ function centerOffset(el) {
    ========================================================================== */
 class Painter {
   constructor() {
-    this.pr = Math.min(devicePixelRatio || 1, 2);
-    this.gl = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    this.pr = MOBILE ? 1 : Math.min(devicePixelRatio || 1, 2);
+    this.gl = new THREE.WebGLRenderer({
+      antialias: !MOBILE, alpha: true,
+      powerPreference: MOBILE ? 'default' : 'high-performance'
+    });
     this.gl.setPixelRatio(1);                 /* device pixels are managed here */
     this.gl.setClearColor(0x000000, 0);
     this.gl.setScissorTest(true);
@@ -165,27 +190,55 @@ class Painter {
     return true;
   }
 
-  /* the offscreen buffer is as large as the biggest visible target */
-  fitBuffer() {
+  /* the offscreen buffer is as large as the biggest target that will actually
+     paint — on mobile that is the single focused one, so the buffer stops
+     resizing every time a larger scene merely scrolls into view */
+  fitBuffer(only, prime) {
     let mw = 1, mh = 1;
     for (const t of this.targets) {
       if (!t.visible) continue;
+      if (only && t !== only && t !== prime) continue;
       if (t.dw > mw) mw = t.dw;
       if (t.dh > mh) mh = t.dh;
     }
-    mw = Math.min(mw, 2400); mh = Math.min(mh, 1600);
+    const capW = MOBILE ? 1100 : 2400, capH = MOBILE ? 800 : 1600;
+    mw = Math.min(mw, capW); mh = Math.min(mh, capH);
     if (mw === this.bw && mh === this.bh) return;
     this.bw = mw; this.bh = mh;
     this.gl.setSize(mw, mh, false);
   }
 
+  /* On a phone, only the target nearest the middle of the viewport paints this
+     frame. Everything else keeps the last frame drawn into its own 2D canvas,
+     so nothing goes blank — it just stops updating while it is off to the side.
+     Returns null when nothing is visible. */
+  focused() {
+    let best = null, bestD = Infinity;
+    for (const t of this.targets) {
+      if (!t.visible) continue;
+      const d = Math.abs(centerOffset(t.el));
+      if (d < bestD) { bestD = d; best = t; }
+    }
+    return best;
+  }
+
   start() {
     if (this.running) return;
     this.running = true;
+    let acc = 0;
+    const step = 1 / MOBILE_FPS;
     const loop = () => {
       requestAnimationFrame(loop);
-      const dt = Math.min(this.clock.getDelta(), 0.05);
+      let dt = Math.min(this.clock.getDelta(), 0.05);
       if (this.hidden) return;
+      if (MOBILE) {
+        /* the skipped frames' time has to be handed to update(), or every
+           animation runs at the throttled rate instead of at real speed */
+        acc += dt;
+        if (acc < step) return;
+        dt = Math.min(acc, 0.05);
+        acc = 0;
+      }
       const t = this.clock.elapsedTime;
       scrollState.update();
       /* drop targets whose host left the document — the Protection Blueprint is
@@ -194,9 +247,23 @@ class Painter {
       if (this.targets.some(t => t.el !== document.documentElement && !t.el.isConnected)) {
         this.targets = this.targets.filter(t => t.el === document.documentElement || t.el.isConnected);
       }
-      this.fitBuffer();
+      /* Mobile paints the focused target, plus ONE target that has never been
+         painted at all. Without the second, a scene that is on screen but never
+         crosses the middle — two stacked cards, a pane beside a taller one —
+         stays permanently blank. Priming costs one extra draw per scene for the
+         life of the page, and after that the cap is back to one. */
+      const only = MOBILE ? this.focused() : null;
+      let prime = null;
+      if (only) {
+        for (const tg of this.targets) {
+          if (tg.visible && !tg.primed && tg !== only) { prime = tg; break; }
+        }
+      }
+      if (MOBILE && !only) return;
+      this.fitBuffer(only, prime);
       for (const tg of this.targets) {
         if (!tg.visible) continue;
+        if (only && tg !== only && tg !== prime) continue;
         this.measure(tg);
         try { tg.update(dt, t); } catch (e) { tg.visible = false; continue; }
         if (tg.paint === false) continue;
@@ -212,6 +279,7 @@ class Painter {
         this.gl.render(tg.scene, tg.camera);
         tg.ctx.clearRect(0, 0, tg.dw, tg.dh);
         tg.ctx.drawImage(this.buf, 0, 0, dw, dh, 0, 0, tg.dw, tg.dh);
+        tg.primed = true;
       }
     };
     loop();
@@ -1067,10 +1135,14 @@ function boot() {
   const steps = [
     ['card surfaces', () => cardSurfaces(painter)],
     ['form surfaces', () => formSurfaces(painter)],
-    ['quote tower', () => quoteTower(painter)],
+    /* the tower is the heaviest geometry on the page and it stands beside the
+       estimate figures — the one place a phone must stay responsive */
+    ...(MOBILE ? [] : [['quote tower', () => quoteTower(painter)]]),
     ['fit compass', () => fitCompass(painter)],
     ['tool devices', () => toolDevices(painter)],
-    ['polish', () => polish()]
+    /* polish is pointer affordances — magnets and tracked sheens. A touch
+       device has no cursor to track, so it only adds listeners that never fire */
+    ...(MOBILE ? [] : [['polish', () => polish()]])
   ];
   for (const [, fn] of steps) {
     try { fn(); } catch (e) { /* one dead scene must never stop the rest */ }
@@ -1083,12 +1155,17 @@ window.__ommaBoot = boot;
 (function gate() {
   try {
     const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
-    const coarse = matchMedia('(pointer:coarse)').matches;
-    const lowMem = navigator.deviceMemory && navigator.deviceMemory <= 2;
+    const lowMem = navigator.deviceMemory && navigator.deviceMemory <= 4;
     const lowCpu = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2;
-    /* Phones and tablets keep the lighter page on purpose — profiling showed the
-       mobile cost here is cumulative compositing, not any single scene. */
-    if (reduce || coarse || lowMem || lowCpu) { window.__ommaGated = true; return; }
+    /* Touch is no longer a reason to bail — it selects the reduced profile
+       above. Reduced motion and genuinely weak hardware still bail outright,
+       and the memory floor is raised on mobile because a phone with 4GB has far
+       less headroom than a desktop with the same number. */
+    if (reduce || lowCpu || (lowMem && (MOBILE || navigator.deviceMemory <= 2))) {
+      window.__ommaGated = true;
+      return;
+    }
+    document.documentElement.classList.add(MOBILE ? 'omma-lite' : 'omma-full');
     if (document.readyState === 'loading') addEventListener('DOMContentLoaded', boot, { once: true });
     else boot();
   } catch (e) { /* no 3D layer; the page is already complete without it */ }
