@@ -13,15 +13,15 @@
 <link rel="apple-touch-icon" href="logos/mark/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Sora:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"></noscript>
 <style>
 :root{
   --navy:#0E1F3E; --navy-deep:#081226; --ink:#3A4A6B; --ink-soft:#5A6A8C;
   --brass:#BE9235; --brass-lit:#E0BE79; --gold-text:#96660F; --gold-lg:#B07E22;
   --paper:#FDFCF9; --porcelain:#F4F6FA; --line:rgba(14,31,62,.12);
   --sans:'Inter',system-ui,-apple-system,sans-serif;
-  --disp:'Sora',var(--sans);
+  --disp:'Playfair Display','Iowan Old Style',Georgia,serif; --ui:'Sora',var(--sans);
   --mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box}
@@ -80,7 +80,7 @@ img{max-width:100%;height:auto}
   color:var(--gold-text);margin:0 0 14px;
 }
 h1{
-  font-family:var(--disp);font-weight:700;letter-spacing:-.025em;line-height:1.05;
+  font-family:var(--disp);font-weight:600;letter-spacing:-.01em;line-height:1.05;
   font-size:clamp(34px,6vw,60px);color:var(--navy);margin:0 0 20px;
 }
 h1 em{font-style:normal;color:var(--gold-lg)}
@@ -100,12 +100,14 @@ h1 em{font-style:normal;color:var(--gold-lg)}
 }
 .plan-panel{
   max-width:560px;margin-left:clamp(0px,6vw,90px);
-  background:rgba(255,255,255,.80);border:1px solid var(--line);border-radius:20px;
+  background:rgba(255,255,255,.80);border:1px solid rgba(14,31,62,.11);border-radius:18px;
   padding:clamp(22px,4vw,34px);
-  box-shadow:0 20px 60px rgba(14,31,62,.09);
+  /* the sitewide glass grammar: lit top edge, hairline, shadow UNDER the pane */
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 1px 2px rgba(14,31,62,.05),
+    0 24px 48px -24px rgba(14,31,62,.22);
 }
-@supports (backdrop-filter:blur(20px)){
-  .plan-panel{backdrop-filter:blur(20px) saturate(1.25);background:rgba(255,255,255,.62)}
+@supports (backdrop-filter:blur(16px)){
+  .plan-panel{backdrop-filter:blur(16px) saturate(1.5);background:rgba(255,255,255,.6)}
 }
 @media (pointer:coarse){
   .plan-panel{backdrop-filter:none;background:rgba(255,255,255,.93)}
@@ -120,7 +122,7 @@ h1 em{font-style:normal;color:var(--gold-lg)}
 .plan-num{font-family:var(--mono);font-size:12px;letter-spacing:.16em;
   text-transform:uppercase;color:var(--gold-text);margin:0 0 10px}
 .plan-panel h2{
-  font-family:var(--disp);font-weight:700;letter-spacing:-.02em;line-height:1.1;
+  font-family:var(--disp);font-weight:600;letter-spacing:-.005em;line-height:1.1;
   font-size:clamp(26px,3.6vw,38px);color:var(--navy);margin:0 0 14px;
 }
 .plan-panel h2 em{font-style:normal;color:var(--gold-lg);display:block}
@@ -203,7 +205,7 @@ h1 em{font-style:normal;color:var(--gold-lg)}
   border-top:1px solid var(--line);padding:clamp(48px,8vw,84px) clamp(20px,5vw,40px);
 }
 .plan-close-in{max-width:820px;margin:0 auto;text-align:center}
-.plan-close h2{font-family:var(--disp);font-weight:700;color:var(--navy);
+.plan-close h2{font-family:var(--disp);font-weight:600;color:var(--navy);
   font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;margin:0 0 14px;line-height:1.12}
 .sources{
   position:relative;z-index:1;background:var(--paper);border-top:1px solid var(--line);

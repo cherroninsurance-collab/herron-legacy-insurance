@@ -200,13 +200,16 @@ void main(){
   vec2  px = (vUv - 0.5) * uSize;                 // CSS-px coords, centred
   vec2  half_ = uSize * 0.5 - vec2(uBleed);       // the pane rect inside the apron
 
-  /* -- Fluid border: wobble the distance field itself ---------------------
-     Adding low-frequency noise (0.8 cycles across the pane, slow drift) to
-     the SDF makes the *boundary* undulate — the silhouette breathes like a
-     droplet held in surface tension. Amplitude 3px: perceptible, not wobbly. */
-  float r = min(half_.x, half_.y) * 0.42;         // generous squircle radius
+  /* -- Crisp architectural border -----------------------------------------
+     This used to be a droplet: radius at 42% of the pane (pill corners) with
+     noise ADDED TO THE SDF so the silhouette undulated. On a page selling
+     six-figure financial products a breathing outline reads as a toy — the
+     user's verdict, and correct. The silhouette is now FIXED: a 24px-class
+     radius that matches the CSS grammar, no boundary noise. The liquid life
+     stays where it belongs — in the refraction inside the pane, never in the
+     shape of the pane. */
+  float r = min(24.0, min(half_.x, half_.y) * 0.22);
   float d = sdSquircle(px, half_, r, 3.4);
-  d += snoise(vec3(px * 0.008, t * 0.28)) * 3.0;
 
   /* -- Thick-slab height profile ------------------------------------------
      Model the pane as glass with a bevelled edge of width bw. Let
@@ -214,7 +217,10 @@ void main(){
      quarter-circle arc  h = sqrt(1-(1-x)²)  — flat in the middle, curling
      hard at the rim exactly like a slab of poured glass. Its analytic slope
      (1-x)/h  is the magnitude of the normal's tilt. */
-  float bw = min(min(half_.x, half_.y) * 0.30, 46.0);
+  /* bevel narrowed 46px -> 20px: the wide band curled the whole rim like a
+     poured slab; a tight bevel reads as machined edge, which is the register
+     this page needs */
+  float bw = min(min(half_.x, half_.y) * 0.18, 20.0);
   float x  = clamp(-d / bw, 0.0, 1.0);
   float h  = sqrt(max(1.0 - (1.0 - x) * (1.0 - x), 1e-4));
   float slope = (1.0 - x) / h;                    // ∞ at rim → clamp below
@@ -235,9 +241,9 @@ void main(){
      We approximate with  offset = -N.xy · (η·bw·h)  so displacement grows
      with both surface tilt and local glass thickness. The cursor adds a
      small global warp so the interior visibly tracks the hand. */
-  float eta = 0.75;                                // "refractive strength" (magnified)
+  float eta = 0.55;                                // calmer, still visibly glass
   vec2 refr = -N.xy * (eta * bw * (0.35 + 0.65 * h));
-  vec2 warp = uMouse * uSize * 0.028;              // cursor-follow warp (magnified)
+  vec2 warp = uMouse * uSize * 0.014;              // cursor-follow, subtle
   vec2 suv  = px + refr + warp + vec2(0.0, uScroll);
 
   /* -- Chromatic aberration ------------------------------------------------
