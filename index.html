@@ -1899,7 +1899,7 @@ html{overflow-x:clip}
         <span class="tag">Live</span>
         <a class="expand" href="https://mellow-tanuki-a026b1.netlify.app" target="_blank" rel="noopener">Open full screen ↗</a>
       </div>
-      <iframe id="blueprintFrame" src="https://mellow-tanuki-a026b1.netlify.app" title="Legacy Blueprint — build your coverage plan" loading="lazy"></iframe>
+      <iframe id="blueprintFrame" src="protection-blueprint.html" title="Legacy Blueprint — build your coverage plan" loading="lazy"></iframe>
       <div class="bp-foot">
         <span>Estimates are illustrative, not an offer of coverage or a quoted rate.</span>
         <span>Not loading? Call or text <a href="tel:6103608583">610-360-8583</a></span>
@@ -1934,6 +1934,52 @@ html{overflow-x:clip}
       <p class="q-note">Estimates are illustrative ranges based on typical non-guaranteed industry pricing for healthy applicants and are <b>not an offer of coverage or a quoted rate</b>. Actual premiums and annuity rates are determined solely by carrier underwriting and current product offerings, and vary by state, health class, and carrier. Annuity and IUL projections use illustrative, non-guaranteed rates you select — IUL figures reflect a typical policy-cost band and are not a carrier illustration. Hybrid LTC and disability figures are broad planning ranges; actual pricing depends on health, occupation class, carrier, and state. Get exact figures on a free call.</p>
     </div>
     </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING ============ -->
+<section class="booking" id="booking">
+  <div class="glow glow-blue" style="top:-200px;right:-200px" aria-hidden="true"></div>
+  <div class="glow glow-brass" style="bottom:-180px;left:-140px" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="book-grid">
+      <div class="book-copy reveal">
+        <span class="eyebrow">Book your call</span>
+        <h2>Fifteen minutes. Real numbers. Zero pressure.</h2>
+        <p>Pick a time that works for you and Connor will call you directly — not a call center, not a script, just straight answers with your actual quotes on screen.</p>
+        <span class="hx-cta-note">No sales script. No obligation. If we're not a fit in the first five minutes, I'll tell you.</span>
+        <div class="book-points">
+          <div class="book-point"><span class="n">01</span><div><b>Pick your time</b><span>Choose any open slot on the live calendar — it syncs instantly.</span></div></div>
+          <div class="book-point"><span class="n">02</span><div><b>Get a reminder</b><span>Email confirmation, so nothing slips through.</span></div></div>
+          <div class="book-point"><span class="n">03</span><div><b>See your options</b><span>Quotes from 20+ carriers, side by side, on the first call.</span></div></div>
+        </div>
+      </div>
+      <div class="book-frame reveal">
+        <!-- Cal inline embed code begins -->
+        <div id="my-cal-inline-15min"></div>
+        <script type="text/javascript">
+          (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+          Cal("init", "15min", {origin:"https://app.cal.com"});
+          Cal.config = Cal.config || {};
+          Cal.config.forwardQueryParams = true;
+          Cal.ns["15min"]("inline", {
+            elementOrSelector:"#my-cal-inline-15min",
+            config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
+            calLink: "herron-insurance/15min",
+          });
+          Cal.ns["15min"]("ui", {
+            "hideEventTypeDetails": false,
+            "layout": "month_view",
+            "cssVarsPerTheme": {
+              "light": { "cal-brand": "#C9973B" },
+              "dark":  { "cal-brand": "#E2B45C" }
+            }
+          });
+        </script>
+        <!-- Cal inline embed code ends -->
+        <div class="book-fallback">Trouble with the calendar? Call or text <a href="tel:6103608583" style="color:var(--navy);font-weight:600">610-360-8583</a></div>
+      </div>
     </div>
   </div>
 </section>
@@ -2007,51 +2053,6 @@ html{overflow-x:clip}
   </div>
 </section>
 
-<!-- ============ BOOKING ============ -->
-<section class="booking" id="booking">
-  <div class="glow glow-blue" style="top:-200px;right:-200px" aria-hidden="true"></div>
-  <div class="glow glow-brass" style="bottom:-180px;left:-140px" aria-hidden="true"></div>
-  <div class="wrap">
-    <div class="book-grid">
-      <div class="book-copy reveal">
-        <span class="eyebrow">Book your call</span>
-        <h2>Fifteen minutes. Real numbers. Zero pressure.</h2>
-        <p>Pick a time that works for you and Connor will call you directly — not a call center, not a script, just straight answers with your actual quotes on screen.</p>
-        <span class="hx-cta-note">No sales script. No obligation. If we're not a fit in the first five minutes, I'll tell you.</span>
-        <div class="book-points">
-          <div class="book-point"><span class="n">01</span><div><b>Pick your time</b><span>Choose any open slot on the live calendar — it syncs instantly.</span></div></div>
-          <div class="book-point"><span class="n">02</span><div><b>Get a reminder</b><span>Email confirmation, so nothing slips through.</span></div></div>
-          <div class="book-point"><span class="n">03</span><div><b>See your options</b><span>Quotes from 20+ carriers, side by side, on the first call.</span></div></div>
-        </div>
-      </div>
-      <div class="book-frame reveal">
-        <!-- Cal inline embed code begins -->
-        <div id="my-cal-inline-15min"></div>
-        <script type="text/javascript">
-          (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
-          Cal("init", "15min", {origin:"https://app.cal.com"});
-          Cal.config = Cal.config || {};
-          Cal.config.forwardQueryParams = true;
-          Cal.ns["15min"]("inline", {
-            elementOrSelector:"#my-cal-inline-15min",
-            config: {"layout":"month_view","useSlotsViewOnSmallScreen":"true"},
-            calLink: "herron-insurance/15min",
-          });
-          Cal.ns["15min"]("ui", {
-            "hideEventTypeDetails": false,
-            "layout": "month_view",
-            "cssVarsPerTheme": {
-              "light": { "cal-brand": "#C9973B" },
-              "dark":  { "cal-brand": "#E2B45C" }
-            }
-          });
-        </script>
-        <!-- Cal inline embed code ends -->
-        <div class="book-fallback">Trouble with the calendar? Call or text <a href="tel:6103608583" style="color:var(--navy);font-weight:600">610-360-8583</a></div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- ============ FAQ ============ -->
 <section id="faq">
