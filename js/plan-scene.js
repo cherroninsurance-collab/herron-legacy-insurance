@@ -79,19 +79,66 @@ import * as THREE from '../vendor/three.module.min.js';
      The export's four-light bright-scene setup, kept intact: ivory ambient,
      warm key from upper-left, cool rim from behind, warm bounce from below.
      Lighting a light scene is harder than lighting a dark one and this works. */
-  scene.add(new THREE.AmbientLight(0xF7F4EC, 0.75));
+  /* An environment to reflect, built from six canvas gradients — no asset, no
+     network. Without one, metal resolves to black, which is why the materials
+     below used to sit at low metalness. See envCube() in js/omma-3d.js.
+
+     The 0.70 gain is baked into the colours rather than set as
+     scene.environmentIntensity, which only exists from three r163 and is
+     silently ignored by the r161 build this site vendors. */
+  (function environment() {
+    const S = 256;
+    const GAIN = 0.70;
+    const dim = function (hex, k) {
+      const n = parseInt(hex.slice(1), 16);
+      return 'rgb(' + Math.round(Math.min(255, ((n >> 16) & 255) * k)) + ',' +
+                      Math.round(Math.min(255, ((n >> 8) & 255) * k)) + ',' +
+                      Math.round(Math.min(255, (n & 255) * k)) + ')';
+    };
+    const cfg = [
+      { top: '#FFF6E2', bot: '#E7D6AE', blob: ['#FFFFFF', .55, .30, .34] },
+      { top: '#EAF1FB', bot: '#CFDCF0', blob: ['#FFFFFF', .40, .62, .22] },
+      { top: '#FFFFFF', bot: '#FFF3D8', blob: ['#FFFDF4', .50, .50, .46] },
+      { top: '#F0EDE4', bot: '#DAD5C6', blob: null },
+      { top: '#FFF9EC', bot: '#EADFC2', blob: ['#FFFFFF', .62, .40, .26] },
+      { top: '#EDF2FA', bot: '#D6E0F2', blob: null }
+    ];
+    const faces = cfg.map(function (c) {
+      const cv = document.createElement('canvas');
+      cv.width = cv.height = S;
+      const g = cv.getContext('2d');
+      const grd = g.createLinearGradient(0, 0, 0, S);
+      grd.addColorStop(0, dim(c.top, GAIN));
+      grd.addColorStop(1, dim(c.bot, GAIN));
+      g.fillStyle = grd; g.fillRect(0, 0, S, S);
+      if (c.blob) {
+        const rg = g.createRadialGradient(
+          c.blob[1] * S, c.blob[2] * S, 0, c.blob[1] * S, c.blob[2] * S, c.blob[3] * S);
+        rg.addColorStop(0, dim(c.blob[0], Math.min(1, GAIN * 1.25)));
+        rg.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = rg; g.fillRect(0, 0, S, S);
+      }
+      return cv;
+    });
+    const tex = new THREE.CubeTexture(faces);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.needsUpdate = true;      /* required, and it fails silently without it */
+    scene.environment = tex;
+  })();
+
+  scene.add(new THREE.AmbientLight(0xF7F4EC, 0.58));
   const key = new THREE.DirectionalLight(0xFFF5DC, 1.65); key.position.set(-6, 10, 8); scene.add(key);
   const rim = new THREE.DirectionalLight(0xC8D8F0, 0.55); rim.position.set(10, 4, -8); scene.add(rim);
   const bounce = new THREE.DirectionalLight(0xE3C476, 0.20); bounce.position.set(0, -6, 4); scene.add(bounce);
 
   const M = {
-    navy:      new THREE.MeshStandardMaterial({ color: C.navy, roughness: 0.30, metalness: 0.42 }),
-    navyMid:   new THREE.MeshStandardMaterial({ color: C.navyMid, roughness: 0.38, metalness: 0.30 }),
-    brass:     new THREE.MeshStandardMaterial({ color: C.brass, roughness: 0.22, metalness: 0.68 }),
-    brassDim:  new THREE.MeshStandardMaterial({ color: C.brassDim, roughness: 0.32, metalness: 0.60 }),
+    navy:      new THREE.MeshStandardMaterial({ color: C.navy, roughness: 0.28, metalness: 0.62 }),
+    navyMid:   new THREE.MeshStandardMaterial({ color: C.navyMid, roughness: 0.36, metalness: 0.48 }),
+    brass:     new THREE.MeshStandardMaterial({ color: C.brass, roughness: 0.20, metalness: 0.88 }),
+    brassDim:  new THREE.MeshStandardMaterial({ color: C.brassDim, roughness: 0.30, metalness: 0.80 }),
     paper:     new THREE.MeshStandardMaterial({ color: C.paper, roughness: 0.55, metalness: 0.04 }),
     porcelain: new THREE.MeshStandardMaterial({ color: C.porcelain, roughness: 0.60, metalness: 0.02 }),
-    slate:     new THREE.MeshStandardMaterial({ color: C.slate, roughness: 0.42, metalness: 0.26 }),
+    slate:     new THREE.MeshStandardMaterial({ color: C.slate, roughness: 0.40, metalness: 0.44 }),
     glass:     new THREE.MeshStandardMaterial({ color: C.glass, roughness: 0.06, metalness: 0, transparent: true, opacity: 0.30 }),
     risk:      new THREE.MeshStandardMaterial({ color: C.risk, roughness: 0.38, metalness: 0.16 })
   };
@@ -191,12 +238,12 @@ import * as THREE from '../vendor/three.module.min.js';
 
     const sh = shieldPath(new THREE.Shape(), 0.69);
     const shMat = new THREE.MeshStandardMaterial({
-      color: C.brass, roughness: 0.22, metalness: 0.58, transparent: true, opacity: 0.40
+      color: C.brass, roughness: 0.20, metalness: 0.78, transparent: true, opacity: 0.40
     });
     const shield = new THREE.Mesh(new THREE.ExtrudeGeometry(sh, { depth: 0.06, bevelEnabled: false }), shMat);
     shield.position.set(-0.55, 0.0, 0.68); g.add(shield);
 
-    const ckMat = new THREE.MeshStandardMaterial({ color: C.brass, roughness: 0.2, metalness: 0.7 });
+    const ckMat = new THREE.MeshStandardMaterial({ color: C.brass, roughness: 0.18, metalness: 0.88 });
     const stem = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.55, 0.08), ckMat);
     stem.rotation.z = -0.55; stem.position.set(-0.73, -0.30, 0.78); g.add(stem);
     const arm = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.08), ckMat);
