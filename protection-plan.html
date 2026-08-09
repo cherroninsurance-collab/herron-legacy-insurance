@@ -461,6 +461,28 @@ h1 em{font-style:normal;color:var(--gold-lg)}
   </div>
 </footer>
 
-<script type="module" src="js/plan-scene.js"></script>
+<script>
+/* Payload gate — see index.html. three.js is 659 KB and every module below
+   imports it at the top, where a static import downloads BEFORE the device
+   check inside can decline. Phones therefore paid the whole library to run
+   code that immediately returned. The check moves out here, ahead of the
+   fetch: the SVG fallbacks these scenes were always built against carry the
+   page on touch, and they cost nothing. */
+(function () {
+  var ok = true;
+  try {
+    ok = !matchMedia('(pointer:coarse)').matches
+      && !matchMedia('(prefers-reduced-motion:reduce)').matches
+      && !(navigator.deviceMemory && navigator.deviceMemory <= 4)
+      && !(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+  } catch (e) { ok = false; }
+  if (!ok) { document.documentElement.classList.add('hx-light-payload'); return; }
+  ['js/plan-scene.js'].forEach(function (src) {
+    var m = document.createElement('script');
+    m.type = 'module'; m.src = src;
+    document.head.appendChild(m);
+  });
+})();
+</script>
 </body>
 </html>
