@@ -115,6 +115,14 @@
     .seg::-webkit-scrollbar{display:none}
   }
   #bnav{padding-bottom:env(safe-area-inset-bottom)}
+
+  /* Bottom clearance. pb-24 (96px) was a single number for two different
+     obstructions: a fixed compliance footer on desktop, and the app tab bar
+     PLUS that footer on phones, where the bar also carries
+     env(safe-area-inset-bottom). Content ran under both. Measured and split. */
+  .hx-body{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+  @media (min-width:768px){ .hx-body{padding-bottom:104px} }
+
   @media print{header{position:static}footer{position:static}.tabsec{display:block!important}body{background:#fff}#bnav{display:none}}
 </style>
 <style id="herron-overrides">
@@ -291,7 +299,7 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
 @media(max-width:640px){html.omma-bucket-on .omma-bucket{height:200px}}
 </style>
 </head>
-<body class="bg-navy-950 text-slate-200 min-h-screen pb-24"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
+<body class="bg-navy-950 text-slate-200 min-h-screen hx-body"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
 
 <!-- ============ HEADER ============ -->
 <div class="hairline"></div>
@@ -1475,26 +1483,33 @@ renderIulCalc(); renderFiaCalc(); renderMygaCalc(); renderCredit();
 </script>
 <script defer src="js/hx-icons.js"></script>
 <script>
-/* Payload gate — see index.html. three.js is 659 KB and every module below
-   imports it at the top, where a static import downloads BEFORE the device
-   check inside can decline. Phones therefore paid the whole library to run
-   code that immediately returned. The check moves out here, ahead of the
-   fetch: the SVG fallbacks these scenes were always built against carry the
-   page on touch, and they cost nothing. */
+/* Payload gate — three tiers, see index.html. Phones get the scenes, just not
+   in the critical path: nothing heavy is requested until load + idle, so first
+   paint stays fast and the visuals arrive a moment later. Reduced motion and
+   genuinely weak hardware still take the light path and keep the SVG
+   fallbacks these scenes were always built against. */
 (function () {
-  var ok = true;
-  try {
-    ok = !matchMedia('(pointer:coarse)').matches
-      && !matchMedia('(prefers-reduced-motion:reduce)').matches
-      && !(navigator.deviceMemory && navigator.deviceMemory <= 4)
-      && !(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
-  } catch (e) { ok = false; }
-  if (!ok) { document.documentElement.classList.add('hx-light-payload'); return; }
-  ['js/omma-3d.js', 'js/omma-matrix.js', 'js/omma-charts.js'].forEach(function (src) {
-    var m = document.createElement('script');
-    m.type = 'module'; m.src = src;
-    document.head.appendChild(m);
-  });
+  var reduce=false, coarse=false, weak=false;
+  try{
+    reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    coarse=matchMedia('(pointer:coarse)').matches;
+    weak=(navigator.deviceMemory&&navigator.deviceMemory<=2)||
+         (navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2);
+  }catch(e){ weak=true; }
+  if(reduce||weak){ document.documentElement.classList.add('hx-light-payload'); return; }
+  function inject(){ ['js/omma-3d.js', 'js/omma-matrix.js', 'js/omma-charts.js'].forEach(function(src){
+    var m=document.createElement('script'); m.type='module'; m.src=src;
+    document.head.appendChild(m); }); }
+  if(!coarse){ inject(); return; }
+  document.documentElement.classList.add('hx-deferred-payload');
+  var fired=false;
+  function go(){ if(fired) return; fired=true; inject(); }
+  function schedule(){
+    if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:2600});
+    else setTimeout(go,1200);
+  }
+  if(document.readyState==='complete') schedule();
+  else addEventListener('load',schedule,{once:true});
 })();
 </script>
 </body>

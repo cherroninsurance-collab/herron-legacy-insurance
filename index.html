@@ -2268,7 +2268,7 @@ window.HXGate = (function () {
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
 <button id="fabChat" aria-label="Open Legacy Concierge chat" aria-expanded="false">
   <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
-  <span class="fab-label"><b>Legacy Concierge</b><span><i></i>Ask anything</span></span>
+  <span class="fab-label"><b><span>Legacy Concierge</span></b><span><i></i>Ask anything</span></span>
 </button>
 
 <script>
@@ -3165,8 +3165,15 @@ renderFit();
 /* phones: keep the words — a bare disc reads as a logo — but drop the second
    line and tighten the pill so it never covers a third of the screen */
 @media(max-width:640px){
-  #fabChat{height:48px;padding:0 15px 0 9px;gap:8px}
-  #fabChat img{height:23px}
+  #fabChat{height:46px;padding:0 13px 0 8px;gap:7px}
+  #fabChat img{height:22px}
+  /* On a 390px screen the full wordmark made the pill ~55% of the width, and a
+     floating button that wide sits on top of whatever you are reading. The
+     short label keeps it a labelled way in — a bare disc reads as a watermark —
+     while giving the card back its right-hand half. */
+  #fabChat .fab-label b{font-size:13px}
+  #fabChat .fab-label b::before{content:"Ask Connor"}
+  #fabChat .fab-label b>span{display:none}
   #fabChat .fab-label b{font-size:12.5px}
   #fabChat .fab-label span{display:none}
 }
@@ -4083,31 +4090,67 @@ try{
      layer, which is the part that was carrying the look anyway.
      =================================================================== -->
 <script>
+/* ---------------------------------------------------------------------------
+   PAYLOAD GATE — three tiers, not two.
+
+   three.js is 659 KB and every module that needs it imports it at the top,
+   where a static import downloads BEFORE the device check inside can decline.
+   Loading it eagerly on a phone cost 12.6 seconds to load. Not loading it at
+   all cost the phone every visual on the page. Neither is the trade.
+
+   So: phones get the 3D, just not in the critical path. Nothing heavy is
+   requested until the page has loaded AND the main thread goes idle, which
+   keeps first paint and time-to-interactive where the light path put them
+   (DOMContentLoaded ~1.4s) and brings the scenes in a moment later, on a
+   thread that is no longer busy. The lite render profile inside omma-3d.js —
+   one target painted per frame, 24fps, DPR 1 — still applies once it runs.
+
+   Desktop-only extras stay desktop-only: liquid-glass.js bails on touch
+   internally, and GSAP's carousel is replaced by a native snap scroller
+   there, so loading either on a phone is pure waste.
+   --------------------------------------------------------------------------- */
 (function () {
-  var heavyOK = true;
+  var reduce = false, coarse = false, weak = false;
   try {
-    heavyOK = !matchMedia('(pointer:coarse)').matches
-           && !matchMedia('(prefers-reduced-motion:reduce)').matches
-           && !(navigator.deviceMemory && navigator.deviceMemory <= 4)
-           && !(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
-  } catch (e) { heavyOK = false; }
-  if (!heavyOK) { document.documentElement.classList.add('hx-light-payload'); return; }
-  /* liquid-glass.js belongs behind this gate too: it also imports three.js at
-     the top of the module and also bails on touch inside — so phones were
-     fetching 684 KB (three + the glass) to run precisely nothing. */
-  ['liquid-glass.js', 'js/omma-3d.js'].forEach(function (src) {
-    var m = document.createElement('script');
-    m.type = 'module'; m.src = src;
-    document.head.appendChild(m);
-  });
-  /* GSAP + the 3D carousel are desktop-only too: on touch the coverage grid
-     is a native snap scroller that never calls gsap, so 70 KB was being
-     downloaded and left unused. */
-  ['vendor/gsap.min.js', 'js/hx-wheel.js'].forEach(function (src) {
-    var t = document.createElement('script');
-    t.src = src; t.defer = true;
-    document.head.appendChild(t);
-  });
+    reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    coarse = matchMedia('(pointer:coarse)').matches;
+    /* <=2, NOT <=4. navigator.deviceMemory is quantised to 0.25/0.5/1/2/4/8
+       and 4 is what a great many ordinary desktops report — gating there
+       silently stripped the 3D from real machines. */
+    weak = (navigator.deviceMemory && navigator.deviceMemory <= 2) ||
+           (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
+  } catch (e) { weak = true; }
+
+  if (reduce || weak) { document.documentElement.classList.add('hx-light-payload'); return; }
+
+  function inject(list, module) {
+    list.forEach(function (src) {
+      var t = document.createElement('script');
+      if (module) t.type = 'module'; else t.defer = true;
+      t.src = src;
+      document.head.appendChild(t);
+    });
+  }
+
+  if (!coarse) {                                   /* desktop: everything, now */
+    inject(['liquid-glass.js', 'js/omma-3d.js'], true);
+    inject(['vendor/gsap.min.js', 'js/hx-wheel.js'], false);
+    return;
+  }
+
+  /* touch: the scenes, deferred until the page is done and the thread is free */
+  document.documentElement.classList.add('hx-deferred-payload');
+  var fired = false;
+  function go() {
+    if (fired) return; fired = true;
+    inject(['js/omma-3d.js'], true);
+  }
+  function schedule() {
+    if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 2600 });
+    else setTimeout(go, 1200);
+  }
+  if (document.readyState === 'complete') schedule();
+  else addEventListener('load', schedule, { once: true });
 })();
 </script>
 <!-- The template's non-3D design code (ticker, breakdown bars, staggered lift,
