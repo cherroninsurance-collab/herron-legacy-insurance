@@ -35,6 +35,41 @@
   .btn-teal{background:rgba(45,212,191,.1);color:#2DD4BF;border-color:rgba(45,212,191,.45)}
   .btn-teal:hover{background:rgba(45,212,191,.16)}
   .btn-danger{background:rgba(248,113,113,.1);color:#F87171;border-color:rgba(248,113,113,.45)}
+
+  /* ------------------------------------------------------------- the gate --
+     Calculated figures on this page sit behind contact details or a booked
+     call. The compliance footer, every step's explanatory copy and the
+     disclosure under each calculator stay OUTSIDE the locked region — a
+     disclosure behind a form is the one thing an insurance page must never
+     do. The consent checkbox is never required: the TCPA forbids making
+     consent to automated contact a condition of receiving something. */
+  .hxg-wrap{position:relative}
+  .hxg-locked{filter:blur(9px) saturate(.65);opacity:.45;pointer-events:none;user-select:none}
+  .hxg{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;padding:14px}
+  .hxg-card{width:min(410px,100%);background:#101B36;border:1px solid rgba(212,175,55,.4);
+    border-left:3px solid #D4AF37;border-radius:16px;padding:20px 22px;
+    box-shadow:0 26px 60px -20px rgba(0,0,0,.7)}
+  .hxg-card h4{font-family:'Playfair Display',Georgia,serif;font-size:19px;color:#fff;margin:0 0 4px}
+  .hxg-sub{font-size:13px;color:#94A3B8;margin:0 0 14px;line-height:1.5}
+  .hxg-row{display:flex;gap:9px;margin-bottom:9px}
+  .hxg-row input{flex:1;min-width:0}
+  .hxg input[type=text],.hxg input[type=email],.hxg input[type=tel]{width:100%;padding:11px 13px;
+    border:1px solid rgba(148,163,184,.3);border-radius:10px;font-size:14.5px;color:#fff;background:#0A1128}
+  .hxg input::placeholder{color:#64748B}
+  .hxg input:focus{border-color:#D4AF37;outline:2px solid rgba(212,175,55,.25)}
+  .hxg-consent{display:flex;gap:9px;align-items:flex-start;margin:11px 0 13px}
+  .hxg-consent input{margin-top:3px;width:16px;height:16px;accent-color:#D4AF37;flex:0 0 auto}
+  .hxg-consent label{font-size:11.5px;line-height:1.5;color:#94A3B8}
+  .hxg-consent label a{color:#E8C96A;font-weight:600}
+  .hxg .btn{width:100%;justify-content:center}
+  .hxg-alt{display:flex;align-items:center;gap:10px;margin-top:11px;font-size:12.5px;color:#64748B}
+  .hxg-alt::before,.hxg-alt::after{content:"";flex:1;height:1px;background:rgba(148,163,184,.22)}
+  .hxg-alt2{display:flex;gap:9px;margin-top:11px}
+  .hxg-alt2 .btn{font-size:13.5px;padding:11px 12px}
+  .hxg-err{color:#F0A0A0;font-size:12px;margin:6px 0 0}
+  .hxg-note{font-size:11px;color:#64748B;margin:12px 0 0;line-height:1.55}
+  @media(max-width:600px){.hxg-row,.hxg-alt2{flex-direction:column}.hxg-card{padding:16px}}
+
   .seg{display:inline-flex;background:#0D1530;border:1px solid rgba(212,175,55,.22);border-radius:.8rem;padding:4px;gap:4px;flex-wrap:wrap;justify-content:center}
   .seg button{padding:.5rem 1.15rem;border-radius:.55rem;font-size:.83rem;font-weight:600;color:#94A3B8;transition:all .18s;white-space:nowrap}
   .seg button:hover{color:#E2E8F0}
@@ -80,6 +115,14 @@
     .seg::-webkit-scrollbar{display:none}
   }
   #bnav{padding-bottom:env(safe-area-inset-bottom)}
+
+  /* Bottom clearance. pb-24 (96px) was a single number for two different
+     obstructions: a fixed compliance footer on desktop, and the app tab bar
+     PLUS that footer on phones, where the bar also carries
+     env(safe-area-inset-bottom). Content ran under both. Measured and split. */
+  .hx-body{padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+  @media (min-width:768px){ .hx-body{padding-bottom:104px} }
+
   @media print{header{position:static}footer{position:static}.tabsec{display:block!important}body{background:#fff}#bnav{display:none}}
 </style>
 <style id="herron-overrides">
@@ -256,7 +299,7 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
 @media(max-width:640px){html.omma-bucket-on .omma-bucket{height:200px}}
 </style>
 </head>
-<body class="bg-navy-950 text-slate-200 min-h-screen pb-24"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
+<body class="bg-navy-950 text-slate-200 min-h-screen hx-body"><a href="index.html" style="position:fixed;left:16px;bottom:16px;z-index:99999;display:inline-flex;align-items:center;gap:8px;font-family:system-ui,sans-serif;font-size:12.5px;font-weight:600;color:#F3EEE4;text-decoration:none;background:rgba(5,18,46,.82);border:1px solid rgba(232,168,74,.55);border-radius:999px;padding:9px 16px;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 10px 30px -8px rgba(0,0,0,.6)">&#8592; Herron &amp; Co. home</a>
 
 <!-- ============ HEADER ============ -->
 <div class="hairline"></div>
@@ -705,7 +748,8 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
     </div>
 
     <div class="lg:col-span-3 space-y-6">
-      <div class="grid sm:grid-cols-3 gap-4">
+      <div class="hxg-wrap">
+      <div data-hxg-host data-hxg-tool="iul-calculator" class="grid sm:grid-cols-3 gap-4">
         <div data-omma-card class="card p-5">
           <p class="text-xs uppercase tracking-wider text-slate-500">Total you put in</p>
           <p id="iul-paid" class="mt-1 font-display text-2xl text-white tnum"></p>
@@ -719,6 +763,7 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
           <p id="iul-inc" class="mt-1 font-display text-2xl text-white tnum"></p>
           <p class="text-[10px] text-slate-500 mt-0.5">beginning at age <span id="iul-incage" class="tnum">65</span></p>
         </div>
+      </div>
       </div>
 
       <div data-omma-card class="card p-5">
@@ -774,7 +819,7 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
     <div class="lg:col-span-3 space-y-6">
       <div data-omma-card class="card card-active p-8 text-center">
         <p class="text-xs uppercase tracking-[0.2em] text-gold-400">Lifetime annual paycheck</p>
-        <p id="fia-pay" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p>
+        <span class="hxg-wrap" style="display:block"><p id="fia-pay" data-hxg-host data-hxg-tool="fia-calculator" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p></span>
         <p class="mt-2 text-slate-400 text-sm">every year, starting at age <span id="fia-startage" class="text-gold-300 tnum"></span> — for as long as you live</p>
         <p class="mt-1 text-[11px]" style="color:#2DD4BF">Payable for life under the income rider — the actual amount is set by the contract&#8217;s roll-up and payout rates, not this illustration.</p>
       </div>
@@ -844,7 +889,7 @@ html.omma-bucket-on #ommaBucket + svg{display:none}  /* the fallback ONLY — a 
     <div class="lg:col-span-3 space-y-6">
       <div data-omma-card class="card card-active p-8 text-center">
         <p class="text-xs uppercase tracking-[0.2em] text-gold-400">Guaranteed value at term end</p>
-        <p id="myga-val" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p>
+        <span class="hxg-wrap" style="display:block"><p id="myga-val" data-hxg-host data-hxg-tool="myga-calculator" class="mt-2 font-display text-5xl md:text-6xl text-white tnum"></p></span>
         <p class="mt-2 text-slate-400 text-sm">after <span id="myga-term2" class="text-gold-300 tnum"></span> years at <span id="myga-rate2" class="text-gold-300 tnum"></span> — locked by contract</p>
         <p class="mt-1 text-[11px]" style="color:#2DD4BF">This figure is contractually guaranteed, backed by the issuing carrier.</p>
       </div>
@@ -1368,30 +1413,103 @@ function renderMygaCalc(){
 /* ---------- boot ---------- */
 renderTabs(); renderIulStep(); renderPhase(); renderMode();
 renderIulCalc(); renderFiaCalc(); renderMygaCalc(); renderCredit();
+
+/* ---------------------------------------------------------------- the gate --
+   Shared with index.html and the Blueprint through the same localStorage key,
+   so a visitor who unlocked anywhere is not asked again here. */
+(function(){
+  var KEY='hx-unlocked-v1';
+  function unlocked(){ try{return localStorage.getItem(KEY)==='1';}catch(e){return false;} }
+  function open_(h){
+    var w=h.closest('.hxg-wrap'); var g=w&&w.querySelector('.hxg');
+    if(g) g.remove();
+    h.classList.remove('hxg-locked'); h.removeAttribute('aria-hidden');
+  }
+  function build(h){
+    var w=h.closest('.hxg-wrap'); if(!w) return;
+    if(unlocked()){ open_(h); return; }
+    if(w.querySelector('.hxg')) return;
+    h.classList.add('hxg-locked'); h.setAttribute('aria-hidden','true');
+    var id='g'+Math.random().toString(36).slice(2,7);
+    var g=document.createElement('div'); g.className='hxg';
+    g.innerHTML='<div class="hxg-card" role="group" aria-label="Unlock this figure">'+
+      '<h4>See your numbers</h4>'+
+      '<p class="hxg-sub">This figure is calculated and waiting. Tell us where to send it and it unlocks right here.</p>'+
+      '<div class="hxg-row">'+
+        '<input type="text" name="firstname" placeholder="First name" autocomplete="given-name" aria-label="First name">'+
+        '<input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel" aria-label="Mobile, optional">'+
+      '</div>'+
+      '<input type="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email">'+
+      '<p class="hxg-err" role="alert"></p>'+
+      '<div class="hxg-consent"><input type="checkbox" id="'+id+'" name="consent">'+
+        '<label for="'+id+'">Text or call me about this, including automated messages or an AI voice. '+
+        '<b>Not required</b> — leaving this unticked still unlocks the figure. Reply STOP to opt out, HELP for help. '+
+        '<a href="privacy-policy.html">Privacy</a></label></div>'+
+      '<button class="btn btn-primary" type="button" data-go>Unlock →</button>'+
+      '<div class="hxg-alt">or</div>'+
+      '<div class="hxg-alt2">'+
+        '<a class="btn btn-ghost" href="index.html#booking">Book 15 min</a>'+
+        '<a class="btn btn-ghost" href="tel:6103608583">Call 610-360-8583</a>'+
+      '</div>'+
+      '<p class="hxg-note">Hypothetical illustration only — not a guarantee, a projection of actual '+
+      'performance, or an offer of any product. The full disclosure on this page stays readable either way.</p>'+
+    '</div>';
+    w.appendChild(g);
+    g.querySelector('[data-go]').addEventListener('click',function(){
+      var f=g.querySelector('input[name=firstname]'), e=g.querySelector('input[name=email]'),
+          err=g.querySelector('.hxg-err');
+      if(!(f.value||'').trim()){ err.textContent='First name, please.'; f.focus(); return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((e.value||'').trim())){
+        err.textContent='A working email — that is where this goes.'; e.focus(); return; }
+      var body=new URLSearchParams();
+      body.append('form-name','estimate-lead');
+      body.append('firstname',f.value.trim());
+      body.append('email',e.value.trim());
+      body.append('phone',(g.querySelector('input[name=phone]').value||'').trim());
+      body.append('consent',g.querySelector('input[name=consent]').checked?'yes':'no');
+      body.append('tool',h.dataset.hxgTool||'wealth-shield-matrix');
+      try{localStorage.setItem(KEY,'1');}catch(x){}
+      document.querySelectorAll('[data-hxg-host]').forEach(open_);
+      fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:body.toString()}).catch(function(){});
+    });
+  }
+  function scan(){ document.querySelectorAll('[data-hxg-host]').forEach(build); }
+  scan();
+  window.HXGateScan = scan;
+})();
+
 })();
 </script>
 <script defer src="js/hx-icons.js"></script>
 <script>
-/* Payload gate — see index.html. three.js is 659 KB and every module below
-   imports it at the top, where a static import downloads BEFORE the device
-   check inside can decline. Phones therefore paid the whole library to run
-   code that immediately returned. The check moves out here, ahead of the
-   fetch: the SVG fallbacks these scenes were always built against carry the
-   page on touch, and they cost nothing. */
+/* Payload gate — three tiers, see index.html. Phones get the scenes, just not
+   in the critical path: nothing heavy is requested until load + idle, so first
+   paint stays fast and the visuals arrive a moment later. Reduced motion and
+   genuinely weak hardware still take the light path and keep the SVG
+   fallbacks these scenes were always built against. */
 (function () {
-  var ok = true;
-  try {
-    ok = !matchMedia('(pointer:coarse)').matches
-      && !matchMedia('(prefers-reduced-motion:reduce)').matches
-      && !(navigator.deviceMemory && navigator.deviceMemory <= 4)
-      && !(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2);
-  } catch (e) { ok = false; }
-  if (!ok) { document.documentElement.classList.add('hx-light-payload'); return; }
-  ['js/omma-3d.js', 'js/omma-matrix.js', 'js/omma-charts.js'].forEach(function (src) {
-    var m = document.createElement('script');
-    m.type = 'module'; m.src = src;
-    document.head.appendChild(m);
-  });
+  var reduce=false, coarse=false, weak=false;
+  try{
+    reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+    coarse=matchMedia('(pointer:coarse)').matches;
+    weak=(navigator.deviceMemory&&navigator.deviceMemory<=2)||
+         (navigator.hardwareConcurrency&&navigator.hardwareConcurrency<=2);
+  }catch(e){ weak=true; }
+  if(reduce||weak){ document.documentElement.classList.add('hx-light-payload'); return; }
+  function inject(){ ['js/omma-3d.js', 'js/omma-matrix.js', 'js/omma-charts.js'].forEach(function(src){
+    var m=document.createElement('script'); m.type='module'; m.src=src;
+    document.head.appendChild(m); }); }
+  if(!coarse){ inject(); return; }
+  document.documentElement.classList.add('hx-deferred-payload');
+  var fired=false;
+  function go(){ if(fired) return; fired=true; inject(); }
+  function schedule(){
+    if('requestIdleCallback' in window) requestIdleCallback(go,{timeout:2600});
+    else setTimeout(go,1200);
+  }
+  if(document.readyState==='complete') schedule();
+  else addEventListener('load',schedule,{once:true});
 })();
 </script>
 </body>

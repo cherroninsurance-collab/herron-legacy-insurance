@@ -71,7 +71,7 @@ const DARK = document.documentElement.dataset.ommaTheme === 'dark';
 const MOBILE = (() => {
   try { return matchMedia('(pointer:coarse)').matches; } catch (e) { return false; }
 })();
-const MOBILE_FPS = 24;
+const MOBILE_FPS = 30;
 const C = DARK ? {
   navy:      0xE8C96A,   /* "edge" colour — gold hairlines on a navy page */
   navyDeep:  0x0A1128,
@@ -141,7 +141,7 @@ function centerOffset(el) {
    ========================================================================== */
 class Painter {
   constructor() {
-    this.pr = MOBILE ? 1 : Math.min(devicePixelRatio || 1, 2);
+    this.pr = MOBILE ? Math.min(devicePixelRatio || 1, 1.5) : Math.min(devicePixelRatio || 1, 2);
     this.gl = new THREE.WebGLRenderer({
       antialias: !MOBILE, alpha: true,
       powerPreference: MOBILE ? 'default' : 'high-performance'
@@ -1219,9 +1219,10 @@ function boot() {
   const steps = [
     ['card surfaces', () => cardSurfaces(painter)],
     ['form surfaces', () => formSurfaces(painter)],
-    /* the tower is the heaviest geometry on the page and it stands beside the
-       estimate figures — the one place a phone must stay responsive */
-    ...(MOBILE ? [] : [['quote tower', () => quoteTower(painter)]]),
+    /* The tower used to be skipped on phones. It is back: the one-target-per-
+       frame cap below bounds the cost regardless of how many scenes exist, so
+       dropping whole scenes buys nothing the cap has not already bought. */
+    ['quote tower', () => quoteTower(painter)],
     ['fit compass', () => fitCompass(painter)],
     ['tool devices', () => toolDevices(painter)],
     /* polish is pointer affordances — magnets and tracked sheens. A touch
