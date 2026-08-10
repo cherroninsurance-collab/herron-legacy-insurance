@@ -686,8 +686,8 @@ footer{background:#EFF2F7;color:#4A5A7C;border-top:1px solid rgba(14,31,62,.10);
 @keyframes hxSheen{0%{background-position:170% 0}42%,100%{background-position:-90% 0}}
 @media (pointer:coarse){
   .hx-hero-card{
-    -webkit-backdrop-filter:none;backdrop-filter:none;
-    background:linear-gradient(180deg,rgba(255,255,255,.78),rgba(255,255,255,.6));
+    -webkit-backdrop-filter:blur(18px) saturate(1.45);backdrop-filter:blur(18px) saturate(1.45);
+    background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.44));
   }
   .hx-hero-card::after{animation:none;display:none}
 }
@@ -1171,26 +1171,38 @@ html{overflow-x:clip}
 /* the floating chiplets overlap the emblem once the hero stacks */
 @media(max-width:880px){ .crest .chiplet{display:none} }
 @media (pointer:coarse){
-  nav,.crest,.crest .chiplet,.mobilebar,.nav-sheet,.nav-burger,.chat-shell,
-  .hstat,.book-point,.iul-preview,.cov-scrim,.cov-x,.cover-card,.lg-container,
-  .liquid-glass,.glass{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  /* Was a blanket kill across every glass surface, written when a phone was
+     running three live WebGL renderers at once. It runs one deferred renderer
+     now, and backdrop-filter is GPU-composited — far cheaper than what it was
+     protecting against. The blur comes back everywhere EXCEPT the three fixed,
+     always-on-screen, full-width surfaces, where a permanent blur of the whole
+     viewport width is still the expensive case. */
+  nav,.mobilebar,.nav-sheet,.nav-burger{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .lg-container,.liquid-glass,.glass,.cover-card,.hstat,.book-point,.iul-preview{
+    -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4)}
   nav{background:rgba(255,255,255,.97)}
   .nav-sheet{background:rgba(252,252,250,.99)}
   .mobilebar{background:rgba(255,255,255,.97)}
   .chat-shell{background:#FFFFFF}
   /* phone fallbacks were reading several stops darker than the desktop glass —
      lift every dark surface a step and let more light through */
-  .hstat,.book-point{background:rgba(255,255,255,.92)}
-  .crest .chiplet{background:rgba(255,255,255,.92)}
-  .cover-card.liquid-glass{background:var(--cloud)}
-  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,#1B3868 0%,#0E1F3E 90%)}
-  .iul-preview.liquid-glass{background:rgba(255,255,255,.85)}
-  .lg-container{background:#FFFFFF;border:1px solid rgba(14,31,62,.10)}
+  /* These were OPAQUE because the blur above them was switched off — an opaque
+     fill is the only way to fake frost with no filter. Now the filter is back,
+     so they must become translucent: backdrop-filter behind a solid colour
+     does precisely nothing, which is why the panes still read as flat grey
+     after the blur was restored. */
+  .hstat,.book-point{background:rgba(255,255,255,.74)}
+  .crest .chiplet{background:rgba(255,255,255,.78)}
+  .cover-card.liquid-glass{background:rgba(255,255,255,.6)}
+  .cover-card.wide.liquid-glass{background:linear-gradient(140deg,rgba(27,56,104,.9) 0%,rgba(14,31,62,.92) 90%)}
+  .iul-preview.liquid-glass{background:rgba(255,255,255,.62)}
+  .lg-container{background:rgba(255,255,255,.62);border:1px solid rgba(14,31,62,.10)}
   /* bright theme: chat surfaces are white frost on every device */
-  .ai-band .lg-container{background:rgba(255,255,255,.94);border:1px solid rgba(14,31,62,.10)}
-  .ai-band .chat-shell{background:rgba(255,255,255,.9)}
-  #fabPanel .chat-shell{background:linear-gradient(180deg,#FFFFFF 0%,#F2F4F9 100%)}
-  .lg-container[data-lg-theme="light"]{background:var(--cloud)}
+  .ai-band .lg-container{background:rgba(255,255,255,.66);border:1px solid rgba(14,31,62,.10)}
+  .ai-band .chat-shell{background:rgba(255,255,255,.6)}
+  #fabPanel .chat-shell{background:linear-gradient(180deg,rgba(255,255,255,.72) 0%,rgba(242,244,249,.66) 100%)}
+  .lg-container[data-lg-theme="light"]{background:rgba(255,255,255,.6)}
   .cov-scrim{background:rgba(3,8,20,.86)}
   /* big blur radii are paint-bound: keep the colour wash, drop the blur —
      but these ARE the ambient light on phones, so keep them bright */
@@ -2221,6 +2233,7 @@ window.HXGate = (function () {
       if (existing) existing.remove();
       host.classList.remove('hxg-locked');
       host.removeAttribute('aria-hidden');
+      if (wrap.dataset.hxgReserved) { wrap.style.minHeight = ''; delete wrap.dataset.hxgReserved; }
       return;
     }
     if (existing) return;
@@ -2233,6 +2246,26 @@ window.HXGate = (function () {
       sub: host.dataset.hxgSub
     });
     wrap.appendChild(g);
+    /* The gate is absolutely positioned, so a card taller than the result it
+       covers overflows the wrapper and lands on the copy above and below.
+       The wrapper reserves the room instead — but measuring ONCE right after
+       insert reads a card that has not finished growing: the webfont is still
+       loading, the consent paragraph has not rewrapped, and the height comes
+       back short. So reserve now, again when fonts settle, and on any later
+       resize of the card. */
+    var cardEl = g.querySelector('.hxg-card');
+    function reserve() {
+      if (!cardEl.isConnected) return;
+      var need = Math.ceil(cardEl.getBoundingClientRect().height + 36);
+      var cur = parseFloat(wrap.style.minHeight) || 0;
+      if (need > cur) wrap.style.minHeight = need + 'px';
+    }
+    wrap.dataset.hxgReserved = '1';
+    reserve();
+    requestAnimationFrame(reserve);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve).catch(function () {});
+    if ('ResizeObserver' in window) new ResizeObserver(reserve).observe(cardEl);
+    addEventListener('resize', reserve, { passive: true });
 
     g.querySelector('[data-hxg-send]').addEventListener('click', function () {
       var email = g.querySelector('input[name=email]');
@@ -2268,7 +2301,7 @@ window.HXGate = (function () {
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
 <button id="fabChat" aria-label="Open Legacy Concierge chat" aria-expanded="false">
   <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
-  <span class="fab-label"><b><span>Legacy Concierge</span></b><span><i></i>Ask anything</span></span>
+  <span class="fab-label"><b><span class="fab-long">Legacy Concierge</span><span class="fab-short">Ask Connor</span></b><span class="fab-sub"><i></i>Ask anything</span></span>
 </button>
 
 <script>
@@ -3135,6 +3168,10 @@ renderFit();
 .hxg-alt2 .btn{font-size:13.5px;padding:11px 14px}
 .hxg-err{color:#9A3B3B;font-size:12px;margin:6px 0 0;min-height:0}
 .hxg-note{font-size:11px;color:var(--ink-soft);margin:12px 0 0;line-height:1.55}
+/* the estimate grid must stack before the gate has to live in half of a phone */
+@media(max-width:760px){
+  .q-grid{grid-template-columns:minmax(0,1fr)}
+}
 @media(max-width:600px){
   .hxg{padding:10px}
   .hxg-card{padding:16px 16px}
@@ -3154,6 +3191,7 @@ renderFit();
 #fabChat img{height:30px;width:auto;display:block;flex:0 0 auto}
 #fabChat .fab-label{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
 #fabChat .fab-label b{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy-deep);white-space:nowrap}
+#fabChat .fab-label .fab-short{display:none}
 #fabChat .fab-label span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
   text-transform:uppercase;color:rgba(8,18,38,.66);display:flex;align-items:center;gap:5px;white-space:nowrap}
 #fabChat .fab-label span i{width:6px;height:6px;border-radius:50%;background:#0F6B2C;
@@ -3171,11 +3209,14 @@ renderFit();
      floating button that wide sits on top of whatever you are reading. The
      short label keeps it a labelled way in — a bare disc reads as a watermark —
      while giving the card back its right-hand half. */
-  #fabChat .fab-label b{font-size:13px}
-  #fabChat .fab-label b::before{content:"Ask Connor"}
-  #fabChat .fab-label b>span{display:none}
+  /* A ::before swap left the button with NO accessible text — innerText came
+     back empty, so the label existed for sighted users and for nobody else.
+     Two real spans instead: the long wordmark for desktop, the short one for
+     phones, each hidden by CSS rather than invented by it. */
   #fabChat .fab-label b{font-size:12.5px}
-  #fabChat .fab-label span{display:none}
+  #fabChat .fab-label .fab-long{display:none}
+  #fabChat .fab-label .fab-short{display:inline}
+  #fabChat .fab-label .fab-sub{display:none}
 }
 
 /* ============================================================================
@@ -3534,8 +3575,8 @@ renderFit();
    the result is visually the same and costs nothing. */
 @media(pointer:coarse){
   .chat-shell,#fabPanel .chat-shell{
-    background:linear-gradient(157deg,rgba(255,255,255,.78),rgba(255,255,255,.62) 46%,rgba(246,248,252,.76))!important;
-    -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    background:linear-gradient(157deg,rgba(255,255,255,.62),rgba(255,255,255,.48) 46%,rgba(246,248,252,.6))!important;
+    -webkit-backdrop-filter:blur(18px) saturate(1.4)!important;backdrop-filter:blur(18px) saturate(1.4)!important;
     border:1px solid rgba(255,255,255,.9)!important;
     box-shadow:0 1.5px 0 rgba(255,255,255,.95) inset,0 0 0 1px rgba(14,31,62,.07),
                0 26px 56px -28px rgba(10,17,40,.34)!important}
