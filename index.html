@@ -1181,6 +1181,12 @@ html{overflow-x:clip}
     -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   .lg-container,.liquid-glass,.glass,.cover-card,.hstat,.book-point,.iul-preview{
     -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4)}
+  /* ...but NOT once the shader takes the pane over. A pane running WebGL AND a
+     viewport-sized backdrop blur pays for the same glass twice, and six of them
+     on a phone is what pinned frames at 83ms. The blur is the fallback; when
+     .lg-webgl-on lands, the shader is the glass. */
+  .lg-container.lg-webgl-on{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   nav{background:rgba(255,255,255,.97)}
   .nav-sheet{background:rgba(252,252,250,.99)}
   .mobilebar{background:rgba(255,255,255,.97)}
@@ -3203,20 +3209,23 @@ renderFit();
 /* phones: keep the words — a bare disc reads as a logo — but drop the second
    line and tighten the pill so it never covers a third of the screen */
 @media(max-width:640px){
-  #fabChat{height:46px;padding:0 13px 0 8px;gap:7px}
+  #fabChat{height:50px;padding:0 15px 0 9px;gap:8px}
   #fabChat img{height:22px}
   /* On a 390px screen the full wordmark made the pill ~55% of the width, and a
      floating button that wide sits on top of whatever you are reading. The
      short label keeps it a labelled way in — a bare disc reads as a watermark —
      while giving the card back its right-hand half. */
-  /* A ::before swap left the button with NO accessible text — innerText came
-     back empty, so the label existed for sighted users and for nobody else.
-     Two real spans instead: the long wordmark for desktop, the short one for
-     phones, each hidden by CSS rather than invented by it. */
-  #fabChat .fab-label b{font-size:12.5px}
-  #fabChat .fab-label .fab-long{display:none}
-  #fabChat .fab-label .fab-short{display:inline}
-  #fabChat .fab-label .fab-sub{display:none}
+  /* The phone gets the SAME button as desktop — full wordmark, the status
+     line, the pulse dot — just scaled. Two earlier attempts got this wrong:
+     a ::before swap that left the button with no accessible text at all
+     (innerText came back empty), then a short label that simply was not the
+     desktop button. Scaling type is the honest way to fit it; cutting the
+     label was not. ~46% of a 390px screen, and it clears the bottom bar. */
+  #fabChat .fab-label b{font-size:13px}
+  #fabChat .fab-label .fab-long{display:inline}
+  #fabChat .fab-label .fab-short{display:none}
+  #fabChat .fab-label .fab-sub{display:flex;font-size:9px;letter-spacing:.08em}
+  #fabChat .fab-label .fab-sub i{width:5px;height:5px}
 }
 
 /* ============================================================================
@@ -4184,7 +4193,10 @@ try{
   var fired = false;
   function go() {
     if (fired) return; fired = true;
-    inject(['js/omma-3d.js'], true);
+    /* liquid-glass.js rides along now: CSS backdrop-filter is frosted glass,
+       not LIQUID glass — no refraction, no dispersion — and that difference
+       is the whole effect. It runs at DPR 1.25 on touch. */
+    inject(['js/omma-3d.js', 'liquid-glass.js'], true);
   }
   function schedule() {
     if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 2600 });

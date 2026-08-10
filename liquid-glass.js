@@ -337,7 +337,12 @@ const THEMES = {
 };
 
 const BLEED = 64;         // px apron around the pane for halo/rim overdraw (enlarged)
-const DPR_CAP = 2;        // GUARDRAIL: hard pixel-ratio clamp for mobile GPUs
+// GUARDRAIL: hard pixel-ratio clamp. Phones run the same shader at 1.25x
+// instead of their native 3x — the fragment cost is ~5.8x lower and, on a
+// refraction effect that is mostly smooth gradients, the difference is close
+// to invisible. This is what makes running it on touch affordable at all.
+const COARSE = matchMedia('(pointer:coarse)').matches;
+const DPR_CAP = COARSE ? 1 : 2;
 
 /* ==========================================================================
    LiquidGlass — one instance per container element.
@@ -475,8 +480,20 @@ class LiquidGlass {
 
   start() {
     if (this.raf || this.dead) return;
+    /* Phones render at 30fps, not 60. This effect is a slow liquid drift — at
+       half rate it is indistinguishable, and it is the difference between
+       affordable and not once six panes share a phone GPU with the deferred
+       3D layer. Desktop is unthrottled. */
+    const step = COARSE ? 1 / 30 : 0;
+    let acc = 0, prev = performance.now();
     const loop = () => {
       this.raf = requestAnimationFrame(loop);
+      if (step) {
+        const now = performance.now();
+        acc += (now - prev) / 1000; prev = now;
+        if (acc < step) return;
+        acc = 0;
+      }
       const u = this.uniforms;
       u.uTime.value = this.clock.getElapsedTime();
 
@@ -529,11 +546,15 @@ class LiquidGlass {
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const lowMemory = navigator.deviceMemory !== undefined && navigator.deviceMemory <= 2;
   const lowCores = navigator.hardwareConcurrency !== undefined && navigator.hardwareConcurrency <= 2;
-  // Touch devices too: the homepage hero already runs two fragment-heavy shaders, and
-  // this would be a third live WebGL renderer competing with them. Phones keep the CSS
-  // glass, which is visually close and costs nothing.
+  // Touch USED to bail here. It no longer does. That rule was written when the
+  // homepage ran three live WebGL renderers on a phone; the heavy modules are
+  // deferred now and the page is interactive in ~1.3s, so there is headroom for
+  // this one. It matters because CSS backdrop-filter is frosted glass, not
+  // LIQUID glass — no refraction, no dispersion, no cursor warp — and the
+  // difference is the whole effect. Phones run it at a lower pixel ratio (see
+  // DPR_CAP) rather than not at all.
   const touch = matchMedia('(pointer:coarse)').matches;
-  if (reducedMotion || lowMemory || lowCores || touch) return;
+  if (reducedMotion || lowMemory || lowCores) return;
 
   // Cheap WebGL probe before pulling in renderers.
   const probe = document.createElement('canvas');
