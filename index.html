@@ -2307,7 +2307,7 @@ window.HXGate = (function () {
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
 <button id="fabChat" aria-label="Open Legacy Concierge chat" aria-expanded="false">
   <img src="logos/mark/mark-mono-navy.png" width="88" height="120" alt="" aria-hidden="true" decoding="async">
-  <span class="fab-label"><b><span class="fab-long">Legacy Concierge</span><span class="fab-short">Ask Connor</span></b><span class="fab-sub"><i></i>Ask anything</span></span>
+  <span class="fab-label"><b>Legacy Concierge</b><span class="fab-sub"><i></i>Ask anything</span></span>
 </button>
 
 <script>
@@ -3197,7 +3197,6 @@ renderFit();
 #fabChat img{height:30px;width:auto;display:block;flex:0 0 auto}
 #fabChat .fab-label{display:flex;flex-direction:column;align-items:flex-start;line-height:1.15}
 #fabChat .fab-label b{font-family:'Sora';font-weight:700;font-size:14px;color:var(--navy-deep);white-space:nowrap}
-#fabChat .fab-label .fab-short{display:none}
 #fabChat .fab-label span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;
   text-transform:uppercase;color:rgba(8,18,38,.66);display:flex;align-items:center;gap:5px;white-space:nowrap}
 #fabChat .fab-label span i{width:6px;height:6px;border-radius:50%;background:#0F6B2C;
@@ -3215,17 +3214,17 @@ renderFit();
      floating button that wide sits on top of whatever you are reading. The
      short label keeps it a labelled way in — a bare disc reads as a watermark —
      while giving the card back its right-hand half. */
-  /* The phone gets the SAME button as desktop — full wordmark, the status
-     line, the pulse dot — just scaled. Two earlier attempts got this wrong:
-     a ::before swap that left the button with no accessible text at all
-     (innerText came back empty), then a short label that simply was not the
-     desktop button. Scaling type is the honest way to fit it; cutting the
-     label was not. ~46% of a 390px screen, and it clears the bottom bar. */
+  /* Phone: the wordmark and the live dot on ONE line. It says what it is and
+     shows it is awake, which is the whole job of the button — the second
+     "Ask anything" line is what made it two-storey and wide. Desktop keeps
+     both lines exactly as it always had them.
+     (History, so nobody repeats it: a ::before swap here left the button with
+     no accessible text at all, and a shortened "Ask Connor" label was simply
+     not the button anyone asked for.) */
+  #fabChat .fab-label{flex-direction:row;align-items:center;gap:7px}
   #fabChat .fab-label b{font-size:13px}
-  #fabChat .fab-label .fab-long{display:inline}
-  #fabChat .fab-label .fab-short{display:none}
-  #fabChat .fab-label .fab-sub{display:flex;font-size:9px;letter-spacing:.08em}
-  #fabChat .fab-label .fab-sub i{width:5px;height:5px}
+  #fabChat .fab-label .fab-sub{display:flex;font-size:0;gap:0}
+  #fabChat .fab-label .fab-sub i{width:7px;height:7px;margin:0}
 }
 
 /* ============================================================================
