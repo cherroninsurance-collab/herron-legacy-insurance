@@ -1698,7 +1698,7 @@ html{overflow-x:clip}
               <a class="btn btn-ghost-dark" href="tel:6103608583">Call 610-360-8583</a>
             </div>
             <div id="iulCapture"></div>
-            <span class="hx-cta-note">One email, used once, to send this. No list, no drip, no reselling your data.</span>
+            <span class="hx-cta-note">Your email is used to send this and so Connor can follow up. No reselling your data, ever. Reply STOP any time.</span>
           </div>
 
         </div>
@@ -1828,7 +1828,7 @@ html{overflow-x:clip}
     <div class="tools-head reveal">
       <span class="eyebrow">Interactive walkthroughs</span>
       <h2>Don't take our word for it. Play with it.</h2>
-      <p>Most agents hand you a brochure. We built you software — two interactive walkthroughs that make the most confusing products in insurance something you can actually see, tap, and stress-test yourself. Free to use.</p>
+      <p>Most agents hand you a brochure. We built you software — two interactive walkthroughs that make the most confusing products in insurance something you can actually see, tap, and stress-test yourself. $0 to work with us.</p>
     </div>
     <div class="tools-grid">
       <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
@@ -1966,7 +1966,7 @@ html{overflow-x:clip}
     <div class="sec-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
       <span class="eyebrow">Instant estimate studio</span>
       <h2>Just want a number? Move the sliders.</h2>
-      <p>The Blueprint builds the plan. This just prices one piece of it — ten seconds, zero forms.</p>
+      <p>The Blueprint builds the plan. This prices one piece of it — move the sliders, then we'll send you the range.</p>
     </div>
     <!-- Liquid Glass pane: canvas (z-10, no pointer events) is injected
          by liquid-glass.js; content stays on top (z-20, clickable). -->
@@ -1976,7 +1976,7 @@ html{overflow-x:clip}
       <div class="q-tabs" id="qTabs" role="tablist"></div>
       <div id="qStage"></div>
       <div id="estCapture"></div>
-      <span class="hx-cta-note">One email, used once, to send this. No list, no drip, no reselling your data.</span>
+      <span class="hx-cta-note">Your email is used to send this and so Connor can follow up. No reselling your data, ever. Reply STOP any time.</span>
       <p class="q-note">Estimates are illustrative ranges based on typical non-guaranteed industry pricing for healthy applicants and are <b>not an offer of coverage or a quoted rate</b>. Actual premiums and annuity rates are determined solely by carrier underwriting and current product offerings, and vary by state, health class, and carrier. Annuity and IUL projections use illustrative, non-guaranteed rates you select — IUL figures reflect a typical policy-cost band and are not a carrier illustration. Hybrid LTC and disability figures are broad planning ranges; actual pricing depends on health, occupation class, carrier, and state. Get exact figures on a free call.</p>
     </div>
     </div>
@@ -2152,6 +2152,117 @@ html{overflow-x:clip}
     </div>
   </div>
 </footer>
+
+
+<script>
+/* ============================================================================
+   THE LEAD GATE — shared engine
+   ----------------------------------------------------------------------------
+   Locks a result region until the visitor gives contact details or books a
+   call. See the CSS block for the three rules this must never break; the one
+   worth repeating here is that the consent checkbox is NEVER required, because
+   the TCPA does not allow consent to automated contact to be a condition of
+   receiving something.
+
+   Unlocking is remembered in localStorage so nobody is asked twice in a
+   session — being re-prompted after you have already handed over your email
+   reads as broken, not as thorough.
+   ========================================================================== */
+window.HXGate = (function () {
+  'use strict';
+  var KEY = 'hx-unlocked-v1';
+  var listeners = [];
+
+  function unlocked() {
+    try { return localStorage.getItem(KEY) === '1'; } catch (e) { return false; }
+  }
+  function markUnlocked() {
+    try { localStorage.setItem(KEY, '1'); } catch (e) {}
+    listeners.forEach(function (fn) { try { fn(); } catch (e) {} });
+    document.querySelectorAll('[data-hxg-host]').forEach(apply);
+  }
+  function onUnlock(fn) { listeners.push(fn); }
+
+  function card(opts) {
+    var id = 'g' + Math.random().toString(36).slice(2, 8);
+    return '' +
+    '<div class="hxg-card" role="group" aria-label="Unlock your result">' +
+      '<h4><svg class="hxi" aria-hidden="true"><use href="#i-lock"></use></svg>' + (opts.title || 'See your numbers') + '</h4>' +
+      '<p class="hxg-sub">' + (opts.sub || 'Tell us where to send it and it unlocks right here.') + '</p>' +
+      '<div class="hxg-row">' +
+        '<input type="text" name="firstname" placeholder="First name" autocomplete="given-name" aria-label="First name">' +
+        '<input type="tel" name="phone" placeholder="Mobile (optional)" autocomplete="tel" aria-label="Mobile, optional">' +
+      '</div>' +
+      '<input type="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email">' +
+      '<p class="hxg-err" role="alert" id="' + id + '-e"></p>' +
+      '<div class="hxg-consent">' +
+        '<input type="checkbox" id="' + id + '" name="consent">' +
+        '<label for="' + id + '">Text or call me about this at the number above, including automated messages or an AI voice. ' +
+        '<b>Not required</b> — leaving this unticked still unlocks your result. Reply STOP to opt out, HELP for help. ' +
+        '<a href="privacy-policy.html">Privacy</a><span class="hxg-opt">optional</span></label>' +
+      '</div>' +
+      '<button class="btn btn-brass" type="button" data-hxg-send>Unlock my numbers →</button>' +
+      '<div class="hxg-alt">or</div>' +
+      '<div class="hxg-alt2">' +
+        '<a class="btn btn-ghost-light" href="#booking">Book 15 min instead</a>' +
+        '<a class="btn btn-ghost-light" href="tel:6103608583">Call 610-360-8583</a>' +
+      '</div>' +
+      '<p class="hxg-note">Figures here are illustrative planning ranges, not offers of coverage or quoted rates. ' +
+      'The full disclosure below this tool stays readable whether or not you fill this in.</p>' +
+    '</div>';
+  }
+
+  /* Lock (or unlock) one host element. The host holds the result; the gate is
+     an overlay so the disclosure that follows the host is never covered. */
+  function apply(host) {
+    var wrap = host.closest('.hxg-wrap') || host;
+    var existing = wrap.querySelector(':scope > .hxg');
+    if (unlocked()) {
+      if (existing) existing.remove();
+      host.classList.remove('hxg-locked');
+      host.removeAttribute('aria-hidden');
+      return;
+    }
+    if (existing) return;
+    host.classList.add('hxg-locked');
+    host.setAttribute('aria-hidden', 'true');
+    var g = document.createElement('div');
+    g.className = 'hxg';
+    g.innerHTML = card({
+      title: host.dataset.hxgTitle,
+      sub: host.dataset.hxgSub
+    });
+    wrap.appendChild(g);
+
+    g.querySelector('[data-hxg-send]').addEventListener('click', function () {
+      var email = g.querySelector('input[name=email]');
+      var first = g.querySelector('input[name=firstname]');
+      var err = g.querySelector('.hxg-err');
+      var ok = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((email.value || '').trim());
+      if (!(first.value || '').trim()) { err.textContent = 'First name, please.'; first.focus(); return; }
+      if (!ok) { err.textContent = 'A working email — that is where this goes.'; email.focus(); return; }
+      err.textContent = '';
+      var body = new URLSearchParams();
+      body.append('form-name', host.dataset.hxgForm || 'estimate-lead');
+      body.append('firstname', first.value.trim());
+      body.append('email', email.value.trim());
+      body.append('phone', (g.querySelector('input[name=phone]').value || '').trim());
+      body.append('consent', g.querySelector('input[name=consent]').checked ? 'yes' : 'no');
+      body.append('tool', host.dataset.hxgForm || '');
+      /* Unlock optimistically: a network hiccup must not cost the visitor the
+         thing they just paid for with their details. */
+      markUnlocked();
+      fetch('/', { method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: body.toString() }).catch(function () {});
+    });
+  }
+
+  function scan() { document.querySelectorAll('[data-hxg-host]').forEach(apply); }
+
+  return { unlocked: unlocked, apply: apply, scan: scan, onUnlock: onUnlock, markUnlocked: markUnlocked };
+})();
+</script>
 
 <!-- ============ FLOATING CHAT ============ -->
 <div id="fabPanel"><div class="chat-shell" id="fabChat_shell"></div></div>
@@ -2543,20 +2654,20 @@ function controls(){
 function out(){
   if(Q.product==='annuity'){
     const fv=Q.aAmt*Math.pow(1+Q.aRate/100,Q.aYrs);
-    return `<div class="q-out"><div class="cap">Projected value after ${Q.aYrs} years</div>
+    return `<div class="hxg-wrap"><div class="q-out" data-hxg-host data-hxg-form="estimate-lead" data-hxg-title="See your estimate" data-hxg-sub="Your range is calculated and waiting. Tell us where to send it and it unlocks here."><div class="cap">Projected value after ${Q.aYrs} years</div>
       <div class="q-price"><em>${money(fv)}</em></div>
       <div class="q-sub">${money(fv-Q.aAmt)} of tax-deferred growth on ${money(Q.aAmt)} at an illustrative ${Q.aRate}% — actual guaranteed rates quoted live on your call.</div>
-      <a class="btn btn-brass" href="#booking">Get today's real rates →</a></div>`;
+      <a class="btn btn-brass" href="#booking">Get today's real rates →</a></div></div>`;
   }
   if(Q.product==='iul'){
     const yrs=Math.max(5,Q.iRet-Q.iAge), r=Q.iRate/100/12, n=yrs*12;
     const fv=Q.iMo*((Math.pow(1+r,n)-1)/r);
     const lo=fv*0.72, hi=fv*0.92;
     const inc=((lo+hi)/2)*0.05;
-    return `<div class="q-out"><div class="cap">Illustrative cash value at age ${Q.iRet}</div>
+    return `<div class="hxg-wrap"><div class="q-out" data-hxg-host data-hxg-form="estimate-lead" data-hxg-title="See your estimate" data-hxg-sub="Your range is calculated and waiting. Tell us where to send it and it unlocks here."><div class="cap">Illustrative cash value at age ${Q.iRet}</div>
       <div class="q-price"><em>${money(lo)}–${money(hi)}</em></div>
       <div class="q-sub">funding ${money(Q.iMo)}/mo for ${yrs} years at an illustrative ${Q.iRate}% after typical policy costs — potentially ~${money(inc)}/yr of tax-advantaged income via policy loans. Non-guaranteed; a carrier illustration gives your real numbers.</div>
-      <a class="btn btn-brass" href="#booking">Get my carrier illustration →</a></div>`;
+      <a class="btn btn-brass" href="#booking">Get my carrier illustration →</a></div></div>`;
   }
   if(Q.product==='ltc'){
     let annual10=interp(ltcBaseF,Q.lAge)*(Q.lPool/100000);
@@ -2569,37 +2680,38 @@ function out(){
       sub=`ten payments, then fully paid up — funding a ${money(Q.lPool)} care pool${Q.lWho==='c'?' shared by both spouses':''}, with a death benefit if care is never needed.`;}
     else{const ann=annual10*0.62;lo=ann*.82;hi=ann*1.18;cap='Estimated annual premium (lifetime pay)';
       sub=`funding a ${money(Q.lPool)} care pool${Q.lWho==='c'?' shared by both spouses':''} — money is never wasted: care benefits if you need them, a death benefit if you don't.`;}
-    return `<div class="q-out"><div class="cap">${cap}</div>
+    return `<div class="hxg-wrap"><div class="q-out" data-hxg-host data-hxg-form="estimate-lead" data-hxg-title="See your estimate" data-hxg-sub="Your range is calculated and waiting. Tell us where to send it and it unlocks here."><div class="cap">${cap}</div>
       <div class="q-price"><em>${money(lo)}–${money(hi)}</em></div>
       <div class="q-sub">${sub}</div>
-      <a class="btn btn-brass" href="#booking">See my side-by-side designs →</a></div>`;
+      <a class="btn btn-brass" href="#booking">See my side-by-side designs →</a></div></div>`;
   }
   if(Q.product==='di'){
     const benefit=Q.dInc*0.6/12;
     let ann=Q.dInc*(interp(diPct,Q.dAge)/100)*diOcc[Q.dOcc]*diBen[Q.dBen]*diElim[Q.dElim];
     const m=ann/12, lo=m*.8, hi=m*1.2;
-    return `<div class="q-out"><div class="cap">Estimated monthly premium</div>
+    return `<div class="hxg-wrap"><div class="q-out" data-hxg-host data-hxg-form="estimate-lead" data-hxg-title="See your estimate" data-hxg-sub="Your range is calculated and waiting. Tell us where to send it and it unlocks here."><div class="cap">Estimated monthly premium</div>
       <div class="q-price"><em>${money(lo)}–${money(hi)}</em></div>
       <div class="q-sub">to protect roughly ${money(benefit)}/mo of your paycheck (≈60% of income) if illness or injury stops you from working. Occupation class drives real pricing — exact quotes on your call.</div>
-      <a class="btn btn-brass" href="#booking">Protect my paycheck →</a></div>`;
+      <a class="btn btn-brass" href="#booking">Protect my paycheck →</a></div></div>`;
   }
   let m;
   if(Q.product==='term') m=interp(termBase,Q.age)*termFac[Q.term]*(Q.sex==='f'?.85:1)*(Q.tob==='y'?2.4:1)*health[Q.hc]*Q.cov/100000;
   if(Q.product==='whole') m=interp(wholeBase,Q.wAge)*(Q.wSex==='f'?.87:1)*(Q.wTob==='y'?1.9:1)*Q.wCov/100000;
   if(Q.product==='fe') m=interp(feBase,Q.fAge)*(Q.fSex==='f'?.82:1)*(Q.fTob==='y'?1.35:1)*Q.fCov/1000;
-  return `<div class="q-out"><div class="cap">Healthy applicant range</div>
+  return `<div class="hxg-wrap"><div class="q-out" data-hxg-host data-hxg-form="estimate-lead" data-hxg-title="See your estimate" data-hxg-sub="Your range is calculated and waiting. Tell us where to send it and it unlocks here."><div class="cap">Healthy applicant range</div>
     <div class="q-split">
       <div class="q-half"><span>Low</span><b>${money(m*.82)}</b></div>
       <div class="q-half hi"><span>High</span><b>${money(m*1.18)}</b></div>
     </div>
     <div class="q-sub">per month, for a healthy applicant with your inputs — your exact rate comes from a free 15-minute call.</div>
     <a class="btn btn-brass" href="#booking">Lock in my exact rate →</a>
-    <a class="q-cross" href="#blueprint">Build my Blueprint →</a></div>`;
+    <a class="q-cross" href="#blueprint">Build my Blueprint →</a></div></div>`;
 }
 
 function render(){
   qTabs.querySelectorAll('.q-tab').forEach(b=>b.classList.toggle('on',b.dataset.qp===Q.product));
   qStage.innerHTML=`<div class="q-grid"><div class="q-controls">${controls()}</div>${out()}</div>`;
+  if(window.HXGate) HXGate.scan();
   qStage.querySelectorAll('input[type=range]').forEach(r=>{
     r.addEventListener('input',()=>{
       Q[r.dataset.key]=parseFloat(r.value);
@@ -2802,17 +2914,18 @@ function renderFit(){
       <button class="fit-back" data-back="1">← Back</button>`;
     }else{
       progress=1;
-      html=`<div class="fit-result"><span class="fit-step-label">Your result</span>
+      html=`<div class="hxg-wrap"><div class="fit-result" data-hxg-host data-hxg-form="fit-check-lead" data-hxg-title="See your recommended path" data-hxg-sub="Your four answers point at one product. Tell us where to send the write-up and it unlocks here."><span class="fit-step-label">Your result</span>
       <h3>${t.name} looks like your fit.</h3><p>${t.result}</p>
       <div class="next"><b>What happens next</b>${t.next}</div>
       <div class="fit-ctas"><a class="btn btn-navy" href="#booking">Book my free call</a>
       <a class="btn btn-ghost-dark" href="#blueprint">Build my Blueprint</a>
       <a class="btn btn-ghost-dark" href="${PHONE}">Call ${PHONE_DISPLAY}</a></div>
       <button class="fit-back" data-restart="1">↺ Start over</button>
-      ${captureCard('fit-check-lead','recommended', t.name)}</div>`;
+      ${captureCard('fit-check-lead','recommended', t.name)}</div></div>`;
     }
   }
   fitBar.style.width=(progress*100)+'%'; fitBody.innerHTML=html;
+  if(window.HXGate) HXGate.scan();
 }
 fitBody.addEventListener('click',e=>{
   const b=e.target.closest('button,a'); if(!b)return;
@@ -2961,6 +3074,73 @@ renderFit();
 /* gold on the deliberately dark surfaces: champagne, not lemon */
 .cover-card.wide .tag,.cover-card.wide .go,.ann-card .kind i{color:var(--gold-hi)}
 .ann-card .kind i{background:linear-gradient(150deg,#F0DCA6,#BE9235)}
+
+
+/* ============================================================================
+   THE LEAD GATE
+   ----------------------------------------------------------------------------
+   Every calculated result is now behind contact details or a booked call.
+
+   THREE RULES THIS MUST NEVER BREAK, in priority order:
+
+   1. DISCLOSURES ARE NEVER GATED. The q-note, the states list, the NPN and
+      every "not an offer of coverage" line sit OUTSIDE the locked region and
+      stay readable to someone who never fills anything in. Hiding a
+      disclosure behind a form is the one thing a compliant insurance site
+      cannot do, and it is the reason the gate wraps only the figure.
+
+   2. THE CONSENT CHECKBOX IS NEVER REQUIRED. Under the TCPA, consent to
+      automated calls and texts may not be a condition of receiving something.
+      Name and email unlock the result; the checkbox is genuinely optional and
+      says so. Requiring it would turn a marketing gate into a legal problem.
+
+   3. THE PHONE NUMBER ALWAYS WORKS. A visitor who will not fill in a form can
+      still call, and that route is visible inside the gate itself.
+   ========================================================================== */
+.hxg-wrap{position:relative}
+.hxg-locked{filter:blur(9px) saturate(.7);opacity:.5;pointer-events:none;user-select:none}
+@media (prefers-reduced-motion:reduce){.hxg-locked{filter:blur(9px);opacity:.5}}
+.hxg{
+  position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;
+  padding:18px;
+}
+.hxg-card{
+  width:min(430px,100%);background:rgba(255,255,255,.97);border:1px solid var(--line);
+  border-left:3px solid var(--brass);border-radius:16px;padding:20px 22px;
+  box-shadow:0 24px 60px -22px rgba(14,31,62,.4);
+}
+@supports (backdrop-filter:blur(14px)){
+  .hxg-card{backdrop-filter:blur(14px) saturate(1.4);background:rgba(255,255,255,.9)}
+}
+.hxg-card h4{font-family:'Sora';font-weight:600;font-size:17px;color:var(--navy);
+  margin:0 0 4px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
+.hxg-card h4 .hxi{width:17px;height:17px;color:#96660F}
+.hxg-card .hxg-sub{font-size:13px;color:var(--ink-soft);margin:0 0 14px;line-height:1.5}
+.hxg-row{display:flex;gap:9px;margin-bottom:9px}
+.hxg-row input{flex:1;min-width:0}
+.hxg input[type=text],.hxg input[type=email],.hxg input[type=tel]{
+  width:100%;padding:11px 13px;border:1px solid rgba(20,38,76,.18);border-radius:10px;
+  font-family:'Inter';font-size:14.5px;color:var(--navy);background:#FBFBFC}
+.hxg input:focus{border-color:var(--brass);background:#fff;outline:2px solid rgba(190,146,53,.25);outline-offset:1px}
+.hxg-consent{display:flex;gap:9px;align-items:flex-start;margin:11px 0 13px}
+.hxg-consent input{margin-top:3px;flex:0 0 auto;width:16px;height:16px;accent-color:#96660F}
+.hxg-consent label{font-size:11.5px;line-height:1.5;color:var(--ink-soft)}
+.hxg-consent label a{color:#96660F;font-weight:600}
+.hxg-opt{font-size:10.5px;font-family:'IBM Plex Mono',monospace;letter-spacing:.1em;
+  text-transform:uppercase;color:#5A6A8C;margin-left:4px}
+.hxg .btn{width:100%;justify-content:center}
+.hxg-alt{display:flex;align-items:center;gap:10px;margin-top:11px;font-size:12.5px;color:var(--ink-soft)}
+.hxg-alt::before,.hxg-alt::after{content:"";flex:1;height:1px;background:var(--line)}
+.hxg-alt2{display:flex;gap:9px;margin-top:11px}
+.hxg-alt2 .btn{font-size:13.5px;padding:11px 14px}
+.hxg-err{color:#9A3B3B;font-size:12px;margin:6px 0 0;min-height:0}
+.hxg-note{font-size:11px;color:var(--ink-soft);margin:12px 0 0;line-height:1.55}
+@media(max-width:600px){
+  .hxg{padding:10px}
+  .hxg-card{padding:16px 16px}
+  .hxg-row{flex-direction:column;gap:9px}
+  .hxg-alt2{flex-direction:column}
+}
 
 /* ============================================================================
    THE CONCIERGE BUTTON — it was an unlabelled gold disc, which reads as a logo
