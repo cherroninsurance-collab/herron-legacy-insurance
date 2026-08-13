@@ -9,3 +9,17 @@
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# /training is the internal Producer OS agent-training app — not customer-facing.
+# The page also carries <meta name="robots">, but a header is what crawlers that
+# ignore the meta tag (and anything fetching the JSON-ish assets) actually respect.
+[[headers]]
+  for = "/training/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+# The service worker must never be served stale, or phones keep running an old app.
+[[headers]]
+  for = "/training/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
