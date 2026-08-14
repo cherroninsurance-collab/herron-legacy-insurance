@@ -1,0 +1,16 @@
+{
+  "name": "Renewed Mind",
+  "short_name": "Renewed Mind",
+  "description": "A daily practice for the renewing of the mind — declarations, goal card, visualization, prayer, journal and gratitude, grounded in Scripture.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#2e2113",
+  "theme_color": "#2e2113",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

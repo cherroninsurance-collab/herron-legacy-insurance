@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Renewed Mind</title>
+<meta name="description" content="A daily practice for the renewing of the mind — declarations, goal card, visualization, prayer, journal and gratitude, grounded in Scripture.">
+<meta name="theme-color" content="#2e2113">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Renewed Mind">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+
+<style>
+/* ── Fonts ─────────────────────────────────────────────────────────────────
+   Self-hosted latin subsets (variable). No network dependency, so the app
+   renders identically offline and on first paint. */
+@font-face{font-family:'Cormorant Garamond';font-style:normal;font-weight:400 700;
+  font-display:swap;src:url('fonts/cormorant-garamond.woff2') format('woff2');}
+@font-face{font-family:'Cormorant Garamond';font-style:italic;font-weight:400 700;
+  font-display:swap;src:url('fonts/cormorant-garamond-italic.woff2') format('woff2');}
+@font-face{font-family:'EB Garamond';font-style:normal;font-weight:400 800;
+  font-display:swap;src:url('fonts/eb-garamond.woff2') format('woff2');}
+@font-face{font-family:'EB Garamond';font-style:italic;font-weight:400 800;
+  font-display:swap;src:url('fonts/eb-garamond-italic.woff2') format('woff2');}
+
+:root{
+  --paper:#f4ecda; --card:#faf5e8; --tile:#ece1c8; --deep:#f1e6cc;
+  --ink:#2c2318; --body:#4a3d29; --muted:#6b5b43; --faint:#8a7248;
+  --rule:#d8c9a5; --hair:#c9b98f;
+  --gold:#a8842c; --gold-lt:#c9a84c; --gold-pale:#f1e2b8;
+  --red:#8f2b1d; --green:#4a5d3a;
+  --dark:#2e2113; --darker:#241a0e; --on-dark:#ecd9a8; --on-dark-dim:#d9c08a; --on-dark-faint:#b09660;
+  --display:'Cormorant Garamond',Georgia,serif;
+  --text:'EB Garamond',Georgia,serif;
+  --tabh:64px;
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--text); font-size:17px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overscroll-behavior-y:none;
+}
+a{color:var(--red);text-decoration:none}
+button{font-family:var(--text);cursor:pointer}
+textarea,input{font-family:var(--text)}
+/* 16px minimum stops iOS auto-zooming the page on focus. Pinch-zoom stays
+   available on purpose — this is a reading app. */
+textarea,input{font-size:16px}
+textarea:focus,input:focus{outline:2px solid var(--gold);outline-offset:-1px}
+
+/* ── Shell ──────────────────────────────────────────────────────────────── */
+.app{
+  display:flex; flex-direction:column;
+  height:100vh; height:100dvh;
+  overflow:hidden;
+}
+
+.topbar{
+  flex:0 0 auto;
+  background:linear-gradient(180deg,var(--dark) 0%,var(--darker) 100%);
+  color:var(--on-dark-dim);
+  border-bottom:3px solid var(--gold);
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.brand{display:flex;flex-direction:column;gap:1px;flex:1 1 auto;min-width:0}
+.brand .rule{font-family:var(--display);font-size:11px;letter-spacing:4px;color:var(--gold);line-height:1}
+.brand .name{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:2.5px;color:var(--on-dark);line-height:1.1}
+/* One line, clipped rather than wrapped — the header must not grow taller on
+   a narrow phone, and a second line would push the practice further down. */
+.brand .verse{font-size:11.5px;font-style:italic;color:var(--on-dark-faint);line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.streak{flex:0 0 auto;text-align:center;min-width:54px;padding:5px 9px;
+  border:1px solid rgba(168,132,44,.55);background:rgba(168,132,44,.10)}
+.streak b{display:block;font-family:var(--display);font-size:23px;font-weight:700;color:var(--gold);line-height:1}
+.streak span{display:block;font-size:9px;letter-spacing:1.6px;color:var(--on-dark-faint);margin-top:2px}
+
+main{flex:1 1 auto;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 28px}
+.wrap{max-width:820px;margin:0 auto}
+
+/* ── Bottom tab strip ───────────────────────────────────────────────────── */
+.tabs{
+  flex:0 0 auto;
+  display:flex; gap:0;
+  overflow-x:auto; overflow-y:hidden;
+  background:linear-gradient(180deg,var(--dark) 0%,var(--darker) 100%);
+  border-top:3px solid var(--gold);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{
+  flex:0 0 auto; min-width:76px;
+  background:none;border:none;border-top:3px solid transparent;
+  color:var(--on-dark-dim); padding:8px 10px 9px;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:11px;letter-spacing:.5px;
+}
+.tabs button .g{font-size:19px;line-height:1;color:var(--gold)}
+.tabs button.on{background:rgba(168,132,44,.22);color:#f4ecda;border-top-color:var(--gold)}
+.tabs button.on .g{color:var(--on-dark)}
+
+/* ── Common blocks ──────────────────────────────────────────────────────── */
+.head{border-bottom:3px double var(--gold);padding-bottom:14px}
+.eyebrow{font-size:11.5px;letter-spacing:2.5px;color:var(--red);font-weight:600;line-height:1.35}
+h1{font-family:var(--display);font-size:32px;font-weight:600;margin:6px 0 0;line-height:1.15}
+h2{font-family:var(--display);font-size:21px;font-weight:600;margin:0}
+.lede{font-size:16px;line-height:1.6;color:var(--body);margin:12px 0 0}
+.lede em{font-style:italic}
+
+.card{background:var(--card);border:1px solid var(--rule);padding:18px 18px}
+.card+.card{margin-top:14px}
+.cardhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;
+  border-bottom:1px solid var(--rule);padding-bottom:9px}
+.cardhead .ref{font-size:12.5px;color:var(--muted);font-style:italic;flex:0 0 auto}
+
+.stack{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+
+.field{margin-top:14px}
+.label{font-size:11px;letter-spacing:1.8px;font-weight:600;margin-bottom:6px}
+.label.old{color:var(--red)} .label.truth{color:var(--green)} .label.decl{color:var(--gold)}
+textarea,input.line{
+  width:100%;padding:10px 12px;line-height:1.5;
+  border:1px solid var(--rule);background:var(--paper);color:var(--ink);
+  resize:vertical;
+}
+textarea{min-height:78px}
+textarea.decl{border-color:var(--gold);font-style:italic}
+.helps{font-size:13px;color:var(--faint);margin-top:6px;font-style:italic}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 22px;border:none;background:var(--red);color:var(--paper);
+  font-size:15px;letter-spacing:2px;
+}
+.btn:active{background:var(--gold)}
+.btn.ghost{background:none;border:1.5px solid var(--red);color:var(--red)}
+.btn.ghost:active{background:var(--red);color:var(--paper)}
+.btn.gold{background:var(--gold);color:var(--darker);font-weight:600}
+.btn.wide{width:100%}
+.btnrow{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+
+/* ── Today ──────────────────────────────────────────────────────────────── */
+.vod{background:var(--card);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  padding:20px 18px;text-align:center;margin-top:20px}
+.vod .t{font-family:var(--display);font-size:21px;font-style:italic;line-height:1.5;margin-top:9px}
+.vod .r{font-size:13px;letter-spacing:1.5px;color:var(--muted);margin-top:9px}
+
+.task{display:flex;align-items:flex-start;gap:12px;padding:10px 6px;width:100%;
+  background:none;border:none;text-align:left;font-family:var(--text)}
+.task:active{background:rgba(168,132,44,.10)}
+.box{flex:0 0 24px;width:24px;height:24px;border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;font-size:15px;margin-top:1px;
+  background:var(--paper);color:transparent}
+.task.done .box{background:var(--gold);color:var(--darker)}
+.task .l{flex:1;min-width:0}
+.task .l b{display:block;font-size:16px;font-weight:400;color:var(--ink)}
+.task.done .l b{color:var(--faint);text-decoration:line-through}
+.task .l span{display:block;font-size:12.5px;color:var(--faint);font-style:italic;margin-top:1px}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.tiles .t{background:var(--tile);border:1px solid var(--rule);padding:13px 10px;text-align:center}
+.tiles .t b{display:block;font-family:var(--display);font-size:24px;font-weight:700;line-height:1}
+.tiles .t span{display:block;font-size:10.5px;letter-spacing:1.5px;color:var(--muted);margin-top:6px}
+
+.method{margin-top:20px;padding:16px 18px;background:var(--tile);
+  border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);
+  font-size:14.5px;line-height:1.6;color:var(--body)}
+.method b{letter-spacing:1px;color:var(--red)}
+
+/* ── Declarations ───────────────────────────────────────────────────────── */
+.decl{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--rule);padding:18px}
+.decl.spoken{border-left-color:var(--gold)}
+.decl .who{font-size:11.5px;letter-spacing:1.8px;color:var(--red);font-weight:600}
+.decl .say{font-family:var(--display);font-size:21px;font-style:italic;line-height:1.45;margin-top:8px}
+.decl .verse{font-size:14.5px;line-height:1.55;color:var(--body);margin-top:11px;
+  border-top:1px solid var(--rule);padding-top:10px}
+.decl .verse span{color:var(--muted);letter-spacing:1px}
+.speak{margin-top:14px;width:100%;padding:12px;border:1.5px solid var(--gold);
+  background:none;color:var(--muted);font-size:13px;letter-spacing:2px}
+.decl.spoken .speak{background:var(--gold);color:var(--darker);font-weight:600}
+
+/* ── Goal card ──────────────────────────────────────────────────────────── */
+.goalcard{background:var(--card);border:3px double var(--gold);padding:24px 20px 20px;
+  box-shadow:0 6px 18px rgba(44,35,24,.18)}
+.goalcard .cap{text-align:center;font-size:12px;letter-spacing:3.5px;color:var(--gold)}
+.goalcard .txt{font-family:var(--display);font-size:20px;font-style:italic;line-height:1.55;
+  margin-top:14px;text-align:center;min-height:80px}
+.goalcard .foot{text-align:center;font-size:12.5px;color:var(--muted);margin-top:16px;
+  border-top:1px solid var(--rule);padding-top:11px;font-style:italic}
+.slots{display:flex;gap:8px;margin-top:14px}
+.slots button{flex:1;padding:12px 4px;border:1.5px solid var(--gold);background:none;
+  color:var(--muted);font-size:12px;letter-spacing:1.5px}
+.slots button.on{background:var(--gold);color:var(--darker);font-weight:600}
+.tips{font-size:14.5px;line-height:1.7;color:var(--body);margin:16px 0 0;padding-left:20px}
+
+/* ── Sessions (visualization / prayer) ──────────────────────────────────── */
+.session{background:var(--dark);color:var(--on-dark);padding:22px 18px;text-align:center;
+  border:3px double var(--gold);margin-top:20px}
+.session .cap{font-size:11.5px;letter-spacing:3px;color:var(--on-dark-faint)}
+.session .clock{font-family:var(--display);font-size:58px;font-weight:600;line-height:1.1;
+  margin-top:8px;font-variant-numeric:tabular-nums}
+.durs{display:flex;justify-content:center;gap:8px;margin-top:14px}
+.durs button{padding:9px 13px;border:1px solid var(--gold);background:none;
+  color:var(--on-dark-dim);font-size:13px}
+.durs button.on{background:var(--gold);color:var(--darker);font-weight:600}
+.session .go{margin-top:18px;width:100%;padding:14px;background:var(--gold);
+  color:var(--darker);border:none;font-size:16px;letter-spacing:2px;font-weight:600}
+.session .status{font-size:13px;font-style:italic;color:var(--on-dark-faint);
+  margin-top:12px;line-height:1.5}
+
+.step{display:flex;gap:14px;background:var(--card);border:1px solid var(--rule);padding:14px 16px}
+.step .n{font-family:var(--display);font-size:27px;font-weight:700;color:var(--gold);
+  line-height:1;flex:0 0 28px}
+.step b{font-size:16px;font-weight:600}
+.step p{font-size:14.5px;line-height:1.55;color:var(--body);margin:3px 0 0}
+
+.phase{background:var(--card);border:1px solid var(--rule);border-left:4px solid var(--rule);
+  padding:13px 16px}
+.phase.on{border-left-color:var(--red);background:var(--deep)}
+.phase .r{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.phase b{font-size:16px;font-weight:600}
+.phase .m{font-size:12.5px;color:var(--muted);flex:0 0 auto}
+.phase p{font-size:14.5px;line-height:1.55;color:var(--body);margin:3px 0 0;font-style:italic}
+
+/* ── Journal ────────────────────────────────────────────────────────────── */
+.prompt{font-family:var(--display);font-size:20px;font-style:italic;line-height:1.5;margin-top:8px}
+.entry{background:var(--card);border:1px solid var(--rule);padding:15px 17px}
+.entry .m{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.entry .m b{font-size:12.5px;letter-spacing:1px;color:var(--red);font-weight:600}
+.entry .m i{font-size:12.5px;color:var(--faint)}
+.entry .t{font-size:15px;line-height:1.6;margin-top:8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.subhead{font-size:11.5px;letter-spacing:1.8px;color:var(--muted);font-weight:600;
+  border-bottom:1px solid var(--rule);padding-bottom:8px;margin-top:26px}
+
+/* ── Gratitude ──────────────────────────────────────────────────────────── */
+.grat{display:flex;align-items:center;gap:12px}
+.grat+.grat{margin-top:9px}
+.grat .n{flex:0 0 32px;width:32px;height:32px;border:1.5px solid var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-family:var(--display);
+  font-size:17px;font-weight:700;color:var(--gold)}
+.grat input{flex:1;min-width:0;padding:10px 4px;border:none;border-bottom:1px solid var(--hair);
+  background:transparent;color:var(--ink)}
+.pastlist{margin:8px 0 0;padding-left:20px;font-size:15px;line-height:1.7}
+
+/* ── Progress ───────────────────────────────────────────────────────────── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px}
+.stats .s{background:var(--card);border:1px solid var(--rule);padding:14px 6px;text-align:center}
+.stats .s b{display:block;font-family:var(--display);font-size:28px;font-weight:700;line-height:1}
+.stats .s span{display:block;font-size:9.5px;letter-spacing:1.2px;color:var(--muted);margin-top:7px}
+.miles{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.mile{flex:1 1 88px;text-align:center;padding:14px 6px;border:2px solid var(--rule);
+  background:var(--card);color:#a89670}
+.mile.hit{border-color:var(--gold);background:var(--gold-pale);color:var(--ink)}
+.mile b{display:block;font-family:var(--display);font-size:24px;font-weight:700;line-height:1}
+.mile .d{font-size:10px;letter-spacing:1px;margin-top:4px}
+.mile .nm{font-size:11.5px;font-style:italic;margin-top:5px}
+.closing{margin-top:24px;padding:18px;background:var(--card);border:1px solid var(--rule);
+  font-size:15px;line-height:1.65;color:var(--body);font-style:italic;text-align:center}
+.closing span{font-style:normal;font-size:13.5px;color:var(--faint);display:block;margin-top:8px}
+
+.setting{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--card);border:1px solid var(--rule);padding:14px 16px;margin-top:14px}
+.setting .l b{display:block;font-size:15px}
+.setting .l span{display:block;font-size:13px;color:var(--faint);font-style:italic;margin-top:2px}
+.setting button{flex:0 0 auto;padding:9px 16px;border:1.5px solid var(--gold);background:none;
+  color:var(--muted);font-size:12px;letter-spacing:1.5px}
+.setting button.on{background:var(--gold);color:var(--darker);font-weight:600}
+
+.colophon{font-size:12.5px;color:var(--faint);font-style:italic;text-align:center;
+  margin-top:26px;line-height:1.6}
+
+/* ── Toast ──────────────────────────────────────────────────────────────── */
+#toast{
+  position:fixed;left:50%;transform:translateX(-50%) translateY(20px);
+  bottom:calc(var(--tabh) + env(safe-area-inset-bottom,0px) + 16px);
+  background:var(--dark);color:var(--on-dark);border:1px solid var(--gold);
+  padding:11px 20px;font-size:14px;letter-spacing:1px;
+  opacity:0;pointer-events:none;transition:opacity .22s ease,transform .22s ease;
+  z-index:60;max-width:88vw;text-align:center;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── Wider screens: restore something closer to the desk layout ─────────── */
+@media (min-width:720px){
+  main{padding:26px 24px 36px}
+  h1{font-size:38px}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .two>.card+.card{margin-top:0}
+  .tiles{grid-template-columns:repeat(4,1fr)}
+  .stats{grid-template-columns:repeat(5,1fr)}
+  .tabs{justify-content:center}
+  .tabs button{min-width:92px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+
+/* ── Print: the Ten Thanksgivings sheet only ────────────────────────────── */
+.printsheet{display:none}
+@media print{
+  @page{margin:.6in}
+  html,body{background:#fff}
+  .app,#toast{display:none !important}
+  .printsheet{display:block !important;font-family:var(--text);color:#2c2318}
+  .printsheet .ph{text-align:center;border-bottom:3px double var(--gold);padding-bottom:14px}
+  .printsheet .ph .m{font-size:12px;letter-spacing:5px;color:var(--gold)}
+  .printsheet .ph .t{font-family:var(--display);font-size:32px;font-weight:600;margin-top:8px}
+  .printsheet .ph .d{font-size:13px;letter-spacing:2px;color:var(--muted);margin-top:6px}
+  .printsheet .pv{font-family:var(--display);font-size:16px;font-style:italic;text-align:center;
+    color:var(--body);margin:18px 0}
+  .printsheet .pr{display:flex;align-items:flex-end;gap:16px;margin-top:20px}
+  .printsheet .pr .n{flex:0 0 32px;font-family:var(--display);font-size:22px;font-weight:700;color:var(--gold)}
+  .printsheet .pr .v{flex:1;border-bottom:1px solid var(--faint);min-height:28px;font-size:17px;padding-bottom:2px}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="rule">✦ ✦ ✦</div>
+      <div class="name">RENEWED MIND</div>
+      <div class="verse">“Be transformed by the renewal of your mind.” — Romans 12:2</div>
+    </div>
+    <div class="streak" title="Day streak"><b id="streakN">0</b><span>DAYS</span></div>
+  </header>
+
+  <main id="main"><div class="wrap" id="screen"></div></main>
+
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+<div class="printsheet" id="printsheet"></div>
+
+<noscript>
+  <div style="padding:24px;font-family:Georgia,serif;line-height:1.6">
+    <h1 style="font-family:Georgia,serif">Renewed Mind</h1>
+    <p>This daily practice needs JavaScript enabled to keep your streak, declarations,
+       goal card and journal on this device.</p>
+    <p><em>“Be transformed by the renewal of your mind.” — Romans 12:2 (ESV)</em></p>
+  </div>
+</noscript>
+
+<script>
+(function(){
+"use strict";
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RENEWED MIND — a daily practice app.
+
+   Everything lives on the device. There is no account and no server: state is
+   one JSON blob in localStorage under `renewedMind_v1`, with the same shape
+   the original design used, so data written by either carries over.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+var KEY = 'renewedMind_v1';
+
+/* ── Content ────────────────────────────────────────────────────────────── */
+
+var AREAS = [
+  { id:'money', name:'Money & Provision', ref:'Philippians 4:19',
+    verse:'And my God will supply every need of yours according to his riches in glory in Christ Jesus.',
+    decl:'God is my source. I steward increase with wisdom and generosity, and every need of mine is supplied in Christ.',
+    helps:'Matthew 6:33 · Proverbs 3:9–10 · 2 Corinthians 9:8 · Deuteronomy 8:18' },
+  { id:'self', name:'Self-Image & Identity', ref:'2 Corinthians 5:17',
+    verse:'Therefore, if anyone is in Christ, he is a new creation. The old has passed away; behold, the new has come.',
+    decl:'I am a new creation in Christ — fearfully and wonderfully made, His workmanship, created for good works.',
+    helps:'Psalm 139:14 · Ephesians 2:10 · 1 Peter 2:9 · Galatians 2:20' },
+  { id:'health', name:'Health & Vitality', ref:'1 Corinthians 6:19–20',
+    verse:'Do you not know that your body is a temple of the Holy Spirit within you, whom you have from God? … So glorify God in your body.',
+    decl:'My body is a temple of the Holy Spirit. I honor God in how I eat, how I move, and how I rest.',
+    helps:'3 John 2 · Proverbs 4:20–22 · Psalm 103:2–3' },
+  { id:'discipline', name:'Discipline & Self-Control', ref:'2 Timothy 1:7',
+    verse:'For God gave us a spirit not of fear but of power and love and self-control.',
+    decl:'God has given me a spirit of power, love, and self-control. I give myself a command and I follow it.',
+    helps:'1 Corinthians 9:27 · Proverbs 25:28 · Hebrews 12:11 · Galatians 5:22–23' },
+  { id:'family', name:'Family & Relationships', ref:'Joshua 24:15',
+    verse:'But as for me and my house, we will serve the LORD.',
+    decl:'As for me and my house, we serve the Lord. I lead my family with patience, kindness, and steadfast love.',
+    helps:'Psalm 127:3 · Ephesians 4:32 · Colossians 3:14 · Proverbs 22:6' },
+  { id:'faith', name:'Faith & Walk with God', ref:'Romans 10:17',
+    verse:'So faith comes from hearing, and hearing through the word of Christ.',
+    decl:'Faith comes by hearing. I feed on the Word daily and trust the Lord with all my heart.',
+    helps:'Hebrews 11:1 · Proverbs 3:5–6 · Mark 11:24 · Matthew 17:20' }
+];
+
+var VOD = [
+  { ref:'Romans 12:2', text:'Do not be conformed to this world, but be transformed by the renewal of your mind, that by testing you may discern what is the will of God, what is good and acceptable and perfect.' },
+  { ref:'Ephesians 4:23–24', text:'Be renewed in the spirit of your minds, and put on the new self, created after the likeness of God in true righteousness and holiness.' },
+  { ref:'Philippians 4:8', text:'Whatever is true, whatever is honorable, whatever is just, whatever is pure, whatever is lovely, whatever is commendable — think about these things.' },
+  { ref:'Joshua 1:8', text:'This Book of the Law shall not depart from your mouth, but you shall meditate on it day and night… For then you will make your way prosperous, and then you will have good success.' },
+  { ref:'Proverbs 4:23', text:'Keep your heart with all vigilance, for from it flow the springs of life.' },
+  { ref:'Colossians 3:2', text:'Set your minds on things that are above, not on things that are on earth.' },
+  { ref:'2 Corinthians 10:5', text:'We destroy arguments and every lofty opinion raised against the knowledge of God, and take every thought captive to obey Christ.' },
+  { ref:'Psalm 1:2–3', text:'His delight is in the law of the LORD, and on his law he meditates day and night. He is like a tree planted by streams of water that yields its fruit in its season.' },
+  { ref:'James 1:22', text:'But be doers of the word, and not hearers only, deceiving yourselves.' },
+  { ref:'Isaiah 26:3', text:'You keep him in perfect peace whose mind is stayed on you, because he trusts in you.' },
+  { ref:'Mark 11:24', text:'Therefore I tell you, whatever you ask in prayer, believe that you have received it, and it will be yours.' },
+  { ref:'Proverbs 16:3', text:'Commit your work to the LORD, and your plans will be established.' }
+];
+
+var PROMPTS = [
+  'Where did my thoughts drift today — toward God’s truth, or toward the old story? (2 Corinthians 10:5)',
+  'What evidence did I see today that God is at work in me? (Philippians 1:6)',
+  'Which old belief tried to speak today — and what is the truth that answers it?',
+  'Name three specific things I am grateful for tonight. (1 Thessalonians 5:18)',
+  'Where did I act like the person God says I am? Where did the old paradigm win?',
+  'What would I attempt tomorrow if I fully trusted God’s promise over my old programming? (Mark 9:23)',
+  'Whose life did I touch today? (Matthew 5:16)'
+];
+
+var MORNING = [
+  ['Be still before God — two quiet minutes','Psalm 46:10'],
+  ['Read the goal card aloud, with feeling','Habakkuk 2:2'],
+  ['Speak the six declarations aloud','Romans 10:17'],
+  ['Visualization — see the finished picture','Philippians 4:8'],
+  ['Thank God in advance for three things','Mark 11:24']
+];
+var EVENING = [
+  ['Read the goal card once more before sleep','Joshua 1:8 — day and night'],
+  ['Journal tonight’s prompt honestly','Lamentations 3:40'],
+  ['Review: where did the new mind win today?','Philippians 1:6'],
+  ['Forgive and release the day','Ephesians 4:26']
+];
+
+var VIZ_STEPS = [
+  ['Settle','Sit upright, breathe slowly. “Be still, and know that I am God.” (Psalm 46:10)'],
+  ['Fix the picture','See the goal already fulfilled — the room, the faces, the details. Involve every sense.'],
+  ['Feel it','Let gratitude rise as though it is already received. “Believe that you have received it.” (Mark 11:24)'],
+  ['Dwell on what is true','Hold only what is true, honorable, pure, lovely. (Philippians 4:8)'],
+  ['Commit and release','Hand the outcome to God. “Commit your work to the LORD.” (Proverbs 16:3) — not my will, but Yours.']
+];
+
+var PHASES = [
+  { name:'Adoration',    w:0.20, body:'Praise God for who He is, before anything He gives. (Psalm 100:4)' },
+  { name:'Confession',   w:0.15, body:'Name the old thoughts and ways honestly. (1 John 1:9)' },
+  { name:'Thanksgiving', w:0.20, body:'Thank Him specifically — including in advance. (1 Thessalonians 5:18)' },
+  { name:'Supplication', w:0.30, body:'Ask boldly for your goals, your family, your renewal — surrendered to His will. (Matthew 7:7, 1 John 5:14)' },
+  { name:'Stillness',    w:0.15, body:'Say nothing. Listen. (Psalm 46:10)' }
+];
+
+var MILESTONES = [[7,'First fruits'],[21,'Habit forming'],[30,'One month'],[60,'Deepening'],
+                  [90,'New normal'],[180,'Half year'],[365,'A full year']];
+
+var TABS = [
+  { id:'today',     label:'Today',   glyph:'☉' },
+  { id:'audit',     label:'Audit',   glyph:'⚖' },
+  { id:'declare',   label:'Declare', glyph:'❝' },
+  { id:'goal',      label:'Goal',    glyph:'✒' },
+  { id:'viz',       label:'Vision',  glyph:'◉' },
+  { id:'prayer',    label:'Prayer',  glyph:'✝' },
+  { id:'journal',   label:'Journal', glyph:'✎' },
+  { id:'gratitude', label:'Thanks',  glyph:'❧' },
+  { id:'progress',  label:'Progress',glyph:'❦' }
+];
+
+/* ── State ──────────────────────────────────────────────────────────────── */
+
+var S = {
+  tab:'today',
+  log:{}, audit:{}, goal:{ text:'I am so happy and grateful now that ', saved:false },
+  journalEntries:[], journalDraft:'', gratitudeLog:{},
+  counts:{ spoken:0, viz:0, prayer:0, reads:0 },
+  showNotes:true,
+  suggest:{},
+  vizMinutes:10, vizRemaining:0, vizRunning:false,
+  prayerMinutes:10, prayerElapsed:0, prayerRunning:false
+};
+
+(function load(){
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY)); } catch(e){}
+  if (!saved) return;
+  S.log            = saved.log || {};
+  S.audit          = saved.audit || {};
+  S.goal           = saved.goal || S.goal;
+  S.journalEntries = saved.journalEntries || [];
+  S.gratitudeLog   = saved.gratitudeLog || {};
+  if (saved.counts) for (var k in saved.counts) S.counts[k] = saved.counts[k];
+  if (typeof saved.showNotes === 'boolean') S.showNotes = saved.showNotes;
+  if (saved.sessionMinutes) { S.vizMinutes = saved.sessionMinutes; S.prayerMinutes = saved.sessionMinutes; }
+})();
+
+function persist(){
+  try {
+    localStorage.setItem(KEY, JSON.stringify({
+      log:S.log, audit:S.audit, goal:S.goal, journalEntries:S.journalEntries,
+      counts:S.counts, gratitudeLog:S.gratitudeLog,
+      showNotes:S.showNotes, sessionMinutes:S.vizMinutes
+    }));
+  } catch(e){ toast('Could not save — device storage is full or blocked.'); }
+}
+
+/* ── Day helpers ────────────────────────────────────────────────────────── */
+
+function keyOf(d){
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function todayKey(){ return keyOf(new Date()); }
+function blankDay(){ return { m:[], e:[], spoken:[], viz:false, prayer:false, reads:[], journal:false, grat:false }; }
+function dayLog(){
+  var d = S.log[todayKey()];
+  if (!d) return blankDay();
+  var out = blankDay();
+  for (var k in d) out[k] = d[k];
+  return out;
+}
+function patchDay(patch){
+  var k = todayKey(), dl = dayLog();
+  for (var p in patch) dl[p] = patch[p];
+  S.log[k] = dl;
+  persist();
+}
+function toggleIn(field, id){
+  var dl = dayLog(), arr = dl[field];
+  var had = arr.indexOf(id) !== -1;
+  var next = had ? arr.filter(function(x){ return x !== id; }) : arr.concat([id]);
+  var patch = {}; patch[field] = next;
+  patchDay(patch);
+  return !had;               // true when this call turned it ON
+}
+function dayActive(dl){
+  return !!(dl && (dl.m.length || dl.e.length || (dl.spoken && dl.spoken.length) ||
+    dl.viz || dl.prayer || (dl.reads && dl.reads.length) || dl.journal || dl.grat));
+}
+function streaks(){
+  var active = function(k){ return dayActive(S.log[k]); };
+  var cur = 0, d = new Date();
+  if (!active(keyOf(d))) d.setDate(d.getDate() - 1);
+  while (active(keyOf(d))) { cur++; d.setDate(d.getDate() - 1); }
+  var keys = Object.keys(S.log).filter(active).sort();
+  var best = 0, run = 0, prev = null;
+  keys.forEach(function(k){
+    if (prev){
+      var a = new Date(prev+'T12:00'), b = new Date(k+'T12:00');
+      run = (b - a) / 86400000 === 1 ? run + 1 : 1;
+    } else run = 1;
+    if (run > best) best = run;
+    prev = k;
+  });
+  return { cur:cur, best:best, total:keys.length };
+}
+function dayIndex(){ return Math.floor(Date.now() / 86400000); }
+function fmt(sec){
+  if (sec < 0) sec = 0;
+  return Math.floor(sec/60) + ':' + String(sec % 60).padStart(2,'0');
+}
+function longDate(k){
+  return new Date(k+'T12:00').toLocaleDateString('en-US',
+    { weekday:'long', month:'long', day:'numeric', year:'numeric' });
+}
+
+/* ── Tiny view helpers ──────────────────────────────────────────────────── */
+
+function esc(s){
+  return String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+var toastTimer = null;
+function toast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2200);
+}
+
+/* ── Screens ────────────────────────────────────────────────────────────── */
+
+function methodNote(html){
+  return S.showNotes ? '<div class="method"><b>THE METHOD — </b>' + html + '</div>' : '';
+}
+
+function taskList(list, field){
+  var dl = dayLog();
+  return list.map(function(t, i){
+    var done = dl[field].indexOf(i) !== -1;
+    return '<button class="task'+(done?' done':'')+'" data-act="task" data-arg="'+field+':'+i+'">'
+         +   '<span class="box">✓</span>'
+         +   '<span class="l"><b>'+esc(t[0])+'</b><span>'+esc(t[1])+'</span></span>'
+         + '</button>';
+  }).join('');
+}
+
+function screenToday(){
+  var dl = dayLog(), st = streaks(), vod = VOD[dayIndex() % VOD.length];
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">THE DAILY WATCH</div>'
+  +   '<h1>'+esc(new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'}))+'</h1>'
+  + '</div>'
+  + '<div class="vod">'
+  +   '<div class="eyebrow">VERSE OF THE DAY</div>'
+  +   '<div class="t">“'+esc(vod.text)+'”</div>'
+  +   '<div class="r">— '+esc(vod.ref)+' (ESV)</div>'
+  + '</div>'
+  + '<div class="two stack">'
+  +   '<div class="card">'
+  +     '<div class="cardhead"><h2>Morning Watch</h2><span class="ref">Psalm 5:3</span></div>'
+  +     taskList(MORNING,'m')
+  +   '</div>'
+  +   '<div class="card">'
+  +     '<div class="cardhead"><h2>Evening Watch</h2><span class="ref">Psalm 4:4</span></div>'
+  +     taskList(EVENING,'e')
+  +   '</div>'
+  + '</div>'
+  + '<div class="tiles">'
+  +   '<div class="t"><b>'+dl.spoken.length+' / 6</b><span>DECLARATIONS</span></div>'
+  +   '<div class="t"><b>'+dl.reads.length+' / 3</b><span>CARD READS</span></div>'
+  +   '<div class="t"><b>'+(dl.viz?'✓':'—')+'</b><span>VISUALIZATION</span></div>'
+  +   '<div class="t"><b>'+(dl.prayer?'✓':'—')+'</b><span>PRAYER</span></div>'
+  + '</div>'
+  + methodNote('A paradigm is the set of habitual ideas ruling your subconscious mind; it yields only to '
+    + '<em>constant, spaced repetition</em> of a new idea impressed with feeling. Scripture said it first: '
+    + 'faith comes by hearing (Romans 10:17), and transformation comes by the renewal of the mind (Romans 12:2). '
+    + 'The Daily Watch is that repetition — morning and evening, every day, until the new idea becomes the fixed one.')
+  + '<div class="colophon">Scripture quotations are from the ESV® Bible<br>(The Holy Bible, English Standard Version®), © 2001 by Crossway.</div>';
+}
+
+function screenAudit(){
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">STEP ONE</div><h1>The Paradigm Audit</h1>'
+  +   '<p class="lede">You cannot put off the old self until you can name it. For each area of life, write '
+  +     'the old story you have been living by, find God’s truth that answers it, and forge a new '
+  +     'present-tense declaration. <em>“Put off your old self… be renewed in the spirit of your minds… '
+  +     'put on the new self, created after the likeness of God.” — Ephesians 4:22–24 (ESV)</em></p>'
+  + '</div>'
+  + '<div class="stack">'
+  + AREAS.map(function(a){
+      var row = S.audit[a.id] || { old:'', truth:'', decl:'' };
+      var filled = [row.old,row.truth,row.decl].filter(function(x){ return x && x.trim(); }).length;
+      var sg = S.suggest[a.id];
+      return '<div class="card">'
+      + '<div class="cardhead"><h2>'+esc(a.name)+'</h2>'
+      +   '<span class="ref">'+(filled===3 ? '✦ COMPLETE' : filled+' OF 3')+'</span></div>'
+      + '<div class="field"><div class="label old">THE OLD STORY — the lie I have believed</div>'
+      +   '<textarea data-audit="'+a.id+':old" placeholder="e.g. “There is never enough — money is scarce and hard.”">'+esc(row.old)+'</textarea></div>'
+      + '<div class="field"><div class="label truth">GOD’S TRUTH — what Scripture says instead</div>'
+      +   '<textarea data-audit="'+a.id+':truth" placeholder="Write the verse (with reference) that answers the lie.">'+esc(row.truth)+'</textarea>'
+      +   '<div class="helps">Start here: '+esc(a.helps)+'</div></div>'
+      + '<div class="field"><div class="label decl">THE NEW DECLARATION — present tense, as though already true</div>'
+      +   '<textarea class="decl" data-audit="'+a.id+':decl" placeholder="e.g. “'+esc(a.decl)+'”">'+esc(row.decl)+'</textarea></div>'
+      + '<div class="btnrow"><button class="btn ghost" data-act="suggest" data-arg="'+a.id+'">✦ SUGGEST FROM SCRIPTURE</button></div>'
+      + (sg ? '<div class="card" style="margin-top:14px;border-color:var(--gold);background:var(--deep)">'
+          + '<div class="label truth">SUGGESTED — GOD’S TRUTH</div>'
+          + '<div style="font-size:15px;line-height:1.55">'+esc(sg.truth)+'</div>'
+          + '<div class="label decl" style="margin-top:12px">SUGGESTED — NEW DECLARATION</div>'
+          + '<div style="font-size:15px;font-style:italic;line-height:1.55">'+esc(sg.decl)+'</div>'
+          + '<div class="btnrow"><button class="btn gold" data-act="useSuggest" data-arg="'+a.id+'">USE THESE</button></div>'
+          + '</div>' : '')
+      + '</div>';
+    }).join('')
+  + '</div>'
+  + methodNote('The moment of confronting an old belief is where the old paradigm fights back with fear. '
+    + 'Scripture’s answer: “We destroy arguments and every lofty opinion raised against the knowledge of God, '
+    + 'and take every thought captive to obey Christ.” (2 Corinthians 10:5, ESV). Naming the lie is how you '
+    + 'take it captive. The declarations you write here become the ones you speak daily.');
+}
+
+function screenDeclare(){
+  var dl = dayLog();
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">SPEAK IT DAILY — '+dl.spoken.length+' OF 6 SPOKEN TODAY</div>'
+  +   '<h1>Daily Declarations</h1>'
+  +   '<p class="lede">Speak each one <em>aloud</em>, slowly, with feeling — not as wishful thinking, but as '
+  +     'agreement with what God has already said. “Faith comes from hearing, and hearing through the word '
+  +     'of Christ.” — Romans 10:17 (ESV)</p>'
+  + '</div>'
+  + '<div class="stack">'
+  + AREAS.map(function(a){
+      var custom = S.audit[a.id] && S.audit[a.id].decl && S.audit[a.id].decl.trim();
+      var spoken = dl.spoken.indexOf(a.id) !== -1;
+      return '<div class="decl'+(spoken?' spoken':'')+'">'
+      + '<div class="who">'+esc(a.name.toUpperCase())+'</div>'
+      + '<div class="say">“'+esc(custom || a.decl)+'”</div>'
+      + '<div class="verse">“'+esc(a.verse)+'” <span>— '+esc(a.ref)+' (ESV)</span></div>'
+      + '<button class="speak" data-act="speak" data-arg="'+a.id+'">'+(spoken?'✓ SPOKEN':'SPOKEN ALOUD')+'</button>'
+      + '</div>';
+    }).join('')
+  + '</div>';
+}
+
+function screenGoal(){
+  var dl = dayLog(), text = S.goal.text || '';
+  var display = (text.trim().length > 40) ? text : (text + '…');
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">WRITE THE VISION — HABAKKUK 2:2</div><h1>The Goal Card</h1>'
+  +   '<p class="lede">Write one clear goal in the present tense, with gratitude, surrendered to God’s will. '
+  +     'Make it a <em>C-type</em> goal — one you don’t yet know how to reach, that requires you to grow. '
+  +     '“Commit your work to the LORD, and your plans will be established.” — Proverbs 16:3 (ESV)</p>'
+  + '</div>'
+  + '<div class="stack">'
+  +   '<div>'
+  +     '<div class="label" style="color:var(--muted)">YOUR CARD — read it morning, midday &amp; night</div>'
+  +     '<div class="goalcard">'
+  +       '<div class="cap">✦ &nbsp;GOAL CARD&nbsp; ✦</div>'
+  +       '<div class="txt" id="goalDisplay">'+esc(display)+'</div>'
+  +       '<div class="foot">“If the Lord wills, we will live and do this or that.” — James 4:15</div>'
+  +     '</div>'
+  +     '<div class="slots">'
+  +       ['MORNING','MIDDAY','EVENING'].map(function(l,i){
+            var on = dl.reads.indexOf(i) !== -1;
+            return '<button class="'+(on?'on':'')+'" data-act="read" data-arg="'+i+'">'+(on?'✓ ':'')+l+'</button>';
+          }).join('')
+  +     '</div>'
+  +   '</div>'
+  +   '<div>'
+  +     '<div class="label" style="color:var(--muted)">COMPOSE YOUR CARD</div>'
+  +     '<textarea id="goalInput" data-goal style="min-height:140px;font-size:17px">'+esc(text)+'</textarea>'
+  +     '<div class="btnrow"><button class="btn" data-act="saveGoal">'+(S.goal.saved?'✓ SAVED':'SAVE CARD')+'</button></div>'
+  +     '<ul class="tips">'
+  +       '<li>Present tense: “I am so happy and grateful now that…”</li>'
+  +       '<li>Specific and vivid — dates, amounts, names.</li>'
+  +       '<li>God-aligned: seek first the kingdom (Matthew 6:33).</li>'
+  +       '<li>Held with open hands: “If the Lord wills…” (James 4:15).</li>'
+  +     '</ul>'
+  +   '</div>'
+  + '</div>'
+  + methodNote('Proctor carried his goal card in his pocket for decades and read it every time he touched it, '
+    + 'so the goal was impressed on the subconscious through repetition and feeling. Keep yours where your '
+    + 'hand finds it — and read it here, morning, midday and night.');
+}
+
+function screenViz(){
+  var dl = dayLog();
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">MENTAL REHEARSAL, SANCTIFIED</div><h1>Visualization</h1>'
+  +   '<p class="lede">See the finished picture and feel the gratitude of it — then hand the outcome to God. '
+  +     '“Whatever is true… honorable… lovely… think about these things.” — Philippians 4:8 (ESV)</p>'
+  + '</div>'
+  + '<div class="session">'
+  +   '<div class="cap">SESSION</div>'
+  +   '<div class="clock" id="vizClock">'+fmt(S.vizRunning ? S.vizRemaining : S.vizMinutes*60)+'</div>'
+  +   '<div class="durs">'
+  +     [5,10,15,20].map(function(m){
+          return '<button class="'+(S.vizMinutes===m?'on':'')+'" data-act="vizDur" data-arg="'+m+'">'+m+' min</button>';
+        }).join('')
+  +   '</div>'
+  +   '<button class="go" data-act="vizToggle">'+(S.vizRunning?'END SESSION':'BEGIN SESSION')+'</button>'
+  +   '<div class="status" id="vizStatus">'+esc(
+        dl.viz ? 'Completed today. Well done — repetition is the work.'
+               : (S.vizRunning ? 'Eyes closed. See it finished. Feel the gratitude.'
+                               : 'Not yet today. Five minutes changes the day.'))+'</div>'
+  + '</div>'
+  + '<div class="stack">'
+  + VIZ_STEPS.map(function(s,i){
+      return '<div class="step"><div class="n">'+(i+1)+'</div>'
+           + '<div><b>'+esc(s[0])+'</b><p>'+esc(s[1])+'</p></div></div>';
+    }).join('')
+  + '</div>';
+}
+
+/* A phase's share of a short session lands under a minute, where "0.8 min" is
+   a worse answer than "45 sec". */
+function phaseLen(w){
+  var sec = Math.round(w * S.prayerMinutes * 60);
+  if (sec < 60) return sec + ' sec';
+  var m = sec / 60;
+  return (Math.round(m*10)/10) + ' min';
+}
+
+function screenPrayer(){
+  var dl = dayLog(), total = S.prayerMinutes*60;
+  var acc = 0, cur = -1, bounds = PHASES.map(function(p){
+    var s = acc; acc += p.w*total; return { start:s, end:acc };
+  });
+  if (S.prayerRunning || S.prayerElapsed > 0){
+    cur = bounds.findIndex(function(b){ return S.prayerElapsed >= b.start && S.prayerElapsed < b.end; });
+  }
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">FIRST THINGS FIRST</div><h1>Prayer &amp; Stillness</h1>'
+  +   '<p class="lede">A guided hour of prayer in miniature — adoration, confession, thanksgiving, '
+  +     'supplication, and stillness. “Be still, and know that I am God.” — Psalm 46:10 (ESV)</p>'
+  + '</div>'
+  + '<div class="session">'
+  +   '<div class="cap" id="prayerPhase">'+esc(cur >= 0 ? PHASES[cur].name.toUpperCase() : 'SESSION')+'</div>'
+  +   '<div class="clock" id="prayerClock">'+fmt(total - S.prayerElapsed)+'</div>'
+  +   '<div class="durs">'
+  +     [5,10,15,20].map(function(m){
+          return '<button class="'+(S.prayerMinutes===m?'on':'')+'" data-act="prayerDur" data-arg="'+m+'">'+m+' min</button>';
+        }).join('')
+  +   '</div>'
+  +   '<button class="go" data-act="prayerToggle">'
+  +     (S.prayerRunning ? 'PAUSE' : (S.prayerElapsed > 0 ? 'RESUME' : 'BEGIN PRAYER'))+'</button>'
+  +   '<div class="status" id="prayerStatus">'+esc(
+        dl.prayer ? 'Completed today.'
+                  : (S.prayerRunning ? PHASES[Math.max(cur,0)].body
+                                     : 'The phases guide you — A.C.T.S. and stillness.'))+'</div>'
+  + '</div>'
+  + '<div class="stack" id="phaseList">'
+  + PHASES.map(function(p,i){
+      return '<div class="phase'+(i===cur?' on':'')+'" data-phase="'+i+'">'
+      + '<div class="r"><b>'+esc(p.name)+'</b><span class="m">'+phaseLen(p.w)+'</span></div>'
+      + '<p>'+esc(p.body)+'</p></div>';
+    }).join('')
+  + '</div>';
+}
+
+function screenJournal(){
+  var prompt = PROMPTS[dayIndex() % PROMPTS.length];
+  return ''
+  + '<div class="head"><div class="eyebrow">THE EVENING EXAMEN</div><h1>Journal</h1></div>'
+  + '<div class="card" style="margin-top:20px">'
+  +   '<div class="label" style="color:var(--red)">TONIGHT’S PROMPT</div>'
+  +   '<div class="prompt">'+esc(prompt)+'</div>'
+  +   '<textarea id="journalInput" data-journal style="min-height:150px;margin-top:14px" '
+  +     'placeholder="Write honestly. This stays on your device.">'+esc(S.journalDraft)+'</textarea>'
+  +   '<div class="btnrow"><button class="btn" data-act="saveJournal">SAVE ENTRY</button></div>'
+  + '</div>'
+  + '<div class="subhead">PAST ENTRIES — '+S.journalEntries.length+'</div>'
+  + '<div class="stack" style="margin-top:14px">'
+  + (S.journalEntries.length
+      ? S.journalEntries.map(function(e){
+          return '<div class="entry"><div class="m"><b>'+esc(e.date)+'</b><i>'+esc(e.prompt)+'</i></div>'
+               + '<div class="t">'+esc(e.text)+'</div></div>';
+        }).join('')
+      : '<div class="entry"><div class="t" style="color:var(--faint);font-style:italic">'
+        + 'No entries yet. Tonight’s is the first.</div></div>')
+  + '</div>';
+}
+
+function screenGratitude(){
+  var gk = todayKey(), GL = S.gratitudeLog || {};
+  var arr = (GL[gk] || []).slice();
+  while (arr.length < 10) arr.push('');
+  var dl = dayLog();
+  var past = Object.keys(GL).filter(function(k){
+    return k !== gk && (GL[k]||[]).some(function(x){ return x && x.trim(); });
+  }).sort().reverse();
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">IN EVERYTHING GIVE THANKS — 1 THESSALONIANS 5:18</div>'
+  +   '<h1>Ten Thanksgivings</h1>'
+  + '</div>'
+  + '<p class="lede">Name ten specific gifts today. Gratitude re-tunes the paradigm from lack to abundance '
+  +   'and gives God the glory for every good and perfect gift. <em>“Every good gift and every perfect gift '
+  +   'is from above.” — James 1:17 (ESV)</em></p>'
+  + '<div class="card" style="margin-top:18px">'
+  +   arr.map(function(v,i){
+        return '<div class="grat"><div class="n">'+(i+1)+'</div>'
+             + '<input type="text" data-grat="'+i+'" value="'+esc(v)+'" placeholder="I thank God for…"></div>';
+      }).join('')
+  +   '<div class="btnrow">'
+  +     '<button class="btn" data-act="saveGrat">'+(dl.grat?'✓ SAVED FOR TODAY':'SAVE TODAY’S LIST')+'</button>'
+  +     '<button class="btn ghost" data-act="printGrat">⎙ PRINT</button>'
+  +   '</div>'
+  + '</div>'
+  + (past.length
+      ? '<div class="subhead">PAST LISTS</div><div class="stack" style="margin-top:14px">'
+        + past.map(function(k){
+            return '<div class="entry"><div class="m"><b>'+esc(longDate(k))+'</b></div>'
+                 + '<ul class="pastlist">'
+                 + GL[k].filter(function(x){ return x && x.trim(); })
+                        .map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('')
+                 + '</ul></div>';
+          }).join('')
+        + '</div>'
+      : '');
+}
+
+function screenProgress(){
+  var st = streaks(), GL = S.gratitudeLog || {};
+  var gratDays = Object.keys(GL).filter(function(k){
+    return (GL[k]||[]).some(function(x){ return x && x.trim(); });
+  }).length;
+  var tiles = [
+    [st.cur,'CURRENT STREAK'], [st.best,'BEST STREAK'], [st.total,'DAYS ACTIVE'],
+    [S.counts.spoken,'DECLARATIONS'], [S.counts.reads,'CARD READS'],
+    [S.counts.viz,'VISUALIZATIONS'], [S.counts.prayer,'PRAYER SESSIONS'],
+    [S.journalEntries.length,'JOURNAL ENTRIES'], [gratDays,'GRATITUDE LISTS']
+  ];
+  return ''
+  + '<div class="head">'
+  +   '<div class="eyebrow">HE WHO BEGAN A GOOD WORK — PHILIPPIANS 1:6</div><h1>Progress</h1>'
+  + '</div>'
+  + '<div class="stats">'
+  +   tiles.map(function(t){
+        return '<div class="s"><b>'+t[0]+'</b><span>'+t[1]+'</span></div>';
+      }).join('')
+  + '</div>'
+  + '<div class="subhead">MILESTONES OF REPETITION</div>'
+  + '<div class="miles">'
+  +   MILESTONES.map(function(m){
+        return '<div class="mile'+(st.total >= m[0] ? ' hit' : '')+'">'
+             + '<b>'+m[0]+'</b><div class="d">DAYS</div><div class="nm">'+esc(m[1])+'</div></div>';
+      }).join('')
+  + '</div>'
+  + '<div class="closing">'
+  +   '“And I am sure of this, that he who began a good work in you will bring it to completion at the day '
+  +   'of Jesus Christ.” — Philippians 1:6 (ESV)'
+  +   '<span>This walk has no finish line. The repetition is the point.</span>'
+  + '</div>'
+  + '<div class="subhead">SETTINGS</div>'
+  + '<div class="setting"><div class="l"><b>Method notes</b>'
+  +   '<span>Show the short teaching panel on each page.</span></div>'
+  +   '<button class="'+(S.showNotes?'on':'')+'" data-act="toggleNotes">'+(S.showNotes?'ON':'OFF')+'</button></div>'
+  + '<div class="colophon">Scripture quotations are from the ESV® Bible (The Holy Bible, English Standard '
+  +   'Version®), © 2001 by Crossway, a publishing ministry of Good News Publishers. Used by permission. '
+  +   'All rights reserved.<br><br>Everything you write stays in this browser on this device.</div>';
+}
+
+var SCREENS = {
+  today:screenToday, audit:screenAudit, declare:screenDeclare, goal:screenGoal,
+  viz:screenViz, prayer:screenPrayer, journal:screenJournal,
+  gratitude:screenGratitude, progress:screenProgress
+};
+
+/* ── Render ─────────────────────────────────────────────────────────────── */
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(function(t){
+    return '<button class="'+(S.tab===t.id?'on':'')+'" data-act="nav" data-arg="'+t.id+'" '
+         + 'aria-current="'+(S.tab===t.id?'page':'false')+'">'
+         + '<span class="g">'+t.glyph+'</span>'+t.label+'</button>';
+  }).join('');
+  var on = document.querySelector('#tabs button.on');
+  if (on && on.scrollIntoView) on.scrollIntoView({ block:'nearest', inline:'center' });
+}
+
+function render(keepScroll){
+  var main = document.getElementById('main');
+  var y = keepScroll ? main.scrollTop : 0;
+  document.getElementById('screen').innerHTML = (SCREENS[S.tab] || screenToday)();
+  document.getElementById('streakN').textContent = streaks().cur;
+  renderTabs();
+  main.scrollTop = y;
+}
+
+/* ── Timers ─────────────────────────────────────────────────────────────── */
+/* The clocks tick every second, but a full re-render each second would blow
+   away any textarea the user is in and fight the scroll position. So the tick
+   handlers touch only the nodes that actually change. */
+
+var vizIv = null, prayIv = null;
+
+function vizToggle(){
+  if (S.vizRunning){
+    clearInterval(vizIv); vizIv = null;
+    S.vizRunning = false; S.vizRemaining = 0;
+    render(true); return;
+  }
+  S.vizRunning = true; S.vizRemaining = S.vizMinutes*60;
+  render(true);
+  vizIv = setInterval(function(){
+    S.vizRemaining--;
+    if (S.vizRemaining <= 0){
+      clearInterval(vizIv); vizIv = null;
+      S.vizRunning = false; S.vizRemaining = 0;
+      S.counts.viz++; patchDay({ viz:true });
+      render(true);
+      toast('Visualization complete. ✦');
+      return;
+    }
+    var el = document.getElementById('vizClock');
+    if (el) el.textContent = fmt(S.vizRemaining);
+  }, 1000);
+}
+
+function prayerToggle(){
+  if (S.prayerRunning){
+    clearInterval(prayIv); prayIv = null;
+    S.prayerRunning = false;
+    render(true); return;
+  }
+  S.prayerRunning = true;
+  render(true);
+  prayIv = setInterval(function(){
+    S.prayerElapsed++;
+    if (S.prayerElapsed >= S.prayerMinutes*60){
+      clearInterval(prayIv); prayIv = null;
+      S.prayerRunning = false; S.prayerElapsed = 0;
+      S.counts.prayer++; patchDay({ prayer:true });
+      render(true);
+      toast('Prayer complete. ✝');
+      return;
+    }
+    paintPrayer();
+  }, 1000);
+}
+
+function paintPrayer(){
+  var total = S.prayerMinutes*60, acc = 0;
+  var bounds = PHASES.map(function(p){ var s = acc; acc += p.w*total; return { start:s, end:acc }; });
+  var cur = bounds.findIndex(function(b){ return S.prayerElapsed >= b.start && S.prayerElapsed < b.end; });
+  var clock = document.getElementById('prayerClock');
+  if (clock) clock.textContent = fmt(total - S.prayerElapsed);
+  var lab = document.getElementById('prayerPhase');
+  if (lab) lab.textContent = cur >= 0 ? PHASES[cur].name.toUpperCase() : 'SESSION';
+  var stat = document.getElementById('prayerStatus');
+  if (stat && S.prayerRunning) stat.textContent = PHASES[Math.max(cur,0)].body;
+  var rows = document.querySelectorAll('#phaseList .phase');
+  for (var i = 0; i < rows.length; i++) rows[i].classList.toggle('on', i === cur);
+}
+
+/* ── Actions ────────────────────────────────────────────────────────────── */
+
+var ACTIONS = {
+  nav: function(id){
+    S.tab = id;
+    render();
+    document.getElementById('main').scrollTop = 0;
+  },
+  task: function(arg){
+    var p = arg.split(':');
+    toggleIn(p[0], parseInt(p[1],10));
+    render(true);
+  },
+  speak: function(id){
+    if (toggleIn('spoken', id)) { S.counts.spoken++; persist(); }
+    render(true);
+  },
+  read: function(i){
+    if (toggleIn('reads', parseInt(i,10))) { S.counts.reads++; persist(); }
+    render(true);
+  },
+  suggest: function(id){
+    var a = AREAS.filter(function(x){ return x.id === id; })[0];
+    if (!a) return;
+    S.suggest[id] = { truth: '“'+a.verse+'” — '+a.ref+' (ESV)', decl: a.decl };
+    render(true);
+  },
+  useSuggest: function(id){
+    var sg = S.suggest[id];
+    if (!sg) return;
+    var row = S.audit[id] || { old:'', truth:'', decl:'' };
+    row.truth = sg.truth; row.decl = sg.decl;
+    S.audit[id] = row;
+    S.suggest[id] = null;
+    persist();
+    render(true);
+    toast('Written in.');
+  },
+  saveGoal: function(){
+    var el = document.getElementById('goalInput');
+    if (el) S.goal.text = el.value;
+    S.goal.saved = true;
+    persist(); render(true);
+    toast('Goal card saved.');
+  },
+  saveJournal: function(){
+    var el = document.getElementById('journalInput');
+    var text = el ? el.value.trim() : '';
+    if (!text) { toast('Write something first.'); return; }
+    S.journalEntries.unshift({
+      date: new Date().toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'}),
+      prompt: PROMPTS[dayIndex() % PROMPTS.length],
+      text: text
+    });
+    S.journalDraft = '';
+    patchDay({ journal:true });          // persists
+    render();
+    toast('Entry saved.');
+  },
+  saveGrat: function(){ patchDay({ grat:true }); render(true); toast('Saved for today.'); },
+  printGrat: function(){ buildPrintSheet(); window.print(); },
+  vizDur: function(m){ if (!S.vizRunning){ S.vizMinutes = parseInt(m,10); persist(); render(true); } },
+  vizToggle: vizToggle,
+  prayerDur: function(m){
+    if (!S.prayerRunning){ S.prayerMinutes = parseInt(m,10); S.prayerElapsed = 0; persist(); render(true); }
+  },
+  prayerToggle: prayerToggle,
+  toggleNotes: function(){ S.showNotes = !S.showNotes; persist(); render(true); }
+};
+
+document.addEventListener('click', function(e){
+  var el = e.target.closest('[data-act]');
+  if (!el) return;
+  var fn = ACTIONS[el.getAttribute('data-act')];
+  if (fn) { e.preventDefault(); fn(el.getAttribute('data-arg')); }
+});
+
+/* Inputs are deliberately uncontrolled: typing writes straight to state and
+   persists on a debounce, with no re-render. Re-rendering per keystroke would
+   drop focus and the caret — the classic innerHTML trap. */
+var saveTimer = null;
+function lazyPersist(){ clearTimeout(saveTimer); saveTimer = setTimeout(persist, 400); }
+
+document.addEventListener('input', function(e){
+  var t = e.target, v = t.value;
+
+  var aud = t.getAttribute && t.getAttribute('data-audit');
+  if (aud){
+    var p = aud.split(':');
+    var row = S.audit[p[0]] || { old:'', truth:'', decl:'' };
+    row[p[1]] = v; S.audit[p[0]] = row;
+    lazyPersist(); return;
+  }
+  if (t.hasAttribute && t.hasAttribute('data-goal')){
+    S.goal.text = v; S.goal.saved = false;
+    var disp = document.getElementById('goalDisplay');
+    if (disp) disp.textContent = v.trim().length > 40 ? v : (v + '…');
+    lazyPersist(); return;
+  }
+  if (t.hasAttribute && t.hasAttribute('data-journal')){
+    S.journalDraft = v; return;          // draft is session-only, as designed
+  }
+  var gi = t.getAttribute && t.getAttribute('data-grat');
+  if (gi !== null && gi !== undefined && gi !== ''){
+    var gk = todayKey();
+    var arr = (S.gratitudeLog[gk] || []).slice();
+    while (arr.length < 10) arr.push('');
+    arr[parseInt(gi,10)] = v;
+    S.gratitudeLog[gk] = arr;
+    lazyPersist();
+  }
+});
+
+/* ── Print sheet ────────────────────────────────────────────────────────── */
+
+function buildPrintSheet(){
+  var gk = todayKey();
+  var arr = (S.gratitudeLog[gk] || []).slice();
+  while (arr.length < 10) arr.push('');
+  document.getElementById('printsheet').innerHTML = ''
+  + '<div class="ph"><div class="m">✦ &nbsp;RENEWED MIND&nbsp; ✦</div>'
+  +   '<div class="t">Ten Thanksgivings</div><div class="d">'+esc(longDate(gk))+'</div></div>'
+  + '<div class="pv">“Oh give thanks to the LORD, for he is good; for his steadfast love endures forever.” '
+  +   '— Psalm 107:1 (ESV)</div>'
+  + arr.map(function(v,i){
+      return '<div class="pr"><div class="n">'+(i+1)+'.</div><div class="v">'+esc(v && v.trim() ? v : '')+'</div></div>';
+    }).join('');
+}
+
+/* ── Day rollover ───────────────────────────────────────────────────────────
+   Phones sleep for hours. On wake, if the calendar day changed, the Today
+   screen, streak, verse and prompt are all stale — repaint them. */
+var lastDay = todayKey();
+document.addEventListener('visibilitychange', function(){
+  if (document.visibilityState !== 'visible') return;
+  if (todayKey() !== lastDay){ lastDay = todayKey(); render(); }
+});
+
+/* ── Boot ───────────────────────────────────────────────────────────────── */
+
+render();
+
+if ('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){ /* offline is a bonus, not a requirement */ });
+  });
+}
+
+})();
+</script>
+</body>
+</html>

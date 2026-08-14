@@ -35,6 +35,31 @@ serves serverless functions from `netlify/functions`.
 | `wealth-shield-matrix.html`, `protection-blueprint.html` | Interactive tool pages. |
 | `liquid-glass.js`, `legacy-ai.js` | Shared glass effect + concierge chat. |
 | `social/` | Standalone social content kit — **not** part of the website. |
+| `renewed-mind/` | Standalone personal daily-practice PWA — **not** part of the website, not linked from it. See below. |
+
+## `renewed-mind/` — a separate app that happens to live in this repo
+Built from the user's Claude Design project "Renewed Mind": a Scripture-grounded daily
+practice (Romans 12:2) pairing Proctor-style paradigm work with ESV Scripture. Nine screens —
+Today/Daily Watch, Paradigm Audit, Declarations, Goal Card, Visualization, Prayer, Journal,
+Gratitude, Progress. **It has nothing to do with the insurance business**: no NPN, no state
+list, no carrier or compliance copy belongs in it, and the homepage must not link to it.
+- Vanilla JS single page + manifest + service worker, no build step, 288K total.
+- The design was a 1440×900 desktop layout (264px sidebar); this is rebuilt for a phone —
+  bottom scrolling tab strip, stacked cards, timer panel above its step list.
+- **State is one localStorage blob under `renewedMind_v1`**, deliberately the same key and
+  shape the design used, so data written by either carries over. No account, no server.
+- **Inputs are uncontrolled on purpose.** Typing writes to state and persists on a 400ms
+  debounce with *no* re-render — re-rendering per keystroke through `innerHTML` drops focus
+  and the caret. Only buttons/nav re-render. Same reason the timers repaint single nodes
+  (`#vizClock`, `#prayerClock`, phase rows) instead of calling `render()` each second.
+- The design called `window.claude.complete` for AI counsel/goal-refine/journal reflection.
+  That API only exists inside the Claude artifact host, so those are replaced by an offline
+  **"suggest from Scripture"** that fills in each area's own verse + declaration. Labelled as
+  suggestion, not counsel. Real AI would need a serverless function — do not point it at
+  `netlify/functions/legacy-ai.js`, which is the insurance concierge with an insurance prompt.
+- Keep the **ESV copyright notice** intact (Today footer + Progress colophon).
+- The design links a `Renewed Mind Workbook.dc.html` companion that was never supplied;
+  the link is omitted rather than left dead.
 
 ## Where the design landed — BRIGHT THEME (2026-07-27)
 
