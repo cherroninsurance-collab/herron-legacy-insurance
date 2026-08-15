@@ -1,0 +1,257 @@
+/* LIVING WORD — Liquid Glass design tokens & core surfaces
+   Doctrine of light: one source, above; light descends onto the Word.
+   Palette: "Daybreak at the Gates" — a luminous, light-filled sanctuary.  */
+
+:root {
+  /* ------------------------------------------------ palette: daybreak */
+  --sky-high:    #cfe2ff;   /* upper heaven, coolest light              */
+  --sky-mid:     #e8f0ff;
+  --sky-low:     #fff6e4;   /* warm horizon glow                        */
+  --vellum:      #fffdf7;   /* glowing digital paper                    */
+  --gold-deep:   #9a6d12;   /* gold that stays legible AS TEXT on light */
+  --gate-gold:   #efb63c;   /* structural gold: borders, rules          */
+  --gate-gold-bright: #ffd977;
+  --ray-white:   #fffdf4;
+  --dawn-rose:   #f0a98d;
+  --olive:       #7ea36a;
+  --water:       #5f9fc4;
+  --ink:         #1b2340;   /* deep indigo — 12:1 on vellum             */
+  --ink-dim:     rgba(27,35,64,.66);
+  --ink-faint:   rgba(27,35,64,.42);
+
+  /* ------------------------------------------------ liquid glass core  */
+  --glass-blur: 22px;
+  --glass-sat: 165%;
+  --glass-bg: rgba(255,255,255,0.52);
+  --glass-bg-raised: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.9);
+  --glass-highlight: inset 0 1px 0 rgba(255,255,255,0.95);
+  --glass-radius: 22px;
+  --glass-radius-sm: 14px;
+
+  /* neumorphic depth — soft indigo shadow, never muddy grey */
+  --depth-far:  0 16px 40px rgba(46,72,140,.16);
+  --depth-near: 0 2px 8px rgba(46,72,140,.10);
+  --depth-pressed: inset 0 3px 10px rgba(46,72,140,.18), inset 0 1px 2px rgba(46,72,140,.14);
+
+  /* heavenly light properties */
+  --halo: radial-gradient(closest-side, rgba(255,217,119,.55), transparent 72%);
+  --beam-gradient: linear-gradient(180deg,
+      rgba(255,253,244,.95) 0%, rgba(255,217,119,.45) 44%, rgba(255,217,119,0) 100%);
+  --dawn-sky: linear-gradient(180deg,
+      var(--sky-high) 0%, var(--sky-mid) 42%, var(--sky-low) 100%);
+
+  /* type scale */
+  --font-scripture: 'New York', Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  --font-ui: 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  --scripture-size: 18px;
+  --scripture-leading: 1.68;
+  --scripture-measure: 34em;
+
+  /* springs (documented; JS reads these via getComputedStyle if needed) */
+  --spring-ui-zeta: 0.92;     /* interaction spring damping ratio  */
+  --spring-ui-omega: 14;      /* rad/s                             */
+  --dur-liturgical: 640ms;    /* slow, weighted default            */
+  --ease-settle: cubic-bezier(.22,.9,.28,1);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; height: 100%; overscroll-behavior: none; }
+body {
+  background: var(--dawn-sky);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: var(--font-ui);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------ surfaces */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--glass-radius);
+  box-shadow: var(--depth-far), var(--depth-near), var(--glass-highlight);
+}
+.glass--raised { background: var(--glass-bg-raised); }
+.glass--pressed { box-shadow: var(--depth-pressed); }
+
+/* chromatic aberration — display headings ONLY, never Scripture text */
+.ca-heading {
+  text-shadow: 1px 0 0 rgba(255,120,90,.10), -1px 0 0 rgba(90,140,255,.10);
+}
+
+.halo { position: relative; }
+.halo::before {
+  content: ''; position: absolute; inset: -34%;
+  background: var(--halo); pointer-events: none; z-index: -1;
+}
+
+/* ----------------------------------------------------------- scripture */
+.scripture {
+  font-family: var(--font-scripture);
+  font-size: var(--scripture-size);
+  line-height: var(--scripture-leading);
+  max-width: var(--scripture-measure);
+  margin-inline: auto;
+  color: var(--ink);
+  text-rendering: optimizeLegibility;
+}
+.scripture .vnum {
+  font-family: var(--font-ui); font-size: .62em; vertical-align: super;
+  color: var(--gold-deep); opacity: .85; margin-right: .28em; user-select: none;
+}
+.scripture .hl-gold  { background: rgba(255,200,60,.30); border-radius: 3px; }
+.scripture .hl-dawn  { background: rgba(240,169,141,.30); border-radius: 3px; }
+.scripture .hl-olive { background: rgba(126,163,106,.26); border-radius: 3px; }
+.scripture .hl-water { background: rgba(95,159,196,.26); border-radius: 3px; }
+.copyright-notice {
+  font-size: 11px; color: var(--ink-faint); text-align: center;
+  padding: 10px 18px 22px; max-width: 34em; margin-inline: auto;
+}
+
+/* ------------------------------------------------------------- buttons */
+.btn {
+  font-family: var(--font-ui); font-size: 15px; font-weight: 600;
+  color: var(--ink); letter-spacing: .02em;
+  padding: 13px 22px; border-radius: var(--glass-radius-sm);
+  background: var(--glass-bg-raised);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--depth-near), var(--glass-highlight);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  cursor: pointer;
+  transition: transform 180ms var(--ease-settle), box-shadow 180ms var(--ease-settle);
+}
+.btn:active { transform: scale(.97); box-shadow: var(--depth-pressed); }
+.btn:focus-visible { outline: 2px solid var(--gold-deep); outline-offset: 2px; }
+.btn--gold {
+  background: linear-gradient(180deg, #ffe6a8, #ffcf6b);
+  border-color: rgba(255,255,255,.95);
+  color: #4a3505;
+}
+
+/* ---------------------------------------------------------- app frames */
+#app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+.screen.active { display: flex; }
+.screen-body { flex: 1; overflow-y: auto; padding: 18px 18px 110px; } /* clear the tabbar */
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: calc(env(safe-area-inset-top, 0px) + 14px) 18px 14px;
+}
+.topbar h1 {
+  font-size: 19px; font-weight: 700; margin: 0; color: var(--gold-deep);
+  font-family: var(--font-scripture); letter-spacing: .03em;
+}
+
+.tabbar {
+  display: flex; justify-content: space-around;
+  margin: auto 14px calc(env(safe-area-inset-bottom, 0px) + 14px); /* auto top: pin to bottom */
+  padding: 8px;
+  position: relative; z-index: 5;                /* floats above the screen layers */
+}
+.tabbar button {
+  flex: 1; background: none; border: 0; color: var(--ink-dim);
+  font: 600 12px var(--font-ui); padding: 9px 4px; border-radius: 12px;
+  cursor: pointer; transition: color 240ms, background 240ms;
+}
+.tabbar button .glyph { display: block; font-size: 20px; margin-bottom: 3px; }
+.tabbar button.on {
+  color: var(--gold-deep);
+  background: linear-gradient(180deg, rgba(255,217,119,.55), rgba(255,217,119,.28));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+.card { padding: 18px; margin-bottom: 14px; }
+.card h3 { margin: 0 0 6px; font-family: var(--font-scripture); color: var(--gold-deep); }
+.card p { margin: 0; color: var(--ink-dim); font-size: 14px; line-height: 1.55; }
+
+/* volumetric ambient beam behind content (CSS fallback layer) */
+.ambient-beam {
+  position: fixed; top: -10vh; left: 50%; width: 72vw; height: 78vh;
+  transform: translateX(-50%) perspective(600px) rotateX(18deg);
+  background: var(--beam-gradient);
+  clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);
+  filter: blur(20px); opacity: .8; pointer-events: none; z-index: 0;
+}
+
+/* ------------------------------------------------ page-flip book stage */
+.book-stage {
+  perspective: 2200px; perspective-origin: 50% 42%;
+  position: relative; flex: 1; overflow: hidden;
+  margin-bottom: 88px;                           /* clear the tabbar */
+  /* the turn gesture must never double as text selection */
+  user-select: none; -webkit-user-select: none;
+  touch-action: pan-y;
+}
+.leaf {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transform-origin: left center;
+  will-change: transform;
+}
+/* Light through paper is painted as the page's OWN background layers, not
+   as overlay elements. An overlay inside preserve-3d gets promoted to its
+   own composited layer, which then composites against the page backdrop
+   instead of the leaf — visibly stranding glyph runs on the sky. Baking
+   the light into the background also reads truer: the paper glows while
+   the ink stays ink.
+   Layer 1: the light bloom that follows the fold (--crease/--translucency)
+   Layer 2: the specular band riding the crease itself
+   Layer 3: the raking sheen across the sheet
+   Layer 4: the vellum stock                                             */
+.leaf .face {
+  position: absolute; inset: 0; padding: 26px 22px 40px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background:
+    radial-gradient(130% 95% at calc(var(--crease, 100%)) 32%,
+      rgba(255,251,236, calc(var(--translucency, 0) * .92)),
+      rgba(255,244,214, calc(var(--translucency, 0) * .38)) 42%,
+      rgba(255,244,214, 0) 68%),
+    linear-gradient(90deg,
+      rgba(255,255,255,0) calc(var(--crease, 100%) - 9%),
+      rgba(255,255,255, calc(var(--translucency, 0) * .9)) var(--crease, 100%),
+      rgba(255,255,255,0) calc(var(--crease, 100%) + 9%)),
+    linear-gradient(105deg, rgba(255,255,255,.9), rgba(255,255,255,0) 34%),
+    linear-gradient(180deg, var(--vellum), #fdf4e2);
+  border: 1px solid rgba(255,255,255,.9);
+  border-radius: 6px 18px 18px 6px;
+  box-shadow: var(--depth-far), var(--glass-highlight);
+  overflow-y: auto;
+}
+/* While the leaf is in motion the face must not be a scroll container:
+   Chromium composites the scrolling contents separately from the face's
+   background inside a preserve-3d layer, which strands glyph runs on the
+   page backdrop. A turning page isn't scrollable anyway. */
+.book-stage.flipping .leaf .face { overflow: hidden; }
+/* Approaching edge-on the leaf hands off to its reverse: a blank vellum
+   back, never mirrored text. Driven from the flip loop rather than
+   backface-visibility, which a scrollable face defeats in some engines. */
+.leaf .face.front { opacity: var(--front-vis, 1); }
+.leaf .face.back {
+  transform: rotateY(180deg); border-radius: 18px 6px 6px 18px;
+  opacity: var(--back-vis, 0);
+}
+
+/* The page underneath, revealed as the leaf lifts away. Its shadow lives
+   inside it, so the flat overlay can never sort in front of the 3D leaf. */
+.under-leaf {
+  position: absolute; inset: 0; border-radius: 6px 18px 18px 6px;
+  background: linear-gradient(180deg, #fdf8ec, #f7ecd6);
+  border: 1px solid rgba(255,255,255,.85);
+  box-shadow: inset 0 0 60px rgba(46,72,140,.06);
+  overflow: hidden;
+}
+.page-shadow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, rgba(46,72,140,.28), transparent 42%);
+  opacity: var(--under-shadow, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}

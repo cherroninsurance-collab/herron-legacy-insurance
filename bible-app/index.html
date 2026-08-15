@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#e8f0ff">
+<title>Living Word — Offline ESV Discipleship</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="css/liquid-glass.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<!-- ambient volumetric beam (CSS layer under all screens) -->
+<div class="ambient-beam" aria-hidden="true"></div>
+
+<div id="app">
+
+  <!-- ============================ SPLASH ============================ -->
+  <div id="splash" aria-label="Opening: light descends upon the Word">
+    <canvas id="splash-gl"></canvas>
+    <div id="splash-book">
+      <div class="board"></div>
+      <div class="leaf3d fan"></div>
+      <div class="leaf3d fan"></div>
+      <div class="leaf3d fan"></div>
+      <div class="leaf3d cover"></div>
+    </div>
+    <div id="splash-title">
+      <h1 class="ca-heading">LIVING WORD</h1>
+      <p>“The grass withers, the flower fades, but the word of our God
+         will stand forever.” — Isaiah 40:8</p>
+    </div>
+  </div>
+
+  <!-- ============================= HOME ============================= -->
+  <section class="screen" id="screen-home">
+    <header class="topbar"><h1>Living Word</h1></header>
+    <div class="screen-body"></div>
+  </section>
+
+  <!-- ============================= READ ============================= -->
+  <section class="screen" id="screen-read">
+    <header class="topbar"><h1>The Word</h1></header>
+    <nav class="reader-nav">
+      <button class="btn" id="btn-books" title="Browse all 66 books">📚</button>
+      <select id="sel-book" aria-label="Book"></select>
+      <select id="sel-chapter" aria-label="Chapter"></select>
+    </nav>
+    <div class="book-stage" id="book-stage">
+      <div class="under-leaf" aria-hidden="true"><div class="page-shadow"></div></div>
+      <div class="leaf">
+        <div class="face front"></div>
+        <div class="face back"></div>
+      </div>
+      <button class="turn-btn prev" id="turn-prev" aria-label="Previous page">‹</button>
+      <button class="turn-btn next" id="turn-next" aria-label="Next page">›</button>
+    </div>
+  </section>
+
+  <!-- ====================== THE 66 BOOKS (3D) ======================= -->
+  <section class="screen" id="screen-books">
+    <header class="topbar">
+      <button class="back-link" data-back="home">‹ Home</button>
+      <h1>The 66 Books</h1>
+    </header>
+    <div class="screen-body">
+      <p class="game-sub" style="text-align:center">Spin the shelf · tap a book for its main lessons</p>
+      <div id="books-carousel" class="carousel-stage"></div>
+      <div id="books-focus" class="books-focus"></div>
+      <div id="books-detail"></div>
+    </div>
+  </section>
+
+  <!-- =================== THE TEACHINGS OF JESUS ===================== -->
+  <section class="screen" id="screen-jesus">
+    <header class="topbar">
+      <button class="back-link" data-back="home">‹ Home</button>
+      <h1>The Teachings of Jesus</h1>
+    </header>
+    <div class="screen-body">
+      <div id="jesus-carousel" class="carousel-stage"></div>
+      <div id="jesus-list"></div>
+    </div>
+  </section>
+
+  <!-- ============================ LEARN ============================= -->
+  <section class="screen" id="screen-learn">
+    <header class="topbar"><h1>Learn</h1></header>
+    <div class="screen-body"></div>
+  </section>
+
+  <!-- ============================ STUDY ============================= -->
+  <section class="screen" id="screen-study">
+    <header class="topbar"><h1>Study</h1></header>
+    <div class="screen-body"></div>
+  </section>
+
+  <!-- ============================ TABBAR ============================ -->
+  <nav class="tabbar glass">
+    <button data-screen="home"><span class="glyph">✦</span>Home</button>
+    <button data-screen="read"><span class="glyph">📖</span>Read</button>
+    <button data-screen="books"><span class="glyph">📚</span>Books</button>
+    <button data-screen="jesus"><span class="glyph">✝️</span>Jesus</button>
+    <button data-screen="learn"><span class="glyph">🕯️</span>Learn</button>
+    <button data-screen="study"><span class="glyph">🌌</span>Study</button>
+  </nav>
+
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

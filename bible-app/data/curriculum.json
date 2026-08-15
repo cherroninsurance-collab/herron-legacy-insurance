@@ -1,0 +1,194 @@
+{
+  "trackA": {
+    "name": "Lambs — Early Readers to 12",
+    "units": [
+      {
+        "unit": 1,
+        "title": "God Makes",
+        "lessons": [
+          {
+            "id": "A1-01",
+            "title": "God Said: Let There Be Light",
+            "passage_ref": "Genesis 1:1-5",
+            "ref": { "b": 1, "c": 1, "vs": 1, "ve": 5 },
+            "big_truth": "God made everything by His word, and everything He made was good.",
+            "christ_connection": "The same Word that said 'Let there be light' became a person — Jesus (John 1:1-5). Jesus is the light that darkness can never put out.",
+            "obedience_step": "Tonight when you see a light turn on, say thank You to God who made light.",
+            "multiply_step": "Tell one person in your family the story of the first day, in your own words.",
+            "memory_verse": { "ref": "Genesis 1:1", "b": 1, "c": 1, "vs": 1, "ve": 1 },
+            "steps": [
+              { "kind": "hear", "body": "Before anything existed — before the sun, before the sea, before you — God was there. And God spoke. He didn't need tools or helpers. He just said, 'Let there be light,' and light came running." },
+              { "kind": "see", "body": "Look at the beam of light on your screen. Real light is faster and brighter than anything — and God made it with only His voice." },
+              { "kind": "play", "body": "Build the memory verse, one glowing word at a time.", "game_id": "verse-builder" },
+              { "kind": "say", "body": "Say the memory verse out loud three times, a little quieter each time, until it is a whisper you can keep." },
+              { "kind": "live", "body": "God's word is powerful. When God says something, it happens. You can trust everything He says." }
+            ]
+          },
+          {
+            "id": "A1-02",
+            "title": "The Shepherd Who Looks for the Lost",
+            "passage_ref": "Luke 15:4-7",
+            "ref": { "b": 42, "c": 15, "vs": 4, "ve": 7 },
+            "big_truth": "God is like a shepherd who never gives up looking for His lost sheep.",
+            "christ_connection": "Jesus told this story about Himself. He is the Good Shepherd who left heaven to find us and carry us home (John 10:11).",
+            "obedience_step": "Pray for one friend who doesn't know Jesus yet — the Shepherd is looking for them.",
+            "multiply_step": "Act out the lost-sheep story with a stuffed animal for someone younger than you.",
+            "memory_verse": { "ref": "Psalm 23:1", "b": 19, "c": 23, "vs": 1, "ve": 1 },
+            "steps": [
+              { "kind": "hear", "body": "A shepherd counted his sheep: ...97, 98, 99 — one was missing! Did he say 'ninety-nine is plenty'? Never. He walked into the dark hills, calling and searching, until the lost one was found and safe on his shoulders." },
+              { "kind": "play", "body": "Lead the lamb along the Shepherd's Path.", "game_id": "shepherd-path" },
+              { "kind": "say", "body": "Memory verse: 'The LORD is my shepherd; I shall not want.'" },
+              { "kind": "live", "body": "When you feel lost or afraid, remember: the Shepherd knows your name and He is already looking for you." }
+            ]
+          },
+          {
+            "id": "A1-03",
+            "title": "One Big Story",
+            "passage_ref": "Luke 24:27",
+            "ref": { "b": 42, "c": 24, "vs": 27, "ve": 27 },
+            "big_truth": "The whole Bible — from the very first page — is one story that leads to Jesus.",
+            "christ_connection": "Creation, the promise, the kings, the prophets — every part of the story points ahead to Jesus, the Rescuer God promised.",
+            "obedience_step": "Ask a grown-up to show you their favorite Bible story and find where it sits on the timeline.",
+            "multiply_step": "Teach the order of the big story (Creation → Promise → Jesus → Church) to a friend using your fingers.",
+            "memory_verse": { "ref": "Psalm 119:105", "b": 19, "c": 119, "vs": 105, "ve": 105 },
+            "steps": [
+              { "kind": "hear", "body": "The Bible is not a box of little stories. It is one river, flowing from the garden all the way to Jesus and then out to the whole world." },
+              { "kind": "play", "body": "Place the great events on the river of light, in order.", "game_id": "great-timeline" },
+              { "kind": "say", "body": "Memory verse: 'Thy word is a lamp unto my feet, and a light unto my path.'" },
+              { "kind": "live", "body": "Every time you read the Bible, ask the treasure question: where is Jesus in this story?" }
+            ]
+          },
+          {
+            "id": "A1-04",
+            "title": "The Greatest Gift",
+            "passage_ref": "John 3:16-17",
+            "ref": { "b": 43, "c": 3, "vs": 16, "ve": 17 },
+            "big_truth": "God loved the world so much that He gave His only Son, so that everyone who believes in Him has life forever.",
+            "christ_connection": "This IS the gospel: Jesus died for our sins and rose again. Believing in Him is not earning a prize — it is receiving a gift.",
+            "obedience_step": "Talk to God in your own words: thank Him for giving Jesus, and tell Him you want to follow Him.",
+            "multiply_step": "John 3:16 is good news for every person on earth. Who will you share it with this week? Say their name out loud.",
+            "memory_verse": { "ref": "John 3:16", "b": 43, "c": 3, "vs": 16, "ve": 16 },
+            "steps": [
+              { "kind": "hear", "body": "A gift is not a gift if you have to pay for it. God gave the most precious gift there ever was — His own Son — so that we could come home to Him." },
+              { "kind": "play", "body": "Build John 3:16 — the verse missionaries have carried to every nation.", "game_id": "verse-builder" },
+              { "kind": "say", "body": "Say John 3:16 and put your own name in it: 'For God so loved ______...'" },
+              { "kind": "live", "body": "You never have to make God love you. He already did the loving first (Romans 5:8)." }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "trackB": {
+    "name": "Disciples — 13 to Adult",
+    "courses": [
+      {
+        "course": 1,
+        "title": "The Gospel of the Kingdom",
+        "studies": [
+          {
+            "id": "B1-01",
+            "title": "The Word Became Flesh",
+            "passage_ref": "John 1:1-14",
+            "ref": { "b": 43, "c": 1, "vs": 1, "ve": 14 },
+            "big_truth": "Jesus is not merely a messenger from God; He is God the Son, the eternal Word, who entered His own creation.",
+            "christ_connection": "John deliberately opens with Genesis 1 language ('In the beginning') to declare that the Creator has become the Redeemer. The Word who spoke light now shines as the Light.",
+            "context": "John writes so that 'you may believe that Jesus is the Christ, the Son of God' (John 20:31). 'Logos' (Word) spoke both to Jewish readers (God's creative word, Gen 1; Ps 33:6) and to Greek readers (the rational principle behind the cosmos). John claims both streams find their fulfillment in a person.",
+            "dbs": [
+              "What does this passage say about God?",
+              "What does it say about people (vv. 5, 10-12)?",
+              "What must change in how I live if the Word truly 'dwelt among us'?",
+              "Who will I share this passage with before our next meeting?"
+            ],
+            "apologetic": "Objection: 'Jesus never claimed to be God.' John 1:1-3,14 — written within living memory of eyewitnesses — asserts full deity and full humanity. See also John 8:58, 20:28. The earliest Christians worshiped Jesus as God at the cost of their lives; that conviction was not a later legend.",
+            "vocab": ["gk-logos"],
+            "obedience_step": "Memorize John 1:1-5 this week and recite it to your group.",
+            "multiply_step": "Lead one person through vv. 1-14 using the four discovery questions above. You do not need to be an expert; the questions do the work."
+          },
+          {
+            "id": "B1-02",
+            "title": "The Righteousness We Could Not Earn",
+            "passage_ref": "Romans 3:23; 5:8; 6:23; 10:9",
+            "ref": { "b": 45, "c": 3, "vs": 23, "ve": 23 },
+            "big_truth": "All have sinned; God justifies sinners freely through the redemption that is in Christ Jesus, received by faith.",
+            "christ_connection": "The 'Romans Road' is the gospel in four stones: universal guilt (3:23), demonstrated love (5:8), wages vs. gift (6:23), and the confession of faith (10:9). Christ's cross is where God's justice and mercy meet.",
+            "context": "Paul writes to a mixed Jewish-Gentile church he has not yet visited, laying out the gospel systematically. Chapters 1-3 establish that no one — religious or pagan — is righteous before God by works.",
+            "dbs": [
+              "What do these verses say about God's character — both His justice and His love?",
+              "What do they say about every human being, including me?",
+              "What is the difference between a wage and a gift, and why does it matter for salvation?",
+              "Who in my life still thinks salvation must be earned? How will I show them these verses?"
+            ],
+            "apologetic": "Objection: 'A loving God wouldn't judge sin.' Love without justice is indifference. Romans 5:8 shows God satisfying His own justice at His own cost — the judge stepped down and took the sentence Himself.",
+            "vocab": ["gk-dikaiosyne", "gk-charis"],
+            "obedience_step": "Write out the four Romans Road verses on a card (or in your notes here) and practice sharing them in under five minutes.",
+            "multiply_step": "Share the Romans Road with one person this week. Record their name in your multiplication ledger and keep praying for them."
+          },
+          {
+            "id": "B1-03",
+            "title": "Sent Ones: The Commission and the Church",
+            "passage_ref": "Matthew 28:18-20; 2 Timothy 2:2",
+            "ref": { "b": 40, "c": 28, "vs": 18, "ve": 20 },
+            "big_truth": "The risen King commands His people to make disciples of all nations — and discipleship is designed to multiply through four generations.",
+            "christ_connection": "The Commission rests entirely on Christ's authority ('All authority... has been given to me') and His presence ('I am with you always'). Mission is not our project for God; it is Christ's own work through us.",
+            "context": "Matthew ends where the church begins. 2 Timothy 2:2 shows the mechanism: Paul → Timothy → faithful ones → others also. Four generations in one verse. A church is planted when disciples gather around the Word, baptize, break bread, and raise their own leaders (Acts 2:42-47; Titus 1:5).",
+            "dbs": [
+              "What has Jesus been given, and what does that mean for the nations — and for my neighborhood?",
+              "What exactly are we commanded to do: make converts, or make disciples who obey? What is the difference?",
+              "What would a simple church look like in my home or village — Word, prayer, bread, baptism, leaders?",
+              "Name your 'Timothy' — the person you are training who will train others. If you have none, who could be the first?"
+            ],
+            "apologetic": "Objection: 'Mission is cultural imperialism.' The gospel is the one message that dignifies every culture equally: every nation, tribe, and tongue is invited as-is to the same table (Rev 7:9). Church-planting done biblically raises LOCAL leaders and puts the Word in LOCAL hands — this app exists to make itself unnecessary.",
+            "vocab": ["gk-ekklesia", "heb-hesed"],
+            "obedience_step": "Begin the 3/3rds pattern with your group this week: Look Back (accountability), Look Up (new passage), Look Forward (goal and prayer).",
+            "multiply_step": "Open your multiplication ledger and write the names of your first generation. Pray over each name daily."
+          }
+        ]
+      }
+    ]
+  },
+  "vocab": [
+    {
+      "id": "gk-logos", "lemma": "λόγος", "language": "greek", "translit": "logos",
+      "gloss": "word, message, reason",
+      "teaching": "In John 1, the eternal self-expression of God — not merely speech about God, but God the Son Himself. Used ~330x in the NT.",
+      "key_refs": ["John 1:1", "John 1:14", "1 John 1:1", "Revelation 19:13"]
+    },
+    {
+      "id": "gk-dikaiosyne", "lemma": "δικαιοσύνη", "language": "greek", "translit": "dikaiosynē",
+      "gloss": "righteousness, justice",
+      "teaching": "The status of being in the right before God. Romans' central theme: a righteousness from God, given to sinners through faith in Christ (Rom 3:21-26).",
+      "key_refs": ["Romans 1:17", "Romans 3:22", "2 Corinthians 5:21"]
+    },
+    {
+      "id": "gk-charis", "lemma": "χάρις", "language": "greek", "translit": "charis",
+      "gloss": "grace, unmerited favor",
+      "teaching": "God's free, undeserved kindness — the opposite of wages. Grace is not God ignoring sin, but God paying for it Himself.",
+      "key_refs": ["Ephesians 2:8-9", "Romans 6:23", "Titus 2:11"]
+    },
+    {
+      "id": "gk-ekklesia", "lemma": "ἐκκλησία", "language": "greek", "translit": "ekklēsia",
+      "gloss": "assembly, church",
+      "teaching": "The called-out gathering of Christ's people — never a building in the NT, always a people. The goal of missions is planting these worshiping communities everywhere.",
+      "key_refs": ["Matthew 16:18", "Acts 2:42-47", "Ephesians 1:22-23"]
+    },
+    {
+      "id": "heb-hesed", "lemma": "חֶסֶד", "language": "hebrew", "translit": "hesed",
+      "gloss": "steadfast love, covenant loyalty",
+      "teaching": "God's loyal, promise-keeping love — the 'goodness and mercy' that pursues David in Psalm 23:6. Fulfilled in Christ, who keeps covenant for us.",
+      "key_refs": ["Psalm 23:6", "Exodus 34:6-7", "Lamentations 3:22-23"]
+    }
+  ],
+  "timeline_events": [
+    { "id": "creation",  "order": 1, "label": "Creation",       "ref": "Genesis 1" },
+    { "id": "fall",      "order": 2, "label": "The Fall",       "ref": "Genesis 3" },
+    { "id": "promise",   "order": 3, "label": "Promise to Abraham", "ref": "Genesis 12" },
+    { "id": "exodus",    "order": 4, "label": "The Exodus",     "ref": "Exodus 14" },
+    { "id": "david",     "order": 5, "label": "King David",     "ref": "2 Samuel 7" },
+    { "id": "exile",     "order": 6, "label": "Exile & Prophets", "ref": "Isaiah 53" },
+    { "id": "bethlehem", "order": 7, "label": "Jesus Is Born",  "ref": "Luke 2" },
+    { "id": "cross",     "order": 8, "label": "The Cross",      "ref": "John 19" },
+    { "id": "tomb",      "order": 9, "label": "The Empty Tomb", "ref": "Luke 24" },
+    { "id": "pentecost", "order": 10, "label": "The Church Is Sent", "ref": "Acts 2" }
+  ]
+}

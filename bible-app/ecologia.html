@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#020617">
+<title>ECOLOGIA — The Sacred Word</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   ECOLOGIA — design tokens
+   Zero external requests: no CDN, no webfonts, no analytics. The
+   OFFLINE ACTIVE badge is literally true.
+   Cinzel is unavailable offline, so display type uses a high-quality
+   serif stack with the wide tracking that gives Cinzel its liturgical
+   feel.
+   ══════════════════════════════════════════════════════════════════ */
+:root {
+  --void: #020617;
+  --accent: #eab308;          /* rethemed live by the age toggle */
+  --accent-soft: rgba(234,179,8,.30);
+  --accent-text: #fde68a;
+  --indigo: #6366f1;
+  --ink: #e2e8f0;
+  --ink-dim: #94a3b8;
+  --font-sacred: 'Cinzel', 'Optima', 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-ui: 'Inter', -apple-system, 'Segoe UI', system-ui, sans-serif;
+  --ease-lux: cubic-bezier(.16,1,.3,1);
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  font-family: var(--font-ui);
+  background: var(--void);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh; min-height: 100dvh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 22px;
+  position: relative;
+  user-select: none;
+}
+.serif-sacred { font-family: var(--font-sacred); letter-spacing: .04em; }
+::-webkit-scrollbar { width: 0; display: none; }
+
+/* ── glassmorphism ────────────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(255,255,255,.015);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-top: 1px solid rgba(255,255,255,.14);
+  border-left: 1px solid rgba(255,255,255,.08);
+  border-right: 1px solid rgba(255,255,255,.03);
+  border-bottom: 1px solid rgba(255,255,255,.02);
+  box-shadow: 0 30px 70px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+  transition: background .5s var(--ease-lux), border-color .5s var(--ease-lux),
+              box-shadow .5s var(--ease-lux), transform .5s var(--ease-lux);
+}
+.glass-panel:hover {
+  background: rgba(255,255,255,.03);
+  border-top-color: var(--accent-soft);
+  box-shadow: 0 40px 90px rgba(0,0,0,.7), 0 0 30px rgba(234,179,8,.06);
+}
+
+/* ── ambient layers ──────────────────────────────────────────────── */
+@keyframes pulseGlow {
+  0%,100% { opacity: .25; transform: scale(1); }
+  50%     { opacity: .40; transform: scale(1.1); }
+}
+#celestial {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(circle at 50% 0%,
+    rgba(234,179,8,.18) 0%, rgba(99,102,241,.08) 40%, transparent 70%);
+  animation: pulseGlow 10s ease-in-out infinite;
+}
+#canvas-container { position: fixed; inset: 0; z-index: 1; }
+#gl { width: 100%; height: 100%; display: block; }
+
+/* ── header ───────────────────────────────────────────────────────── */
+header, main, footer { position: relative; z-index: 20; width: 100%;
+  max-width: 1280px; margin-inline: auto; }
+header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand-dot {
+  width: 11px; height: 11px; border-radius: 50%; background: var(--accent);
+  box-shadow: 0 0 12px var(--accent); animation: pulseGlow 2.4s ease-in-out infinite;
+}
+.brand h1 { font-size: 20px; letter-spacing: .2em; font-weight: 600;
+  color: #fef3c7; margin: 0; }
+.header-tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.age-toggle { display: flex; padding: 4px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+.age-toggle button {
+  padding: 7px 17px; border-radius: 999px; border: 0; background: none; cursor: pointer;
+  color: var(--ink-dim); font: 500 12px/1 var(--font-ui); letter-spacing: .06em;
+  transition: all .3s var(--ease-lux);
+}
+.age-toggle button.on { background: rgba(255,255,255,.10); color: #fff; }
+.age-toggle button.on.youth { background: rgba(239,68,68,.20); color: #fca5a5; }
+.badge {
+  padding: 9px 15px; border-radius: 999px; display: flex; align-items: center; gap: 7px;
+  font-size: 11px; letter-spacing: .1em; color: #34d399; font-weight: 500;
+}
+.badge svg { width: 12px; height: 12px; }
+
+/* ── main grid ────────────────────────────────────────────────────── */
+main {
+  display: grid; grid-template-columns: 1fr; gap: 26px;
+  margin: 34px auto; align-items: center;
+}
+@media (min-width: 1040px) {
+  main { grid-template-columns: repeat(12, 1fr); }
+  .col-left  { grid-column: span 4; }
+  .col-mid   { grid-column: span 4; min-height: 380px; }
+  .col-right { grid-column: span 4; }
+}
+.col-mid { min-height: 220px; }        /* the holographic book shows through */
+.col-left, .col-right { display: flex; flex-direction: column; gap: 20px; }
+
+.scripture-card { padding: 30px; border-radius: 26px; }
+.eyebrow { font-size: 11px; text-transform: uppercase; letter-spacing: .25em;
+  color: var(--accent); font-weight: 600; display: block; margin-bottom: 12px; }
+#scripture-title { font-size: 26px; color: #fef3c7; margin: 0 0 14px; line-height: 1.25; }
+#scripture-text { color: #cbd5e1; font-size: 14.5px; line-height: 1.75; font-weight: 300;
+  font-style: italic; letter-spacing: .01em; margin: 0; transition: opacity .45s var(--ease-lux); }
+.rule { height: 1px; margin: 24px 0;
+  background: linear-gradient(90deg, transparent, #334155, transparent); }
+.card-foot { display: flex; justify-content: space-between; align-items: center;
+  font-size: 11.5px; color: var(--ink-dim); letter-spacing: .08em; gap: 10px; }
+.link-btn { background: none; border: 0; cursor: pointer; color: var(--accent-text);
+  font: 500 11.5px var(--font-ui); letter-spacing: .08em; display: flex; align-items: center; gap: 5px;
+  transition: color .3s; }
+.link-btn:hover { color: #fff; }
+.link-btn svg { width: 14px; height: 14px; }
+
+.module-card {
+  padding: 22px; border-radius: 20px; display: flex; align-items: center;
+  justify-content: space-between; gap: 14px; cursor: pointer;
+}
+.module-card:hover { transform: translateY(-2px); }
+.module-card .tag { font-size: 10px; text-transform: uppercase; letter-spacing: .16em;
+  font-weight: 700; color: var(--indigo); }
+.module-card.gold .tag { color: var(--accent); }
+.module-card h3 { font-size: 16.5px; color: #e2e8f0; margin: 5px 0 0;
+  transition: color .3s; font-family: var(--font-sacred); }
+.module-card:hover h3 { color: #fde68a; }
+.module-card p { font-size: 12.5px; color: var(--ink-dim); font-weight: 300; margin: 6px 0 0; line-height: 1.5; }
+.chev {
+  width: 34px; height: 34px; flex: none; border-radius: 50%;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.10);
+  display: grid; place-items: center; color: var(--ink-dim);
+  transition: all .3s var(--ease-lux);
+}
+.module-card:hover .chev { background: rgba(234,179,8,.10);
+  border-color: var(--accent-soft); color: var(--accent-text); }
+.chev svg { width: 16px; height: 16px; }
+
+/* ── footer ───────────────────────────────────────────────────────── */
+footer { display: flex; justify-content: space-between; align-items: center; gap: 16px;
+  flex-wrap: wrap; font-size: 11px; letter-spacing: .14em; color: #64748b;
+  border-top: 1px solid rgba(255,255,255,.05); padding-top: 22px; }
+footer nav { display: flex; gap: 24px; flex-wrap: wrap; }
+footer button { background: none; border: 0; cursor: pointer; color: #64748b;
+  font: 400 11px var(--font-ui); letter-spacing: .14em; transition: color .3s; }
+footer button:hover { color: var(--accent-text); }
+
+/* ── overlay / module shell ───────────────────────────────────────── */
+#overlay {
+  position: fixed; inset: 0; z-index: 60; display: none;
+  background: rgba(2,6,23,.72); backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 20px; overflow-y: auto; overscroll-behavior: contain;
+}
+#overlay.open { display: block; animation: fadeIn .4s var(--ease-lux); }
+@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+.sheet {
+  max-width: 940px; margin: 24px auto; border-radius: 26px; padding: 28px;
+  animation: riseIn .5s var(--ease-lux);
+}
+@keyframes riseIn { from { opacity: 0; transform: translateY(22px) } to { opacity: 1; transform: none } }
+.sheet-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 6px; }
+.sheet-head h2 { font-family: var(--font-sacred); font-size: 25px; color: #fef3c7; margin: 0; line-height: 1.25; }
+.sheet-sub { color: var(--ink-dim); font-size: 13px; font-weight: 300; margin: 8px 0 22px; line-height: 1.6; }
+.close-x {
+  flex: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font-size: 19px; line-height: 1; transition: all .3s;
+}
+.close-x:hover { background: rgba(239,68,68,.15); border-color: rgba(239,68,68,.4); color: #fca5a5; }
+
+.btn {
+  padding: 12px 20px; border-radius: 13px; cursor: pointer;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font: 600 13.5px var(--font-ui); letter-spacing: .02em;
+  transition: all .3s var(--ease-lux);
+}
+.btn:hover { background: rgba(255,255,255,.10); border-color: var(--accent-soft); }
+.btn--gold { background: linear-gradient(180deg, rgba(234,179,8,.26), rgba(234,179,8,.10));
+  border-color: var(--accent-soft); color: #fef3c7; }
+.btn:disabled { opacity: .4; cursor: default; }
+
+/* ── games & modules ──────────────────────────────────────────────── */
+.tile-pool { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+.tile {
+  padding: 11px 15px; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+  color: var(--ink); font: 500 14px var(--font-sacred); transition: all .3s var(--ease-lux);
+}
+.tile:hover { border-color: var(--accent-soft); background: rgba(255,255,255,.08); }
+.tile.used { opacity: .2; pointer-events: none; }
+.tile.wrong { animation: shakeIt .5s var(--ease-lux); border-color: rgba(239,68,68,.5); }
+@keyframes shakeIt { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 60%{transform:translateX(5px)} }
+.answer-line {
+  min-height: 62px; padding: 16px; border-radius: 14px; margin-bottom: 16px;
+  border: 1px dashed var(--accent-soft); font-family: var(--font-sacred);
+  font-size: 16px; line-height: 1.7; color: #fef3c7;
+}
+.answer-line.done { border-style: solid; box-shadow: 0 0 34px rgba(234,179,8,.20); }
+.answer-line span { opacity: 0; transition: opacity .5s var(--ease-lux); }
+.answer-line span.lit { opacity: 1; text-shadow: 0 0 14px rgba(234,179,8,.55); }
+
+.progress-rail { display: flex; gap: 5px; height: 7px; margin: 14px 0 20px; }
+.progress-rail i { flex: 1; border-radius: 4px; background: rgba(255,255,255,.07);
+  transition: background .6s var(--ease-lux), box-shadow .6s var(--ease-lux); }
+.progress-rail i.lit { background: linear-gradient(90deg, var(--accent), #fef3c7);
+  box-shadow: 0 0 14px var(--accent-soft); }
+
+.seq-slots { display: flex; flex-wrap: wrap; gap: 9px; min-height: 46px; margin-bottom: 16px; }
+.seq-card {
+  padding: 12px 15px; border-radius: 13px; cursor: pointer; text-align: left;
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.12);
+  transition: all .3s var(--ease-lux); display: flex; flex-direction: column; gap: 3px;
+  color: var(--ink); font-family: var(--font-ui);
+}
+.seq-card strong { font: 600 13.5px var(--font-sacred); color: #e2e8f0; }
+.seq-card small { font-size: 11px; color: var(--ink-dim); }
+.seq-card:hover { border-color: var(--accent-soft); }
+.seq-card.placed { border-color: var(--accent-soft); background: rgba(234,179,8,.09); cursor: default; }
+
+.quiz-q { font: 600 15.5px var(--font-ui); color: #fef3c7; margin: 20px 0 12px; line-height: 1.55; }
+.quiz-opt { display: block; width: 100%; text-align: left; margin-bottom: 9px; }
+.quiz-opt.correct { border-color: rgba(52,211,153,.55); background: rgba(52,211,153,.12); color: #a7f3d0; }
+.quiz-opt.miss { border-color: rgba(239,68,68,.45); background: rgba(239,68,68,.10); }
+.explain { padding: 15px 17px; border-radius: 14px; margin: 12px 0 4px;
+  border: 1px solid var(--accent-soft); background: rgba(234,179,8,.07);
+  font-size: 13.5px; line-height: 1.65; color: #fde68a; }
+.explain b { color: #fff8e1; }
+
+.result {
+  margin-top: 20px; padding: 22px; border-radius: 18px; text-align: center;
+  border: 1px solid var(--accent-soft); background: rgba(234,179,8,.08);
+}
+.result .big { font-size: 34px; }
+.result p { color: #fde68a; font-size: 14px; line-height: 1.65; margin: 10px 0 0; }
+
+/* book / teaching grids */
+.grid-cards { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.mini-book {
+  padding: 15px 13px; border-radius: 13px; cursor: pointer; text-align: center;
+  background: linear-gradient(150deg, rgba(99,102,241,.15), rgba(255,255,255,.02));
+  border: 1px solid rgba(255,255,255,.10); border-left: 3px solid var(--accent-soft);
+  transition: all .35s var(--ease-lux); color: var(--ink);
+}
+.mini-book.ot { background: linear-gradient(150deg, rgba(234,179,8,.14), rgba(255,255,255,.02)); }
+.mini-book:hover { transform: translateY(-3px); border-color: var(--accent-soft);
+  box-shadow: 0 14px 34px rgba(0,0,0,.5), 0 0 22px rgba(234,179,8,.10); }
+.mini-book b { display: block; font: 600 13.5px var(--font-sacred); color: #fef3c7; }
+.mini-book span { font-size: 10.5px; color: var(--ink-dim); letter-spacing: .1em; text-transform: uppercase; }
+
+.detail-block { padding: 17px; border-radius: 15px; margin-top: 12px;
+  background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.08); }
+.detail-block .kind { display: block; font: 700 10.5px var(--font-ui); letter-spacing: .18em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+.detail-block p { margin: 0; font-size: 14px; line-height: 1.7; color: #cbd5e1; }
+.detail-block.christ { border-color: var(--accent-soft); background: rgba(234,179,8,.07); }
+.detail-block.christ p { color: #fde68a; }
+
+.accordion { margin-bottom: 10px; border-radius: 15px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); }
+.accordion > button { width: 100%; text-align: left; padding: 15px 17px; cursor: pointer;
+  background: none; border: 0; color: var(--ink); font-family: var(--font-ui); }
+.accordion > button b { display: block; font: 600 14.5px var(--font-sacred); color: #fef3c7; }
+.accordion > button small { color: var(--ink-dim); font-size: 11.5px; letter-spacing: .06em; }
+.accordion .inner { padding: 0 17px 15px; }
+
+#map-canvas { width: 100%; height: 340px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,.10); display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+<body>
+
+<div id="celestial"></div>
+<div id="canvas-container"><canvas id="gl"></canvas></div>
+
+<!-- ══════════════════════════ HEADER ══════════════════════════ -->
+<header>
+  <div class="brand">
+    <div class="brand-dot"></div>
+    <h1 class="serif-sacred">ECOLOGIA</h1>
+  </div>
+  <div class="header-tools">
+    <div class="age-toggle glass-panel">
+      <button id="btn-kids" data-age="kids">YOUTH</button>
+      <button id="btn-adults" data-age="adults" class="on">ADULT</button>
+    </div>
+    <div class="badge glass-panel">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+      OFFLINE ACTIVE
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ MAIN ═══════════════════════════ -->
+<main>
+  <section class="col-left">
+    <div class="glass-panel scripture-card">
+      <span class="eyebrow">Verse of the Day</span>
+      <h2 id="scripture-title" class="serif-sacred">John 1:1</h2>
+      <p id="scripture-text">"In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning."</p>
+      <div class="rule"></div>
+      <div class="card-foot">
+        <span id="translation-label">TRANSLATION: KJV</span>
+        <button class="link-btn" id="btn-listen">
+          LISTEN TIMBRE
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="glass-panel module-card" data-module="books">
+      <div>
+        <span class="tag">Canonical Atlas</span>
+        <h3>The Sixty-Six</h3>
+        <p>Every book, its theme, and where it points to Christ.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+  </section>
+
+  <div class="col-mid"></div>
+
+  <section class="col-right">
+    <div class="glass-panel module-card" id="card1" data-module="">
+      <div>
+        <span class="tag" id="card1-tag">Interactive Chronology</span>
+        <h3 id="card1-title">Testament Illuminations</h3>
+        <p id="card1-desc">Journey through historical design alignments.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+    <div class="glass-panel module-card gold" id="card2" data-module="">
+      <div>
+        <span class="tag" id="card2-tag">Scripture Quest Engine</span>
+        <h3 id="card2-title">Exegesis Training</h3>
+        <p id="card2-desc">Deep, structured modular memory maps.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+    <div class="glass-panel module-card" id="card3" data-module="">
+      <div>
+        <span class="tag" id="card3-tag">Word Made Flesh</span>
+        <h3 id="card3-title">The Teachings of Jesus</h3>
+        <p id="card3-desc">Sermon, parables, the I AMs, and His final words.</p>
+      </div>
+      <div class="chev"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg></div>
+    </div>
+  </section>
+</main>
+
+<!-- ══════════════════════════ FOOTER ══════════════════════════ -->
+<footer>
+  <p style="margin:0;font-weight:300">CRAFTED FOR UNIVERSAL MISSIONARY DISPATCH</p>
+  <nav>
+    <button data-module="books">HISTORICAL TEXTS</button>
+    <button data-module="concordance">CONCORDANCE</button>
+    <button data-module="maps">GLOBAL MAPS</button>
+  </nav>
+</footer>
+
+<div id="overlay"><div class="glass-panel sheet" id="sheet"></div></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ECOLOGIA ENGINE
+   Rewritten from the source draft. Notable departures:
+   · Three.js is replaced by hand-written raymarched WebGL. The book is
+     an SDF solid shaded with true single-bounce refraction and
+     per-channel dispersion — physically closer than MeshPhysicalMaterial
+     transmission, and it costs one fullscreen triangle instead of a
+     600 KB dependency the offline badge could never honor.
+   · No CDN, webfont, or network call of any kind exists in this file.
+   ══════════════════════════════════════════════════════════════════ */
+'use strict';
+
+const BIBLE = {"note":"Main lessons for every book of the Bible, Genesis to Revelation. Fields: b=book id, t=theme, kv=key verse, ls=main lessons, c=where the book points to Christ.","books":[{"b":1,"t":"Beginnings: creation, fall, and the promise","kv":"Genesis 12:2-3","ls":["God created everything good, and humanity in His own image.","Sin entered through one act of distrust and broke everything — but God pursued the sinners, not abandoned them.","God builds His plan through covenant promises to Abraham, Isaac, and Jacob, and preserves His people through Joseph."],"c":"The offspring who will crush the serpent (3:15), the lamb God Himself provides (22:8), and Judah's coming ruler (49:10) all point to Jesus."},{"b":2,"t":"Redemption: God delivers and dwells","kv":"Exodus 6:7","ls":["God hears the cry of the oppressed and acts in mighty power to free them.","Salvation comes through the blood of the Passover lamb, not the merit of the rescued.","God gives His law and His presence — the redeemed are made a worshiping people."],"c":"Jesus is our Passover Lamb (1 Cor 5:7), the true bread from heaven, and the greater Moses who leads the ultimate exodus from sin."},{"b":3,"t":"Holiness: a holy God makes a way to be near","kv":"Leviticus 19:2","ls":["Sin is costly — atonement always requires a substitute's blood.","God is holy, and His people are called to be distinct in every area of life.","The Day of Atonement shows both the seriousness of sin and the mercy of God."],"c":"Every sacrifice, priest, and cleansing ritual is a shadow fulfilled in Jesus, our great High Priest and final sacrifice (Hebrews 9-10)."},{"b":4,"t":"Wilderness: faithfulness meets unbelief","kv":"Numbers 23:19","ls":["Unbelief, not obstacles, keeps people out of God's promises.","God provides daily — manna, water, guidance — even for grumblers.","God keeps His promises across generations despite human failure."],"c":"The bronze serpent lifted up for the dying is Jesus' own picture of His cross (John 3:14-15)."},{"b":5,"t":"Covenant renewed: love the LORD your God","kv":"Deuteronomy 6:5","ls":["Obedience flows from remembering what God has done.","God's commands are for our good — life and blessing are found in loving Him.","Choose this day: covenant faithfulness is a decision every generation must make."],"c":"Moses promises a greater Prophet to come (18:15) — fulfilled in Jesus, who kept the whole covenant we broke."},{"b":6,"t":"Conquest: God keeps every promise","kv":"Joshua 21:45","ls":["Courage comes from God's presence, not favorable odds.","Victory belongs to the LORD — Jericho fell to faith, not siegecraft.","Not one word of God's good promises ever fails."],"c":"Joshua ('The LORD saves') leads Israel into rest — a preview of Jesus (same name in Greek), who leads His people into eternal rest."},{"b":7,"t":"The spiral of sin and the mercy of God","kv":"Judges 21:25","ls":["When everyone does what is right in their own eyes, society collapses.","God repeatedly raises deliverers for an undeserving people.","Flawed judges cannot produce lasting peace — the heart itself must change."],"c":"Every failed deliverer sharpens the longing for the perfect Deliverer-King, Jesus."},{"b":8,"t":"Loyal love in the darkest times","kv":"Ruth 1:16","ls":["God works His grand plan through small, ordinary faithfulness.","Hesed — costly loyal love — is the family likeness of God's people.","The outsider who takes refuge under God's wings is fully welcomed in."],"c":"Boaz the kinsman-redeemer buys back a foreign widow — and their line leads straight to David and to Jesus, our Redeemer (Matt 1:5)."},{"b":9,"t":"The heart God sees: kingship begins","kv":"1 Samuel 16:7","ls":["God exalts the humble (Hannah) and brings down the proud (Eli's house).","Man looks at outward appearance; the LORD looks at the heart.","Obedience is better than sacrifice — partial obedience is disobedience."],"c":"David the anointed shepherd-king from Bethlehem prefigures great David's greater Son."},{"b":10,"t":"David's throne and God's forever promise","kv":"2 Samuel 7:16","ls":["God's covenant with David promises a throne established forever.","Even the man after God's own heart falls terribly — and repentance, not perfection, marks the godly.","Sin is forgiven yet consequences remain; grace is never license."],"c":"The son of David whose kingdom never ends is Jesus (Luke 1:32-33)."},{"b":11,"t":"A kingdom divided by half-hearted worship","kv":"1 Kings 18:21","ls":["Wisdom without wholehearted devotion ends in idolatry (Solomon).","How long will you go limping between two opinions? God demands undivided loyalty.","God is not in the noise but often in the low whisper — He sustains His weary servants."],"c":"Solomon's glory and the temple's splendor fade; one greater than Solomon and the true temple is Jesus (Matt 12:42; John 2:19-21)."},{"b":12,"t":"The long fall: exile comes at last","kv":"2 Kings 17:13-14","ls":["God sends prophet after prophet in patience before judgment falls.","National ruin follows spiritual ruin — idolatry destroys from within.","Even in judgment God preserves a remnant and the lamp of David."],"c":"The preserved line of David, flickering but never extinguished, carries the promise to Bethlehem."},{"b":13,"t":"God's people retold: worship at the center","kv":"1 Chronicles 16:34","ls":["God's covenant faithfulness runs through every generation of the genealogies.","Worship deserves our best order, skill, and joy.","Give thanks to the LORD, for He is good — His steadfast love endures forever."],"c":"The genealogy from Adam through David is the family tree that Matthew 1 completes in Jesus."},{"b":14,"t":"If my people humble themselves","kv":"2 Chronicles 7:14","ls":["Revival begins with humbling, prayer, seeking God, and turning from sin.","The kings who sought the LORD prospered; those who forsook Him fell.","God's eyes run throughout the earth to strengthen wholehearted hearts."],"c":"The temple's filled-with-glory dedication anticipates God dwelling among us in Christ (John 1:14)."},{"b":15,"t":"Return and rebuild: God stirs His people","kv":"Ezra 7:10","ls":["God moves even pagan kings' hearts to accomplish His promises.","Set your heart to study God's Word, do it, and teach it — in that order.","Restoration requires repentance, not just relocation."],"c":"The return from exile is a small resurrection — the greater return from sin's exile comes through Christ."},{"b":16,"t":"Rebuilding walls with sword and trowel","kv":"Nehemiah 8:10","ls":["Prayer and planning belong together; so do work and watchfulness.","The joy of the LORD is your strength.","Reform must be renewed — hearts drift even after revival."],"c":"Nehemiah's grief-driven intercession for a ruined city foreshadows Jesus weeping over Jerusalem."},{"b":17,"t":"Providence: the unseen God saves","kv":"Esther 4:14","ls":["God's name is never mentioned — yet His hand moves in every 'coincidence.'","Courage means risking position and life for God's people: 'If I perish, I perish.'","You were placed where you are for such a time as this."],"c":"A mediator risks death, uninvited before the throne, to save the condemned — a portrait of our Advocate."},{"b":18,"t":"Suffering and the God who is enough","kv":"Job 19:25","ls":["The righteous do suffer — simple formulas about suffering are false comfort.","We may bring our anguish honestly to God; He is big enough for our questions.","Seeing God is better than getting answers: 'now my eye sees you.'"],"c":"Job's cry for a mediator and his confession 'I know that my Redeemer lives' are answered in Jesus."},{"b":19,"t":"The prayer book of every heart","kv":"Psalm 145:18","ls":["Every emotion — praise, grief, fury, fear, joy — can be prayed.","Blessed is the one whose delight is God's Word, whose refuge is God Himself.","Praise is the destination of the whole story: let everything that has breath praise the LORD."],"c":"The Psalms are Jesus' own songbook: His suffering (Ps 22), His resurrection (Ps 16), His reign (Ps 2, 110)."},{"b":20,"t":"Wisdom: skill in the fear of the LORD","kv":"Proverbs 9:10","ls":["The fear of the LORD is the beginning of wisdom.","Words, money, work, friendship, desire — every ordinary thing is a spiritual thing.","Trust in the LORD with all your heart; lean not on your own understanding."],"c":"Wisdom personified, present at creation and calling in the streets, finds its fullness in Christ, the wisdom of God (1 Cor 1:24)."},{"b":21,"t":"Vapor: life under the sun without God","kv":"Ecclesiastes 12:13","ls":["Pleasure, wealth, work, and wisdom cannot bear the weight of being your meaning.","Death levels everything 'under the sun' — so receive each day as God's gift.","The end of the matter: fear God and keep His commandments."],"c":"The Preacher's honest despair is the ache Jesus answers: abundant life that death cannot cancel."},{"b":22,"t":"Love strong as death","kv":"Song of Solomon 8:7","ls":["Married love — desire, delight, faithfulness — is God's good creation.","Love is not to be awakened before its time; covenant guards the flame.","Many waters cannot quench love."],"c":"The Bridegroom's delight in his bride images Christ's love for His church (Eph 5:25-32)."},{"b":23,"t":"The Holy One of Israel: judgment and comfort","kv":"Isaiah 53:5","ls":["God is high and holy, and the nations are dust on His scales — yet He dwells with the contrite.","Comfort my people: sin is judged, but grace speaks tenderly and prepares a highway home.","God's servant suffers in the place of sinners — pierced for our transgressions."],"c":"Isaiah is the Gospel in the Old Testament: virgin-born Immanuel (7:14), Wonderful Counselor (9:6), the Suffering Servant (53), the anointed preacher of good news (61:1)."},{"b":24,"t":"The weeping prophet and the new covenant","kv":"Jeremiah 31:33","ls":["God's word burns like fire — speak it whether or not anyone listens.","The heart is deceitful above all things; only God can give a new one.","Even under judgment, God plans a future and a hope for His people."],"c":"The promised new covenant — law on hearts, sins remembered no more — is sealed by Jesus' blood (Luke 22:20)."},{"b":25,"t":"Grief that still hopes","kv":"Lamentations 3:22-23","ls":["It is right to lament — to bring ruin and grief honestly before God.","His mercies are new every morning even in the ashes; great is His faithfulness.","God does not afflict from His heart; His judgments aim at restoration."],"c":"The man of sorrows who sat weeping over a destroyed city points to the Man of Sorrows who wept over it again."},{"b":26,"t":"The glory departs — and promises to return","kv":"Ezekiel 36:26","ls":["God's glory will not share a temple with idols — sin drives out blessing.","God will give a new heart of flesh and put His own Spirit within His people.","Dry bones live again when God's word and breath come — no one is beyond His reviving."],"c":"The good Shepherd who seeks the scattered flock Himself (34:11-16) is Jesus' self-description in John 10."},{"b":27,"t":"God rules the kingdoms of men","kv":"Daniel 7:14","ls":["Conviction may cost you the furnace or the lions' den — God is able to deliver, but even if not, we will not bow.","Pride brings kings to eat grass; heaven rules, and the humble are lifted.","History is not chaos: every empire falls, and God's kingdom stands forever."],"c":"One like a son of man receives everlasting dominion from the Ancient of Days — Jesus' favorite title for Himself."},{"b":28,"t":"Scandalous love for an unfaithful bride","kv":"Hosea 6:6","ls":["Sin is not rule-breaking only — it is adultery against a loving God.","God buys back the unfaithful at His own cost and calls them 'my people' again.","He desires steadfast love, not empty sacrifice."],"c":"Hosea buying back Gomer from the slave block is the gospel in miniature: Christ redeems His compromised bride."},{"b":29,"t":"The day of the LORD and the outpoured Spirit","kv":"Joel 2:13","ls":["Calamity is a summons: return to the LORD with all your heart.","Rend your hearts and not your garments — He is gracious and merciful.","God promises to pour out His Spirit on all flesh."],"c":"Peter preaches Pentecost from Joel 2 — the promise poured out by the risen Jesus (Acts 2)."},{"b":30,"t":"Let justice roll down like waters","kv":"Amos 5:24","ls":["Religious performance without justice for the poor disgusts God.","Privilege increases accountability: you only have I known — therefore I will punish.","God's plumb line measures every crooked wall — and He promises to rebuild David's fallen booth."],"c":"The rebuilt booth of David that gathers the nations (9:11-12) is fulfilled in the church of Jesus (Acts 15:16-17)."},{"b":31,"t":"Pride goes down: Edom's fall","kv":"Obadiah 15","ls":["Gloating over a brother's calamity invites God's judgment.","The pride of your heart has deceived you — soaring nests are torn down.","As you have done, it shall be done to you; but Zion will be delivered."],"c":"The kingdom shall be the LORD's — the final verdict Jesus' reign makes certain."},{"b":32,"t":"A missionary God and a reluctant prophet","kv":"Jonah 4:2","ls":["You cannot outrun God's call — or His mercy.","God's compassion extends to enemies we would rather see judged.","Salvation belongs to the LORD — even the storm and the fish obey Him."],"c":"Jesus gives 'the sign of Jonah': three days in the deep, then rescue that brings mercy to the nations (Matt 12:40)."},{"b":33,"t":"What does the LORD require?","kv":"Micah 6:8","ls":["Do justice, love kindness, walk humbly with your God.","Leaders who devour the flock face the Shepherd's judgment.","Who is a God like You, pardoning iniquity, casting sins into the depths of the sea?"],"c":"From little Bethlehem comes forth the ruler whose origin is from ancient days (5:2) — quoted at Jesus' birth."},{"b":34,"t":"The LORD avenges: Nineveh's end","kv":"Nahum 1:7","ls":["God's patience with evil is long but not endless.","The LORD is a stronghold in the day of trouble; He knows those who take refuge in Him.","No empire built on blood outlasts His verdict."],"c":"The feet of him who brings good news of peace (1:15) — the herald language Paul applies to gospel preachers (Rom 10:15)."},{"b":35,"t":"Living by faith when God confuses you","kv":"Habakkuk 2:4","ls":["Take your 'how long?' and 'why?' directly to God — then wait at the watchpost.","The righteous shall live by his faith.","Though the fig tree fails and the stalls are empty, yet I will rejoice in the LORD."],"c":"'The righteous shall live by faith' becomes the backbone of the gospel of grace (Rom 1:17; Gal 3:11)."},{"b":36,"t":"Hidden in the day of wrath, quieted by love","kv":"Zephaniah 3:17","ls":["The day of the LORD sweeps away every proud refuge.","Seek the LORD, seek righteousness, seek humility — perhaps you may be hidden.","God rejoices over His restored people with singing."],"c":"The King of Israel in your midst (3:15) who removes judgment is Jesus among His people."},{"b":37,"t":"First things first: build God's house","kv":"Haggai 1:5","ls":["Consider your ways: paneled houses and neglected worship explain empty harvests.","Work, for I am with you — God's presence fuels obedience.","The latter glory of this house shall be greater than the former."],"c":"The greater glory came when the Lord Himself walked into that second temple."},{"b":38,"t":"The King is coming — humble, on a donkey","kv":"Zechariah 9:9","ls":["Not by might, nor by power, but by my Spirit, says the LORD.","God removes His people's filthy garments and clothes them clean.","They will look on Him whom they pierced and mourn — and a fountain for sin will be opened."],"c":"Palm Sunday, thirty pieces of silver, the struck shepherd, the pierced one — Zechariah reads like a Passion narrative written five centuries early."},{"b":39,"t":"Wearied words and a coming sunrise","kv":"Malachi 4:2","ls":["Half-hearted offerings say what we really think of God.","God hates faithlessness in marriage and robbery in worship.","For those who fear His name, the sun of righteousness will rise with healing."],"c":"The messenger who prepares the way (3:1) is John the Baptist; the Lord who suddenly comes to His temple is Jesus. Then — four hundred years of silence, until a cry in Bethlehem."},{"b":40,"t":"The King and His kingdom","kv":"Matthew 28:18-20","ls":["Jesus is the promised Messiah — Matthew shows fulfillment after fulfillment.","Kingdom righteousness exceeds rule-keeping: it transforms the heart (Sermon on the Mount).","The King's final word is a commission: make disciples of all nations."],"c":"Immanuel — God with us — from the genealogy's climax to 'I am with you always.'"},{"b":41,"t":"The Servant who came to give His life","kv":"Mark 10:45","ls":["Jesus acts with immediate, breathtaking authority over disease, demons, storms, and death.","Discipleship means taking up a cross, not climbing a ladder.","The Son of Man came not to be served but to serve, and to give His life as a ransom for many."],"c":"The centurion's confession at the cross — 'Truly this man was the Son of God' — is the book's whole point."},{"b":42,"t":"The Savior who seeks the lost","kv":"Luke 19:10","ls":["The gospel is for outsiders: shepherds, sinners, Samaritans, tax collectors, women, the poor.","Prayer and the Holy Spirit thread through Jesus' whole ministry.","The Son of Man came to seek and to save the lost."],"c":"From the manger to the empty tomb, Luke's careful history shows a Savior whose mercy reaches farther than anyone expected."},{"b":43,"t":"Believe and have life in His name","kv":"John 20:31","ls":["Jesus is God the Son: the Word made flesh, the great I AM.","Eternal life is knowing the Father through the Son — beginning now.","Love one another as I have loved you: the mark of His disciples."],"c":"Seven signs and seven 'I AM' statements build one verdict: these are written so that you may believe that Jesus is the Christ, the Son of God."},{"b":44,"t":"The unstoppable gospel","kv":"Acts 1:8","ls":["The risen Jesus builds His church by His Spirit through ordinary, praying people.","Persecution scatters believers — and spreads the gospel like wind spreads seed.","From Jerusalem to Rome, no prison, storm, or council can chain the word of God."],"c":"Acts is Jesus' continuing work: what He began to do, His body now does among all nations."},{"b":45,"t":"The righteousness of God, by faith","kv":"Romans 1:16","ls":["All have sinned — religious and pagan alike stand guilty before God.","God justifies the ungodly freely, by grace, through faith in Jesus' blood.","Therefore: living sacrifice, transformed mind, love without hypocrisy."],"c":"The gospel is the power of God for salvation to everyone who believes — Christ crucified and risen is its whole content."},{"b":46,"t":"The cross-shaped church","kv":"1 Corinthians 1:18","ls":["The message of the cross upends worldly wisdom, status, and division.","Your body and your gatherings belong to the Lord — purity and order matter.","Love is greater than every gift; the resurrection is the hinge of everything."],"c":"Christ crucified — a stumbling block to some, but to the called, the power and wisdom of God; and Christ risen, the firstfruits of those who sleep."},{"b":47,"t":"Strength in weakness","kv":"2 Corinthians 12:9","ls":["Ministry is treasure in jars of clay — afflicted but not crushed.","Godly grief produces repentance; generous giving flows from grace.","My grace is sufficient for you, for my power is made perfect in weakness."],"c":"He who knew no sin was made sin for us, so that in Him we might become the righteousness of God (5:21)."},{"b":48,"t":"Set free: no other gospel","kv":"Galatians 2:20","ls":["Adding works to grace is not a variation of the gospel — it is its loss.","Justified by faith, adopted as sons, heirs of the promise to Abraham.","Walk by the Spirit: freedom is for love, and the Spirit bears His own fruit."],"c":"I have been crucified with Christ; the life I now live, I live by faith in the Son of God who loved me and gave Himself for me."},{"b":49,"t":"One new people, seated with Christ","kv":"Ephesians 2:8-9","ls":["You were dead in sin — made alive by grace alone, through faith alone.","Christ has made Jew and Gentile one new humanity; the church is God's masterpiece.","Walk worthy: in unity, purity, Spirit-filled households, and the whole armor of God."],"c":"God's eternal plan is to unite all things in Christ — and to display His grace in the church forever."},{"b":50,"t":"Joy that circumstances cannot touch","kv":"Philippians 1:21","ls":["Partnership in the gospel turns even prison into an outpost of joy.","Have this mind among yourselves: Christ emptied Himself to the point of the cross.","Rejoice in the Lord always; the peace of God guards hearts beyond understanding."],"c":"To live is Christ, to die is gain — the whole letter breathes contentment in Him alone."},{"b":51,"t":"Christ is all: complete in Him","kv":"Colossians 1:18","ls":["Jesus is the image of the invisible God — Creator, Sustainer, Head, Firstborn from the dead.","Philosophy, ritual, and asceticism add nothing to a believer already complete in Christ.","Set your minds on things above; let Christ's word dwell richly as you live it out at home and work."],"c":"In Him the whole fullness of deity dwells bodily — and you have been filled in Him."},{"b":52,"t":"Hope that works while it waits","kv":"1 Thessalonians 4:16-17","ls":["The gospel arrives in power and turns people from idols to serve the living God.","Holy living — in purity, love, and honest work — pleases God.","Grieve with hope: the Lord Himself will descend, and we will always be with Him."],"c":"Waiting for God's Son from heaven, whom He raised — Jesus who delivers us from the wrath to come."},{"b":53,"t":"Stand firm until He comes","kv":"2 Thessalonians 3:13","ls":["Present suffering will be repaid with rest when Jesus is revealed.","Do not be shaken by end-times panic; lawlessness will not outlast the Lord's breath.","Idleness is not spirituality — do not grow weary in doing good."],"c":"The day of the Lord belongs to the Lord Jesus, whose coming destroys every counterfeit."},{"b":54,"t":"Order in God's household","kv":"1 Timothy 1:15","ls":["The saying is trustworthy: Christ Jesus came into the world to save sinners.","Godly leaders are proven by character before they are given charge.","Godliness with contentment is great gain; fight the good fight of the faith."],"c":"There is one mediator between God and men, the man Christ Jesus, who gave Himself as a ransom for all."},{"b":55,"t":"Guard the deposit, finish the race","kv":"2 Timothy 3:16-17","ls":["Fan into flame the gift of God; He gave us a spirit not of fear but of power, love, and self-control.","Entrust the gospel to faithful people who will teach others also — four generations in one verse (2:2).","All Scripture is breathed out by God and equips for every good work."],"c":"Remember Jesus Christ, risen from the dead — Paul's dying charge and the church's living hope."},{"b":56,"t":"Grace that trains us for good works","kv":"Titus 2:11-12","ls":["Sound doctrine and sound living are inseparable.","Appoint elders of proven character to set the church in order.","We are saved not by works of righteousness but by the washing of regeneration."],"c":"We wait for our blessed hope: the appearing of our great God and Savior Jesus Christ."},{"b":57,"t":"Receive him as you would receive me","kv":"Philemon 17-18","ls":["The gospel turns a runaway slave into a beloved brother.","Christian appeal works by love, not compulsion.","'Charge it to my account' — imputation in one sentence."],"c":"Paul's offer to pay Onesimus's debt mirrors Christ, who charged our debt to Himself."},{"b":58,"t":"Jesus is better: don't drift","kv":"Hebrews 4:15-16","ls":["Jesus is superior to angels, Moses, and every priest — the exact imprint of God's nature.","His one sacrifice does what a thousand altars never could: it perfects forever.","Therefore hold fast, draw near with confidence, and run the race looking to Jesus."],"c":"A great High Priest who sympathizes with our weakness, a new covenant in His blood, an unshakable kingdom."},{"b":59,"t":"Faith that works","kv":"James 1:22","ls":["Count trials as joy — tested faith produces steadfastness.","Be doers of the word; religion that ignores the needy and unbridles the tongue is worthless.","Faith without works is dead; humble yourselves and He will exalt you."],"c":"The wisdom from above and the royal law of love both come from the Lord of glory, Jesus."},{"b":60,"t":"Exiles: hope under fire","kv":"1 Peter 2:24","ls":["A living hope through the resurrection guards you through grief and trial.","You are a chosen race, a royal priesthood — so live honorably among unbelievers.","Suffering for good is grace; entrust your soul to a faithful Creator."],"c":"He Himself bore our sins in His body on the tree — by His wounds you have been healed."},{"b":61,"t":"Growing in grace while scoffers scoff","kv":"2 Peter 3:9","ls":["His divine power has granted everything needed for life and godliness — so add virtue to faith.","False teachers promise freedom and deliver slavery.","The Lord is not slow but patient, not wishing that any should perish."],"c":"We did not follow myths: eyewitnesses of His majesty await the day the Morning Star rises."},{"b":62,"t":"God is light, God is love: assurance","kv":"1 John 5:13","ls":["Walking in the light means confessing sin, not pretending sinlessness.","Love one another — anyone who hates a brother walks in darkness.","These things are written that you may KNOW you have eternal life."],"c":"The blood of Jesus cleanses from all sin; He is the propitiation, our Advocate with the Father."},{"b":63,"t":"Truth and love walk together","kv":"2 John 6","ls":["Walking in truth is the parent's deepest joy.","Love is defined by obedience, not sentiment.","Do not receive teaching that denies Christ come in the flesh."],"c":"Abiding in the teaching of Christ is having both the Father and the Son."},{"b":64,"t":"Support the workers of the truth","kv":"3 John 4","ls":["No greater joy than to hear that my children walk in the truth.","Hospitality to gospel workers makes you a fellow worker for the truth.","Imitate good, not evil — Diotrephes' love of preeminence is the anti-pattern."],"c":"Workers go out 'for the sake of the Name' — the Name above every name."},{"b":65,"t":"Contend for the faith once delivered","kv":"Jude 24-25","ls":["False teaching creeps in quietly and turns grace into license.","Build yourselves up in faith, pray in the Spirit, keep yourselves in God's love, show mercy to doubters.","God is able to keep you from stumbling and present you blameless with great joy."],"c":"Kept for Jesus Christ — and kept BY Him, the only God our Savior, be glory forever."},{"b":66,"t":"The Lamb wins: behold, I am coming soon","kv":"Revelation 21:5","ls":["Jesus walks among His churches now — He sees, commends, corrects, and promises.","History's storms rage under a throne that never shakes; the Lamb who was slain is worthy to open the scroll.","Every tear wiped away, death no more, the dwelling of God with man — and the gates never shut."],"c":"The Lion is the Lamb: Alpha and Omega, the bright Morning Star. The Bible's last prayer is the church's oldest one — 'Come, Lord Jesus.'"}]};
+const TEACH = {"note":"The teachings of Jesus, organized for discipleship. Each item: title, ref, what Jesus taught, and how to live it.","categories":[{"id":"sermon","title":"The Sermon on the Mount","glyph":"⛰️","ref":"Matthew 5–7","intro":"Jesus' manifesto of kingdom life: not a ladder to climb but a portrait of hearts His grace transforms.","items":[{"title":"The Beatitudes","ref":"Matthew 5:3-12","teaching":"The kingdom belongs to the poor in spirit, the mourners, the meek, the mercy-givers, the pure in heart, the peacemakers, the persecuted — the people the world overlooks are the people God blesses.","live":"Stop performing strength. Bring your poverty of spirit to God today and receive the kingdom as a gift."},{"title":"Salt and Light","ref":"Matthew 5:13-16","teaching":"Disciples preserve and illuminate the world around them; hidden faith is as useless as flavorless salt.","live":"Do one good work today visibly enough that someone could glorify your Father because of it."},{"title":"Fulfilling the Law","ref":"Matthew 5:17-20","teaching":"Jesus came not to abolish the Law and Prophets but to fulfill them — every promise lands on Him.","live":"Read the Old Testament expecting to meet Jesus in it."},{"title":"Anger, Lust, and the Heart","ref":"Matthew 5:21-30","teaching":"Murder begins with contempt; adultery begins with a look. God judges the heart, not just the hands.","live":"Deal with sin at the root: name the anger or desire you've been feeding, and bring it into the light."},{"title":"Love Your Enemies","ref":"Matthew 5:43-48","teaching":"Anyone can love friends; children of the Father love enemies and pray for persecutors, as He sends sun and rain on all.","live":"Pray by name, today, for the person who has hurt you most."},{"title":"Giving, Praying, Fasting in Secret","ref":"Matthew 6:1-18","teaching":"Practice righteousness for your Father's eyes, not your audience's applause — He sees in secret and rewards.","live":"Do one act of generosity this week that no one but God will ever know about."},{"title":"The Lord's Prayer","ref":"Matthew 6:9-13","teaching":"Pray simply: Father, hallowed name, kingdom come, daily bread, forgiven and forgiving, delivered from evil.","live":"Pray it slowly every morning this week — one line at a time, in your own words."},{"title":"Treasures and Anxiety","ref":"Matthew 6:19-34","teaching":"You cannot serve God and money. Look at the birds, consider the lilies — your Father knows what you need. Seek first the kingdom.","live":"Name your biggest worry out loud to God, then do today's obedience and leave tomorrow to Him."},{"title":"Judging and Asking","ref":"Matthew 7:1-12","teaching":"Take the log out of your own eye first. Ask, seek, knock — your Father gives good gifts. Do to others what you wish done to you.","live":"Before correcting anyone this week, confess your own version of the same fault."},{"title":"Two Gates, Two Trees, Two Builders","ref":"Matthew 7:13-27","teaching":"The narrow gate leads to life; trees are known by fruit; and only the one who HEARS these words and DOES them builds on rock.","live":"Pick one command from this sermon and build it into your week — hearing without doing is sand."}]},{"id":"parables","title":"Parables of the Kingdom","glyph":"🌱","ref":"Matthew 13; Luke 10–18","intro":"Stories with a hook: ordinary seeds, coins, and sons that smuggle the kingdom past the defenses of the heart.","items":[{"title":"The Sower","ref":"Matthew 13:1-23","teaching":"The same seed — the word of the kingdom — lands on path, rocks, thorns, and good soil. The difference is the heart that receives it.","live":"Which soil are you right now? Ask God to pull the thorns of worry and wealth choking His word."},{"title":"The Weeds Among Wheat","ref":"Matthew 13:24-30","teaching":"Good and evil grow together until the harvest; final sorting belongs to the Lord, not to us.","live":"Release the judgment you've been carrying — be faithful wheat and trust the Harvester."},{"title":"Mustard Seed and Leaven","ref":"Matthew 13:31-33","teaching":"The kingdom starts absurdly small and grows unstoppably large.","live":"Do not despise small beginnings: one verse, one prayer, one person taught."},{"title":"Hidden Treasure and the Pearl","ref":"Matthew 13:44-46","teaching":"The kingdom is worth everything — the finder sells all he has WITH JOY.","live":"What are you holding back from God? Compare its worth to the treasure and choose joyfully."},{"title":"The Good Samaritan","ref":"Luke 10:25-37","teaching":"'Who is my neighbor?' is the wrong question. Be the neighbor — cross the road, bear the cost, show mercy.","live":"The interrupted plan, the inconvenient person: that is your Jericho road this week."},{"title":"The Lost Sheep, Coin, and Son","ref":"Luke 15","teaching":"Heaven throws parties over found sinners. The father runs, embraces, and restores the prodigal — and pleads with the resentful older brother too.","live":"Come home if you're far off. Join the feast if you've been sulking in the field."},{"title":"The Unforgiving Servant","ref":"Matthew 18:21-35","teaching":"Forgiven a debt of millions, he choked a man over pennies. Received mercy must become released mercy.","live":"Name the debt you're still collecting from someone — and cancel it before the sun sets."},{"title":"Workers in the Vineyard","ref":"Matthew 20:1-16","teaching":"The master's generosity offends the math of merit: the last hired receive a full day's grace.","live":"Stop comparing wages. Celebrate grace given to others as loudly as grace given to you."},{"title":"The Rich Fool","ref":"Luke 12:13-21","teaching":"Bigger barns cannot store a soul. 'This night your soul is required of you' — be rich toward God.","live":"Review your actual budget and calendar: are you laying up treasure only for yourself?"},{"title":"The Great Banquet","ref":"Luke 14:15-24","teaching":"The invited made excuses — so the master filled his table from the streets and hedges. The feast WILL be full.","live":"Who are the 'unlikely' people you could invite toward God's table this month?"},{"title":"The Pharisee and the Tax Collector","ref":"Luke 18:9-14","teaching":"The religious résumé went home unjustified; the man who prayed 'God, be merciful to me, a sinner' went home righteous.","live":"Trade your résumé prayer for the tax collector's seven words."},{"title":"The Talents","ref":"Matthew 25:14-30","teaching":"The master entrusts his wealth and rewards faithful risk; fear that buries the gift insults the giver.","live":"Name the gift you've buried — and put it to work for the kingdom this week."},{"title":"The Sheep and the Goats","ref":"Matthew 25:31-46","teaching":"The King counts what was done for the hungry, thirsty, stranger, naked, sick, and prisoner as done for HIM.","live":"Serve one 'least of these' this week, and know whose face you're actually serving."}]},{"id":"iam","title":"The Seven 'I AM' Statements","glyph":"🔥","ref":"The Gospel of John","intro":"Seven claims that echo the burning bush: Jesus does not merely bring bread, light, and life — He IS them.","items":[{"title":"I am the Bread of Life","ref":"John 6:35","teaching":"Whoever comes to Me shall not hunger — He satisfies the appetite beneath every appetite.","live":"Bring your restlessness to Jesus first today, before you feed it anything else."},{"title":"I am the Light of the World","ref":"John 8:12","teaching":"Whoever follows Me will not walk in darkness but have the light of life.","live":"Bring one hidden thing into His light — darkness loses power when it's named to Him."},{"title":"I am the Door","ref":"John 10:9","teaching":"If anyone enters by Me, he will be saved — one door, wide open, into safety and pasture.","live":"Stop trying to climb in some other way; enter through Christ alone."},{"title":"I am the Good Shepherd","ref":"John 10:11","teaching":"The good shepherd lays down his life for the sheep — He knows His own by name.","live":"Listen for the Shepherd's voice in His Word daily; refuse the stranger's voice of shame."},{"title":"I am the Resurrection and the Life","ref":"John 11:25","teaching":"Spoken at a tomb: whoever believes in Me, though he die, yet shall he live.","live":"Speak this verse over your deepest grief — He said it before He wept, and then He called Lazarus out."},{"title":"I am the Way, the Truth, and the Life","ref":"John 14:6","teaching":"No one comes to the Father except through Me — the way is not a map but a Person.","live":"Trade anxiety about the future for trust in the One who IS the way there."},{"title":"I am the True Vine","ref":"John 15:5","teaching":"Abide in Me: apart from Me you can do nothing; in Me you bear much fruit.","live":"Build one daily abiding habit — Word and prayer — and let fruit grow from connection, not straining."}]},{"id":"signs","title":"Miracles & Signs","glyph":"✨","ref":"The Four Gospels","intro":"Never magic tricks — each miracle is a signpost revealing who Jesus is and what His kingdom restores.","items":[{"title":"Water into Wine","ref":"John 2:1-11","teaching":"The first sign: six stone jars of ceremony become overflowing joy. He saves the best for His hour.","live":"Invite Jesus into the ordinary places (like a wedding kitchen) — He transforms from the inside."},{"title":"Calming the Storm","ref":"Mark 4:35-41","teaching":"'Peace! Be still.' Wind and sea obey Him — and the disciples fear the Calmer more than the storm.","live":"Say what the disciples learned: He is IN the boat. Name your storm to Him tonight."},{"title":"Feeding the Five Thousand","ref":"John 6:1-14","teaching":"Five loaves, two fish, one boy's lunch — in His hands, enough for everyone with twelve baskets left.","live":"Offer your 'not enough' to Jesus; He multiplies surrendered lunches, not hoarded feasts."},{"title":"Walking on Water","ref":"Matthew 14:22-33","teaching":"In the fourth watch of the night He comes. Peter sinks when he watches the wind instead of the Word.","live":"Keep your eyes on Jesus, not the weather. When you sink, His hand is already reaching."},{"title":"Healing the Paralytic","ref":"Mark 2:1-12","teaching":"'Son, your sins are forgiven' came BEFORE 'rise and walk' — the deeper paralysis is dealt with first.","live":"Carry a friend to Jesus like the four rooftop-diggers: pray them into His presence."},{"title":"Blind Bartimaeus","ref":"Mark 10:46-52","teaching":"The crowd hushed him; he shouted louder: 'Son of David, have mercy on me!' Jesus stopped for one beggar.","live":"Ignore the voices that say your need embarrasses God. Shout anyway — He stops."},{"title":"Raising Lazarus","ref":"John 11:1-44","teaching":"He wept at the tomb He was about to empty. 'Lazarus, come out' — and death obeyed.","live":"Jesus feels your grief AND holds authority over its cause. Trust both His tears and His power."},{"title":"The Resurrection","ref":"Luke 24; John 20","teaching":"The sign of all signs: the tomb is empty, the grave clothes folded, and He ate fish with them. Because He lives, everything He said is true.","live":"Live this week as if death is defeated — because it is."}]},{"id":"commands","title":"The Great Commands & Final Words","glyph":"❤️","ref":"The Gospels & Acts 1","intro":"What Jesus said matters most — the commands He called greatest and the words He chose for last.","items":[{"title":"You Must Be Born Again","ref":"John 3:1-21","teaching":"Religion is not enough — even for Nicodemus. New birth by the Spirit, through believing the lifted-up Son.","live":"Have you been born again — not improved, but made new? Ask Him tonight."},{"title":"The Greatest Commandment","ref":"Matthew 22:36-40","teaching":"Love the Lord your God with all your heart, soul, and mind; love your neighbor as yourself. Everything hangs on these.","live":"Audit your day against two loves — not a hundred rules."},{"title":"Take Up Your Cross","ref":"Luke 9:23-25","teaching":"Deny yourself daily, take up your cross, and follow. Whoever loses his life for My sake will save it.","live":"Identify today's cross — the costly obedience you've been avoiding — and pick it up."},{"title":"A New Commandment","ref":"John 13:34-35","teaching":"Love one another AS I HAVE LOVED YOU — by this all people will know you are My disciples.","live":"Wash a foot this week: do the low, unglamorous act of love no one wants to do."},{"title":"The Promise of the Helper","ref":"John 14:15-27; 16:7-15","teaching":"It is to your advantage that I go: the Spirit of truth will dwell IN you, teach you, and glorify Christ.","live":"Stop living like an orphan. Ask the Helper for help — that's His name."},{"title":"The High Priestly Prayer","ref":"John 17","teaching":"Hours before the cross, Jesus prayed for YOU: for all who would believe through the apostles' word — that they may be one.","live":"You are inside this prayer. Pursue unity with another believer as Jesus' answered request."},{"title":"The Great Commission","ref":"Matthew 28:18-20; Acts 1:8","teaching":"All authority is Mine — therefore GO, make disciples of all nations, baptizing and teaching, and I am with you always.","live":"Write down the names of your Jerusalem, your Judea, and your ends-of-the-earth. Start with the first name today."}]}]};
+
+/* ════════════════════════ 1 · WEBGL ENGINE ════════════════════════ */
+const VERT = `attribute vec2 p; void main(){ gl_Position = vec4(p,0.,1.); }`;
+
+const FRAG = `
+precision highp float;
+uniform vec2  uRes;
+uniform float uTime;
+uniform vec2  uMouse;      // smoothed parallax, -1..1
+uniform vec3  uAccent;     // theme accent (age toggle rethemes this)
+uniform float uOpen;       // 0..1 book opening amount
+
+const float PI = 3.14159265;
+
+mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c,-s,s,c); }
+
+float hash(vec2 p){ return fract(sin(dot(p, vec2(127.1,311.7))) * 43758.5453); }
+float noise(vec2 p){
+  vec2 i = floor(p), f = fract(p);
+  f = f*f*(3.0-2.0*f);
+  return mix(mix(hash(i), hash(i+vec2(1,0)), f.x),
+             mix(hash(i+vec2(0,1)), hash(i+vec2(1,1)), f.x), f.y);
+}
+
+float sdRoundBox(vec3 p, vec3 b, float r){
+  vec3 q = abs(p) - b + r;
+  return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0) - r;
+}
+
+/* The codex: a structural cover plus two page slabs hinged at the spine.
+   uOpen drives the hinge so the volume breathes open on load.           */
+float mapBook(vec3 p){
+  vec3 pc = p; pc.z += 0.20;
+  float cover = sdRoundBox(pc, vec3(1.16, 1.52, 0.055), 0.05);
+
+  float hinge = mix(0.55, 0.15, uOpen);       // radians off the page plane
+  vec3 pl = p; pl.x += 0.56; pl.xz *= rot(-hinge);
+  float left = sdRoundBox(pl, vec3(0.52, 1.42, 0.028), 0.02);
+
+  vec3 pr = p; pr.x -= 0.56; pr.xz *= rot(hinge);
+  float right = sdRoundBox(pr, vec3(0.52, 1.42, 0.028), 0.02);
+
+  return min(cover, min(left, right));
+}
+
+vec3 calcNormal(vec3 p){
+  vec2 e = vec2(1.0,-1.0) * 0.0012;
+  return normalize(
+    e.xyy * mapBook(p + e.xyy) + e.yyx * mapBook(p + e.yyx) +
+    e.yxy * mapBook(p + e.yxy) + e.xxx * mapBook(p + e.xxx));
+}
+
+/* Heaven above: the single light source of the whole composition. */
+vec3 env(vec3 d){
+  float y = d.y * 0.5 + 0.5;
+  vec3 c = mix(vec3(0.008,0.014,0.033), vec3(0.045,0.062,0.128), y);
+  vec3 L = normalize(vec3(0.0, 1.0, 0.42));
+  float core = pow(max(dot(d, L), 0.0), 42.0);
+  float halo = pow(max(dot(d, L), 0.0), 4.0);
+  c += uAccent * (core * 2.6 + halo * 0.10);
+  c += vec3(0.38,0.40,0.98) * pow(max(dot(d, normalize(vec3(-0.7,-0.3,0.6))),0.0), 6.0) * 0.09;
+  // distant stars — placed WITHIN each cell, else hashing floored coords
+  // paints whole cells and the sky turns into a checkerboard of squares.
+  vec2 sv = d.xy / max(abs(d.z), 0.35) * 9.0;
+  vec2 cell = floor(sv);
+  vec2 f = fract(sv) - 0.5;
+  vec2 jitter = (vec2(hash(cell), hash(cell + 41.7)) - 0.5) * 0.7;
+  float star = smoothstep(0.055, 0.0, length(f - jitter))
+             * step(0.82, hash(cell + 7.1));      // only ~18% of cells hold one
+  c += vec3(0.85, 0.88, 1.0) * star * 0.5 * smoothstep(0.05, 0.5, y);
+  return c;
+}
+
+/* March inside the glass to the far wall, so thickness reads honestly. */
+float marchInside(vec3 ro, vec3 rd){
+  float t = 0.004;
+  for (int i = 0; i < 28; i++){
+    float d = -mapBook(ro + rd * t);
+    if (d < 0.0008) break;
+    t += max(d, 0.006);
+    if (t > 5.0) break;
+  }
+  return t;
+}
+
+/* One spectral channel through the glass: in, through, and out again.
+   Written as a function returning a vec3 so each channel is picked with a
+   static .r/.g/.b swizzle — dynamic vector indexing inside a loop is legal
+   ES 1.0 but is mis-compiled by several mobile drivers.                  */
+vec3 glassChannel(vec3 pos, vec3 N, vec3 rd, float ior){
+  vec3 rr = refract(rd, N, 1.0 / ior);
+  if (dot(rr, rr) < 0.001) rr = reflect(rd, N);
+  float inner = marchInside(pos + rr * 0.006, rr);
+  vec3 outR = refract(rr, -calcNormal(pos + rr * inner), ior);
+  if (dot(outR, outR) < 0.001) outR = rr;
+  float absorb = exp(-inner * 0.55);          // Beer–Lambert through the leaf
+  return env(outR) * absorb + uAccent * (1.0 - absorb) * 0.62;
+}
+
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5 * uRes) / uRes.y;
+
+  // Framed so the codex reads as a discrete object with clear silhouette;
+  // closer than this it fills the frame and glass loses all definition.
+  // Portrait viewports pull further back so the panels stay legible.
+  float pull = clamp((1.10 - uRes.x / uRes.y) / 0.60, 0.0, 1.0);
+  vec3 ro = vec3(0.0, 0.0, mix(7.5, 12.0, pull));
+  vec3 rd = normalize(vec3(uv * 1.35, -2.6));
+
+  // parallax + zero-gravity drift, applied to the ray rather than the mesh
+  float ax = uMouse.x * 0.55 + sin(uTime * 0.30) * 0.05;
+  float ay = uMouse.y * 0.36 + cos(uTime * 0.21) * 0.03;
+  float bob = sin(uTime * 0.8) * 0.075;
+  ro.y -= bob;
+  ro.xz *= rot(ax);  rd.xz *= rot(ax);
+  ro.yz *= rot(ay);  rd.yz *= rot(ay);
+
+  // ── primary march + volumetric shaft integrated along the way.
+  //    Density must be weighted by the STEP LENGTH: sphere-tracing steps
+  //    shrink near surfaces, so a per-iteration sum piles up halos around
+  //    every silhouette instead of measuring the light actually traversed.
+  float t = 0.0, hit = 0.0;
+  vec3 shaft = vec3(0.0);
+  for (int i = 0; i < 80; i++){
+    vec3 pos = ro + rd * t;
+    float d = mapBook(pos);
+    if (d < 0.0016){ hit = 1.0; break; }
+    float step = max(d * 0.86, 0.012);
+    // god-rays: a cone of light descending on the codex
+    float cone = 1.0 - smoothstep(0.0, mix(0.34, 1.30, clamp(0.5 - pos.y * 0.35, 0.0, 1.0)), abs(pos.x));
+    float dens = cone * smoothstep(-2.2, 1.9, pos.y)
+               * (0.55 + 0.45 * noise(vec2(pos.x * 2.4, pos.y * 1.5 - uTime * 0.16)));
+    shaft += uAccent * dens * step * 0.011;
+    t += step;
+    if (t > 12.0) break;
+  }
+
+  vec3 col;
+  if (hit > 0.5){
+    vec3 pos = ro + rd * t;
+    vec3 N = calcNormal(pos);
+    float fres = pow(1.0 - max(dot(-rd, N), 0.0), 4.0);
+
+    // ── chromatic dispersion: three IORs split the spectrum, red bending
+    //    least and blue most, exactly as a real prism separates light.
+    vec3 disp = vec3(
+      glassChannel(pos, N, rd, 1.440).r,
+      glassChannel(pos, N, rd, 1.495).g,
+      glassChannel(pos, N, rd, 1.550).b);
+
+    vec3 refl = env(reflect(rd, N));
+    col = mix(disp, refl, clamp(fres, 0.0, 0.85));
+
+    // gilded rim + clearcoat specular from the heavenly source
+    vec3 L = normalize(vec3(0.0, 1.0, 0.42));
+    float spec = pow(max(dot(reflect(-L, N), -rd), 0.0), 88.0);
+    col += vec3(1.0, 0.97, 0.88) * spec * 2.6;
+    col += uAccent * fres * 0.95;                       // gilded edge
+    col += uAccent * pow(max(dot(N, L), 0.0), 2.0) * 0.22;
+    col += vec3(0.55, 0.62, 1.0) * pow(1.0 - max(dot(-rd, N), 0.0), 2.0) * 0.10;
+
+    // Illuminated script: ruled lines of glowing text across the open
+    // leaves. Masked off the spine and the outer margins, so it reads as
+    // a page of Scripture rather than a striped slab.
+    float freq = 74.0;
+    float line = floor(pos.y * freq);
+    float rule = smoothstep(0.74, 0.97, sin(pos.y * freq) * 0.5 + 0.5);
+    // break each ruling into word-length segments with ragged right edges
+    float words = smoothstep(0.34, 0.46, noise(vec2(pos.x * 22.0, line * 3.7)));
+    float margin = smoothstep(1.24, 1.12, abs(pos.y))
+                 * smoothstep(0.08, 0.22, abs(pos.x))
+                 * smoothstep(1.02, 0.90, abs(pos.x))
+                 * step(0.0, pos.z);            // front leaves only
+    col += uAccent * rule * words * margin * 0.30;
+  } else {
+    col = env(rd);
+  }
+
+  col += shaft;
+
+  // drifting motes inside the shaft
+  for (int i = 0; i < 2; i++){
+    float fi = float(i);
+    vec2 gp = uv * (13.0 + fi * 9.0) + vec2(sin(uTime * 0.3 + fi) * 0.4, uTime * (0.13 + fi * 0.07));
+    vec2 cell = floor(gp);
+    vec2 f = fract(gp) - 0.5;
+    float sp = smoothstep(0.085, 0.0,
+      length(f + (vec2(hash(cell), hash(cell + 7.3)) - 0.5) * 0.7));
+    col += uAccent * sp * 0.20 * (1.0 - smoothstep(0.25, 1.1, abs(uv.x)));
+  }
+
+  // ACES-ish filmic tonemap + vignette
+  col *= 1.05;
+  col = (col * (2.51 * col + 0.03)) / (col * (2.43 * col + 0.59) + 0.14);
+  col *= mix(0.72, 1.0, smoothstep(1.35, 0.25, length(uv * vec2(0.85, 1.0))));
+  gl_FragColor = vec4(pow(max(col, 0.0), vec3(0.4545)), 1.0);
+}
+`;
+
+const Engine = (() => {
+  const canvas = document.getElementById('gl');
+  let gl = null, uni = {}, raf = 0;
+  let mouse = { x: 0, y: 0 }, target = { x: 0, y: 0 };
+  let accent = [0.918, 0.702, 0.031];      // #eab308
+  let accentTarget = accent.slice();
+  let open = 0;
+  const t0 = performance.now();
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function compile(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src); gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+      throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  }
+
+  function resize() {
+    // Raymarching is fill-rate bound; 1.5x DPR keeps 60fps on phones.
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    canvas.width = Math.floor(innerWidth * dpr);
+    canvas.height = Math.floor(innerHeight * dpr);
+    canvas.style.width = innerWidth + 'px';
+    canvas.style.height = innerHeight + 'px';
+    if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
+  }
+
+  function init() {
+    try {
+      gl = canvas.getContext('webgl', { antialias: false, alpha: false,
+                                        powerPreference: 'high-performance' });
+      if (!gl) throw new Error('no webgl');
+      const prog = gl.createProgram();
+      gl.attachShader(prog, compile(gl.VERTEX_SHADER, VERT));
+      gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog);
+      if (!gl.getProgramParameter(prog, gl.LINK_STATUS))
+        throw new Error(gl.getProgramInfoLog(prog));
+      gl.useProgram(prog);
+      const buf = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
+      const loc = gl.getAttribLocation(prog, 'p');
+      gl.enableVertexAttribArray(loc);
+      gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+      ['uRes','uTime','uMouse','uAccent','uOpen'].forEach(n =>
+        uni[n] = gl.getUniformLocation(prog, n));
+    } catch (e) {
+      // Graceful degradation: the celestial CSS layer carries the mood.
+      canvas.style.display = 'none';
+      document.getElementById('celestial').style.opacity = '.75';
+      return;
+    }
+    resize();
+    addEventListener('resize', resize);
+    addEventListener('pointermove', (e) => {
+      mouse.x = (e.clientX - innerWidth / 2) / (innerWidth / 2);
+      mouse.y = (e.clientY - innerHeight / 2) / (innerHeight / 2);
+    }, { passive: true });
+    loop();
+  }
+
+  function loop() {
+    raf = requestAnimationFrame(loop);
+    const time = reduced ? 0 : (performance.now() - t0) / 1000;
+    // critically-damped-ish inertia, matching the original spring feel
+    target.x += (mouse.x - target.x) * 0.05;
+    target.y += (mouse.y - target.y) * 0.05;
+    for (let i = 0; i < 3; i++) accent[i] += (accentTarget[i] - accent[i]) * 0.06;
+    open += (1 - open) * 0.018;
+
+    gl.uniform2f(uni.uRes, canvas.width, canvas.height);
+    gl.uniform1f(uni.uTime, time);
+    gl.uniform2f(uni.uMouse, target.x, target.y);
+    gl.uniform3f(uni.uAccent, accent[0], accent[1], accent[2]);
+    gl.uniform1f(uni.uOpen, open);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+  }
+
+  return {
+    init,
+    setAccent(hex) {
+      accentTarget = [((hex >> 16) & 255) / 255, ((hex >> 8) & 255) / 255, (hex & 255) / 255];
+      document.documentElement.style.setProperty('--accent',
+        '#' + hex.toString(16).padStart(6, '0'));
+      document.documentElement.style.setProperty('--accent-soft',
+        `rgba(${(hex>>16)&255},${(hex>>8)&255},${hex&255},.32)`);
+    },
+  };
+})();
+
+/* ════════════════════ 2 · AGE-CLASS INTERFACE MATRIX ════════════════════ */
+const interfaceData = {
+  kids: {
+    scriptureTitle: 'Genesis 1:1',
+    scriptureText: '"In the beginning, God created the heavens and the earth." Everything you can see — stars, oceans, elephants, you — began because God spoke!',
+    card1: { tag: 'Fun Bible Journey', title: 'The Creation Adventure',
+             desc: 'Play through the 7 beautiful days of creation.', module: 'creation' },
+    card2: { tag: 'Hero Memory Match', title: 'Heroes of Faith',
+             desc: 'Match each hero to the brave thing God helped them do.', module: 'heroes' },
+    card3: { tag: 'Golden Verse Builder', title: 'Build the Verse',
+             desc: 'Put the shining words in order and light up the whole verse.', module: 'verse' },
+    accent: 0xef4444,
+  },
+  adults: {
+    scriptureTitle: 'John 1:1',
+    scriptureText: '"In the beginning was the Word, and the Word was with God, and the Word was God. He was with God in the beginning."',
+    card1: { tag: 'Interactive Chronology', title: 'Testament Illuminations',
+             desc: 'Place redemptive history in order along the river of light.', module: 'chronology' },
+    card2: { tag: 'Scripture Quest Engine', title: 'Exegesis Training',
+             desc: 'Observation, interpretation, application — drilled passage by passage.', module: 'exegesis' },
+    card3: { tag: 'Word Made Flesh', title: 'The Teachings of Jesus',
+             desc: 'Sermon, parables, the I AMs, and His final words.', module: 'teachings' },
+    accent: 0xeab308,
+  },
+};
+let AGE = 'adults';
+
+function switchAge(mode) {
+  AGE = mode;
+  const d = interfaceData[mode];
+  document.querySelectorAll('.age-toggle button').forEach(b => {
+    const on = b.dataset.age === mode;
+    b.classList.toggle('on', on);
+    b.classList.toggle('youth', on && mode === 'kids');
+  });
+  Engine.setAccent(d.accent);
+
+  const st = document.getElementById('scripture-text');
+  st.style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('scripture-title').textContent = d.scriptureTitle;
+    st.textContent = d.scriptureText;
+    st.style.opacity = '1';
+  }, 260);
+
+  [1, 2, 3].forEach(i => {
+    const c = d['card' + i];
+    document.getElementById(`card${i}-tag`).textContent = c.tag;
+    document.getElementById(`card${i}-title`).textContent = c.title;
+    document.getElementById(`card${i}-desc`).textContent = c.desc;
+    document.getElementById('card' + i).dataset.module = c.module;
+  });
+}
+
+/* ════════════════════════ 3 · OVERLAY SHELL ════════════════════════ */
+const overlay = document.getElementById('overlay');
+const sheet = document.getElementById('sheet');
+
+function openSheet(title, sub, build) {
+  sheet.innerHTML = `
+    <div class="sheet-head">
+      <h2 class="serif-sacred">${title}</h2>
+      <button class="close-x" id="sheet-close" aria-label="Close">&times;</button>
+    </div>
+    <p class="sheet-sub">${sub}</p>
+    <div id="sheet-body"></div>`;
+  document.getElementById('sheet-close').onclick = closeSheet;
+  build(document.getElementById('sheet-body'));
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeSheet() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+overlay.addEventListener('click', (e) => { if (e.target === overlay) closeSheet(); });
+addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
+
+const el = (tag, cls, text) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text != null) n.textContent = text;
+  return n;
+};
+const shuffle = (a) => {
+  const r = a.slice();
+  for (let i = r.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [r[i], r[j]] = [r[j], r[i]];
+  }
+  return r;
+};
+function speak(text) {
+  try {
+    if (!('speechSynthesis' in window) || !text) return;
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.rate = 0.92;
+    speechSynthesis.speak(u);   // device-local voices; no network
+  } catch (_) {}
+}
+function celebrate(host, msg) {
+  const r = el('div', 'result');
+  r.append(el('div', 'big', '✦'), el('p', null, msg));
+  host.append(r);
+  r.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ═══════════════════ 4 · YOUTH LEARNING GAMES ═══════════════════ */
+
+const CREATION_DAYS = [
+  { n: 1, label: 'Light and Darkness', ref: 'Genesis 1:3-5', art: '☀️' },
+  { n: 2, label: 'Sky and Waters',     ref: 'Genesis 1:6-8', art: '🌊' },
+  { n: 3, label: 'Land and Plants',    ref: 'Genesis 1:9-13', art: '🌿' },
+  { n: 4, label: 'Sun, Moon, Stars',   ref: 'Genesis 1:14-19', art: '🌙' },
+  { n: 5, label: 'Fish and Birds',     ref: 'Genesis 1:20-23', art: '🐟' },
+  { n: 6, label: 'Animals and People', ref: 'Genesis 1:24-31', art: '🦁' },
+  { n: 7, label: 'God Rested',         ref: 'Genesis 2:1-3', art: '🕊️' },
+];
+
+/* GAME 1 — The Creation Adventure: sequence the seven days. Wrong taps
+   never punish; they re-read the verse and nudge the card.            */
+function gameCreation(host) {
+  let next = 0;
+  const rail = el('div', 'progress-rail');
+  CREATION_DAYS.forEach(() => rail.append(document.createElement('i')));
+  const slots = el('div', 'seq-slots');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, slots, pool);
+
+  shuffle(CREATION_DAYS).forEach(day => {
+    const card = el('button', 'seq-card');
+    card.append(el('strong', null, `${day.art}  ${day.label}`), el('small', null, day.ref));
+    card.onclick = () => {
+      if (day.n === CREATION_DAYS[next].n) {
+        card.disabled = true;
+        card.classList.add('placed');
+        card.querySelector('strong').textContent = `Day ${day.n} · ${day.label}`;
+        slots.append(card);
+        rail.children[next].classList.add('lit');
+        next++;
+        if (next === CREATION_DAYS.length) {
+          celebrate(host, 'You built the whole first week! God spoke, and it was so — and everything He made was very good.');
+        }
+      } else {
+        card.classList.remove('wrong'); void card.offsetWidth; card.classList.add('wrong');
+        speak(`Not yet. What came on day ${next + 1}?`);
+      }
+    };
+    pool.append(card);
+  });
+}
+
+/* GAME 2 — Heroes of Faith: match the hero to the brave act. */
+const HEROES = [
+  { hero: 'Noah',    deed: 'Built the ark when no rain had ever fallen', ref: 'Genesis 6' },
+  { hero: 'David',   deed: 'Faced the giant with a sling and God’s name', ref: '1 Samuel 17' },
+  { hero: 'Daniel',  deed: 'Kept praying, even facing the lions’ den', ref: 'Daniel 6' },
+  { hero: 'Esther',  deed: 'Went to the king to save her people', ref: 'Esther 4' },
+  { hero: 'Ruth',    deed: 'Stayed loyal and followed the true God', ref: 'Ruth 1' },
+  { hero: 'Mary',    deed: 'Said yes to God and became Jesus’ mother', ref: 'Luke 1' },
+];
+function gameHeroes(host) {
+  let picked = null, done = 0;
+  const info = el('p', 'sheet-sub', 'Tap a hero, then tap the brave thing God helped them do.');
+  const wrap = el('div', 'grid-cards');
+  const heroCol = el('div'), deedCol = el('div');
+  heroCol.style.display = deedCol.style.display = 'flex';
+  heroCol.style.flexDirection = deedCol.style.flexDirection = 'column';
+  heroCol.style.gap = deedCol.style.gap = '9px';
+  host.append(info, wrap);
+  wrap.style.gridTemplateColumns = 'repeat(auto-fit,minmax(230px,1fr))';
+  wrap.append(heroCol, deedCol);
+
+  HEROES.forEach(h => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, h.hero));
+    b.dataset.hero = h.hero;
+    b.onclick = () => {
+      if (b.disabled) return;
+      heroCol.querySelectorAll('.seq-card').forEach(x => x.classList.remove('placed'));
+      b.classList.add('placed');
+      picked = h;
+    };
+    heroCol.append(b);
+  });
+
+  shuffle(HEROES).forEach(h => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, h.deed), el('small', null, h.ref));
+    b.onclick = () => {
+      if (b.disabled || !picked) { speak('Pick a hero first.'); return; }
+      if (picked.hero === h.hero) {
+        b.disabled = true; b.classList.add('placed');
+        const hb = heroCol.querySelector(`[data-hero="${h.hero}"]`);
+        hb.disabled = true; hb.classList.add('placed'); hb.style.opacity = '.45';
+        picked = null; done++;
+        if (done === HEROES.length) {
+          celebrate(host, 'Every hero was an ordinary person with an extraordinary God. He is the same God today — and He knows your name.');
+        }
+      } else {
+        b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+      }
+    };
+    deedCol.append(b);
+  });
+}
+
+/* GAME 3 — Build the Verse: assemble Scripture from glowing word tiles. */
+const MEMORY_VERSES = [
+  { ref: 'John 3:16', text: 'For God so loved the world, that he gave his only begotten Son.' },
+  { ref: 'Psalm 119:105', text: 'Thy word is a lamp unto my feet, and a light unto my path.' },
+  { ref: 'Genesis 1:1', text: 'In the beginning God created the heaven and the earth.' },
+];
+function gameVerse(host) {
+  const verse = MEMORY_VERSES[Math.floor(Math.random() * MEMORY_VERSES.length)];
+  const words = verse.text.split(/\s+/);
+  let next = 0;
+  host.append(el('p', 'sheet-sub', `Tap the words in order — ${verse.ref}`));
+  const line = el('div', 'answer-line');
+  const pool = el('div', 'tile-pool');
+  host.append(line, pool);
+
+  shuffle(words.map((w, i) => ({ w, i }))).forEach(({ w, i }) => {
+    const tile = el('button', 'tile', w);
+    tile.onclick = () => {
+      // exact position OR an identical duplicate word both count
+      if (i === next || w === words[next]) {
+        tile.classList.add('used');
+        const span = el('span', null, (next ? ' ' : '') + w);
+        line.append(span);
+        requestAnimationFrame(() => span.classList.add('lit'));
+        next++;
+        if (next === words.length) {
+          line.classList.add('done');
+          speak(verse.text);
+          celebrate(host, `You built ${verse.ref}! Say it out loud three times — the Word hidden in your heart goes with you everywhere.`);
+        }
+      } else {
+        tile.classList.remove('wrong'); void tile.offsetWidth; tile.classList.add('wrong');
+        speak(words.slice(0, next).join(' '));
+      }
+    };
+    pool.append(tile);
+  });
+}
+
+/* ═══════════════════ 5 · ADULT DEEP MODULES ═══════════════════ */
+
+const EPOCHS = [
+  { n: 1,  label: 'Creation',            ref: 'Genesis 1–2' },
+  { n: 2,  label: 'The Fall',            ref: 'Genesis 3' },
+  { n: 3,  label: 'Covenant with Abraham', ref: 'Genesis 12' },
+  { n: 4,  label: 'The Exodus',          ref: 'Exodus 12–14' },
+  { n: 5,  label: 'Law at Sinai',        ref: 'Exodus 20' },
+  { n: 6,  label: 'Davidic Kingdom',     ref: '2 Samuel 7' },
+  { n: 7,  label: 'Exile & Prophets',    ref: 'Isaiah 53' },
+  { n: 8,  label: 'The Incarnation',     ref: 'Luke 2' },
+  { n: 9,  label: 'Cross & Resurrection', ref: 'Luke 23–24' },
+  { n: 10, label: 'Pentecost & the Church', ref: 'Acts 2' },
+  { n: 11, label: 'New Creation',        ref: 'Revelation 21' },
+];
+
+/* MODULE 1 — Testament Illuminations: order the epochs of redemption. */
+function moduleChronology(host) {
+  let next = 0;
+  const rail = el('div', 'progress-rail');
+  EPOCHS.forEach(() => rail.append(document.createElement('i')));
+  const slots = el('div', 'seq-slots');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, slots, pool);
+
+  shuffle(EPOCHS).forEach(e => {
+    const c = el('button', 'seq-card');
+    c.append(el('strong', null, e.label), el('small', null, e.ref));
+    c.onclick = () => {
+      if (e.n === EPOCHS[next].n) {
+        c.disabled = true; c.classList.add('placed');
+        slots.append(c); rail.children[next].classList.add('lit'); next++;
+        if (next === EPOCHS.length) {
+          celebrate(host, 'One story, one Author, one Redeemer. From the garden to the city, every epoch bends toward Christ — "beginning with Moses and all the Prophets, he interpreted to them in all the Scriptures the things concerning himself." (Luke 24:27)');
+        }
+      } else {
+        c.classList.remove('wrong'); void c.offsetWidth; c.classList.add('wrong');
+      }
+    };
+    pool.append(c);
+  });
+}
+
+/* MODULE 2 — Exegesis Training: observation → interpretation → application,
+   the actual inductive method, drilled with reasoned feedback.        */
+const EXEGESIS = [
+  {
+    passage: 'Philippians 2:5-8',
+    text: '"Have this mind among yourselves, which is yours in Christ Jesus, who, though he was in the form of God, did not count equality with God a thing to be grasped, but emptied himself, by taking the form of a servant..."',
+    steps: [
+      { stage: 'OBSERVATION', q: 'What does the text actually SAY about Christ’s status before the incarnation?',
+        opts: ['He was created first among all beings',
+               'He was in the form of God and equal with God',
+               'He became divine after His resurrection'],
+        a: 1, why: 'The text states He "was in the form of God" and held "equality with God" prior to emptying Himself. Observation asks what is on the page — not yet what it means.' },
+      { stage: 'INTERPRETATION', q: 'What does "emptied himself" mean in context?',
+        opts: ['He ceased to be God',
+               'He gave up His divine attributes permanently',
+               'He did not cling to His privileges but took the form of a servant'],
+        a: 2, why: 'The grammar defines the emptying by the participle that follows: "by taking the form of a servant." He added humanity and veiled glory; He did not subtract deity. Context — not English connotation — governs meaning.' },
+      { stage: 'APPLICATION', q: 'What does Paul command the church to DO with this?',
+        opts: ['Adopt Christ’s self-lowering mindset toward one another',
+               'Debate the two natures of Christ precisely',
+               'Wait passively for exaltation'],
+        a: 0, why: 'The hymn is framed by an imperative: "Have this mind among yourselves." The deepest Christology in Scripture is deployed to settle a church squabble. Doctrine always lands in obedience.' },
+    ],
+  },
+  {
+    passage: 'Romans 3:23-24',
+    text: '"For all have sinned and fall short of the glory of God, and are justified by his grace as a gift, through the redemption that is in Christ Jesus."',
+    steps: [
+      { stage: 'OBSERVATION', q: 'What is the scope of the word "all"?',
+        opts: ['Only the notably wicked', 'Every human being without exception', 'Only those outside the covenant'],
+        a: 1, why: 'Paul has spent chapters 1–3 closing every escape route — moralist, pagan, and religious alike. "All" is universal, which is why the remedy must be universal too.' },
+      { stage: 'INTERPRETATION', q: 'What does "justified" mean here?',
+        opts: ['Made gradually more moral over time',
+               'Declared righteous in God’s courtroom',
+               'Forgiven but still legally guilty'],
+        a: 1, why: 'Justification is forensic — a legal declaration, not an infusion of improvement. God pronounces the ungodly righteous on the basis of Christ’s redemption, not their progress.' },
+      { stage: 'APPLICATION', q: 'What follows for someone still trying to earn God’s favor?',
+        opts: ['Try harder with better methods',
+               'Receive as a gift what can never be earned',
+               'Balance grace with sufficient merit'],
+        a: 1, why: '"As a gift" (dorean) forecloses the transaction. Adding merit to grace does not improve the gospel — it abolishes it (Galatians 2:21).' },
+    ],
+  },
+];
+function moduleExegesis(host) {
+  const study = EXEGESIS[Math.floor(Math.random() * EXEGESIS.length)];
+  let idx = 0, score = 0;
+  const passageBlock = el('div', 'detail-block');
+  passageBlock.innerHTML =
+    `<span class="kind">${study.passage}</span><p style="font-style:italic">${study.text}</p>`;
+  host.append(passageBlock);
+  const rail = el('div', 'progress-rail');
+  study.steps.forEach(() => rail.append(document.createElement('i')));
+  const stage = el('div');
+  host.append(rail, stage);
+
+  function render() {
+    const s = study.steps[idx];
+    stage.innerHTML = '';
+    stage.append(el('span', 'eyebrow', `Step ${idx + 1} of ${study.steps.length} · ${s.stage}`));
+    stage.append(el('p', 'quiz-q', s.q));
+    let answered = false;
+    s.opts.forEach((opt, i) => {
+      const b = el('button', 'btn quiz-opt', opt);
+      b.onclick = () => {
+        if (answered) return;
+        answered = true;
+        const right = i === s.a;
+        if (right) score++;
+        b.classList.add(right ? 'correct' : 'miss');
+        if (!right) stage.querySelectorAll('.quiz-opt')[s.a].classList.add('correct');
+        const ex = el('div', 'explain');
+        ex.innerHTML = `<b>${right ? 'Correct.' : 'Not quite.'}</b> ${s.why}`;
+        stage.append(ex);
+        rail.children[idx].classList.add('lit');
+        const nextBtn = el('button', 'btn btn--gold',
+          idx < study.steps.length - 1 ? 'Next step ›' : 'Finish the drill');
+        nextBtn.style.marginTop = '14px';
+        nextBtn.onclick = () => {
+          idx++;
+          if (idx < study.steps.length) render();
+          else {
+            stage.innerHTML = '';
+            celebrate(stage, `${score} of ${study.steps.length} on ${study.passage}. Observation before interpretation, interpretation before application — the discipline that keeps a teacher from preaching their own imagination.`);
+          }
+        };
+        stage.append(nextBtn);
+      };
+      stage.append(b);
+    });
+  }
+  render();
+}
+
+/* MODULE 3 — Concordance: trace a redemptive thread across both testaments. */
+const THREADS = [
+  { theme: 'The Lamb', chain: [
+      { ref: 'Genesis 22:8',  note: '"God will provide for himself the lamb" — Abraham on the mountain.' },
+      { ref: 'Exodus 12:13',  note: 'The Passover blood on the doorposts: judgment passes over.' },
+      { ref: 'Isaiah 53:7',   note: '"Like a lamb that is led to the slaughter" — the silent Servant.' },
+      { ref: 'John 1:29',     note: '"Behold, the Lamb of God, who takes away the sin of the world!"' },
+      { ref: 'Revelation 5:6', note: 'The Lamb standing, as though slain — worthy to open the scroll.' },
+  ]},
+  { theme: 'The Temple', chain: [
+      { ref: 'Exodus 40:34',   note: 'The glory fills the tabernacle — God dwells among His people.' },
+      { ref: '1 Kings 8:11',   note: 'The cloud fills Solomon’s temple at its dedication.' },
+      { ref: 'Ezekiel 10:18',  note: 'The glory departs; sin drives out the presence.' },
+      { ref: 'John 2:19-21',   note: '"Destroy this temple" — He was speaking of His body.' },
+      { ref: '1 Corinthians 3:16', note: 'You yourselves are God’s temple, indwelt by His Spirit.' },
+  ]},
+  { theme: 'The Kingdom', chain: [
+      { ref: 'Genesis 1:28',   note: 'Humanity commissioned to rule creation under God.' },
+      { ref: '2 Samuel 7:16',  note: 'David’s throne established forever.' },
+      { ref: 'Daniel 7:14',    note: 'One like a son of man receives everlasting dominion.' },
+      { ref: 'Mark 1:15',      note: '"The kingdom of God is at hand; repent and believe."' },
+      { ref: 'Revelation 11:15', note: 'The kingdom of the world becomes the kingdom of our Lord.' },
+  ]},
+];
+function moduleConcordance(host) {
+  const thread = THREADS[Math.floor(Math.random() * THREADS.length)];
+  let next = 0;
+  host.append(el('p', 'sheet-sub',
+    `Thread: ${thread.theme}. Tap the references in canonical order to trace how the promise unfolds.`));
+  const rail = el('div', 'progress-rail');
+  thread.chain.forEach(() => rail.append(document.createElement('i')));
+  const trace = el('div');
+  const pool = el('div', 'seq-slots');
+  host.append(rail, trace, pool);
+
+  shuffle(thread.chain).forEach(link => {
+    const b = el('button', 'seq-card');
+    b.append(el('strong', null, link.ref));
+    b.onclick = () => {
+      if (link.ref === thread.chain[next].ref) {
+        b.disabled = true; b.style.display = 'none';
+        const step = el('div', 'detail-block');
+        step.innerHTML = `<span class="kind">${next + 1} · ${link.ref}</span><p>${link.note}</p>`;
+        trace.append(step);
+        rail.children[next].classList.add('lit');
+        next++;
+        if (next === thread.chain.length) {
+          celebrate(host, `The thread of ${thread.theme} runs unbroken from Genesis to Revelation. Sixty-six books, forty authors, sixteen centuries — one Mind behind it, and one Christ at its center.`);
+        }
+      } else {
+        b.classList.remove('wrong'); void b.offsetWidth; b.classList.add('wrong');
+      }
+    };
+    pool.append(b);
+  });
+}
+
+/* ═══════════════════ 6 · REFERENCE MODULES ═══════════════════ */
+const GENRE_GLYPH = { law:'⛰️', history:'🏺', wisdom:'🎼', prophets:'🔥',
+                      gospel:'✝️', acts:'🌍', epistle:'📜', apocalyptic:'👑' };
+const CANON_META = {"1":{"name":"Genesis","abbrev":"Gen","testament":"OT","genre":"law","chapters":50},"2":{"name":"Exodus","abbrev":"Ex","testament":"OT","genre":"law","chapters":40},"3":{"name":"Leviticus","abbrev":"Lev","testament":"OT","genre":"law","chapters":27},"4":{"name":"Numbers","abbrev":"Num","testament":"OT","genre":"law","chapters":36},"5":{"name":"Deuteronomy","abbrev":"Deut","testament":"OT","genre":"law","chapters":34},"6":{"name":"Joshua","abbrev":"Josh","testament":"OT","genre":"history","chapters":24},"7":{"name":"Judges","abbrev":"Judg","testament":"OT","genre":"history","chapters":21},"8":{"name":"Ruth","abbrev":"Ruth","testament":"OT","genre":"history","chapters":4},"9":{"name":"1 Samuel","abbrev":"1Sam","testament":"OT","genre":"history","chapters":31},"10":{"name":"2 Samuel","abbrev":"2Sam","testament":"OT","genre":"history","chapters":24},"11":{"name":"1 Kings","abbrev":"1Ki","testament":"OT","genre":"history","chapters":22},"12":{"name":"2 Kings","abbrev":"2Ki","testament":"OT","genre":"history","chapters":25},"13":{"name":"1 Chronicles","abbrev":"1Chr","testament":"OT","genre":"history","chapters":29},"14":{"name":"2 Chronicles","abbrev":"2Chr","testament":"OT","genre":"history","chapters":36},"15":{"name":"Ezra","abbrev":"Ezra","testament":"OT","genre":"history","chapters":10},"16":{"name":"Nehemiah","abbrev":"Neh","testament":"OT","genre":"history","chapters":13},"17":{"name":"Esther","abbrev":"Est","testament":"OT","genre":"history","chapters":10},"18":{"name":"Job","abbrev":"Job","testament":"OT","genre":"wisdom","chapters":42},"19":{"name":"Psalms","abbrev":"Ps","testament":"OT","genre":"wisdom","chapters":150},"20":{"name":"Proverbs","abbrev":"Prov","testament":"OT","genre":"wisdom","chapters":31},"21":{"name":"Ecclesiastes","abbrev":"Eccl","testament":"OT","genre":"wisdom","chapters":12},"22":{"name":"Song of Solomon","abbrev":"Song","testament":"OT","genre":"wisdom","chapters":8},"23":{"name":"Isaiah","abbrev":"Isa","testament":"OT","genre":"prophets","chapters":66},"24":{"name":"Jeremiah","abbrev":"Jer","testament":"OT","genre":"prophets","chapters":52},"25":{"name":"Lamentations","abbrev":"Lam","testament":"OT","genre":"prophets","chapters":5},"26":{"name":"Ezekiel","abbrev":"Ezek","testament":"OT","genre":"prophets","chapters":48},"27":{"name":"Daniel","abbrev":"Dan","testament":"OT","genre":"prophets","chapters":12},"28":{"name":"Hosea","abbrev":"Hos","testament":"OT","genre":"prophets","chapters":14},"29":{"name":"Joel","abbrev":"Joel","testament":"OT","genre":"prophets","chapters":3},"30":{"name":"Amos","abbrev":"Amos","testament":"OT","genre":"prophets","chapters":9},"31":{"name":"Obadiah","abbrev":"Obad","testament":"OT","genre":"prophets","chapters":1},"32":{"name":"Jonah","abbrev":"Jonah","testament":"OT","genre":"prophets","chapters":4},"33":{"name":"Micah","abbrev":"Mic","testament":"OT","genre":"prophets","chapters":7},"34":{"name":"Nahum","abbrev":"Nah","testament":"OT","genre":"prophets","chapters":3},"35":{"name":"Habakkuk","abbrev":"Hab","testament":"OT","genre":"prophets","chapters":3},"36":{"name":"Zephaniah","abbrev":"Zeph","testament":"OT","genre":"prophets","chapters":3},"37":{"name":"Haggai","abbrev":"Hag","testament":"OT","genre":"prophets","chapters":2},"38":{"name":"Zechariah","abbrev":"Zech","testament":"OT","genre":"prophets","chapters":14},"39":{"name":"Malachi","abbrev":"Mal","testament":"OT","genre":"prophets","chapters":4},"40":{"name":"Matthew","abbrev":"Matt","testament":"NT","genre":"gospel","chapters":28},"41":{"name":"Mark","abbrev":"Mark","testament":"NT","genre":"gospel","chapters":16},"42":{"name":"Luke","abbrev":"Luke","testament":"NT","genre":"gospel","chapters":24},"43":{"name":"John","abbrev":"John","testament":"NT","genre":"gospel","chapters":21},"44":{"name":"Acts","abbrev":"Acts","testament":"NT","genre":"acts","chapters":28},"45":{"name":"Romans","abbrev":"Rom","testament":"NT","genre":"epistle","chapters":16},"46":{"name":"1 Corinthians","abbrev":"1Cor","testament":"NT","genre":"epistle","chapters":16},"47":{"name":"2 Corinthians","abbrev":"2Cor","testament":"NT","genre":"epistle","chapters":13},"48":{"name":"Galatians","abbrev":"Gal","testament":"NT","genre":"epistle","chapters":6},"49":{"name":"Ephesians","abbrev":"Eph","testament":"NT","genre":"epistle","chapters":6},"50":{"name":"Philippians","abbrev":"Phil","testament":"NT","genre":"epistle","chapters":4},"51":{"name":"Colossians","abbrev":"Col","testament":"NT","genre":"epistle","chapters":4},"52":{"name":"1 Thessalonians","abbrev":"1Th","testament":"NT","genre":"epistle","chapters":5},"53":{"name":"2 Thessalonians","abbrev":"2Th","testament":"NT","genre":"epistle","chapters":3},"54":{"name":"1 Timothy","abbrev":"1Tim","testament":"NT","genre":"epistle","chapters":6},"55":{"name":"2 Timothy","abbrev":"2Tim","testament":"NT","genre":"epistle","chapters":4},"56":{"name":"Titus","abbrev":"Titus","testament":"NT","genre":"epistle","chapters":3},"57":{"name":"Philemon","abbrev":"Phlm","testament":"NT","genre":"epistle","chapters":1},"58":{"name":"Hebrews","abbrev":"Heb","testament":"NT","genre":"epistle","chapters":13},"59":{"name":"James","abbrev":"Jas","testament":"NT","genre":"epistle","chapters":5},"60":{"name":"1 Peter","abbrev":"1Pet","testament":"NT","genre":"epistle","chapters":5},"61":{"name":"2 Peter","abbrev":"2Pet","testament":"NT","genre":"epistle","chapters":3},"62":{"name":"1 John","abbrev":"1Jn","testament":"NT","genre":"epistle","chapters":5},"63":{"name":"2 John","abbrev":"2Jn","testament":"NT","genre":"epistle","chapters":1},"64":{"name":"3 John","abbrev":"3Jn","testament":"NT","genre":"epistle","chapters":1},"65":{"name":"Jude","abbrev":"Jude","testament":"NT","genre":"epistle","chapters":1},"66":{"name":"Revelation","abbrev":"Rev","testament":"NT","genre":"apocalyptic","chapters":22}};
+
+function moduleBooks(host) {
+  const grid = el('div', 'grid-cards');
+  const detail = el('div');
+  host.append(grid, detail);
+  BIBLE.books.forEach(ov => {
+    const meta = CANON_META[ov.b] || {};
+    const c = el('button', 'mini-book' + (meta.testament === 'OT' ? ' ot' : ''));
+    c.innerHTML = `<b>${meta.name || ('Book ' + ov.b)}</b>
+      <span>${GENRE_GLYPH[meta.genre] || '📖'} ${meta.testament === 'OT' ? 'Old' : 'New'}</span>`;
+    c.onclick = () => {
+      detail.innerHTML = `
+        <div class="detail-block" style="border-color:var(--accent-soft)">
+          <span class="kind">${meta.name} — ${ov.t}</span>
+          <p style="color:var(--ink-dim);font-size:12.5px">Key verse: ${ov.kv}</p>
+        </div>
+        ${ov.ls.map((l, i) => `<div class="detail-block"><span class="kind">Lesson ${i+1}</span><p>${l}</p></div>`).join('')}
+        <div class="detail-block christ"><span class="kind">Where is Jesus here?</span><p>${ov.c}</p></div>`;
+      detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+    grid.append(c);
+  });
+}
+
+function moduleTeachings(host) {
+  TEACH.categories.forEach(cat => {
+    const head = el('div', 'detail-block');
+    head.innerHTML = `<span class="kind">${cat.glyph} ${cat.title} · ${cat.ref}</span><p>${cat.intro}</p>`;
+    host.append(head);
+    cat.items.forEach(it => {
+      const acc = el('div', 'accordion');
+      const btn = el('button');
+      btn.innerHTML = `<b>${it.title}</b><small>${it.ref}</small>`;
+      const inner = el('div', 'inner');
+      inner.hidden = true;
+      inner.innerHTML = `
+        <div class="detail-block"><span class="kind">What Jesus taught</span><p>${it.teaching}</p></div>
+        <div class="detail-block christ"><span class="kind">Live it</span><p>${it.live}</p></div>`;
+      btn.onclick = () => { inner.hidden = !inner.hidden; };
+      acc.append(btn, inner);
+      host.append(acc);
+    });
+  });
+}
+
+/* GLOBAL MAPS — Acts 1:8 dispatch rings, drawn on canvas. */
+const MISSION_RINGS = [
+  { r: 0.13, label: 'JERUSALEM', note: 'Where you already are' },
+  { r: 0.30, label: 'JUDEA', note: 'Your own people and region' },
+  { r: 0.48, label: 'SAMARIA', note: 'The neighbors you would rather avoid' },
+  { r: 0.72, label: 'ENDS OF THE EARTH', note: 'Every nation, tribe, and tongue' },
+];
+function moduleMaps(host) {
+  host.append(el('p', 'sheet-sub',
+    '"But you will receive power when the Holy Spirit has come upon you, and you will be my witnesses in Jerusalem and in all Judea and Samaria, and to the end of the earth." — Acts 1:8'));
+  const cv = el('canvas'); cv.id = 'map-canvas';
+  host.append(cv);
+  const legend = el('div'); host.append(legend);
+  legend.innerHTML = MISSION_RINGS.map((r, i) =>
+    `<div class="detail-block"><span class="kind">${i + 1} · ${r.label}</span><p>${r.note}</p></div>`).join('');
+
+  requestAnimationFrame(() => {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const W = cv.clientWidth, H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    const ctx = cv.getContext('2d');
+    ctx.scale(dpr, dpr);
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#020617'); g.addColorStop(1, '#0b1226');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+    const cx = W / 2, cy = H / 2, base = Math.min(W, H) * 0.62;
+    const accent = getComputedStyle(document.documentElement)
+      .getPropertyValue('--accent').trim() || '#eab308';
+    MISSION_RINGS.slice().reverse().forEach((ring) => {
+      const rr = base * ring.r;
+      const grd = ctx.createRadialGradient(cx, cy, rr * 0.55, cx, cy, rr);
+      grd.addColorStop(0, 'rgba(234,179,8,0)');
+      grd.addColorStop(1, 'rgba(234,179,8,.09)');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = accent + '66';
+      ctx.setLineDash([4, 8]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(cx, cy, rr, 0, Math.PI * 2); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(226,232,240,.72)';
+      ctx.font = '600 9.5px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(ring.label, cx, cy - rr + 14);
+    });
+    // radiating dispatch lines
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2 - Math.PI / 2;
+      const grad = ctx.createLinearGradient(cx, cy,
+        cx + Math.cos(a) * base * 0.72, cy + Math.sin(a) * base * 0.72);
+      grad.addColorStop(0, accent + 'cc');
+      grad.addColorStop(1, accent + '00');
+      ctx.strokeStyle = grad; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(a) * base * 0.72, cy + Math.sin(a) * base * 0.72);
+      ctx.stroke();
+    }
+    const core = ctx.createRadialGradient(cx, cy, 0, cx, cy, 22);
+    core.addColorStop(0, '#fff8e1'); core.addColorStop(1, accent + '00');
+    ctx.fillStyle = core;
+    ctx.beginPath(); ctx.arc(cx, cy, 22, 0, Math.PI * 2); ctx.fill();
+  });
+}
+
+/* ══════════════════════ 7 · MODULE ROUTER ══════════════════════ */
+const MODULES = {
+  creation:    ['The Creation Adventure', 'Seven days, in the order God spoke them. Tap each day as it comes.', gameCreation],
+  heroes:      ['Heroes of Faith', 'Ordinary people, extraordinary God. Match each hero to their brave act.', gameHeroes],
+  verse:       ['Build the Verse', 'Every word in its place — then watch the whole verse light up.', gameVerse],
+  chronology:  ['Testament Illuminations', 'Eleven epochs of redemptive history. Place them along the river of light.', moduleChronology],
+  exegesis:    ['Exegesis Training', 'The inductive method drilled: observation, then interpretation, then application.', moduleExegesis],
+  concordance: ['Concordance — Redemptive Threads', 'Trace one theme across both testaments in canonical order.', moduleConcordance],
+  books:       ['The Sixty-Six', 'Every book of the canon: its theme, key verse, main lessons, and where it points to Christ.', moduleBooks],
+  teachings:   ['The Teachings of Jesus', 'The Sermon, the parables, the seven I AMs, the miracles, and His final words.', moduleTeachings],
+  maps:        ['Global Maps — The Acts 1:8 Dispatch', 'Concentric commission: the gospel moves outward from wherever you stand.', moduleMaps],
+};
+
+document.addEventListener('click', (e) => {
+  const ageBtn = e.target.closest('.age-toggle button');
+  if (ageBtn) return switchAge(ageBtn.dataset.age);
+
+  const holder = e.target.closest('[data-module]');
+  if (holder && holder.dataset.module) {
+    const m = MODULES[holder.dataset.module];
+    if (m) openSheet(m[0], m[1], m[2]);
+  }
+});
+
+document.getElementById('btn-listen').onclick = () =>
+  speak(document.getElementById('scripture-title').textContent + '. ' +
+        document.getElementById('scripture-text').textContent.replace(/["“”]/g, ''));
+
+/* ══════════════════════════ 8 · IGNITION ══════════════════════════ */
+Engine.init();
+switchAge('adults');
+</script>
+</body>
+</html>
