@@ -5,6 +5,11 @@
 [build]
   publish = "."
   functions = "netlify/functions"
+  # The /training/* access gate. Stated for the same reason as the functions
+  # directory: a deploy that silently skips this folder serves the training app
+  # to the world. Keep it in this [build] table — a second [build] is a TOML
+  # parse error and fails the deploy.
+  edge_functions = "netlify/edge-functions"
 
 [functions]
   directory = "netlify/functions"

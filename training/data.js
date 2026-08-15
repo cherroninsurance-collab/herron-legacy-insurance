@@ -1,3 +1,6 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 /* Producer OS — training content.
    Generated from the Producer OS Portal design handoff. Every script, question, rebuttal and
    compliance guardrail below is the reviewed copy, carried over word for word. Do not paraphrase,

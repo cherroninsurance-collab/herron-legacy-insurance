@@ -1,3 +1,9 @@
+<!--
+  Proprietary & Confidential
+  Copyright © 2026 Connor Herron. All Rights Reserved.
+  Unauthorized distribution or public hosting prohibited.
+-->
+
 # Producer OS — phone training app
 
 Internal sales-training app for licensed producers, rebuilt from the *Producer OS Portal*

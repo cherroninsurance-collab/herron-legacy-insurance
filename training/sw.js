@@ -1,8 +1,11 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 /* Producer OS service worker — the app has to work at a kitchen table with no bars.
    Shell + content are cached on install; the coach endpoint is never cached.
    Bump CACHE when any file in ASSETS changes, or phones keep serving the old copy. */
 
-var CACHE = 'producer-os-v1';
+var CACHE = 'producer-os-v2';
 var ASSETS = [
   './',
   'index.html',
@@ -36,6 +39,24 @@ self.addEventListener('fetch', function (e) {
   var url = new URL(req.url);
   if (url.origin !== location.origin) return;             // fonts etc. fall through to the network
   if (url.pathname.indexOf('/.netlify/functions/') === 0) return;
+
+  // Navigations go to the network first so the access gate is always consulted
+  // while online — a cached shell must not outlive an expired session. Falls
+  // back to the cached app when there's genuinely no signal.
+  // The gate answers 401, so `res.ok` is false and the unlock page is never cached.
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req).then(function (res) {
+        if (!res || !res.ok) return res;
+        return res;
+      }).catch(function () {
+        return caches.match('index.html').then(function (hit) {
+          return hit || caches.match('./');
+        });
+      })
+    );
+    return;
+  }
 
   e.respondWith(
     caches.match(req).then(function (hit) {

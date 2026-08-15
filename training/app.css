@@ -1,3 +1,6 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 /* Producer OS — phone-first training app.
    Design tokens are the Producer OS handoff values; the layout is rebuilt for a
    one-handed phone (rails become snap scrollers, tables become cards, the sidebar
@@ -362,4 +365,11 @@ textarea.field { min-height: 150px; }
 }
 @media (min-width: 1024px) {
   main { max-width: 1040px; }
+}
+
+/* confidentiality notice in the nav sheet */
+.sheet__notice {
+  font-family: var(--mono); font-size: 9.5px; line-height: 1.75; letter-spacing: .04em;
+  color: var(--t-label); text-align: center;
+  border-top: 1px solid var(--hair); margin-top: 14px; padding-top: 14px;
 }

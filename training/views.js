@@ -1,3 +1,6 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 /* Producer OS — view renderers.
    Each function returns an HTML string for one screen. All copy comes from
    window.POS_DATA (see data.js) — never hard-code script text here. */

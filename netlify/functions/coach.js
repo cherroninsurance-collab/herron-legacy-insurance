@@ -1,3 +1,6 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 // netlify/functions/coach.js
 //
 // Producer OS — Alpha Coach role-play + rep scoring for /training.
@@ -87,17 +90,55 @@ const MODULES = [
   { n: 7, name: "Annuity Conversions & Rollovers", focus: "401(k)/IRA rollovers, shortfall discovery, income riders, step-ups." }
 ];
 
+// Same session cookie the /training/* edge gate issues. Without this check the
+// endpoint is open to the world: the app is gated but its API would not be, and
+// anyone could burn tokens against it.
+const crypto = require("crypto");
+const COOKIE = "pos_session";
+
+function signedIn(event) {
+  const secret = process.env.TRAINING_COOKIE_SECRET || process.env.TRAINING_PASSCODE;
+  if (!secret) return false;
+
+  const raw = (event.headers && (event.headers.cookie || event.headers.Cookie)) || "";
+  let token = null;
+  for (const part of raw.split(";")) {
+    const [k, ...v] = part.trim().split("=");
+    if (k === COOKIE) token = decodeURIComponent(v.join("="));
+  }
+  if (!token) return false;
+
+  const dot = token.lastIndexOf(".");
+  if (dot < 1) return false;
+  const payload = token.slice(0, dot);
+  const expected = crypto.createHmac("sha256", secret).update(payload).digest("base64url");
+  const got = Buffer.from(token.slice(dot + 1));
+  const want = Buffer.from(expected);
+  if (got.length !== want.length || !crypto.timingSafeEqual(got, want)) return false;
+
+  const expires = Number(payload);
+  return Number.isFinite(expires) && expires > Date.now();
+}
+
 exports.handler = async (event) => {
   const headers = {
     "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*",
+    // Same-origin only — the training app is the sole caller, so there is no
+    // reason to advertise this endpoint to other sites the way the public
+    // concierge does.
+    "Access-Control-Allow-Origin": "https://herronlegacyinsurance.com",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    Vary: "Origin",
   };
 
   if (event.httpMethod === "OPTIONS") return { statusCode: 204, headers, body: "" };
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers, body: JSON.stringify({ error: "POST only" }) };
+  }
+
+  if (!signedIn(event)) {
+    return { statusCode: 401, headers, body: JSON.stringify({ error: "locked" }) };
   }
 
   const key = process.env.ANTHROPIC_API_KEY;

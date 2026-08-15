@@ -1,3 +1,6 @@
+/* Proprietary & Confidential
+   Copyright © 2026 Connor Herron. All Rights Reserved.
+   Unauthorized distribution or public hosting prohibited. */
 /* Producer OS — app shell: state, routing, persistence, search, AI calls.
    Plain ES5-ish vanilla JS, no build step, same as the rest of this repo. */
 
