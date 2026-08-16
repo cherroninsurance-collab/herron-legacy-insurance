@@ -5,26 +5,7 @@
 [build]
   publish = "."
   functions = "netlify/functions"
-  # The /training/* access gate. Stated for the same reason as the functions
-  # directory: a deploy that silently skips this folder serves the training app
-  # to the world. Keep it in this [build] table — a second [build] is a TOML
-  # parse error and fails the deploy.
-  edge_functions = "netlify/edge-functions"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
-
-# /training is the internal Producer OS agent-training app — not customer-facing.
-# The page also carries <meta name="robots">, but a header is what crawlers that
-# ignore the meta tag (and anything fetching the JSON-ish assets) actually respect.
-[[headers]]
-  for = "/training/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-
-# The service worker must never be served stale, or phones keep running an old app.
-[[headers]]
-  for = "/training/sw.js"
-  [headers.values]
-    Cache-Control = "no-cache"
